@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Immo Südtirol – Moderne Immobilien</title>
-
+  <meta name="description" content="Immo Südtirol zeigt moderne Kauf- und Mietobjekte in den Dolomiten mit Karte, Filtersuche und direkter Übersicht für Käufer und Mieter." />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -34,6 +34,7 @@
       background: linear-gradient(180deg, #f8f5ef 0%, var(--bg) 100%);
       color: var(--text);
       line-height: 1.5;
+      scroll-behavior: smooth;
     }
 
     a {
@@ -75,6 +76,27 @@
       z-index: 1;
     }
 
+    .page-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .page-nav a {
+      color: rgba(255,255,255,0.92);
+      font-size: 0.95rem;
+      background: rgba(255,255,255,0.12);
+      padding: 9px 14px;
+      border-radius: 999px;
+      transition: background 180ms ease, transform 180ms ease;
+    }
+
+    .page-nav a:hover {
+      background: rgba(255,255,255,0.22);
+      transform: translateY(-1px);
+    }
+
     .brand {
       display: flex;
       flex-direction: column;
@@ -114,16 +136,34 @@
     }
 
     .hero-copy h2 {
-      font-size: clamp(1.8rem, 3.3vw, 2.6rem);
+      font-size: clamp(1.9rem, 3.3vw, 2.8rem);
       margin-bottom: 10px;
-      line-height: 1.15;
+      line-height: 1.1;
     }
 
     .hero-copy p {
-      max-width: 620px;
-      color: rgba(255,255,255,0.84);
+      max-width: 660px;
+      color: rgba(255,255,255,0.9);
       font-size: 1rem;
       margin-bottom: 18px;
+    }
+
+    .hero-highlights {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .hero-highlights span {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.14);
+      font-size: 0.92rem;
+      color: rgba(255,255,255,0.95);
     }
 
     .hero-actions {
@@ -147,6 +187,11 @@
 
     .button:hover {
       transform: translateY(-1px);
+    }
+
+    .button:focus-visible {
+      outline: 3px solid rgba(255,255,255,0.75);
+      outline-offset: 3px;
     }
 
     .button-primary {
@@ -272,6 +317,38 @@
       transition: all 180ms ease;
     }
 
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 10px;
+    }
+
+    .feature-card {
+      background: var(--surface-strong);
+      border: 1px solid transparent;
+      border-radius: 20px;
+      padding: 18px;
+      transition: border-color 180ms ease, transform 180ms ease;
+    }
+
+    .feature-card:hover {
+      border-color: rgba(51, 77, 65, 0.18);
+      transform: translateY(-2px);
+    }
+
+    .feature-card h4 {
+      margin-bottom: 8px;
+      color: var(--accent);
+      font-size: 1rem;
+    }
+
+    .feature-card p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
     .filter-chip.active {
       background: var(--accent);
       color: white;
@@ -283,6 +360,18 @@
       grid-template-columns: 0.95fr 1.05fr;
       gap: 20px;
       align-items: start;
+    }
+
+    .page-footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.92rem;
     }
 
     #karte-map {
@@ -423,6 +512,18 @@
       }
     }
 
+    .page-footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
     @media (max-width: 760px) {
       .hero {
         grid-template-columns: 1fr;
@@ -441,6 +542,11 @@
         flex-direction: column;
         align-items: flex-start;
       }
+
+      .page-footer {
+        flex-direction: column;
+        text-align: left;
+      }
     }
   </style>
 </head>
@@ -455,13 +561,24 @@
         <div class="pill">📍 Südtirol • Aktuelle Angebote</div>
       </div>
 
+      <div class="page-nav" aria-label="Seitennavigation">
+        <a href="#angebote">Angebote</a>
+        <a href="#karte-map">Karte</a>
+        <a href="#vorteile">Vorteile</a>
+      </div>
+
       <div class="hero">
         <div class="hero-copy">
-          <h2>Finden Sie Ihr neues Zuhause mit mehr Ruhe und Überblick.</h2>
-          <p>Wir zeigen Ihnen aktuelle Kauf- und Mietobjekte in Südtirol in einer klaren, modernen Darstellung – von der ersten Ansicht bis zur finalen Auswahl.</p>
+          <h2>Immo Südtirol: hochwertige Wohnträume in den Alpen.</h2>
+          <p>Entdecken Sie geprüfte Kauf- und Mietobjekte mit direktem Kartenüberblick, smarten Filteroptionen und klarer Präsentation – alles auf einer Seite.</p>
           <div class="hero-actions">
             <a class="button button-primary" href="#angebote">Zu den Angeboten</a>
             <a class="button button-secondary" href="#karte-map">Zur Karte</a>
+          </div>
+          <div class="hero-highlights">
+            <span>✓ Regionale Top-Objekte</span>
+            <span>✓ Schneller Vergleich</span>
+            <span>✓ Modernes Design</span>
           </div>
         </div>
 
@@ -487,6 +604,21 @@
         <div class="stat-card">
           <strong id="stat-miete">0</strong>
           <span>Zur Miete</span>
+        </div>
+      </div>
+
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h4>Südtirol-weit entdecken</h4>
+          <p>Von Bozen bis Meran: Unsere Immobilien zeigen die besten Orte in einer kompakten Übersicht.</p>
+        </div>
+        <div class="feature-card">
+          <h4>Live-Karte</h4>
+          <p>Standorte und Angebote werden direkt in der Karte angezeigt, für einen schnellen Gesamtblick.</p>
+        </div>
+        <div class="feature-card">
+          <h4>Einfach vergleichen</h4>
+          <p>Filter für Kauf und Miete sowie übersichtliche Objektkarten helfen bei der Auswahl.</p>
         </div>
       </div>
     </header>
@@ -528,7 +660,37 @@
           </div>
         </div>
       </section>
+
+      <section class="panel" id="vorteile">
+        <div class="section-head">
+          <div>
+            <h3>Vorteile auf einen Blick</h3>
+            <p>Hier sehen Sie, warum unsere Seite für Immobilien in Südtirol besonders geeignet ist.</p>
+          </div>
+        </div>
+
+        <div class="feature-grid">
+          <div class="feature-card">
+            <h4>Regionale Expertise</h4>
+            <p>Gezielte Auswahl von Immobilien in den bekanntesten Südtiroler Orten.</p>
+          </div>
+          <div class="feature-card">
+            <h4>Klare Objektinfos</h4>
+            <p>Schnell erkennen, ob ein Objekt für Kauf oder Miete geeignet ist.</p>
+          </div>
+          <div class="feature-card">
+            <h4>Direkte Kartenansicht</h4>
+            <p>Jede Immobilie kann direkt auf der Karte gefunden werden.</p>
+          </div>
+        </div>
+      </section>
     </main>
+
+    <footer class="page-footer">
+      <span>Immo Südtirol</span>
+      <span>Modernes Design & klare Darstellung</span>
+      <span>Version 1.02</span>
+    </footer>
   </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
