@@ -1,0 +1,22 @@
+[
+  {"typ":"kauf","titel":"Modernes Chalet mit Panorama","ort":"Ortisei","preis":"€ 980.000","zimmer":4,"flaeche":165,"lat":46.6167,"lng":11.6633},
+  {"typ":"miete","titel":"Appartement im Dorfkern","ort":"Bozen","preis":"€ 1.650 / Monat","zimmer":3,"flaeche":98,"lat":46.4983,"lng":11.3548},
+  {"typ":"kauf","titel":"Lichtdurchflutete Villa","ort":"Meran","preis":"€ 1.240.000","zimmer":5,"flaeche":220,"lat":46.6675,"lng":11.1667},
+  {"typ":"kauf","titel":"Renoviertes Landhaus","ort":"Brixen","preis":"€ 420.000","zimmer":4,"flaeche":140,"lat":46.7167,"lng":11.6333},
+  {"typ":"miete","titel":"Studio mit Bergblick","ort":"Klausen","preis":"€ 880 / Monat","zimmer":1,"flaeche":36,"lat":46.6833,"lng":11.5667},
+  {"typ":"kauf","titel":"Familienfreundliches Reihenhaus","ort":"Laives","preis":"€ 365.000","zimmer":4,"flaeche":125,"lat":46.4590,"lng":11.3430},
+  {"typ":"miete","titel":"Zentrales Loft","ort":"Bozen","preis":"€ 2.100 / Monat","zimmer":2,"flaeche":85,"lat":46.4983,"lng":11.3548},
+  {"typ":"kauf","titel":"Ferienwohnung nahe Skigebiet","ort":"Bruneck","preis":"€ 295.000","zimmer":2,"flaeche":60,"lat":46.8048,"lng":11.9515},
+  {"typ":"miete","titel":"Helles Apartment in Meran","ort":"Meran","preis":"€ 1.200 / Monat","zimmer":2,"flaeche":70,"lat":46.6675,"lng":11.1667},
+  {"typ":"kauf","titel":"Stadthaus mit Garten","ort":"Eppan","preis":"€ 775.000","zimmer":5,"flaeche":200,"lat":46.4833,"lng":11.2667},
+  {"typ":"kauf","titel":"Charmante Wohnung im Altbau","ort":"Bozen","preis":"€ 320.000","zimmer":3,"flaeche":95,"lat":46.4983,"lng":11.3548},
+  {"typ":"miete","titel":"Kleines Penthouse","ort":"Meran","preis":"€ 2.450 / Monat","zimmer":3,"flaeche":110,"lat":46.6675,"lng":11.1667},
+  {"typ":"kauf","titel":"Großzügige Villa mit Seezugang","ort":"Kaltern","preis":"€ 1.950.000","zimmer":6,"flaeche":380,"lat":46.3423,"lng":11.2898},
+  {"typ":"miete","titel":"Modernes Zimmer in WG","ort":"Brixen","preis":"€ 550 / Monat","zimmer":1,"flaeche":20,"lat":46.7167,"lng":11.6333},
+  {"typ":"kauf","titel":"Neubau-Eigentumswohnung","ort":"Bozen","preis":"€ 495.000","zimmer":3,"flaeche":110,"lat":46.4983,"lng":11.3548},
+  {"typ":"miete","titel":"Ferien-Apartment am See","ort":"Toblach","preis":"€ 1.100 / Monat","zimmer":2,"flaeche":55,"lat":46.7175,"lng":12.1419},
+  {"typ":"kauf","titel":"Rustikales Bauernhaus","ort":"St. Magdalena","preis":"€ 585.000","zimmer":5,"flaeche":210,"lat":46.5120,"lng":11.3520},
+  {"typ":"miete","titel":"Saisonwohnung nahe Piste","ort":"Ortisei","preis":"€ 1.750 / Monat","zimmer":3,"flaeche":90,"lat":46.6167,"lng":11.6633},
+  {"typ":"kauf","titel":"Zweizimmerwohnung mit Balkon","ort":"Meran","preis":"€ 265.000","zimmer":2,"flaeche":58,"lat":46.6675,"lng":11.1667},
+  {"typ":"kauf","titel":"Design-Residenz in Bestlage","ort":"Bozen","preis":"€ 1.750.000","zimmer":7,"flaeche":420,"lat":46.4983,"lng":11.3548}
+]

@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Immo Südtirol – Moderne Immobilien</title>
-  <meta name="description" content="Immo Südtirol zeigt moderne Kauf- und Mietobjekte in den Dolomiten mit Karte, Filtersuche und direkter Übersicht für Käufer und Mieter." />
+  <title>Estora Living – Moderne Immobilien</title>
+  <meta name="description" content="Estora Living zeigt moderne Kauf- und Mietobjekte in den Dolomiten mit Karte, Filtersuche und klarer Übersicht für Käufer und Mieter." />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -548,6 +548,39 @@
         text-align: left;
       }
     }
+    /* Modal for listing details */
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(8,10,12,0.5);
+      z-index: 2000;
+      padding: 20px;
+    }
+
+    .modal.open { display: flex; }
+
+    .modal-panel {
+      width: 100%;
+      max-width: 880px;
+      background: var(--surface);
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.35);
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      font-size: 1.05rem;
+      cursor: pointer;
+      color: var(--muted);
+    }
+
+    .load-more-wrap { text-align: center; margin-top: 12px; }
+    .button-load-more { padding: 10px 16px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface-strong); cursor: pointer; }
   </style>
 </head>
 <body>
@@ -555,10 +588,10 @@
     <header>
       <div class="topbar">
         <div class="brand">
-          <strong>Immo Südtirol</strong>
-          <h1>Moderne Immobilien, klar präsentiert.</h1>
+          <strong>Estora Living</strong>
+          <h1>Finden Sie Ihr Zuhause in den Alpen.</h1>
         </div>
-        <div class="pill">📍 Südtirol • Aktuelle Angebote</div>
+        <div class="pill">📍 Südtirol • Estora Living</div>
       </div>
 
       <div class="page-nav" aria-label="Seitennavigation">
@@ -569,8 +602,8 @@
 
       <div class="hero">
         <div class="hero-copy">
-          <h2>Immo Südtirol: hochwertige Wohnträume in den Alpen.</h2>
-          <p>Entdecken Sie geprüfte Kauf- und Mietobjekte mit direktem Kartenüberblick, smarten Filteroptionen und klarer Präsentation – alles auf einer Seite.</p>
+          <h2>Estora Living — Exquisite Wohnträume in den Alpen.</h2>
+          <p>Entdecken Sie sorgfältig ausgewählte Kauf- und Mietobjekte mit interaktiver Karte, smarten Filtern und klarer Präsentation — alles übersichtlich auf einer Seite.</p>
           <div class="hero-actions">
             <a class="button button-primary" href="#angebote">Zu den Angeboten</a>
             <a class="button button-secondary" href="#karte-map">Zur Karte</a>
@@ -657,6 +690,7 @@
               </div>
             </div>
             <div class="listings" id="listings"></div>
+                    <div class="load-more-wrap" id="load-more-wrap" aria-live="polite"></div>
           </div>
         </div>
       </section>
@@ -687,7 +721,7 @@
     </main>
 
     <footer class="page-footer">
-      <span>Immo Südtirol</span>
+      <span>Estora Living</span>
       <span>Modernes Design & klare Darstellung</span>
       <span>Version 1.02</span>
     </footer>
@@ -771,7 +805,7 @@
       const photoClass = getTypeClass(item.typ);
       const details = getSpecs(item);
       return `
-        <article class="card">
+        <article class="card" data-estora-id="${item._id}">
           <div class="card-photo ${photoClass}">${tag}</div>
           <div class="card-body">
             <span class="card-tag">${tag}</span>
@@ -781,20 +815,42 @@
               <span>${details || 'Weitere Details folgen'}</span>
               <strong class="card-preis">${formatPrice(item.preis)}</strong>
             </div>
+            <div style="margin-top:10px; display:flex; gap:8px;">
+              <button class="button button-secondary btn-open" data-estora-id="${item._id}" aria-label="Details ansehen">Details</button>
+              <button class="button button-secondary btn-focus-map" data-estora-id="${item._id}" aria-label="Auf der Karte zeigen">Auf Karte</button>
+            </div>
           </div>
         </article>
       `;
     }
 
     function renderListings(data) {
-      const visible = data.filter((item) => activeFilter === 'alle' || item.typ === activeFilter);
+      const filtered = data.filter((item) => activeFilter === 'alle' || item.typ === activeFilter);
+      const start = 0 + (currentPage - 1) * itemsPerPage;
+      const end = start + itemsPerPage;
+      const pageItems = filtered.slice(start, end);
 
-      if (!visible.length) {
+      if (!filtered.length) {
         listingsBox.innerHTML = '<div class="empty-state">Für diesen Filter sind aktuell keine passenden Angebote verfügbar.</div>';
+        document.getElementById('load-more-wrap').innerHTML = '';
         return;
       }
 
-      listingsBox.innerHTML = visible.map(karteHtml).join('');
+      listingsBox.innerHTML = pageItems.map(karteHtml).join('');
+      attachListingHandlers();
+
+      // load more
+      const loadWrap = document.getElementById('load-more-wrap');
+      if (end < filtered.length) {
+        loadWrap.innerHTML = `<button class="button-load-more" id="btn-load-more">Mehr laden</button>`;
+        document.getElementById('btn-load-more').addEventListener('click', () => {
+          currentPage += 1;
+          renderListings(allData);
+          updateMap(allData);
+        });
+      } else {
+        loadWrap.innerHTML = '';
+      }
     }
 
     function updateStats(data) {
@@ -810,18 +866,24 @@
     }
 
     function updateMap(data) {
+      // remove previous markers
       map.eachLayer((layer) => {
-        if (layer instanceof L.Marker) {
-          layer.remove();
-        }
+        if (layer instanceof L.Marker) layer.remove();
       });
+
+      // create mapping for markers to open from listings
+      window._estoraMarkers = window._estoraMarkers || {};
+      window._estoraMarkers = {};
 
       const visible = data.filter((item) => activeFilter === 'alle' || item.typ === activeFilter);
       visible.forEach((item) => {
         if (item.lat && item.lng) {
-          L.marker([item.lat, item.lng])
+          const m = L.marker([item.lat, item.lng])
             .addTo(map)
             .bindPopup(`<strong>${item.titel ?? 'Immobilie'}</strong><br>${item.ort ?? ''}<br>${item.preis ?? ''}`);
+          if (typeof item._id !== 'undefined') {
+            window._estoraMarkers[item._id] = m;
+          }
         }
       });
 
@@ -829,10 +891,11 @@
     }
 
     function renderAll(data) {
-      allData = data;
+      // assign stable ids for mapping between cards and markers
+      allData = data.map((it, i) => ({ ...it, _id: i }));
       updateStats(data);
-      renderListings(data);
-      updateMap(data);
+      renderListings(allData);
+      updateMap(allData);
     }
 
     function setActiveFilter(filter) {
@@ -840,6 +903,8 @@
       filterChips.forEach((chip) => {
         chip.classList.toggle('active', chip.dataset.filter === filter);
       });
+      // reset pagination on filter change
+      currentPage = 1;
       renderListings(allData);
       updateMap(allData);
     }
@@ -847,6 +912,52 @@
     filterChips.forEach((chip) => {
       chip.addEventListener('click', () => setActiveFilter(chip.dataset.filter));
     });
+
+    // pagination state
+    let itemsPerPage = 6;
+    let currentPage = 1;
+
+    function attachListingHandlers() {
+      // delegate clicks
+      listingsBox.querySelectorAll('.btn-open').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          const id = Number(btn.dataset.estoraId);
+          const item = allData.find(x => x._id === id);
+          if (item) openModal(item);
+        });
+      });
+
+      listingsBox.querySelectorAll('.btn-focus-map').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          const id = Number(btn.dataset.estoraId);
+          const marker = window._estoraMarkers && window._estoraMarkers[id];
+          const item = allData.find(x => x._id === id);
+          if (item && item.lat && item.lng) {
+            map.setView([item.lat, item.lng], 13, { animate: true });
+          }
+          if (marker) marker.openPopup();
+        });
+      });
+    }
+
+    function openModal(item) {
+      const modal = document.getElementById('detail-modal');
+      modal.querySelector('.modal-title').textContent = item.titel || 'Immobilie';
+      modal.querySelector('.modal-body').innerHTML = `
+        <p><strong>Ort:</strong> ${item.ort || '—'}</p>
+        <p><strong>Preis:</strong> ${formatPrice(item.preis)}</p>
+        <p><strong>Zimmer / Fläche:</strong> ${getSpecs(item) || '—'}</p>
+        <p style="margin-top:10px;color:var(--muted)">ID: ${item._id}</p>
+      `;
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('detail-modal');
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+    }
 
     async function ladeInserate() {
       listingsBox.innerHTML = `
@@ -856,6 +967,18 @@
           <div class="skeleton medium"></div>
         </div>
       `;
+
+      // Try local sample JSON first (convenient for offline/dev).
+      try {
+        const resp = await fetch('sample-listings.json', { cache: 'no-store' });
+        if (resp.ok) {
+          const sample = await resp.json();
+          renderAll(sample);
+          return;
+        }
+      } catch (err) {
+        // ignore and continue to DB/fallback
+      }
 
       if (!db) {
         renderAll(fallbackListings);
@@ -875,5 +998,16 @@
 
     ladeInserate();
   </script>
+
+  <!-- Detail modal -->
+  <div id="detail-modal" class="modal" role="dialog" aria-hidden="true" aria-labelledby="modal-title">
+    <div class="modal-panel">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
+        <h3 id="modal-title" class="modal-title">Titel</h3>
+        <button class="modal-close" aria-label="Schließen" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-body" style="margin-top:12px;color:var(--text)"></div>
+    </div>
+  </div>
 </body>
 </html>
