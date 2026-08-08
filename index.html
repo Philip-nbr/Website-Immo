@@ -1,4546 +1,3794 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <title>Estora Living — Immobilien in Südtirol</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <meta
-    name="description"
-    content="Estora Living — ausgewählte Immobilien zum Kaufen und Mieten in Südtirol."
-  />
+<title>Estora Living — Immobilien in Südtirol</title>
 
-  <!-- Leaflet -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  />
+<meta name="description"
+content="Estora Living — moderne Immobilien in Südtirol. Kaufen, mieten und entdecken.">
 
-  <!-- Fonts -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
-    rel="stylesheet"
-  />
-
-  <!-- Supabase -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  <style>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+rel="stylesheet">
 
-    /* =========================================================
-       ROOT
-    ========================================================= */
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
-    :root {
-      --bg: #f5f4f0;
-      --surface: #ffffff;
-      --surface-soft: #eeeee9;
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-      --text: #17201c;
-      --text-soft: #65706a;
-      --text-light: #8b938e;
+<style>
 
-      --green: #173b31;
-      --green-2: #24584a;
-      --green-soft: #e5ece8;
+/* =========================================================
+   ESTORA LIVING
+   PREMIUM LIQUID GLASS DESIGN
+   ========================================================= */
 
-      --gold: #b08b52;
-      --gold-soft: #f1eadf;
+:root {
 
-      --border: #e2e4df;
+    --bg: #f3f5f4;
+    --bg-2: #e9eeeb;
 
-      --shadow-sm:
-        0 4px 15px rgba(20, 35, 29, 0.06);
+    --surface: rgba(255,255,255,.68);
+    --surface-strong: rgba(255,255,255,.86);
+    --surface-dark: rgba(20,27,24,.72);
 
-      --shadow:
-        0 15px 50px rgba(20, 35, 29, 0.09);
+    --text: #101513;
+    --text-soft: #5f6863;
+    --text-faint: #8b938e;
 
-      --shadow-lg:
-        0 30px 80px rgba(20, 35, 29, 0.16);
+    --green: #174b3a;
+    --green-2: #23664d;
+    --green-soft: #e3eee9;
 
-      --radius-sm: 10px;
-      --radius: 18px;
-      --radius-lg: 28px;
+    --gold: #b89048;
+    --gold-soft: #f3ead9;
 
-      --max-width: 1440px;
-    }
+    --line: rgba(20,35,28,.09);
+    --line-light: rgba(255,255,255,.5);
 
+    --shadow:
+        0 20px 70px rgba(20,40,30,.09);
 
-    /* =========================================================
-       RESET
-    ========================================================= */
+    --shadow-soft:
+        0 10px 35px rgba(20,40,30,.07);
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    --radius-xl: 34px;
+    --radius-lg: 26px;
+    --radius-md: 20px;
 
-    html {
-      scroll-behavior: smooth;
-    }
+    --blur: blur(28px);
+}
 
-    body {
-      font-family: "DM Sans", sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.5;
-      -webkit-font-smoothing: antialiased;
-    }
 
-    button,
-    input,
-    select {
-      font: inherit;
-    }
+/* =========================================================
+   RESET
+   ========================================================= */
 
-    button {
-      cursor: pointer;
-    }
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
+html {
+    scroll-behavior: smooth;
+}
 
-    img {
-      max-width: 100%;
-      display: block;
-    }
+body {
 
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        sans-serif;
 
-    /* =========================================================
-       GLOBAL
-    ========================================================= */
-
-    .container {
-      width: min(
-        calc(100% - 40px),
-        var(--max-width)
-      );
-
-      margin: 0 auto;
-    }
-
-    .serif {
-      font-family: "Playfair Display", serif;
-    }
-
-    .muted {
-      color: var(--text-soft);
-    }
-
-
-    /* =========================================================
-       HEADER
-    ========================================================= */
-
-    .site-header {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-
-      z-index: 1000;
-
-      color: white;
-    }
-
-    .navbar {
-      height: 88px;
-
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-
-      gap: 30px;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-
-      font-weight: 700;
-      font-size: 20px;
-
-      letter-spacing: -0.03em;
-    }
-
-    .logo-mark {
-      width: 38px;
-      height: 38px;
-
-      border: 1px solid rgba(255,255,255,.45);
-      border-radius: 12px;
-
-      display: grid;
-      place-items: center;
-
-      backdrop-filter: blur(10px);
-
-      font-family: "Playfair Display", serif;
-      font-size: 20px;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 34px;
-
-      font-size: 14px;
-      color: rgba(255,255,255,.82);
-    }
-
-    .nav-links a {
-      transition: .2s;
-    }
-
-    .nav-links a:hover {
-      color: white;
-    }
-
-    .nav-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .nav-button {
-      border: 1px solid rgba(255,255,255,.3);
-
-      background: rgba(255,255,255,.08);
-
-      backdrop-filter: blur(14px);
-
-      color: white;
-
-      border-radius: 999px;
-
-      padding: 10px 17px;
-
-      transition: .2s;
-    }
-
-    .nav-button:hover {
-      background: white;
-      color: var(--green);
-    }
-
-    .nav-button.primary {
-      background: white;
-      color: var(--green);
-      border-color: white;
-    }
-
-    .mobile-menu {
-      display: none;
-
-      width: 42px;
-      height: 42px;
-
-      border: 1px solid rgba(255,255,255,.3);
-
-      background: rgba(255,255,255,.08);
-
-      color: white;
-
-      border-radius: 12px;
-    }
-
-
-    /* =========================================================
-       HERO
-    ========================================================= */
-
-    .hero {
-      min-height: 760px;
-
-      position: relative;
-
-      display: flex;
-      align-items: center;
-
-      overflow: hidden;
-
-      background:
+    background:
+        radial-gradient(
+            circle at 10% 0%,
+            rgba(119,161,141,.20),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 90% 10%,
+            rgba(206,184,133,.16),
+            transparent 25%
+        ),
         linear-gradient(
-          90deg,
-          rgba(8, 28, 22, .82) 0%,
-          rgba(8, 28, 22, .56) 42%,
-          rgba(8, 28, 22, .22) 100%
+            180deg,
+            var(--bg),
+            #f7f8f7 55%,
+            var(--bg-2)
+        );
+
+    color: var(--text);
+
+    min-height: 100vh;
+
+    -webkit-font-smoothing: antialiased;
+
+    overflow-x: hidden;
+}
+
+body::before {
+
+    content: "";
+
+    position: fixed;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    background:
+        linear-gradient(
+            120deg,
+            transparent 20%,
+            rgba(255,255,255,.20),
+            transparent 80%
+        );
+
+    opacity: .35;
+
+    z-index: -1;
+}
+
+button,
+input,
+select {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+::-webkit-scrollbar {
+    width: 9px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(20,40,30,.18);
+    border-radius: 20px;
+}
+
+
+/* =========================================================
+   APP
+   ========================================================= */
+
+.app {
+
+    width: min(1500px, calc(100% - 36px));
+
+    margin: auto;
+
+    padding-bottom: 60px;
+}
+
+
+/* =========================================================
+   LIQUID GLASS NAVIGATION
+   ========================================================= */
+
+.nav-shell {
+
+    position: sticky;
+
+    top: 18px;
+
+    z-index: 1000;
+
+    margin-top: 18px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 20px;
+
+    padding: 11px 12px 11px 18px;
+
+    border: 1px solid rgba(255,255,255,.68);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.74),
+            rgba(255,255,255,.46)
+        );
+
+    backdrop-filter: blur(30px) saturate(150%);
+    -webkit-backdrop-filter: blur(30px) saturate(150%);
+
+    border-radius: 999px;
+
+    box-shadow:
+        0 14px 50px rgba(30,50,40,.10),
+        inset 0 1px 0 rgba(255,255,255,.8);
+}
+
+.logo {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: -.04em;
+
+    white-space: nowrap;
+}
+
+.logo-mark {
+
+    width: 38px;
+    height: 38px;
+
+    border-radius: 13px;
+
+    display: grid;
+
+    place-items: center;
+
+    color: white;
+
+    font-size: 17px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #245f49,
+            #0e3326
+        );
+
+    box-shadow:
+        inset 0 1px 1px rgba(255,255,255,.3),
+        0 7px 20px rgba(23,75,58,.22);
+}
+
+.logo-text {
+
+    display: flex;
+
+    flex-direction: column;
+
+    line-height: 1;
+}
+
+.logo-text strong {
+    font-size: 15px;
+}
+
+.logo-text span {
+
+    margin-top: 4px;
+
+    font-size: 8px;
+
+    letter-spacing: .15em;
+
+    text-transform: uppercase;
+
+    color: var(--text-faint);
+}
+
+.nav-links {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+}
+
+.nav-links button {
+
+    border: 0;
+
+    background: transparent;
+
+    padding: 10px 14px;
+
+    border-radius: 999px;
+
+    color: var(--text-soft);
+
+    transition: .25s ease;
+}
+
+.nav-links button:hover {
+
+    background: rgba(255,255,255,.55);
+
+    color: var(--text);
+}
+
+.nav-actions {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+}
+
+.glass-button {
+
+    border: 1px solid rgba(255,255,255,.65);
+
+    background:
+        rgba(255,255,255,.55);
+
+    backdrop-filter: blur(20px);
+
+    -webkit-backdrop-filter: blur(20px);
+
+    border-radius: 999px;
+
+    padding: 10px 15px;
+
+    color: var(--text);
+
+    font-weight: 600;
+
+    transition:
+        transform .2s ease,
+        background .2s ease,
+        box-shadow .2s ease;
+}
+
+.glass-button:hover {
+
+    transform: translateY(-1px);
+
+    background: rgba(255,255,255,.82);
+
+    box-shadow: var(--shadow-soft);
+}
+
+.language-button {
+
+    min-width: 48px;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.hero {
+
+    position: relative;
+
+    min-height: 620px;
+
+    margin-top: 18px;
+
+    border-radius: var(--radius-xl);
+
+    overflow: hidden;
+
+    background:
+
+        linear-gradient(
+            120deg,
+            rgba(13,37,28,.91),
+            rgba(21,63,48,.62)
         ),
 
-        url("https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=2400&q=90")
+        url("https://images.unsplash.com/photo-1510798831971-661eb04b3739?auto=format&fit=crop&w=2200&q=90")
         center / cover;
-    }
 
-    .hero::after {
-      content: "";
+    box-shadow:
+        0 35px 100px rgba(20,40,30,.18);
+}
 
-      position: absolute;
+.hero::after {
 
-      inset: auto 0 0;
+    content: "";
 
-      height: 180px;
+    position: absolute;
 
-      background:
-        linear-gradient(
-          transparent,
-          var(--bg)
+    inset: 0;
+
+    background:
+        radial-gradient(
+            circle at 75% 30%,
+            rgba(255,255,255,.13),
+            transparent 25%
         );
-    }
 
-    .hero-content {
-      position: relative;
-      z-index: 2;
+    pointer-events: none;
+}
 
-      max-width: 850px;
+.hero-content {
 
-      padding-top: 100px;
-    }
+    position: relative;
 
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
+    z-index: 2;
 
-      margin-bottom: 22px;
+    padding: clamp(45px, 7vw, 100px);
 
-      color: rgba(255,255,255,.82);
+    max-width: 950px;
 
-      font-size: 13px;
-      font-weight: 600;
+    color: white;
+}
 
-      text-transform: uppercase;
+.eyebrow {
 
-      letter-spacing: .13em;
-    }
+    display: inline-flex;
 
-    .eyebrow::before {
-      content: "";
+    align-items: center;
 
-      width: 28px;
-      height: 1px;
+    gap: 8px;
 
-      background: var(--gold);
-    }
+    padding: 8px 13px;
 
-    .hero h1 {
-      font-family: "Playfair Display", serif;
+    border-radius: 999px;
 
-      font-size: clamp(
-        48px,
-        6vw,
-        88px
-      );
+    background: rgba(255,255,255,.12);
 
-      line-height: .98;
+    border: 1px solid rgba(255,255,255,.20);
 
-      letter-spacing: -.045em;
+    backdrop-filter: blur(20px);
 
-      color: white;
+    font-size: 12px;
 
-      max-width: 850px;
-    }
+    font-weight: 600;
 
-    .hero h1 span {
-      color: #d9c39c;
-    }
+    letter-spacing: .04em;
+}
 
-    .hero-description {
-      max-width: 590px;
+.eyebrow-dot {
 
-      margin-top: 25px;
+    width: 7px;
+    height: 7px;
 
-      color: rgba(255,255,255,.78);
+    border-radius: 50%;
 
-      font-size: 17px;
+    background: #a9d8bf;
 
-      line-height: 1.7;
-    }
+    box-shadow: 0 0 14px #a9d8bf;
+}
+
+.hero h1 {
+
+    margin-top: 25px;
+
+    font-size:
+        clamp(48px, 7vw, 94px);
+
+    line-height: .98;
+
+    letter-spacing: -.065em;
+
+    font-weight: 700;
+
+    max-width: 900px;
+}
+
+.hero h1 span {
+
+    color: rgba(255,255,255,.63);
+}
+
+.hero-description {
+
+    max-width: 650px;
+
+    margin-top: 27px;
+
+    color: rgba(255,255,255,.74);
+
+    font-size: 17px;
+
+    line-height: 1.7;
+}
 
 
-    /* =========================================================
-       SEARCH BOX
-    ========================================================= */
+/* =========================================================
+   HERO SEARCH
+   ========================================================= */
 
-    .hero-search {
-      margin-top: 40px;
+.search-glass {
 
-      width: min(900px, 100%);
+    position: absolute;
 
-      padding: 9px;
+    z-index: 5;
 
-      background: rgba(255,255,255,.97);
+    left: 50%;
 
-      border-radius: 18px;
+    bottom: 34px;
 
-      box-shadow: var(--shadow-lg);
+    transform: translateX(-50%);
 
-      display: grid;
+    width: min(1000px, calc(100% - 50px));
 
-      grid-template-columns:
-        1.3fr
-        .75fr
-        .75fr
+    padding: 9px;
+
+    display: grid;
+
+    grid-template-columns:
+        1.5fr
+        1fr
+        1fr
         auto;
 
-      gap: 7px;
-    }
+    gap: 7px;
 
-    .search-field {
-      min-height: 58px;
+    border-radius: 25px;
 
-      padding: 8px 16px;
+    background:
+        rgba(255,255,255,.72);
 
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+    border: 1px solid rgba(255,255,255,.72);
 
-      border-radius: 12px;
+    backdrop-filter:
+        blur(30px)
+        saturate(150%);
 
-      transition: .2s;
-    }
+    -webkit-backdrop-filter:
+        blur(30px)
+        saturate(150%);
 
-    .search-field:hover {
-      background: var(--surface-soft);
-    }
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.22),
+        inset 0 1px 0 rgba(255,255,255,.9);
+}
 
-    .search-field label {
-      color: var(--text-light);
+.search-field {
 
-      font-size: 11px;
+    display: flex;
 
-      text-transform: uppercase;
+    flex-direction: column;
 
-      letter-spacing: .08em;
+    justify-content: center;
 
-      margin-bottom: 3px;
-    }
+    padding: 11px 16px;
 
-    .search-field input,
-    .search-field select {
-      border: 0;
-      outline: 0;
+    border-radius: 17px;
 
-      background: transparent;
+    transition: .2s ease;
+}
 
-      color: var(--text);
+.search-field:hover {
 
-      font-weight: 600;
+    background: rgba(255,255,255,.5);
+}
 
-      width: 100%;
-    }
+.search-field label {
 
-    .search-button {
-      border: 0;
+    color: #737b77;
 
-      min-width: 125px;
+    font-size: 10px;
 
-      border-radius: 13px;
+    text-transform: uppercase;
 
-      background: var(--green);
+    letter-spacing: .08em;
 
-      color: white;
+    font-weight: 700;
+}
 
-      font-weight: 600;
+.search-field input,
+.search-field select {
 
-      transition: .25s;
-    }
+    border: 0;
 
-    .search-button:hover {
-      background: var(--green-2);
-      transform: translateY(-1px);
-    }
+    outline: none;
 
+    background: transparent;
 
-    /* =========================================================
-       HERO TRUST
-    ========================================================= */
+    color: var(--text);
 
-    .hero-bottom {
-      margin-top: 34px;
+    font-size: 14px;
 
-      display: flex;
-      gap: 28px;
+    font-weight: 600;
 
-      color: rgba(255,255,255,.7);
+    margin-top: 4px;
 
-      font-size: 13px;
-    }
+    width: 100%;
+}
 
-    .hero-trust {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+.search-submit {
 
-    .trust-dot {
-      width: 7px;
-      height: 7px;
+    border: 0;
 
-      border-radius: 50%;
+    border-radius: 18px;
 
-      background: #d3bd93;
-    }
+    padding: 0 23px;
 
+    background:
+        linear-gradient(
+            145deg,
+            #245f49,
+            #123c2d
+        );
 
-    /* =========================================================
-       SECTION
-    ========================================================= */
+    color: white;
 
-    section {
-      padding: 100px 0;
-    }
+    font-weight: 700;
 
-    .section-header {
-      display: flex;
+    box-shadow:
+        0 9px 25px rgba(18,60,45,.28);
 
-      align-items: flex-end;
-      justify-content: space-between;
+    transition: .25s ease;
+}
 
-      gap: 30px;
+.search-submit:hover {
 
-      margin-bottom: 35px;
-    }
+    transform: scale(1.02);
 
-    .section-kicker {
-      color: var(--gold);
-
-      font-size: 12px;
-
-      font-weight: 700;
-
-      text-transform: uppercase;
-
-      letter-spacing: .13em;
-
-      margin-bottom: 9px;
-    }
-
-    .section-title {
-      font-family: "Playfair Display", serif;
-
-      font-size: clamp(
-        34px,
-        4vw,
-        52px
-      );
-
-      line-height: 1.05;
-
-      letter-spacing: -.03em;
-    }
-
-    .section-description {
-      max-width: 480px;
-
-      color: var(--text-soft);
-
-      font-size: 15px;
-
-      line-height: 1.7;
-    }
+    box-shadow:
+        0 13px 32px rgba(18,60,45,.35);
+}
 
 
-    /* =========================================================
-       QUICK CATEGORIES
-    ========================================================= */
+/* =========================================================
+   QUICK STATS
+   ========================================================= */
 
-    .categories {
-      display: grid;
+.stats {
 
-      grid-template-columns:
+    display: grid;
+
+    grid-template-columns:
         repeat(4, 1fr);
 
-      gap: 14px;
-    }
+    gap: 12px;
 
-    .category {
-      position: relative;
+    margin-top: 18px;
+}
 
-      height: 240px;
+.stat {
 
-      border-radius: var(--radius-lg);
+    padding: 24px;
 
-      overflow: hidden;
+    border-radius: var(--radius-lg);
 
-      color: white;
+    background:
+        rgba(255,255,255,.62);
 
-      cursor: pointer;
+    border: 1px solid rgba(255,255,255,.75);
 
-      box-shadow: var(--shadow-sm);
-    }
+    backdrop-filter: blur(24px);
 
-    .category img {
-      width: 100%;
-      height: 100%;
+    box-shadow: var(--shadow-soft);
+}
 
-      object-fit: cover;
+.stat strong {
 
-      transition: transform .6s ease;
-    }
+    display: block;
 
-    .category:hover img {
-      transform: scale(1.06);
-    }
+    font-size: 29px;
 
-    .category::after {
-      content: "";
+    letter-spacing: -.05em;
 
-      position: absolute;
+    color: var(--green);
+}
 
-      inset: 0;
+.stat span {
 
-      background:
+    display: block;
+
+    margin-top: 5px;
+
+    color: var(--text-soft);
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   SECTION
+   ========================================================= */
+
+.section {
+
+    margin-top: 70px;
+}
+
+.section-header {
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 25px;
+}
+
+.section-title {
+
+    font-size: clamp(30px, 4vw, 48px);
+
+    letter-spacing: -.055em;
+
+    line-height: 1;
+
+    font-weight: 700;
+}
+
+.section-subtitle {
+
+    margin-top: 10px;
+
+    color: var(--text-soft);
+
+    font-size: 15px;
+}
+
+.section-link {
+
+    color: var(--green);
+
+    font-weight: 700;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   FILTER BAR
+   ========================================================= */
+
+.filter-bar {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-bottom: 22px;
+}
+
+.filter {
+
+    border: 1px solid var(--line);
+
+    background:
+        rgba(255,255,255,.58);
+
+    padding: 10px 16px;
+
+    border-radius: 999px;
+
+    color: var(--text-soft);
+
+    font-weight: 600;
+
+    font-size: 13px;
+
+    transition: .2s ease;
+}
+
+.filter:hover {
+
+    background: white;
+}
+
+.filter.active {
+
+    color: white;
+
+    background: var(--green);
+
+    border-color: var(--green);
+
+    box-shadow:
+        0 7px 20px rgba(23,75,58,.20);
+}
+
+
+/* =========================================================
+   LISTING GRID
+   ========================================================= */
+
+.listing-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0,1fr));
+
+    gap: 18px;
+}
+
+.property-card {
+
+    position: relative;
+
+    overflow: hidden;
+
+    border-radius: 28px;
+
+    background:
+        rgba(255,255,255,.68);
+
+    border: 1px solid rgba(255,255,255,.75);
+
+    box-shadow: var(--shadow-soft);
+
+    transition:
+        transform .35s cubic-bezier(.2,.8,.2,1),
+        box-shadow .35s ease;
+}
+
+.property-card:hover {
+
+    transform: translateY(-7px);
+
+    box-shadow:
+        0 28px 70px rgba(20,40,30,.14);
+}
+
+.property-image {
+
+    height: 285px;
+
+    position: relative;
+
+    overflow: hidden;
+
+    background: #ddd;
+}
+
+.property-image img {
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    transition: transform .7s cubic-bezier(.2,.8,.2,1);
+}
+
+.property-card:hover .property-image img {
+
+    transform: scale(1.045);
+}
+
+.property-type {
+
+    position: absolute;
+
+    left: 15px;
+    top: 15px;
+
+    padding: 8px 11px;
+
+    border-radius: 999px;
+
+    color: white;
+
+    background:
+        rgba(15,25,20,.48);
+
+    border: 1px solid rgba(255,255,255,.3);
+
+    backdrop-filter: blur(18px);
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: .08em;
+}
+
+.favorite {
+
+    position: absolute;
+
+    top: 14px;
+    right: 14px;
+
+    width: 42px;
+    height: 42px;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(255,255,255,.4);
+
+    background:
+        rgba(255,255,255,.25);
+
+    color: white;
+
+    backdrop-filter: blur(18px);
+
+    font-size: 18px;
+
+    transition: .2s ease;
+}
+
+.favorite:hover {
+
+    transform: scale(1.08);
+
+    background: rgba(255,255,255,.55);
+
+    color: #a33;
+}
+
+.favorite.saved {
+
+    background: white;
+
+    color: #b44;
+}
+
+.property-content {
+
+    padding: 20px;
+}
+
+.property-location {
+
+    color: var(--text-faint);
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    text-transform: uppercase;
+
+    letter-spacing: .08em;
+}
+
+.property-title {
+
+    margin-top: 7px;
+
+    font-size: 18px;
+
+    letter-spacing: -.03em;
+
+    font-weight: 700;
+}
+
+.property-meta {
+
+    display: flex;
+
+    gap: 15px;
+
+    margin-top: 12px;
+
+    color: var(--text-soft);
+
+    font-size: 12px;
+}
+
+.property-bottom {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-top: 19px;
+}
+
+.property-price {
+
+    color: var(--green);
+
+    font-size: 18px;
+
+    font-weight: 800;
+
+    letter-spacing: -.03em;
+}
+
+.details-button {
+
+    border: 0;
+
+    background: var(--green-soft);
+
+    color: var(--green);
+
+    padding: 9px 13px;
+
+    border-radius: 999px;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    transition: .2s ease;
+}
+
+.details-button:hover {
+
+    background: var(--green);
+
+    color: white;
+}
+
+
+/* =========================================================
+   EXPLORER
+   ========================================================= */
+
+.explorer {
+
+    display: grid;
+
+    grid-template-columns:
+        .85fr 1.15fr;
+
+    min-height: 620px;
+
+    overflow: hidden;
+
+    border-radius: 34px;
+
+    background:
+        rgba(255,255,255,.66);
+
+    border: 1px solid rgba(255,255,255,.78);
+
+    box-shadow: var(--shadow);
+}
+
+.explorer-list {
+
+    padding: 28px;
+
+    overflow: auto;
+
+    max-height: 620px;
+}
+
+.explorer-list::-webkit-scrollbar {
+    width: 5px;
+}
+
+.explorer-item {
+
+    display: grid;
+
+    grid-template-columns: 105px 1fr;
+
+    gap: 13px;
+
+    padding: 10px;
+
+    border-radius: 18px;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+}
+
+.explorer-item:hover,
+.explorer-item.selected {
+
+    background:
+        rgba(255,255,255,.85);
+
+    box-shadow:
+        0 8px 25px rgba(20,40,30,.06);
+}
+
+.explorer-thumb {
+
+    width: 105px;
+    height: 85px;
+
+    border-radius: 14px;
+
+    object-fit: cover;
+}
+
+.explorer-info {
+
+    min-width: 0;
+}
+
+.explorer-info h4 {
+
+    font-size: 14px;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+.explorer-info p {
+
+    color: var(--text-faint);
+
+    font-size: 11px;
+
+    margin-top: 4px;
+}
+
+.explorer-price {
+
+    display: block;
+
+    margin-top: 8px;
+
+    color: var(--green);
+
+    font-size: 13px;
+
+    font-weight: 800;
+}
+
+.map-container {
+
+    position: relative;
+
+    min-height: 620px;
+}
+
+#map {
+
+    width: 100%;
+    height: 100%;
+
+    min-height: 620px;
+}
+
+.map-overlay {
+
+    position: absolute;
+
+    top: 20px;
+    right: 20px;
+
+    z-index: 500;
+
+    padding: 9px 13px;
+
+    border-radius: 999px;
+
+    background:
+        rgba(255,255,255,.76);
+
+    border: 1px solid rgba(255,255,255,.7);
+
+    backdrop-filter: blur(20px);
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    color: var(--text-soft);
+}
+
+
+/* =========================================================
+   REGION CARDS
+   ========================================================= */
+
+.region-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 15px;
+}
+
+.region {
+
+    position: relative;
+
+    height: 240px;
+
+    overflow: hidden;
+
+    border-radius: 26px;
+
+    color: white;
+
+    cursor: pointer;
+
+    box-shadow: var(--shadow-soft);
+}
+
+.region img {
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    transition: .6s ease;
+}
+
+.region:hover img {
+
+    transform: scale(1.06);
+}
+
+.region::after {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
         linear-gradient(
-          transparent 20%,
-          rgba(0,0,0,.72)
+            transparent 25%,
+            rgba(0,0,0,.65)
         );
+}
+
+.region-content {
+
+    position: absolute;
+
+    z-index: 2;
+
+    bottom: 20px;
+
+    left: 20px;
+}
+
+.region-content strong {
+
+    font-size: 20px;
+
+    letter-spacing: -.03em;
+}
+
+.region-content span {
+
+    display: block;
+
+    margin-top: 4px;
+
+    color: rgba(255,255,255,.72);
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   ESTORA CTA
+   ========================================================= */
+
+.cta {
+
+    position: relative;
+
+    overflow: hidden;
+
+    padding: 65px;
+
+    border-radius: 34px;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            130deg,
+            #10392b,
+            #1e5c45
+        );
+
+    box-shadow:
+        0 30px 80px rgba(20,70,50,.18);
+}
+
+.cta::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 400px;
+    height: 400px;
+
+    border-radius: 50%;
+
+    right: -150px;
+    top: -200px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,255,255,.16),
+            transparent 70%
+        );
+}
+
+.cta h2 {
+
+    position: relative;
+
+    max-width: 700px;
+
+    font-size:
+        clamp(32px, 5vw, 57px);
+
+    line-height: 1;
+
+    letter-spacing: -.055em;
+}
+
+.cta p {
+
+    position: relative;
+
+    max-width: 600px;
+
+    margin-top: 18px;
+
+    color: rgba(255,255,255,.7);
+
+    line-height: 1.7;
+}
+
+.cta-button {
+
+    position: relative;
+
+    display: inline-flex;
+
+    margin-top: 28px;
+
+    padding: 13px 19px;
+
+    border-radius: 999px;
+
+    background: white;
+
+    color: var(--green);
+
+    font-weight: 800;
+
+    font-size: 13px;
+
+    transition: .2s ease;
+}
+
+.cta-button:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 10px 30px rgba(0,0,0,.18);
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+footer {
+
+    margin-top: 70px;
+
+    padding: 35px 10px 15px;
+
+    border-top: 1px solid var(--line);
+}
+
+.footer-top {
+
+    display: grid;
+
+    grid-template-columns:
+        1.5fr
+        1fr
+        1fr
+        1fr;
+
+    gap: 30px;
+}
+
+.footer-brand p {
+
+    margin-top: 12px;
+
+    max-width: 330px;
+
+    color: var(--text-soft);
+
+    font-size: 13px;
+
+    line-height: 1.7;
+}
+
+.footer-column h4 {
+
+    font-size: 12px;
+
+    text-transform: uppercase;
+
+    letter-spacing: .08em;
+}
+
+.footer-column a {
+
+    display: block;
+
+    margin-top: 9px;
+
+    color: var(--text-soft);
+
+    font-size: 12px;
+
+    transition: .2s ease;
+}
+
+.footer-column a:hover {
+
+    color: var(--green);
+}
+
+.footer-bottom {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 20px;
+
+    margin-top: 45px;
+
+    padding-top: 20px;
+
+    border-top: 1px solid var(--line);
+
+    color: var(--text-faint);
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   SOUTH TYROL BRAND BADGE
+   ========================================================= */
+
+.south-tyrol-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 11px;
+
+    padding: 10px 14px;
+
+    border-radius: 16px;
+
+    background:
+        rgba(255,255,255,.6);
+
+    border: 1px solid rgba(255,255,255,.8);
+
+    box-shadow:
+        0 7px 22px rgba(20,40,30,.05);
+}
+
+.tyrol-symbol {
+
+    position: relative;
+
+    width: 27px;
+    height: 20px;
+}
+
+.tyrol-symbol::before,
+.tyrol-symbol::after {
+
+    content: "";
+
+    position: absolute;
+
+    bottom: 0;
+
+    width: 0;
+    height: 0;
+
+    border-left: 14px solid transparent;
+    border-right: 14px solid transparent;
+    border-bottom: 19px solid var(--green);
+}
+
+.tyrol-symbol::before {
+    left: -2px;
+}
+
+.tyrol-symbol::after {
+
+    left: 10px;
+
+    border-bottom-color: #d5b56b;
+}
+
+.tyrol-text strong {
+
+    display: block;
+
+    color: var(--green);
+
+    font-size: 11px;
+}
+
+.tyrol-text span {
+
+    display: block;
+
+    margin-top: 2px;
+
+    color: var(--text-faint);
+
+    font-size: 8px;
+
+    text-transform: uppercase;
+
+    letter-spacing: .06em;
+}
+
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
+.modal {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 3000;
+
+    display: none;
+
+    place-items: center;
+
+    padding: 20px;
+
+    background:
+        rgba(10,18,14,.48);
+
+    backdrop-filter: blur(15px);
+}
+
+.modal.open {
+
+    display: grid;
+}
+
+.modal-card {
+
+    width: min(850px, 100%);
+
+    max-height: 90vh;
+
+    overflow: auto;
+
+    border-radius: 32px;
+
+    background:
+        rgba(250,252,251,.90);
+
+    border: 1px solid rgba(255,255,255,.8);
+
+    box-shadow:
+        0 40px 120px rgba(0,0,0,.25);
+
+    backdrop-filter:
+        blur(35px);
+
+    animation:
+        modalIn .35s cubic-bezier(.2,.8,.2,1);
+}
+
+@keyframes modalIn {
+
+    from {
+        opacity: 0;
+        transform: scale(.96) translateY(15px);
     }
 
-    .category-content {
-      position: absolute;
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
 
-      z-index: 2;
+.modal-image {
 
-      left: 22px;
-      right: 22px;
-      bottom: 20px;
+    height: 360px;
+
+    width: 100%;
+
+    object-fit: cover;
+}
+
+.modal-content {
+
+    padding: 30px;
+}
+
+.modal-close {
+
+    position: absolute;
+
+    top: 18px;
+    right: 18px;
+
+    width: 42px;
+    height: 42px;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(255,255,255,.7);
+
+    background:
+        rgba(255,255,255,.72);
+
+    backdrop-filter: blur(20px);
+
+    font-size: 18px;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media(max-width: 1050px) {
+
+    .listing-grid {
+        grid-template-columns: repeat(2,1fr);
     }
 
-    .category-content span {
-      display: block;
-
-      font-size: 12px;
-
-      color: rgba(255,255,255,.7);
-
-      margin-bottom: 3px;
-    }
-
-    .category-content strong {
-      font-family: "Playfair Display", serif;
-
-      font-size: 25px;
-    }
-
-
-    /* =========================================================
-       PROPERTY EXPLORER
-    ========================================================= */
-
-    .explorer-section {
-      background: #e9e9e4;
+    .region-grid {
+        grid-template-columns: repeat(2,1fr);
     }
 
     .explorer {
-      display: grid;
-
-      grid-template-columns:
-        390px
-        1fr;
-
-      min-height: 680px;
-
-      background: white;
-
-      border-radius: 28px;
-
-      overflow: hidden;
-
-      box-shadow: var(--shadow);
+        grid-template-columns: 1fr;
     }
-
-    .explorer-sidebar {
-      border-right: 1px solid var(--border);
-
-      display: flex;
-
-      flex-direction: column;
-
-      min-width: 0;
-    }
-
-    .explorer-top {
-      padding: 22px;
-
-      border-bottom: 1px solid var(--border);
-    }
-
-    .explorer-top-row {
-      display: flex;
-
-      align-items: center;
-      justify-content: space-between;
-
-      margin-bottom: 17px;
-    }
-
-    .explorer-top h3 {
-      font-size: 19px;
-    }
-
-    .result-count {
-      color: var(--text-soft);
-
-      font-size: 13px;
-    }
-
-
-    /* =========================================================
-       FILTERS
-    ========================================================= */
-
-    .filter-tabs {
-      display: flex;
-
-      padding: 4px;
-
-      background: var(--surface-soft);
-
-      border-radius: 11px;
-
-      margin-bottom: 15px;
-    }
-
-    .filter-tab {
-      flex: 1;
-
-      border: 0;
-
-      padding: 9px;
-
-      border-radius: 8px;
-
-      background: transparent;
-
-      color: var(--text-soft);
-
-      font-weight: 600;
-
-      font-size: 13px;
-
-      transition: .2s;
-    }
-
-    .filter-tab.active {
-      background: white;
-
-      color: var(--green);
-
-      box-shadow: var(--shadow-sm);
-    }
-
-    .filter-row {
-      display: grid;
-
-      grid-template-columns: 1fr 1fr;
-
-      gap: 8px;
-    }
-
-    .filter-control {
-      border: 1px solid var(--border);
-
-      background: white;
-
-      border-radius: 10px;
-
-      padding: 11px;
-
-      outline: 0;
-
-      color: var(--text);
-
-      font-size: 13px;
-    }
-
-    .filter-control:focus {
-      border-color: var(--green-2);
-    }
-
-    .sort-select {
-      width: 100%;
-
-      border: 0;
-
-      background: var(--surface-soft);
-
-      border-radius: 9px;
-
-      padding: 9px 10px;
-
-      outline: 0;
-
-      margin-top: 10px;
-
-      color: var(--text-soft);
-
-      font-size: 13px;
-    }
-
-
-    /* =========================================================
-       PROPERTY LIST
-    ========================================================= */
-
-    .property-list {
-      overflow-y: auto;
-
-      padding: 12px;
-
-      flex: 1;
-    }
-
-    .property-list::-webkit-scrollbar {
-      width: 5px;
-    }
-
-    .property-list::-webkit-scrollbar-thumb {
-      background: #d4d7d2;
-
-      border-radius: 20px;
-    }
-
-    .property-item {
-      display: grid;
-
-      grid-template-columns: 115px 1fr;
-
-      gap: 13px;
-
-      padding: 10px;
-
-      border-radius: 15px;
-
-      cursor: pointer;
-
-      transition: .2s;
-
-      border: 1px solid transparent;
-    }
-
-    .property-item:hover {
-      background: #f6f6f2;
-    }
-
-    .property-item.selected {
-      background: var(--green-soft);
-
-      border-color: rgba(23,59,49,.12);
-    }
-
-    .property-image {
-      height: 105px;
-
-      border-radius: 11px;
-
-      overflow: hidden;
-
-      position: relative;
-    }
-
-    .property-image img {
-      width: 100%;
-      height: 100%;
-
-      object-fit: cover;
-
-      transition: .4s;
-    }
-
-    .property-item:hover .property-image img {
-      transform: scale(1.04);
-    }
-
-    .property-fav {
-      position: absolute;
-
-      top: 7px;
-      right: 7px;
-
-      width: 28px;
-      height: 28px;
-
-      border: 0;
-
-      border-radius: 50%;
-
-      background: rgba(255,255,255,.9);
-
-      display: grid;
-      place-items: center;
-
-      font-size: 13px;
-    }
-
-    .property-info {
-      min-width: 0;
-
-      display: flex;
-      flex-direction: column;
-    }
-
-    .property-type {
-      font-size: 10px;
-
-      color: var(--green-2);
-
-      font-weight: 700;
-
-      text-transform: uppercase;
-
-      letter-spacing: .08em;
-    }
-
-    .property-name {
-      font-weight: 700;
-
-      font-size: 14px;
-
-      margin-top: 3px;
-
-      white-space: nowrap;
-
-      overflow: hidden;
-
-      text-overflow: ellipsis;
-    }
-
-    .property-location {
-      color: var(--text-soft);
-
-      font-size: 12px;
-
-      margin-top: 2px;
-    }
-
-    .property-price {
-      margin-top: auto;
-
-      color: var(--green);
-
-      font-weight: 700;
-
-      font-size: 15px;
-    }
-
-    .property-meta {
-      display: flex;
-
-      gap: 8px;
-
-      color: var(--text-light);
-
-      font-size: 11px;
-
-      margin-top: 4px;
-    }
-
-
-    /* =========================================================
-       MAP
-    ========================================================= */
 
     .map-container {
-      position: relative;
-
-      min-width: 0;
+        min-height: 480px;
     }
 
     #map {
-      width: 100%;
-      height: 100%;
-
-      min-height: 680px;
-    }
-
-    .map-overlay {
-      position: absolute;
-
-      z-index: 500;
-
-      top: 18px;
-      left: 18px;
-
-      background: rgba(255,255,255,.94);
-
-      backdrop-filter: blur(12px);
-
-      padding: 9px 13px;
-
-      border-radius: 10px;
-
-      box-shadow: var(--shadow-sm);
-
-      font-size: 12px;
-
-      color: var(--text-soft);
-    }
-
-    .map-location-button {
-      position: absolute;
-
-      z-index: 500;
-
-      right: 18px;
-      bottom: 18px;
-
-      width: 44px;
-      height: 44px;
-
-      border: 0;
-
-      background: white;
-
-      border-radius: 12px;
-
-      box-shadow: var(--shadow);
-
-      font-size: 18px;
-    }
-
-
-    /* =========================================================
-       LEAFLET
-    ========================================================= */
-
-    .leaflet-popup-content-wrapper {
-      border-radius: 14px;
-    }
-
-    .leaflet-popup-content {
-      margin: 14px;
-      font-family: "DM Sans", sans-serif;
-    }
-
-    .map-popup {
-      min-width: 190px;
-    }
-
-    .map-popup img {
-      width: 100%;
-      height: 100px;
-
-      object-fit: cover;
-
-      border-radius: 9px;
-
-      margin-bottom: 9px;
-    }
-
-    .map-popup strong {
-      display: block;
-
-      font-size: 14px;
-
-      margin-bottom: 3px;
-    }
-
-    .map-popup span {
-      color: var(--text-soft);
-
-      font-size: 12px;
-    }
-
-    .price-marker {
-      background: var(--green);
-
-      color: white;
-
-      border: 2px solid white;
-
-      box-shadow: 0 4px 15px rgba(0,0,0,.2);
-
-      border-radius: 999px;
-
-      padding: 6px 9px;
-
-      font-size: 11px;
-
-      font-weight: 700;
-
-      white-space: nowrap;
-    }
-
-
-    /* =========================================================
-       FEATURED
-    ========================================================= */
-
-    .featured-grid {
-      display: grid;
-
-      grid-template-columns:
-        1.35fr
-        .85fr
-        .85fr;
-
-      grid-template-rows:
-        260px 260px;
-
-      gap: 15px;
-    }
-
-    .featured-card {
-      position: relative;
-
-      overflow: hidden;
-
-      border-radius: var(--radius-lg);
-
-      color: white;
-
-      cursor: pointer;
-    }
-
-    .featured-card:first-child {
-      grid-row: span 2;
-    }
-
-    .featured-card img {
-      width: 100%;
-      height: 100%;
-
-      object-fit: cover;
-
-      transition: transform .6s;
-    }
-
-    .featured-card:hover img {
-      transform: scale(1.05);
-    }
-
-    .featured-card::after {
-      content: "";
-
-      position: absolute;
-
-      inset: 0;
-
-      background:
-        linear-gradient(
-          transparent 30%,
-          rgba(0,0,0,.76)
-        );
-    }
-
-    .featured-content {
-      position: absolute;
-
-      z-index: 2;
-
-      left: 24px;
-      right: 24px;
-      bottom: 22px;
-    }
-
-    .featured-content small {
-      color: rgba(255,255,255,.7);
-
-      font-size: 11px;
-
-      text-transform: uppercase;
-
-      letter-spacing: .1em;
-    }
-
-    .featured-content h3 {
-      font-family: "Playfair Display", serif;
-
-      font-size: 26px;
-
-      margin: 5px 0;
-    }
-
-    .featured-card:not(:first-child) .featured-content h3 {
-      font-size: 21px;
-    }
-
-    .featured-price {
-      font-weight: 700;
-    }
-
-
-    /* =========================================================
-       REGION SECTION
-    ========================================================= */
-
-    .regions {
-      display: grid;
-
-      grid-template-columns:
-        repeat(3, 1fr);
-
-      gap: 15px;
-    }
-
-    .region-card {
-      background: white;
-
-      border: 1px solid var(--border);
-
-      border-radius: 20px;
-
-      padding: 24px;
-
-      transition: .25s;
-    }
-
-    .region-card:hover {
-      transform: translateY(-4px);
-
-      box-shadow: var(--shadow);
-    }
-
-    .region-number {
-      color: var(--gold);
-
-      font-family: "Playfair Display", serif;
-
-      font-size: 34px;
-    }
-
-    .region-card h3 {
-      margin-top: 10px;
-
-      font-family: "Playfair Display", serif;
-
-      font-size: 26px;
-    }
-
-    .region-card p {
-      color: var(--text-soft);
-
-      font-size: 14px;
-
-      margin-top: 8px;
-
-      line-height: 1.65;
-    }
-
-    .region-link {
-      display: inline-flex;
-
-      margin-top: 17px;
-
-      color: var(--green);
-
-      font-size: 13px;
-
-      font-weight: 700;
-    }
-
-
-    /* =========================================================
-       CTA
-    ========================================================= */
-
-    .cta {
-      position: relative;
-
-      overflow: hidden;
-
-      background:
-        linear-gradient(
-          100deg,
-          #173b31,
-          #254e42
-        );
-
-      border-radius: 30px;
-
-      padding: 70px;
-
-      color: white;
-    }
-
-    .cta::before {
-      content: "";
-
-      position: absolute;
-
-      width: 400px;
-      height: 400px;
-
-      border-radius: 50%;
-
-      background: rgba(255,255,255,.04);
-
-      top: -200px;
-      right: -100px;
-    }
-
-    .cta-content {
-      position: relative;
-
-      z-index: 2;
-
-      max-width: 650px;
-    }
-
-    .cta h2 {
-      font-family: "Playfair Display", serif;
-
-      font-size: clamp(
-        35px,
-        4vw,
-        54px
-      );
-
-      line-height: 1.05;
-    }
-
-    .cta p {
-      color: rgba(255,255,255,.72);
-
-      margin-top: 15px;
-
-      max-width: 520px;
-
-      line-height: 1.7;
-    }
-
-    .cta-actions {
-      margin-top: 28px;
-
-      display: flex;
-
-      gap: 10px;
-
-      flex-wrap: wrap;
-    }
-
-    .cta-button {
-      border: 0;
-
-      padding: 13px 19px;
-
-      border-radius: 999px;
-
-      font-weight: 700;
-    }
-
-    .cta-button.primary {
-      background: white;
-
-      color: var(--green);
-    }
-
-    .cta-button.secondary {
-      background: rgba(255,255,255,.1);
-
-      color: white;
-
-      border: 1px solid rgba(255,255,255,.2);
-    }
-
-
-    /* =========================================================
-       FOOTER
-    ========================================================= */
-
-    footer {
-      padding: 55px 0 30px;
+        min-height: 480px;
     }
 
     .footer-top {
-      display: grid;
+        grid-template-columns: repeat(2,1fr);
+    }
+}
 
-      grid-template-columns:
-        1.4fr
-        repeat(3, 1fr);
 
-      gap: 40px;
+@media(max-width: 800px) {
 
-      padding-bottom: 45px;
-
-      border-bottom: 1px solid var(--border);
+    .app {
+        width: min(100% - 20px, 1500px);
     }
 
-    .footer-brand {
-      max-width: 280px;
+    .nav-shell {
+        border-radius: 22px;
     }
 
-    .footer-logo {
-      font-family: "Playfair Display", serif;
-
-      font-size: 27px;
-
-      font-weight: 600;
+    .nav-links {
+        display: none;
     }
 
-    .footer-brand p {
-      color: var(--text-soft);
-
-      font-size: 13px;
-
-      margin-top: 10px;
-
-      line-height: 1.7;
+    .hero {
+        min-height: 700px;
     }
 
-    .footer-column h4 {
-      font-size: 13px;
-
-      margin-bottom: 14px;
+    .hero-content {
+        padding: 55px 25px;
     }
 
-    .footer-column a {
-      display: block;
-
-      color: var(--text-soft);
-
-      font-size: 13px;
-
-      margin-bottom: 8px;
-
-      transition: .2s;
+    .hero h1 {
+        font-size: 48px;
     }
 
-    .footer-column a:hover {
-      color: var(--green);
+    .search-glass {
+
+        grid-template-columns: 1fr;
+
+        bottom: 15px;
+
+        width: calc(100% - 30px);
+
+        border-radius: 22px;
+    }
+
+    .search-submit {
+
+        height: 52px;
+    }
+
+    .stats {
+        grid-template-columns: repeat(2,1fr);
+    }
+
+    .listing-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .region-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .section-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .cta {
+        padding: 40px 25px;
+    }
+}
+
+
+@media(max-width: 520px) {
+
+    .logo-text span {
+        display: none;
+    }
+
+    .language-button {
+        display: none;
+    }
+
+    .hero h1 {
+        font-size: 42px;
+    }
+
+    .stats {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .stat {
+        padding: 18px;
+    }
+
+    .stat strong {
+        font-size: 24px;
+    }
+
+    .explorer-list {
+        padding: 15px;
+    }
+
+    .footer-top {
+        grid-template-columns: 1fr;
     }
 
     .footer-bottom {
-      display: flex;
-
-      justify-content: space-between;
-
-      gap: 20px;
-
-      padding-top: 20px;
-
-      color: var(--text-light);
-
-      font-size: 12px;
-    }
-
-
-    /* =========================================================
-       MODAL
-    ========================================================= */
-
-    .modal {
-      position: fixed;
-
-      inset: 0;
-
-      z-index: 5000;
-
-      display: none;
-
-      align-items: center;
-      justify-content: center;
-
-      padding: 20px;
-
-      background: rgba(10,18,14,.62);
-
-      backdrop-filter: blur(8px);
-    }
-
-    .modal.open {
-      display: flex;
-    }
-
-    .modal-window {
-      width: min(1000px, 100%);
-
-      max-height: 90vh;
-
-      overflow: auto;
-
-      background: white;
-
-      border-radius: 24px;
-
-      box-shadow: var(--shadow-lg);
-
-      animation: modalIn .25s ease;
-    }
-
-    @keyframes modalIn {
-      from {
-        opacity: 0;
-        transform: translateY(15px) scale(.98);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-    }
-
-    .modal-gallery {
-      height: 390px;
-
-      display: grid;
-
-      grid-template-columns:
-        1.4fr .6fr;
-
-      gap: 4px;
-
-      overflow: hidden;
-    }
-
-    .modal-main-image {
-      background-size: cover;
-
-      background-position: center;
-    }
-
-    .modal-side-images {
-      display: grid;
-
-      grid-template-rows:
-        1fr 1fr;
-
-      gap: 4px;
-    }
-
-    .modal-side-image {
-      background-size: cover;
-
-      background-position: center;
-    }
-
-    .modal-content {
-      padding: 30px;
-    }
-
-    .modal-top {
-      display: flex;
-
-      justify-content: space-between;
-
-      gap: 20px;
-    }
-
-    .modal-type {
-      color: var(--gold);
-
-      font-size: 11px;
-
-      text-transform: uppercase;
-
-      letter-spacing: .12em;
-
-      font-weight: 700;
-    }
-
-    .modal-title {
-      font-family: "Playfair Display", serif;
-
-      font-size: 37px;
-
-      line-height: 1.1;
-
-      margin-top: 5px;
-    }
-
-    .modal-location {
-      color: var(--text-soft);
-
-      margin-top: 5px;
-    }
-
-    .modal-close {
-      width: 40px;
-      height: 40px;
-
-      flex-shrink: 0;
-
-      border: 1px solid var(--border);
-
-      background: white;
-
-      border-radius: 50%;
-
-      font-size: 17px;
-    }
-
-    .modal-details {
-      display: grid;
-
-      grid-template-columns:
-        repeat(4, 1fr);
-
-      gap: 10px;
-
-      margin-top: 28px;
-    }
-
-    .detail-box {
-      background: var(--surface-soft);
-
-      padding: 15px;
-
-      border-radius: 12px;
-    }
-
-    .detail-box span {
-      display: block;
-
-      color: var(--text-light);
-
-      font-size: 11px;
-
-      margin-bottom: 3px;
-    }
-
-    .detail-box strong {
-      font-size: 14px;
-    }
-
-    .modal-description {
-      color: var(--text-soft);
-
-      margin-top: 25px;
-
-      line-height: 1.8;
-
-      font-size: 14px;
-    }
-
-    .modal-footer {
-      display: flex;
-
-      justify-content: space-between;
-
-      align-items: center;
-
-      gap: 15px;
-
-      margin-top: 28px;
-
-      padding-top: 20px;
-
-      border-top: 1px solid var(--border);
-    }
-
-    .modal-price {
-      font-family: "Playfair Display", serif;
-
-      font-size: 30px;
-
-      color: var(--green);
-    }
-
-    .contact-button {
-      background: var(--green);
-
-      color: white;
-
-      border: 0;
-
-      border-radius: 999px;
-
-      padding: 13px 21px;
-
-      font-weight: 700;
-    }
-
-
-    /* =========================================================
-       MOBILE NAV
-    ========================================================= */
-
-    .mobile-nav {
-      display: none;
-
-      position: fixed;
-
-      z-index: 4000;
-
-      left: 12px;
-      right: 12px;
-      bottom: 12px;
-
-      background: rgba(23,59,49,.96);
-
-      backdrop-filter: blur(15px);
-
-      border-radius: 18px;
-
-      padding: 8px;
-
-      box-shadow: var(--shadow-lg);
-    }
-
-    .mobile-nav a {
-      flex: 1;
-
-      text-align: center;
-
-      color: rgba(255,255,255,.7);
-
-      font-size: 10px;
-    }
-
-    .mobile-nav-icon {
-      display: block;
-
-      font-size: 17px;
-
-      margin-bottom: 2px;
-    }
-
-
-    /* =========================================================
-       EMPTY / LOADING
-    ========================================================= */
-
-    .empty {
-      padding: 50px 20px;
-
-      text-align: center;
-
-      color: var(--text-soft);
-    }
-
-    .empty strong {
-      display: block;
-
-      color: var(--text);
-
-      margin-bottom: 5px;
-    }
-
-    .loading {
-      padding: 50px;
-
-      text-align: center;
-
-      color: var(--text-soft);
-    }
-
-
-    /* =========================================================
-       RESPONSIVE
-    ========================================================= */
-
-    @media (max-width: 1100px) {
-
-      .nav-links {
-        gap: 20px;
-      }
-
-      .hero-search {
-        grid-template-columns:
-          1fr 1fr 1fr;
-      }
-
-      .search-button {
-        min-height: 52px;
-
-        grid-column: 1 / -1;
-      }
-
-      .categories {
-        grid-template-columns:
-          repeat(2, 1fr);
-      }
-
-      .featured-grid {
-        grid-template-columns:
-          1fr 1fr;
-
-        grid-template-rows:
-          300px 220px;
-      }
-
-      .featured-card:first-child {
-        grid-column: 1 / -1;
-
-        grid-row: auto;
-      }
-
-      .explorer {
-        grid-template-columns:
-          350px 1fr;
-      }
-    }
-
-
-    @media (max-width: 800px) {
-
-      .container {
-        width: min(
-          calc(100% - 28px),
-          var(--max-width)
-        );
-      }
-
-      .navbar {
-        height: 72px;
-      }
-
-      .nav-links,
-      .nav-actions {
-        display: none;
-      }
-
-      .mobile-menu {
-        display: block;
-      }
-
-      .hero {
-        min-height: 700px;
-      }
-
-      .hero-content {
-        padding-top: 80px;
-      }
-
-      .hero h1 {
-        font-size: 53px;
-      }
-
-      .hero-search {
-        grid-template-columns: 1fr;
-      }
-
-      .search-button {
-        grid-column: auto;
-      }
-
-      .hero-bottom {
-        flex-wrap: wrap;
-        gap: 12px 20px;
-      }
-
-      section {
-        padding: 70px 0;
-      }
-
-      .section-header {
-        display: block;
-      }
-
-      .section-description {
-        margin-top: 12px;
-      }
-
-      .explorer {
-        grid-template-columns: 1fr;
-      }
-
-      .explorer-sidebar {
-        border-right: 0;
-
-        max-height: none;
-      }
-
-      .property-list {
-        max-height: 470px;
-      }
-
-      #map {
-        min-height: 450px;
-      }
-
-      .map-container {
-        min-height: 450px;
-      }
-
-      .featured-grid {
-        display: grid;
-
-        grid-template-columns: 1fr;
-
-        grid-template-rows:
-          repeat(3, 250px);
-      }
-
-      .featured-card:first-child {
-        grid-column: auto;
-      }
-
-      .regions {
-        grid-template-columns: 1fr;
-      }
-
-      .cta {
-        padding: 45px 28px;
-      }
-
-      .footer-top {
-        grid-template-columns:
-          1fr 1fr;
-      }
-
-      .footer-brand {
-        grid-column: 1 / -1;
-      }
-
-      .footer-bottom {
-        flex-direction: column;
-      }
-
-      .mobile-nav {
-        display: flex;
-      }
-
-      .modal-gallery {
-        height: 280px;
-      }
-
-      .modal-details {
-        grid-template-columns:
-          1fr 1fr;
-      }
-    }
-
-
-    @media (max-width: 520px) {
-
-      .hero {
-        min-height: 730px;
-      }
-
-      .hero h1 {
-        font-size: 45px;
-      }
-
-      .hero-description {
-        font-size: 15px;
-      }
-
-      .categories {
-        grid-template-columns: 1fr;
-      }
-
-      .category {
-        height: 210px;
-      }
-
-      .property-item {
-        grid-template-columns:
-          95px 1fr;
-      }
-
-      .property-image {
-        height: 95px;
-      }
-
-      .modal-gallery {
-        grid-template-columns: 1fr;
-
-        height: 250px;
-      }
-
-      .modal-side-images {
-        display: none;
-      }
-
-      .modal-content {
-        padding: 22px;
-      }
-
-      .modal-title {
-        font-size: 29px;
-      }
-
-      .modal-details {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .modal-footer {
         flex-direction: column;
 
         align-items: flex-start;
-      }
-
-      .contact-button {
-        width: 100%;
-      }
-
-      .footer-top {
-        grid-template-columns: 1fr;
-      }
-
-      .footer-brand {
-        grid-column: auto;
-      }
     }
+}
 
-  </style>
+
+/* =========================================================
+   LEAFLET CUSTOMIZATION
+   ========================================================= */
+
+.leaflet-container {
+
+    font-family: Inter, sans-serif;
+
+    background: #e9eeeb;
+}
+
+.leaflet-control-zoom {
+
+    border: 0 !important;
+
+    box-shadow:
+        0 10px 30px rgba(20,40,30,.12) !important;
+}
+
+.leaflet-control-zoom a {
+
+    border: 0 !important;
+
+    background:
+        rgba(255,255,255,.78) !important;
+
+    backdrop-filter: blur(15px);
+
+    color: var(--green) !important;
+}
+
+
+/* =========================================================
+   CUSTOM MARKER
+   ========================================================= */
+
+.estora-marker {
+
+    width: 42px;
+    height: 42px;
+
+    display: grid;
+
+    place-items: center;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            145deg,
+            #24654d,
+            #103729
+        );
+
+    color: white;
+
+    border: 4px solid rgba(255,255,255,.92);
+
+    box-shadow:
+        0 8px 25px rgba(15,55,40,.35);
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+    transition: .2s ease;
+}
+
+.estora-marker:hover {
+
+    transform: scale(1.12);
+}
+
+
+/* =========================================================
+   ANIMATION HELPERS
+   ========================================================= */
+
+.reveal {
+
+    opacity: 0;
+
+    transform: translateY(25px);
+
+    transition:
+        opacity .7s ease,
+        transform .7s cubic-bezier(.2,.8,.2,1);
+}
+
+.reveal.visible {
+
+    opacity: 1;
+
+    transform: translateY(0);
+}
+
+</style>
 </head>
 
 
 <body>
 
+<div class="app">
 
-  <!-- =======================================================
-       HEADER
-  ======================================================== -->
 
-  <header class="site-header">
+<!-- ======================================================
+     NAVIGATION
+     ====================================================== -->
 
-    <div class="container">
+<nav class="nav-shell">
 
-      <nav class="navbar">
+    <a href="#" class="logo">
 
-        <a href="#" class="logo">
-
-          <span class="logo-mark">
+        <div class="logo-mark">
             E
-          </span>
+        </div>
 
-          <span>
-            Estora Living
-          </span>
+        <div class="logo-text">
+            <strong>Estora Living</strong>
+            <span>South Tyrol</span>
+        </div>
 
-        </a>
+    </a>
 
 
-        <div class="nav-links">
+    <div class="nav-links">
 
-          <a href="#entdecken">
+        <button onclick="scrollToSection('properties')">
             Immobilien
-          </a>
+        </button>
 
-          <a href="#auswahl">
-            Auswahl
-          </a>
+        <button onclick="scrollToSection('explorer')">
+            Karte
+        </button>
 
-          <a href="#regionen">
+        <button onclick="scrollToSection('regions')">
             Regionen
-          </a>
+        </button>
 
-          <a href="#verkaufen">
-            Immobilie anbieten
-          </a>
+        <button onclick="scrollToSection('about')">
+            Über Estora
+        </button>
+
+    </div>
+
+
+    <div class="nav-actions">
+
+        <button
+            class="glass-button language-button"
+            id="languageButton"
+            onclick="toggleLanguage()">
+            IT
+        </button>
+
+        <button
+            class="glass-button"
+            onclick="scrollToSection('contact')">
+            Inserat aufgeben
+        </button>
+
+    </div>
+
+</nav>
+
+
+
+<!-- ======================================================
+     HERO
+     ====================================================== -->
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <div class="eyebrow">
+
+            <span class="eyebrow-dot"></span>
+
+            <span data-de="Immobilien in Südtirol"
+                  data-it="Immobili in Alto Adige">
+                Immobilien in Südtirol
+            </span>
 
         </div>
 
 
-        <div class="nav-actions">
+        <h1>
 
-          <button class="nav-button">
-            ♡ Favoriten
-          </button>
+            <span data-de="Ein Zuhause."
+                  data-it="Una casa.">
+                Ein Zuhause.
+            </span>
 
-          <button class="nav-button primary">
-            Inserat aufgeben
-          </button>
+            <br>
+
+            <span data-de="Der richtige Ort."
+                  data-it="Il posto giusto.">
+                Der richtige Ort.
+            </span>
+
+        </h1>
+
+
+        <p class="hero-description"
+           data-de="Entdecke ausgewählte Immobilien in Südtirol. Klar präsentiert, einfach vergleichbar und mit dem Ort immer im Mittelpunkt."
+           data-it="Scopri immobili selezionati in Alto Adige. Presentati con chiarezza, facili da confrontare e con il territorio sempre al centro.">
+
+            Entdecke ausgewählte Immobilien in Südtirol.
+            Klar präsentiert, einfach vergleichbar und mit dem Ort immer im Mittelpunkt.
+
+        </p>
+
+    </div>
+
+
+
+    <!-- SEARCH -->
+
+    <div class="search-glass">
+
+        <div class="search-field">
+
+            <label data-de="Was suchst du?"
+                   data-it="Cosa cerchi?">
+                Was suchst du?
+            </label>
+
+            <input
+                id="searchInput"
+                type="text"
+                placeholder="Ort, Immobilie ..."
+                data-placeholder-de="Ort, Immobilie ..."
+                data-placeholder-it="Località, immobile ...">
+
+        </div>
+
+
+        <div class="search-field">
+
+            <label data-de="Art"
+                   data-it="Tipo">
+                Art
+            </label>
+
+            <select id="typeSelect">
+
+                <option value="all"
+                        data-de="Alle"
+                        data-it="Tutti">
+                    Alle
+                </option>
+
+                <option value="buy"
+                        data-de="Kaufen"
+                        data-it="Acquistare">
+                    Kaufen
+                </option>
+
+                <option value="rent"
+                        data-de="Mieten"
+                        data-it="Affittare">
+                    Mieten
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="search-field">
+
+            <label data-de="Preis"
+                   data-it="Prezzo">
+                Preis
+            </label>
+
+            <select id="priceSelect">
+
+                <option value="all">Alle Preise</option>
+
+                <option value="500k">
+                    bis € 500.000
+                </option>
+
+                <option value="1000k">
+                    bis € 1 Mio.
+                </option>
+
+                <option value="1500k">
+                    bis € 1,5 Mio.
+                </option>
+
+            </select>
 
         </div>
 
 
         <button
-          class="mobile-menu"
-          onclick="window.scrollTo({top:0,behavior:'smooth'})"
-        >
-          ☰
+            class="search-submit"
+            onclick="performSearch()">
+
+            <span data-de="Suchen"
+                  data-it="Cerca">
+                Suchen
+            </span>
+
         </button>
 
-      </nav>
+    </div>
+
+</section>
+
+
+
+<!-- ======================================================
+     STATS
+     ====================================================== -->
+
+<section class="stats reveal">
+
+    <div class="stat">
+
+        <strong id="statTotal">
+            0
+        </strong>
+
+        <span data-de="Immobilien"
+              data-it="Immobili">
+            Immobilien
+        </span>
 
     </div>
 
-  </header>
 
+    <div class="stat">
 
-  <!-- =======================================================
-       HERO
-  ======================================================== -->
+        <strong id="statBuy">
+            0
+        </strong>
 
-  <section class="hero">
-
-    <div class="container">
-
-      <div class="hero-content">
-
-        <div class="eyebrow">
-          Immobilien in Südtirol
-        </div>
-
-
-        <h1>
-          Ein Zuhause,
-          <br>
-          das zu <span>dir</span>
-          passt.
-        </h1>
-
-
-        <p class="hero-description">
-          Entdecke besondere Immobilien in Südtirol —
-          von modernen Wohnungen in Bozen bis zu
-          alpinen Häusern in den Dolomiten.
-        </p>
-
-
-        <!-- SEARCH -->
-
-        <div class="hero-search">
-
-          <div class="search-field">
-
-            <label>
-              Standort
-            </label>
-
-            <input
-              id="heroLocation"
-              type="text"
-              placeholder="z. B. Meran"
-            />
-
-          </div>
-
-
-          <div class="search-field">
-
-            <label>
-              Angebot
-            </label>
-
-            <select id="heroType">
-
-              <option value="alle">
-                Kaufen & Mieten
-              </option>
-
-              <option value="kauf">
-                Kaufen
-              </option>
-
-              <option value="miete">
-                Mieten
-              </option>
-
-            </select>
-
-          </div>
-
-
-          <div class="search-field">
-
-            <label>
-              Zimmer
-            </label>
-
-            <select id="heroRooms">
-
-              <option value="0">
-                Beliebig
-              </option>
-
-              <option value="1">
-                1+ Zimmer
-              </option>
-
-              <option value="2">
-                2+ Zimmer
-              </option>
-
-              <option value="3">
-                3+ Zimmer
-              </option>
-
-              <option value="4">
-                4+ Zimmer
-              </option>
-
-            </select>
-
-          </div>
-
-
-          <button
-            class="search-button"
-            onclick="performSearch()"
-          >
-            Immobilien suchen
-          </button>
-
-        </div>
-
-
-        <div class="hero-bottom">
-
-          <div class="hero-trust">
-            <span class="trust-dot"></span>
-            Regionale Angebote
-          </div>
-
-          <div class="hero-trust">
-            <span class="trust-dot"></span>
-            Interaktive Karte
-          </div>
-
-          <div class="hero-trust">
-            <span class="trust-dot"></span>
-            Klare Preise
-          </div>
-
-        </div>
-
-      </div>
+        <span data-de="Zum Kauf"
+              data-it="In vendita">
+            Zum Kauf
+        </span>
 
     </div>
 
-  </section>
+
+    <div class="stat">
+
+        <strong id="statRent">
+            0
+        </strong>
+
+        <span data-de="Zur Miete"
+              data-it="In affitto">
+            Zur Miete
+        </span>
+
+    </div>
 
 
-  <!-- =======================================================
-       CATEGORIES
-  ======================================================== -->
+    <div class="stat">
 
-  <section>
+        <strong>
+            Südtirol
+        </strong>
 
-    <div class="container">
+        <span data-de="Eine Region"
+              data-it="Una regione">
+            Eine Region
+        </span>
 
-      <div class="section-header">
+    </div>
+
+</section>
+
+
+
+<!-- ======================================================
+     PROPERTIES
+     ====================================================== -->
+
+<section
+    class="section reveal"
+    id="properties">
+
+    <div class="section-header">
 
         <div>
 
-          <div class="section-kicker">
-            Entdecken
-          </div>
+            <h2 class="section-title"
+                data-de="Ausgewählte Immobilien"
+                data-it="Immobili selezionati">
 
-          <h2 class="section-title">
-            Was suchst du?
-          </h2>
+                Ausgewählte Immobilien
 
-        </div>
+            </h2>
 
-        <p class="section-description">
-          Starte deine Suche direkt nach Immobilientyp
-          und entdecke ausgewählte Angebote in Südtirol.
-        </p>
+            <p class="section-subtitle"
+               data-de="Orte, die bleiben. Immobilien, die passen."
+               data-it="Luoghi da vivere. Immobili da scoprire.">
 
-      </div>
+                Orte, die bleiben. Immobilien, die passen.
 
-
-      <div class="categories">
-
-
-        <div
-          class="category"
-          onclick="quickFilter('kauf')"
-        >
-
-          <img
-            src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1000&q=85"
-            alt="Moderne Wohnung"
-          />
-
-          <div class="category-content">
-
-            <span>
-              Eigentum
-            </span>
-
-            <strong>
-              Kaufen
-            </strong>
-
-          </div>
+            </p>
 
         </div>
 
+        <a href="#"
+           class="section-link"
+           data-de="Alle Immobilien →"
+           data-it="Tutti gli immobili →">
 
-        <div
-          class="category"
-          onclick="quickFilter('miete')"
-        >
+            Alle Immobilien →
 
-          <img
-            src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1000&q=85"
-            alt="Wohnung zur Miete"
-          />
-
-          <div class="category-content">
-
-            <span>
-              Flexibel wohnen
-            </span>
-
-            <strong>
-              Mieten
-            </strong>
-
-          </div>
-
-        </div>
-
-
-        <div
-          class="category"
-          onclick="filterLocation('Meran')"
-        >
-
-          <img
-            src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1000&q=85"
-            alt="Luxus Immobilie"
-          />
-
-          <div class="category-content">
-
-            <span>
-              Beliebte Region
-            </span>
-
-            <strong>
-              Meran
-            </strong>
-
-          </div>
-
-        </div>
-
-
-        <div
-          class="category"
-          onclick="filterLocation('Bozen')"
-        >
-
-          <img
-            src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=85"
-            alt="Haus"
-          />
-
-          <div class="category-content">
-
-            <span>
-              Urban & alpin
-            </span>
-
-            <strong>
-              Bozen
-            </strong>
-
-          </div>
-
-        </div>
-
-      </div>
+        </a>
 
     </div>
 
-  </section>
+
+    <div class="filter-bar">
+
+        <button
+            class="filter active"
+            data-filter="all"
+            onclick="setFilter('all')"
+            data-de="Alle"
+            data-it="Tutti">
+            Alle
+        </button>
+
+        <button
+            class="filter"
+            data-filter="buy"
+            onclick="setFilter('buy')"
+            data-de="Kaufen"
+            data-it="Acquistare">
+            Kaufen
+        </button>
+
+        <button
+            class="filter"
+            data-filter="rent"
+            onclick="setFilter('rent')"
+            data-de="Mieten"
+            data-it="Affittare">
+            Mieten
+        </button>
+
+        <button
+            class="filter"
+            data-filter="featured"
+            onclick="setFilter('featured')"
+            data-de="Ausgewählt"
+            data-it="Selezionati">
+            Ausgewählt
+        </button>
+
+    </div>
 
 
-  <!-- =======================================================
-       PROPERTY EXPLORER
-  ======================================================== -->
+    <div
+        class="listing-grid"
+        id="listingGrid">
 
-  <section
-    id="entdecken"
-    class="explorer-section"
-  >
+    </div>
 
-    <div class="container">
+</section>
 
-      <div class="section-header">
+
+
+<!-- ======================================================
+     MAP EXPLORER
+     ====================================================== -->
+
+<section
+    class="section reveal"
+    id="explorer">
+
+    <div class="section-header">
 
         <div>
 
-          <div class="section-kicker">
-            Immobilien entdecken
-          </div>
+            <h2 class="section-title"
+                data-de="Südtirol entdecken"
+                data-it="Esplora l'Alto Adige">
 
-          <h2 class="section-title">
-            Finde deinen Ort.
-          </h2>
+                Südtirol entdecken
+
+            </h2>
+
+            <p class="section-subtitle"
+               data-de="Suche nach Immobilien direkt auf der Karte."
+               data-it="Cerca immobili direttamente sulla mappa.">
+
+                Suche nach Immobilien direkt auf der Karte.
+
+            </p>
 
         </div>
 
-        <p class="section-description">
-          Vergleiche Immobilien direkt auf der Karte
-          und entdecke, welche Angebote zu deiner
-          Suche passen.
-        </p>
-
-      </div>
+    </div>
 
 
-      <div class="explorer">
+    <div class="explorer">
 
+        <div class="explorer-list"
+             id="explorerList">
 
-        <!-- SIDEBAR -->
+        </div>
 
-        <aside class="explorer-sidebar">
-
-
-          <div class="explorer-top">
-
-            <div class="explorer-top-row">
-
-              <h3>
-                Immobilien
-              </h3>
-
-              <span
-                id="resultCount"
-                class="result-count"
-              >
-                0 Ergebnisse
-              </span>
-
-            </div>
-
-
-            <div class="filter-tabs">
-
-              <button
-                class="filter-tab active"
-                data-type="alle"
-                onclick="setType('alle')"
-              >
-                Alle
-              </button>
-
-              <button
-                class="filter-tab"
-                data-type="kauf"
-                onclick="setType('kauf')"
-              >
-                Kaufen
-              </button>
-
-              <button
-                class="filter-tab"
-                data-type="miete"
-                onclick="setType('miete')"
-              >
-                Mieten
-              </button>
-
-            </div>
-
-
-            <div class="filter-row">
-
-              <input
-                id="locationFilter"
-                class="filter-control"
-                type="text"
-                placeholder="Ort"
-                oninput="applyFilters()"
-              />
-
-              <select
-                id="roomsFilter"
-                class="filter-control"
-                onchange="applyFilters()"
-              >
-
-                <option value="0">
-                  Zimmer
-                </option>
-
-                <option value="1">
-                  1+
-                </option>
-
-                <option value="2">
-                  2+
-                </option>
-
-                <option value="3">
-                  3+
-                </option>
-
-                <option value="4">
-                  4+
-                </option>
-
-                <option value="5">
-                  5+
-                </option>
-
-              </select>
-
-            </div>
-
-
-            <select
-              id="sortFilter"
-              class="sort-select"
-              onchange="applyFilters()"
-            >
-
-              <option value="recommended">
-                Empfohlen
-              </option>
-
-              <option value="priceLow">
-                Preis aufsteigend
-              </option>
-
-              <option value="priceHigh">
-                Preis absteigend
-              </option>
-
-              <option value="area">
-                Größte Fläche
-              </option>
-
-            </select>
-
-          </div>
-
-
-          <div
-            id="propertyList"
-            class="property-list"
-          >
-
-            <div class="loading">
-              Immobilien werden geladen ...
-            </div>
-
-          </div>
-
-        </aside>
-
-
-        <!-- MAP -->
 
         <div class="map-container">
 
-          <div class="map-overlay">
+            <div class="map-overlay">
 
-            <strong id="mapCount">
-              0
-            </strong>
+                <span data-de="Interaktive Karte"
+                      data-it="Mappa interattiva">
+                    Interaktive Karte
+                </span>
 
-            Immobilien auf der Karte
+            </div>
 
-          </div>
-
-
-          <div id="map"></div>
-
-
-          <button
-            class="map-location-button"
-            onclick="resetMap()"
-            title="Karte zurücksetzen"
-          >
-            ◎
-          </button>
+            <div id="map"></div>
 
         </div>
 
-      </div>
-
     </div>
 
-  </section>
+</section>
 
 
-  <!-- =======================================================
-       FEATURED
-  ======================================================== -->
 
-  <section id="auswahl">
+<!-- ======================================================
+     REGIONS
+     ====================================================== -->
 
-    <div class="container">
+<section
+    class="section reveal"
+    id="regions">
 
-      <div class="section-header">
+    <div class="section-header">
 
         <div>
 
-          <div class="section-kicker">
-            Estora Auswahl
-          </div>
+            <h2 class="section-title"
+                data-de="Beliebte Regionen"
+                data-it="Regioni popolari">
 
-          <h2 class="section-title">
-            Immobilien mit Charakter.
-          </h2>
+                Beliebte Regionen
+
+            </h2>
+
+            <p class="section-subtitle"
+               data-de="Von den Bergen bis ins Tal."
+               data-it="Dalle montagne alla valle.">
+
+                Von den Bergen bis ins Tal.
+
+            </p>
 
         </div>
 
-        <p class="section-description">
-          Eine kleine Auswahl besonderer Immobilien,
-          die zeigen, wie Estora Living aussehen soll.
+    </div>
+
+
+    <div class="region-grid">
+
+
+        <div class="region"
+             onclick="searchRegion('Meran')">
+
+            <img
+                src="https://images.unsplash.com/photo-1605537964076-3cb0ea4b6f08?auto=format&fit=crop&w=900&q=85"
+                alt="Meran">
+
+            <div class="region-content">
+
+                <strong>Meran</strong>
+
+                <span>
+                    Merano
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="region"
+             onclick="searchRegion('Bozen')">
+
+            <img
+                src="https://images.unsplash.com/photo-1601918774946-25832a4be0d6?auto=format&fit=crop&w=900&q=85"
+                alt="Bozen">
+
+            <div class="region-content">
+
+                <strong>Bozen</strong>
+
+                <span>
+                    Bolzano
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="region"
+             onclick="searchRegion('Gröden')">
+
+            <img
+                src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=900&q=85"
+                alt="Dolomiten">
+
+            <div class="region-content">
+
+                <strong>Gröden</strong>
+
+                <span>
+                    Val Gardena
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="region"
+             onclick="searchRegion('Pustertal')">
+
+            <img
+                src="https://images.unsplash.com/photo-1483347756197-71ef80e95f73?auto=format&fit=crop&w=900&q=85"
+                alt="Pustertal">
+
+            <div class="region-content">
+
+                <strong>Pustertal</strong>
+
+                <span>
+                    Val Pusteria
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ======================================================
+     ABOUT / BRAND
+     ====================================================== -->
+
+<section
+    class="section reveal"
+    id="about">
+
+    <div class="cta">
+
+        <h2
+            data-de="Immobilien. Südtirol. Einfach besser."
+            data-it="Immobili. Alto Adige. Semplicemente meglio.">
+
+            Immobilien.
+            Südtirol.
+            Einfach besser.
+
+        </h2>
+
+
+        <p
+            data-de="Estora Living verbindet moderne Technologie mit dem lokalen Charakter Südtirols. Wir wollen Immobilien nicht komplizierter machen – sondern einfacher, schöner und übersichtlicher."
+            data-it="Estora Living unisce tecnologia moderna e il carattere locale dell'Alto Adige. Vogliamo rendere il mercato immobiliare più semplice, bello e intuitivo.">
+
+            Estora Living verbindet moderne Technologie mit dem lokalen Charakter Südtirols.
+            Wir wollen Immobilien nicht komplizierter machen – sondern einfacher,
+            schöner und übersichtlicher.
+
         </p>
 
-      </div>
 
+        <a
+            href="#contact"
+            class="cta-button"
+            data-de="Immobilie inserieren →"
+            data-it="Pubblica immobile →">
 
-      <div class="featured-grid">
+            Immobilie inserieren →
 
-
-        <article class="featured-card">
-
-          <img
-            src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1400&q=85"
-            alt="Luxushaus"
-          />
-
-          <div class="featured-content">
-
-            <small>
-              Meran · Zum Kauf
-            </small>
-
-            <h3>
-              Villa mit Blick über das Burggrafenamt
-            </h3>
-
-            <div class="featured-price">
-              € 1.240.000
-            </div>
-
-          </div>
-
-        </article>
-
-
-        <article class="featured-card">
-
-          <img
-            src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1000&q=85"
-            alt="Modernes Apartment"
-          />
-
-          <div class="featured-content">
-
-            <small>
-              Bozen · Zum Kauf
-            </small>
-
-            <h3>
-              Urban Apartment
-            </h3>
-
-            <div class="featured-price">
-              € 690.000
-            </div>
-
-          </div>
-
-        </article>
-
-
-        <article class="featured-card">
-
-          <img
-            src="https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=1000&q=85"
-            alt="Alpenhaus"
-          />
-
-          <div class="featured-content">
-
-            <small>
-              Gröden · Zum Kauf
-            </small>
-
-            <h3>
-              Alpine Residence
-            </h3>
-
-            <div class="featured-price">
-              € 980.000
-            </div>
-
-          </div>
-
-        </article>
-
-
-        <article class="featured-card">
-
-          <img
-            src="https://images.unsplash.com/photo-1600210491892-03d54c0aaf87?auto=format&fit=crop&w=1000&q=85"
-            alt="Wohnung"
-          />
-
-          <div class="featured-content">
-
-            <small>
-              Lana · Miete
-            </small>
-
-            <h3>
-              Helle Wohnung
-            </h3>
-
-            <div class="featured-price">
-              € 1.450 / Monat
-            </div>
-
-          </div>
-
-        </article>
-
-
-      </div>
+        </a>
 
     </div>
 
-  </section>
+</section>
 
 
-  <!-- =======================================================
-       REGIONS
-  ======================================================== -->
 
-  <section id="regionen">
+<!-- ======================================================
+     FOOTER
+     ====================================================== -->
 
-    <div class="container">
+<footer id="contact">
 
-      <div class="section-header">
-
-        <div>
-
-          <div class="section-kicker">
-            Regionen
-          </div>
-
-          <h2 class="section-title">
-            Südtirol entdecken.
-          </h2>
-
-        </div>
-
-        <p class="section-description">
-          Von urbanen Wohnungen bis zu ruhigen
-          Berglagen — jede Region hat ihren eigenen Charakter.
-        </p>
-
-      </div>
-
-
-      <div class="regions">
-
-
-        <article class="region-card">
-
-          <div class="region-number">
-            01
-          </div>
-
-          <h3>
-            Meran & Umgebung
-          </h3>
-
-          <p>
-            Mediterranes Klima, historische Architektur
-            und eine hohe Lebensqualität zwischen Weinbergen
-            und Bergen.
-          </p>
-
-          <a
-            href="#entdecken"
-            class="region-link"
-            onclick="filterLocation('Meran')"
-          >
-            Immobilien ansehen →
-          </a>
-
-        </article>
-
-
-        <article class="region-card">
-
-          <div class="region-number">
-            02
-          </div>
-
-          <h3>
-            Bozen
-          </h3>
-
-          <p>
-            Südtirols urbanes Zentrum mit modernen
-            Wohnungen, kurzen Wegen und direkter
-            Verbindung zu den Bergen.
-          </p>
-
-          <a
-            href="#entdecken"
-            class="region-link"
-            onclick="filterLocation('Bozen')"
-          >
-            Immobilien ansehen →
-          </a>
-
-        </article>
-
-
-        <article class="region-card">
-
-          <div class="region-number">
-            03
-          </div>
-
-          <h3>
-            Dolomiten
-          </h3>
-
-          <p>
-            Besondere Häuser, Chalets und Wohnungen
-            in einer der spektakulärsten Landschaften
-            Europas.
-          </p>
-
-          <a
-            href="#entdecken"
-            class="region-link"
-            onclick="filterLocation('Ortisei')"
-          >
-            Immobilien ansehen →
-          </a>
-
-        </article>
-
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- =======================================================
-       CTA
-  ======================================================== -->
-
-  <section id="verkaufen">
-
-    <div class="container">
-
-      <div class="cta">
-
-        <div class="cta-content">
-
-          <div class="section-kicker">
-            Für Eigentümer
-          </div>
-
-          <h2>
-            Deine Immobilie.
-            <br>
-            Die richtige Bühne.
-          </h2>
-
-          <p>
-            Du möchtest eine Immobilie verkaufen oder vermieten?
-            Präsentiere dein Objekt hochwertig und erreiche
-            Interessenten in ganz Südtirol.
-          </p>
-
-          <div class="cta-actions">
-
-            <button class="cta-button primary">
-              Immobilie anbieten
-            </button>
-
-            <button
-              class="cta-button secondary"
-              onclick="document.getElementById('entdecken').scrollIntoView({behavior:'smooth'})"
-            >
-              Immobilien ansehen
-            </button>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- =======================================================
-       FOOTER
-  ======================================================== -->
-
-  <footer>
-
-    <div class="container">
-
-      <div class="footer-top">
+    <div class="footer-top">
 
 
         <div class="footer-brand">
 
-          <div class="footer-logo">
-            Estora Living
-          </div>
+            <a href="#" class="logo">
 
-          <p>
-            Moderne Immobilienplattform für Südtirol.
-            Einfach suchen, vergleichen und das passende
-            Zuhause finden.
-          </p>
+                <div class="logo-mark">
+                    E
+                </div>
+
+                <div class="logo-text">
+
+                    <strong>
+                        Estora Living
+                    </strong>
+
+                    <span>
+                        South Tyrol
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <p
+                data-de="Die moderne Immobilienplattform für Südtirol."
+                data-it="La moderna piattaforma immobiliare per l'Alto Adige.">
+
+                Die moderne Immobilienplattform für Südtirol.
+
+            </p>
+
+
+            <!-- Standortzeichen Platzhalter -->
+
+            <div
+                class="south-tyrol-badge"
+                style="margin-top:22px;">
+
+                <div class="tyrol-symbol"></div>
+
+                <div class="tyrol-text">
+
+                    <strong>
+                        Ein Unternehmen aus Südtirol
+                    </strong>
+
+                    <span>
+                        Un'impresa dell'Alto Adige
+                    </span>
+
+                </div>
+
+            </div>
 
         </div>
+
 
 
         <div class="footer-column">
 
-          <h4>
-            Entdecken
-          </h4>
+            <h4
+                data-de="Entdecken"
+                data-it="Scopri">
 
-          <a href="#entdecken">
-            Immobilien
-          </a>
+                Entdecken
 
-          <a href="#auswahl">
-            Auswahl
-          </a>
+            </h4>
 
-          <a href="#regionen">
-            Regionen
-          </a>
+            <a href="#properties"
+               data-de="Immobilien"
+               data-it="Immobili">
+                Immobilien
+            </a>
+
+            <a href="#explorer"
+               data-de="Karte"
+               data-it="Mappa">
+                Karte
+            </a>
+
+            <a href="#regions"
+               data-de="Regionen"
+               data-it="Regioni">
+                Regionen
+            </a>
 
         </div>
+
 
 
         <div class="footer-column">
 
-          <h4>
-            Für Eigentümer
-          </h4>
+            <h4
+                data-de="Estora"
+                data-it="Estora">
 
-          <a href="#verkaufen">
-            Immobilie anbieten
-          </a>
+                Estora
 
-          <a href="#">
-            Preise
-          </a>
+            </h4>
 
-          <a href="#">
-            Informationen
-          </a>
+            <a href="#about"
+               data-de="Über uns"
+               data-it="Chi siamo">
+                Über uns
+            </a>
+
+            <a href="#"
+               data-de="Kontakt"
+               data-it="Contatti">
+                Kontakt
+            </a>
+
+            <a href="#"
+               data-de="Inserat aufgeben"
+               data-it="Pubblica annuncio">
+                Inserat aufgeben
+            </a>
 
         </div>
+
 
 
         <div class="footer-column">
 
-          <h4>
-            Estora
-          </h4>
+            <h4
+                data-de="Rechtliches"
+                data-it="Informazioni">
 
-          <a href="#">
-            Über uns
-          </a>
+                Rechtliches
 
-          <a href="#">
-            Kontakt
-          </a>
+            </h4>
 
-          <a href="#">
-            Datenschutz
-          </a>
+            <a href="#"
+               data-de="Impressum"
+               data-it="Note legali">
+                Impressum
+            </a>
+
+            <a href="#"
+               data-de="Datenschutz"
+               data-it="Privacy">
+                Datenschutz
+            </a>
+
+            <a href="#"
+               data-de="Cookies"
+               data-it="Cookie">
+                Cookies
+            </a>
 
         </div>
-
-
-      </div>
-
-
-      <div class="footer-bottom">
-
-        <span>
-          © 2026 Estora Living
-        </span>
-
-        <span>
-          Made for South Tyrol
-        </span>
-
-      </div>
 
     </div>
 
-  </footer>
 
 
-  <!-- =======================================================
-       MOBILE NAV
-  ======================================================== -->
+    <div class="footer-bottom">
 
-  <nav class="mobile-nav">
+        <span>
+            © 2026 Estora Living
+        </span>
 
-    <a href="#">
-      <span class="mobile-nav-icon">⌂</span>
-      Start
-    </a>
+        <span
+            data-de="Mit Sitz in Südtirol"
+            data-it="Con sede in Alto Adige">
 
-    <a href="#entdecken">
-      <span class="mobile-nav-icon">⌕</span>
-      Suchen
-    </a>
+            Mit Sitz in Südtirol
 
-    <a href="#auswahl">
-      <span class="mobile-nav-icon">✦</span>
-      Auswahl
-    </a>
+        </span>
 
-    <a href="#regionen">
-      <span class="mobile-nav-icon">⌖</span>
-      Regionen
-    </a>
+        <span>
+            Deutsch · Italiano
+        </span>
 
-  </nav>
+    </div>
+
+</footer>
 
 
-  <!-- =======================================================
-       MODAL
-  ======================================================== -->
+</div>
 
-  <div
-    id="propertyModal"
+
+
+<!-- ======================================================
+     PROPERTY MODAL
+     ====================================================== -->
+
+<div
     class="modal"
-    onclick="closeModalOutside(event)"
-  >
+    id="propertyModal"
+    onclick="closeModal(event)">
 
-    <div class="modal-window">
+    <div
+        class="modal-card"
+        onclick="event.stopPropagation()">
 
+        <div style="position:relative;">
 
-      <div class="modal-gallery">
+            <img
+                id="modalImage"
+                class="modal-image"
+                src=""
+                alt="">
 
-        <div
-          id="modalMainImage"
-          class="modal-main-image"
-        ></div>
+            <button
+                class="modal-close"
+                onclick="closeModal()">
 
-        <div class="modal-side-images">
+                ×
 
-          <div
-            id="modalImageTwo"
-            class="modal-side-image"
-          ></div>
-
-          <div
-            id="modalImageThree"
-            class="modal-side-image"
-          ></div>
+            </button>
 
         </div>
 
-      </div>
 
-
-      <div class="modal-content">
-
-
-        <div class="modal-top">
-
-          <div>
+        <div class="modal-content">
 
             <div
-              id="modalType"
-              class="modal-type"
-            >
-              ZUM KAUF
+                id="modalLocation"
+                class="property-location">
             </div>
 
             <h2
-              id="modalTitle"
-              class="modal-title"
-            >
-              Immobilie
+                id="modalTitle"
+                style="
+                    margin-top:7px;
+                    font-size:32px;
+                    letter-spacing:-.05em;
+                ">
             </h2>
 
+            <p
+                id="modalDescription"
+                style="
+                    margin-top:14px;
+                    color:var(--text-soft);
+                    line-height:1.7;
+                ">
+            </p>
+
+
             <div
-              id="modalLocation"
-              class="modal-location"
-            >
-              Südtirol
+                id="modalMeta"
+                style="
+                    display:flex;
+                    gap:20px;
+                    margin-top:22px;
+                    color:var(--text-soft);
+                    font-size:13px;
+                ">
             </div>
 
-          </div>
 
+            <div
+                style="
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:center;
+                    margin-top:25px;
+                ">
 
-          <button
-            class="modal-close"
-            onclick="closeModal()"
-          >
-            ×
-          </button>
+                <strong
+                    id="modalPrice"
+                    style="
+                        color:var(--green);
+                        font-size:24px;
+                    ">
+                </strong>
 
-        </div>
+                <button
+                    class="details-button"
+                    onclick="closeModal()">
 
+                    Schließen
 
-        <div class="modal-details">
+                </button>
 
-          <div class="detail-box">
-
-            <span>
-              Zimmer
-            </span>
-
-            <strong id="modalRooms">
-              —
-            </strong>
-
-          </div>
-
-
-          <div class="detail-box">
-
-            <span>
-              Wohnfläche
-            </span>
-
-            <strong id="modalArea">
-              —
-            </strong>
-
-          </div>
-
-
-          <div class="detail-box">
-
-            <span>
-              Immobilientyp
-            </span>
-
-            <strong id="modalCategory">
-              —
-            </strong>
-
-          </div>
-
-
-          <div class="detail-box">
-
-            <span>
-              ID
-            </span>
-
-            <strong id="modalId">
-              —
-            </strong>
-
-          </div>
+            </div>
 
         </div>
-
-
-        <p
-          id="modalDescription"
-          class="modal-description"
-        ></p>
-
-
-        <div class="modal-footer">
-
-          <div
-            id="modalPrice"
-            class="modal-price"
-          >
-            —
-          </div>
-
-          <button
-            class="contact-button"
-            onclick="contactProperty()"
-          >
-            Interesse an diesem Objekt
-          </button>
-
-        </div>
-
-      </div>
 
     </div>
 
-  </div>
+</div>
 
 
-  <!-- =======================================================
-       LEAFLET
-  ======================================================== -->
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 
-  <script>
+<script>
 
-    /* =======================================================
-       SUPABASE
-    ======================================================== */
+/* =========================================================
+   ESTORA DATA
+   ========================================================= */
 
-    const SUPABASE_URL =
-      "https://mjumwwwynhkszylikokw.supabase.co";
+const properties = [
 
-    const SUPABASE_KEY =
-      "sb_publishable_mlea-7ngrrTEM3-rktdN3A_ZzvkMVYP";
-
-
-    let db = null;
-
-    if (
-      window.supabase &&
-      window.supabase.createClient
-    ) {
-
-      db =
-        window.supabase.createClient(
-          SUPABASE_URL,
-          SUPABASE_KEY
-        );
-
-    }
-
-
-    /* =======================================================
-       DEMO DATA
-    ======================================================== */
-
-    const fallbackListings = [
-
-      {
+    {
         id: 1,
-        typ: "kauf",
-        titel: "Villa mit Panoramablick",
-        ort: "Meran",
-        preis: 1240000,
-        preisText: "€ 1.240.000",
-        zimmer: 5,
-        flaeche: 220,
-        kategorie: "Villa",
-
-        lat: 46.6713,
-        lng: 11.1526,
-
+        type: "buy",
+        featured: true,
+        title: "Modernes Chalet mit Dolomitenblick",
+        location: "St. Ulrich · Gröden",
+        price: "€ 980.000",
+        rooms: 4,
+        area: 165,
+        lat: 46.575,
+        lng: 11.671,
         image:
-          "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=85",
-
-        image2:
-          "https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=1000&q=85",
-
-        image3:
-          "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1000&q=85",
-
+        "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=90",
         description:
-          "Elegante Villa in ruhiger Lage mit großzügigen Wohnbereichen, hochwertiger Ausstattung und weitem Blick über das Meraner Land."
-      },
+        "Hochwertiges Chalet mit großzügigen Wohnflächen, moderner Architektur und beeindruckendem Blick auf die Dolomiten."
+    },
 
-
-      {
+    {
         id: 2,
-        typ: "kauf",
-        titel: "Modernes Apartment",
-        ort: "Bozen",
-        preis: 690000,
-        preisText: "€ 690.000",
-        zimmer: 3,
-        flaeche: 112,
-        kategorie: "Apartment",
-
-        lat: 46.4983,
-        lng: 11.3548,
-
+        type: "rent",
+        featured: true,
+        title: "Elegantes Apartment im Zentrum",
+        location: "Meran",
+        price: "€ 1.650 / Monat",
+        rooms: 3,
+        area: 98,
+        lat: 46.671,
+        lng: 11.161,
         image:
-          "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1200&q=85",
-
-        image2:
-          "https://images.unsplash.com/photo-1600210491892-03d54c0aaf87?auto=format&fit=crop&w=1000&q=85",
-
-        image3:
-          "https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=1000&q=85",
-
+        "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=90",
         description:
-          "Helles, modernes Apartment in zentraler Lage von Bozen. Große Fenster, offene Küche und hochwertiger Innenausbau."
-      },
+        "Modernes Apartment in zentraler Lage mit hochwertiger Ausstattung und kurzen Wegen in die Altstadt."
+    },
 
-
-      {
+    {
         id: 3,
-        typ: "kauf",
-        titel: "Alpine Residence",
-        ort: "Ortisei",
-        preis: 980000,
-        preisText: "€ 980.000",
-        zimmer: 4,
-        flaeche: 165,
-        kategorie: "Chalet",
-
-        lat: 46.5742,
-        lng: 11.6715,
-
+        type: "buy",
+        featured: true,
+        title: "Architektenvilla mit Garten",
+        location: "Bozen · Gries",
+        price: "€ 1.240.000",
+        rooms: 5,
+        area: 220,
+        lat: 46.498,
+        lng: 11.349,
         image:
-          "https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=1200&q=85",
-
-        image2:
-          "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1000&q=85",
-
-        image3:
-          "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1000&q=85",
-
+        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=90",
         description:
-          "Außergewöhnliches alpines Zuhause mit moderner Architektur und direktem Blick auf die Dolomiten."
-      },
+        "Freistehende Villa mit klarer Architektur, großzügigen Fensterflächen und privatem Garten."
+    },
 
-
-      {
+    {
         id: 4,
-        typ: "miete",
-        titel: "Helle Wohnung im Zentrum",
-        ort: "Lana",
-        preis: 1450,
-        preisText: "€ 1.450 / Monat",
-        zimmer: 3,
-        flaeche: 96,
-        kategorie: "Wohnung",
-
-        lat: 46.6124,
-        lng: 11.1519,
-
+        type: "buy",
+        featured: false,
+        title: "Panoramawohnung am Berg",
+        location: "Bruneck",
+        price: "€ 695.000",
+        rooms: 3,
+        area: 105,
+        lat: 46.796,
+        lng: 11.935,
         image:
-          "https://images.unsplash.com/photo-1600210491892-03d54c0aaf87?auto=format&fit=crop&w=1200&q=85",
-
-        image2:
-          "https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=1000&q=85",
-
-        image3:
-          "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1000&q=85",
-
+        "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1200&q=90",
         description:
-          "Moderne Mietwohnung im Zentrum von Lana mit großzügigem Wohnbereich, Balkon und guter Anbindung."
-      },
+        "Helle Wohnung mit großer Terrasse und freiem Blick auf die umliegenden Berge."
+    },
 
-
-      {
+    {
         id: 5,
-        typ: "miete",
-        titel: "Design Apartment",
-        ort: "Brixen",
-        preis: 1700,
-        preisText: "€ 1.700 / Monat",
-        zimmer: 3,
-        flaeche: 105,
-        kategorie: "Apartment",
-
-        lat: 46.7151,
-        lng: 11.6560,
-
+        type: "rent",
+        featured: false,
+        title: "Design Apartment",
+        location: "Bozen · Zentrum",
+        price: "€ 1.900 / Monat",
+        rooms: 3,
+        area: 91,
+        lat: 46.499,
+        lng: 11.354,
         image:
-          "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1200&q=85",
-
-        image2:
-          "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1000&q=85",
-
-        image3:
-          "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1000&q=85",
-
+        "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=90",
         description:
-          "Designorientierte Wohnung mit klaren Linien, moderner Küche und viel natürlichem Licht."
-      },
+        "Modern eingerichtetes Apartment für Menschen, die urbanes Leben und Südtirol verbinden möchten."
+    },
 
-
-      {
+    {
         id: 6,
-        typ: "kauf",
-        titel: "Familienhaus mit Garten",
-        ort: "Bruneck",
-        preis: 850000,
-        preisText: "€ 850.000",
-        zimmer: 5,
-        flaeche: 185,
-        kategorie: "Haus",
-
-        lat: 46.7967,
-        lng: 11.9354,
-
+        type: "buy",
+        featured: false,
+        title: "Alpenhaus mit großem Grundstück",
+        location: "Toblach",
+        price: "€ 1.080.000",
+        rooms: 6,
+        area: 245,
+        lat: 46.736,
+        lng: 12.222,
         image:
-          "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85",
-
-        image2:
-          "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1000&q=85",
-
-        image3:
-          "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1000&q=85",
-
+        "https://images.unsplash.com/photo-1510798831971-661eb04b3739?auto=format&fit=crop&w=1200&q=90",
         description:
-          "Großzügiges Familienhaus mit Garten in ruhiger Lage. Viel Platz für Familie, Homeoffice und Freizeit."
-      }
+        "Großzügiges Haus in ruhiger Lage mit viel Privatsphäre und direktem Zugang zur Natur."
+    }
 
-    ];
+];
 
 
-    /* =======================================================
-       STATE
-    ======================================================== */
+/* =========================================================
+   STATE
+   ========================================================= */
 
-    let allListings = [];
+let activeFilter = "all";
 
-    let filteredListings = [];
+let currentLanguage = "de";
 
-    let activeType = "alle";
+let map;
 
-    let favorites =
-      JSON.parse(
+let markers = {};
+
+let savedProperties =
+    JSON.parse(
         localStorage.getItem("estoraFavorites") || "[]"
-      );
+    );
 
 
-    /* =======================================================
-       MAP
-    ======================================================== */
+/* =========================================================
+   INIT
+   ========================================================= */
 
-    const map =
-      L.map("map", {
-        zoomControl: false
-      }).setView(
-        [46.55, 11.35],
-        9
-      );
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
 
+        renderProperties();
 
-    L.control
-      .zoom({
-        position: "bottomright"
-      })
-      .addTo(map);
+        renderExplorer();
 
+        updateStats();
 
-    L.tileLayer(
-      "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-      {
-        attribution:
-          "&copy; OpenStreetMap contributors",
+        initMap();
 
-        maxZoom: 19
-      }
-    ).addTo(map);
-
-
-    let markerLayer =
-      L.layerGroup().addTo(map);
-
-
-    /* =======================================================
-       HELPERS
-    ======================================================== */
-
-    function escapeHTML(value) {
-
-      if (value === null || value === undefined) {
-        return "";
-      }
-
-      return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+        setupReveal();
 
     }
+);
 
 
-    function formatPrice(value) {
+/* =========================================================
+   RENDER PROPERTIES
+   ========================================================= */
 
-      if (!value) {
-        return "Preis auf Anfrage";
-      }
+function renderProperties() {
 
-      return new Intl.NumberFormat(
-        "de-DE",
-        {
-          style: "currency",
-          currency: "EUR",
-          maximumFractionDigits: 0
-        }
-      ).format(value);
+    const grid =
+        document.getElementById("listingGrid");
 
-    }
+    let filtered =
+        getFilteredProperties();
 
 
-    function getPriceNumber(item) {
+    if (!filtered.length) {
 
-      if (typeof item.preis === "number") {
-        return item.preis;
-      }
+        grid.innerHTML = `
 
-      const value =
-        String(item.preis || "")
-          .replace(/[^\d]/g, "");
+            <div style="
+                grid-column:1/-1;
+                padding:60px;
+                text-align:center;
+                color:var(--text-soft);
+            ">
 
-      return Number(value) || 0;
+                Keine passenden Immobilien gefunden.
 
-    }
-
-
-    function normalizeItem(item, index) {
-
-      return {
-
-        id:
-          item.id ??
-          item._id ??
-          index + 1,
-
-        typ:
-          item.typ ||
-          item.type ||
-          "kauf",
-
-        titel:
-          item.titel ||
-          item.title ||
-          "Immobilie",
-
-        ort:
-          item.ort ||
-          item.location ||
-          "Südtirol",
-
-        preis:
-          getPriceNumber(item),
-
-        preisText:
-          item.preisText ||
-          item.preis ||
-          formatPrice(
-            getPriceNumber(item)
-          ),
-
-        zimmer:
-          Number(
-            item.zimmer ||
-            item.rooms ||
-            0
-          ),
-
-        flaeche:
-          Number(
-            item.flaeche ||
-            item.area ||
-            0
-          ),
-
-        kategorie:
-          item.kategorie ||
-          item.category ||
-          "Immobilie",
-
-        lat:
-          Number(item.lat) ||
-          null,
-
-        lng:
-          Number(item.lng) ||
-          null,
-
-        image:
-          item.image ||
-          fallbackListings[
-            index %
-            fallbackListings.length
-          ].image,
-
-        image2:
-          item.image2 ||
-          item.image ||
-          fallbackListings[
-            index %
-            fallbackListings.length
-          ].image2,
-
-        image3:
-          item.image3 ||
-          item.image ||
-          fallbackListings[
-            index %
-            fallbackListings.length
-          ].image3,
-
-        description:
-          item.description ||
-          "Weitere Informationen zu diesem Objekt folgen."
-
-      };
-
-    }
-
-
-    /* =======================================================
-       RENDER LIST
-    ======================================================== */
-
-    function renderListings() {
-
-      const list =
-        document.getElementById(
-          "propertyList"
-        );
-
-
-      document.getElementById(
-        "resultCount"
-      ).textContent =
-        `${filteredListings.length} Ergebnisse`;
-
-
-      document.getElementById(
-        "mapCount"
-      ).textContent =
-        filteredListings.length;
-
-
-      if (!filteredListings.length) {
-
-        list.innerHTML = `
-
-          <div class="empty">
-
-            <strong>
-              Keine Immobilien gefunden
-            </strong>
-
-            Versuche einen anderen Ort
-            oder ändere deine Filter.
-
-          </div>
+            </div>
 
         `;
 
         return;
-
-      }
-
-
-      list.innerHTML =
-        filteredListings
-          .map(
-            item => {
-
-              const isFavorite =
-                favorites.includes(
-                  String(item.id)
-                );
-
-
-              return `
-
-                <article
-                  class="property-item"
-                  data-id="${escapeHTML(item.id)}"
-                  onclick="selectProperty(${item.id})"
-                >
-
-                  <div class="property-image">
-
-                    <img
-                      src="${escapeHTML(item.image)}"
-                      alt="${escapeHTML(item.titel)}"
-                      loading="lazy"
-                    >
-
-                    <button
-                      class="property-fav"
-                      onclick="toggleFavorite(event, ${item.id})"
-                      aria-label="Favorit"
-                    >
-                      ${isFavorite ? "♥" : "♡"}
-                    </button>
-
-                  </div>
-
-
-                  <div class="property-info">
-
-                    <div class="property-type">
-
-                      ${item.typ === "kauf"
-                        ? "Zum Kauf"
-                        : "Zur Miete"}
-
-                    </div>
-
-
-                    <div class="property-name">
-
-                      ${escapeHTML(item.titel)}
-
-                    </div>
-
-
-                    <div class="property-location">
-
-                      ${escapeHTML(item.ort)}
-
-                    </div>
-
-
-                    <div class="property-meta">
-
-                      <span>
-                        ${item.zimmer}
-                        Zimmer
-                      </span>
-
-                      <span>
-                        ${item.flaeche}
-                        m²
-                      </span>
-
-                    </div>
-
-
-                    <div class="property-price">
-
-                      ${
-                        item.preisText ||
-                        formatPrice(item.preis)
-                      }
-
-                    </div>
-
-                  </div>
-
-                </article>
-
-              `;
-
-            }
-          )
-          .join("");
-
     }
 
 
-    /* =======================================================
-       RENDER MAP
-    ======================================================== */
+    grid.innerHTML =
+        filtered.map(property => {
 
-    function renderMap() {
+            const saved =
+                savedProperties.includes(property.id);
 
-      markerLayer.clearLayers();
+            const type =
+                property.type === "buy"
+                ? "Kauf"
+                : "Miete";
+
+            return `
+
+            <article
+                class="property-card">
+
+                <div
+                    class="property-image">
+
+                    <img
+                        src="${property.image}"
+                        alt="${property.title}"
+                        loading="lazy">
+
+                    <span
+                        class="property-type">
+
+                        ${type}
+
+                    </span>
 
 
-      const bounds = [];
+                    <button
+                        class="favorite ${saved ? "saved" : ""}"
+                        onclick="toggleFavorite(${property.id})">
 
+                        ${saved ? "♥" : "♡"}
 
-      filteredListings.forEach(
-        item => {
-
-          if (
-            !item.lat ||
-            !item.lng
-          ) {
-            return;
-          }
-
-
-          bounds.push([
-            item.lat,
-            item.lng
-          ]);
-
-
-          const markerIcon =
-            L.divIcon({
-
-              className:
-                "custom-price-marker",
-
-              html: `
-
-                <div class="price-marker">
-
-                  ${
-                    item.typ === "miete"
-                      ? `${formatPrice(item.preis)} / M.`
-                      : formatPrice(item.preis)
-                  }
+                    </button>
 
                 </div>
 
-              `,
 
-              iconSize: null,
+                <div
+                    class="property-content">
 
-              iconAnchor: [
-                35,
-                15
-              ]
+                    <div
+                        class="property-location">
 
-            });
+                        ${property.location}
+
+                    </div>
 
 
-          const marker =
-            L.marker(
-              [
-                item.lat,
-                item.lng
-              ],
-              {
-                icon: markerIcon
-              }
+                    <h3
+                        class="property-title">
+
+                        ${property.title}
+
+                    </h3>
+
+
+                    <div
+                        class="property-meta">
+
+                        <span>
+                            ${property.rooms} Zimmer
+                        </span>
+
+                        <span>
+                            ${property.area} m²
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        class="property-bottom">
+
+                        <strong
+                            class="property-price">
+
+                            ${property.price}
+
+                        </strong>
+
+
+                        <button
+                            class="details-button"
+                            onclick="openProperty(${property.id})">
+
+                            Details →
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+            `;
+
+        }).join("");
+}
+
+
+/* =========================================================
+   FILTER
+   ========================================================= */
+
+function getFilteredProperties() {
+
+    const search =
+        document
+            .getElementById("searchInput")
+            ?.value
+            .toLowerCase()
+            .trim() || "";
+
+
+    const type =
+        document
+            .getElementById("typeSelect")
+            ?.value || "all";
+
+
+    return properties.filter(property => {
+
+        const filterMatch =
+            activeFilter === "all"
+            ||
+            (activeFilter === "buy" &&
+             property.type === "buy")
+            ||
+            (activeFilter === "rent" &&
+             property.type === "rent")
+            ||
+            (activeFilter === "featured" &&
+             property.featured);
+
+
+        const typeMatch =
+            type === "all"
+            ||
+            property.type === type;
+
+
+        const searchMatch =
+            !search
+            ||
+            property.title
+                .toLowerCase()
+                .includes(search)
+            ||
+            property.location
+                .toLowerCase()
+                .includes(search);
+
+
+        return (
+            filterMatch &&
+            typeMatch &&
+            searchMatch
+        );
+
+    });
+
+}
+
+
+function setFilter(filter) {
+
+    activeFilter = filter;
+
+
+    document
+        .querySelectorAll(".filter")
+        .forEach(button => {
+
+            button.classList.toggle(
+                "active",
+                button.dataset.filter === filter
             );
 
+        });
 
-          marker.bindPopup(`
 
-            <div class="map-popup">
+    renderProperties();
 
-              <img
-                src="${escapeHTML(item.image)}"
-                alt=""
-              >
+    renderExplorer();
 
-              <strong>
-                ${escapeHTML(item.titel)}
-              </strong>
+}
 
-              <span>
-                ${escapeHTML(item.ort)}
-                ·
-                ${escapeHTML(item.kategorie)}
-              </span>
 
-              <br>
+/* =========================================================
+   SEARCH
+   ========================================================= */
 
-              <strong>
-                ${
-                  item.preisText ||
-                  formatPrice(item.preis)
-                }
-              </strong>
+function performSearch() {
 
-              <br>
+    renderProperties();
 
-              <button
-                onclick="openModal(${item.id})"
-                style="
-                  margin-top:8px;
-                  border:0;
-                  background:#173b31;
-                  color:white;
-                  padding:7px 11px;
-                  border-radius:7px;
-                  font-size:11px;
-                "
-              >
-                Details ansehen
-              </button>
+    renderExplorer();
+
+    document
+        .getElementById("properties")
+        .scrollIntoView({
+            behavior: "smooth"
+        });
+
+}
+
+
+function searchRegion(region) {
+
+    document
+        .getElementById("searchInput")
+        .value = region;
+
+    performSearch();
+
+}
+
+
+/* =========================================================
+   FAVORITES
+   ========================================================= */
+
+function toggleFavorite(id) {
+
+    if (savedProperties.includes(id)) {
+
+        savedProperties =
+            savedProperties.filter(
+                propertyId =>
+                    propertyId !== id
+            );
+
+    } else {
+
+        savedProperties.push(id);
+
+    }
+
+
+    localStorage.setItem(
+        "estoraFavorites",
+        JSON.stringify(savedProperties)
+    );
+
+
+    renderProperties();
+
+}
+
+
+/* =========================================================
+   STATS
+   ========================================================= */
+
+function updateStats() {
+
+    document
+        .getElementById("statTotal")
+        .textContent =
+        properties.length;
+
+
+    document
+        .getElementById("statBuy")
+        .textContent =
+        properties.filter(
+            property => property.type === "buy"
+        ).length;
+
+
+    document
+        .getElementById("statRent")
+        .textContent =
+        properties.filter(
+            property => property.type === "rent"
+        ).length;
+
+}
+
+
+/* =========================================================
+   MAP
+   ========================================================= */
+
+function initMap() {
+
+    map =
+        L.map("map", {
+            zoomControl: true
+        })
+        .setView(
+            [46.65, 11.45],
+            9
+        );
+
+
+    L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+            attribution:
+                "&copy; OpenStreetMap-Mitwirkende"
+        }
+    ).addTo(map);
+
+
+    renderExplorer();
+
+}
+
+
+function createMarker(property) {
+
+    const icon =
+        L.divIcon({
+
+            className: "",
+
+            html: `
+
+                <div
+                    class="estora-marker">
+
+                    E
+
+                </div>
+
+            `,
+
+            iconSize: [42,42],
+
+            iconAnchor: [21,21]
+
+        });
+
+
+    const marker =
+        L.marker(
+            [property.lat, property.lng],
+            { icon }
+        );
+
+
+    marker.bindPopup(`
+
+        <div style="
+            min-width:180px;
+            padding:5px;
+        ">
+
+            <strong>
+                ${property.title}
+            </strong>
+
+            <br>
+
+            <span>
+                ${property.location}
+            </span>
+
+            <br><br>
+
+            <strong style="
+                color:#174b3a;
+            ">
+                ${property.price}
+            </strong>
+
+        </div>
+
+    `);
+
+
+    marker.on(
+        "click",
+        () => {
+
+            document
+                .querySelectorAll(".explorer-item")
+                .forEach(item => {
+
+                    item.classList.toggle(
+                        "selected",
+                        Number(item.dataset.id)
+                        === property.id
+                    );
+
+                });
+
+        }
+    );
+
+
+    return marker;
+
+}
+
+
+/* =========================================================
+   EXPLORER
+   ========================================================= */
+
+function renderExplorer() {
+
+    const list =
+        document.getElementById("explorerList");
+
+    if (!list) return;
+
+
+    const filtered =
+        getFilteredProperties();
+
+
+    list.innerHTML =
+        filtered.map(property => `
+
+            <div
+                class="explorer-item"
+                data-id="${property.id}"
+                onclick="focusProperty(${property.id})">
+
+                <img
+                    class="explorer-thumb"
+                    src="${property.image}"
+                    alt="${property.title}">
+
+                <div
+                    class="explorer-info">
+
+                    <h4>
+                        ${property.title}
+                    </h4>
+
+                    <p>
+                        ${property.location}
+                    </p>
+
+                    <span
+                        class="explorer-price">
+
+                        ${property.price}
+
+                    </span>
+
+                </div>
 
             </div>
 
-          `);
+        `).join("");
 
 
-          marker.on(
-            "click",
-            () => {
+    if (!map) return;
 
-              highlightListItem(
-                item.id
-              );
+
+    Object.values(markers)
+        .forEach(marker =>
+            map.removeLayer(marker)
+        );
+
+
+    markers = {};
+
+
+    filtered.forEach(property => {
+
+        const marker =
+            createMarker(property);
+
+        marker.addTo(map);
+
+        markers[property.id] =
+            marker;
+
+    });
+
+}
+
+
+/* =========================================================
+   FOCUS PROPERTY
+   ========================================================= */
+
+function focusProperty(id) {
+
+    const property =
+        properties.find(
+            item => item.id === id
+        );
+
+
+    if (!property || !map) return;
+
+
+    map.flyTo(
+        [property.lat, property.lng],
+        13,
+        {
+            duration: .8
+        }
+    );
+
+
+    if (markers[id]) {
+
+        setTimeout(
+            () => markers[id].openPopup(),
+            600
+        );
+
+    }
+
+
+    document
+        .querySelectorAll(".explorer-item")
+        .forEach(item => {
+
+            item.classList.toggle(
+                "selected",
+                Number(item.dataset.id)
+                === id
+            );
+
+        });
+
+}
+
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
+function openProperty(id) {
+
+    const property =
+        properties.find(
+            item => item.id === id
+        );
+
+
+    if (!property) return;
+
+
+    document
+        .getElementById("modalImage")
+        .src =
+        property.image;
+
+
+    document
+        .getElementById("modalLocation")
+        .textContent =
+        property.location;
+
+
+    document
+        .getElementById("modalTitle")
+        .textContent =
+        property.title;
+
+
+    document
+        .getElementById("modalDescription")
+        .textContent =
+        property.description;
+
+
+    document
+        .getElementById("modalPrice")
+        .textContent =
+        property.price;
+
+
+    document
+        .getElementById("modalMeta")
+        .innerHTML = `
+
+        <span>
+            🛏 ${property.rooms} Zimmer
+        </span>
+
+        <span>
+            📐 ${property.area} m²
+        </span>
+
+        <span>
+            📍 ${property.location}
+        </span>
+
+    `;
+
+
+    document
+        .getElementById("propertyModal")
+        .classList.add("open");
+
+}
+
+
+function closeModal(event) {
+
+    if (
+        event &&
+        event.target !== event.currentTarget
+    ) return;
+
+
+    document
+        .getElementById("propertyModal")
+        .classList.remove("open");
+
+}
+
+
+/* =========================================================
+   LANGUAGE
+   ========================================================= */
+
+function toggleLanguage() {
+
+    currentLanguage =
+        currentLanguage === "de"
+        ? "it"
+        : "de";
+
+
+    document
+        .getElementById("languageButton")
+        .textContent =
+        currentLanguage === "de"
+        ? "IT"
+        : "DE";
+
+
+    document
+        .querySelectorAll("[data-de]")
+        .forEach(element => {
+
+            const value =
+                element.dataset[
+                    currentLanguage
+                ];
+
+            if (!value) return;
+
+
+            if (
+                element.tagName === "INPUT"
+            ) {
+
+                element.placeholder =
+                    currentLanguage === "de"
+                    ? element.dataset.placeholderDe
+                    : element.dataset.placeholderIt;
+
+            } else {
+
+                element.textContent =
+                    value;
 
             }
-          );
 
-
-          markerLayer.addLayer(
-            marker
-          );
-
-        }
-      );
-
-
-      if (bounds.length) {
-
-        map.fitBounds(
-          bounds,
-          {
-            padding: [
-              60,
-              60
-            ],
-            maxZoom: 11
-          }
-        );
-
-      }
-
-    }
-
-
-    /* =======================================================
-       FILTERS
-    ======================================================== */
-
-    function applyFilters() {
-
-      const location =
-        document
-          .getElementById(
-            "locationFilter"
-          )
-          .value
-          .toLowerCase()
-          .trim();
-
-
-      const rooms =
-        Number(
-          document
-            .getElementById(
-              "roomsFilter"
-            )
-            .value
-        );
-
-
-      const sort =
-        document
-          .getElementById(
-            "sortFilter"
-          )
-          .value;
-
-
-      filteredListings =
-        allListings.filter(
-          item => {
-
-            const typeMatch =
-              activeType === "alle" ||
-              item.typ === activeType;
-
-
-            const locationMatch =
-              !location ||
-              item.ort
-                .toLowerCase()
-                .includes(location);
-
-
-            const roomsMatch =
-              !rooms ||
-              item.zimmer >= rooms;
-
-
-            return (
-              typeMatch &&
-              locationMatch &&
-              roomsMatch
-            );
-
-          }
-        );
-
-
-      if (sort === "priceLow") {
-
-        filteredListings.sort(
-          (a, b) =>
-            a.preis - b.preis
-        );
-
-      }
-
-
-      if (sort === "priceHigh") {
-
-        filteredListings.sort(
-          (a, b) =>
-            b.preis - a.preis
-        );
-
-      }
-
-
-      if (sort === "area") {
-
-        filteredListings.sort(
-          (a, b) =>
-            b.flaeche - a.flaeche
-        );
-
-      }
-
-
-      renderListings();
-
-      renderMap();
-
-    }
-
-
-    function setType(type) {
-
-      activeType = type;
-
-
-      document
-        .querySelectorAll(
-          ".filter-tab"
-        )
-        .forEach(
-          button => {
-
-            button.classList.toggle(
-              "active",
-              button.dataset.type === type
-            );
-
-          }
-        );
-
-
-      applyFilters();
-
-    }
-
-
-    function quickFilter(type) {
-
-      setType(type);
-
-
-      document
-        .getElementById(
-          "entdecken"
-        )
-        .scrollIntoView({
-          behavior: "smooth"
         });
 
-    }
+}
 
 
-    function filterLocation(location) {
+/* =========================================================
+   SCROLL
+   ========================================================= */
 
-      document
-        .getElementById(
-          "locationFilter"
-        )
-        .value =
-        location;
+function scrollToSection(id) {
 
+    const element =
+        document.getElementById(id);
 
-      applyFilters();
-
-
-      document
-        .getElementById(
-          "entdecken"
-        )
-        .scrollIntoView({
-          behavior: "smooth"
-        });
-
-    }
+    if (!element) return;
 
 
-    function performSearch() {
+    element.scrollIntoView({
+        behavior: "smooth"
+    });
 
-      const location =
-        document
-          .getElementById(
-            "heroLocation"
-          )
-          .value;
+}
 
 
-      const type =
-        document
-          .getElementById(
-            "heroType"
-          )
-          .value;
+/* =========================================================
+   REVEAL ANIMATION
+   ========================================================= */
 
+function setupReveal() {
 
-      const rooms =
-        document
-          .getElementById(
-            "heroRooms"
-          )
-          .value;
+    const observer =
+        new IntersectionObserver(
+            entries => {
 
+                entries.forEach(entry => {
 
-      document
-        .getElementById(
-          "locationFilter"
-        )
-        .value =
-        location;
+                    if (
+                        entry.isIntersecting
+                    ) {
 
+                        entry.target
+                            .classList
+                            .add("visible");
 
-      document
-        .getElementById(
-          "roomsFilter"
-        )
-        .value =
-        rooms;
+                    }
 
+                });
 
-      setType(type);
-
-
-      document
-        .getElementById(
-          "entdecken"
-        )
-        .scrollIntoView({
-          behavior: "smooth"
-        });
-
-    }
-
-
-    /* =======================================================
-       SELECT PROPERTY
-    ======================================================== */
-
-    function selectProperty(id) {
-
-      const item =
-        allListings.find(
-          property =>
-            Number(property.id) ===
-            Number(id)
+            },
+            {
+                threshold: .12
+            }
         );
 
 
-      if (!item) {
-        return;
-      }
-
-
-      highlightListItem(id);
-
-
-      if (
-        item.lat &&
-        item.lng
-      ) {
-
-        map.flyTo(
-          [
-            item.lat,
-            item.lng
-          ],
-          13,
-          {
-            duration: .7
-          }
+    document
+        .querySelectorAll(".reveal")
+        .forEach(element =>
+            observer.observe(element)
         );
 
-      }
+}
 
 
-      openModal(id);
+/* =========================================================
+   KEYBOARD
+   ========================================================= */
 
-    }
-
-
-    function highlightListItem(id) {
-
-      document
-        .querySelectorAll(
-          ".property-item"
-        )
-        .forEach(
-          element => {
-
-            element.classList.toggle(
-              "selected",
-              Number(
-                element.dataset.id
-              ) === Number(id)
-            );
-
-          }
-        );
-
-    }
-
-
-    /* =======================================================
-       FAVORITES
-    ======================================================== */
-
-    function toggleFavorite(
-      event,
-      id
-    ) {
-
-      event.stopPropagation();
-
-
-      const stringId =
-        String(id);
-
-
-      if (
-        favorites.includes(
-          stringId
-        )
-      ) {
-
-        favorites =
-          favorites.filter(
-            favorite =>
-              favorite !== stringId
-          );
-
-      } else {
-
-        favorites.push(
-          stringId
-        );
-
-      }
-
-
-      localStorage.setItem(
-        "estoraFavorites",
-        JSON.stringify(
-          favorites
-        )
-      );
-
-
-      renderListings();
-
-    }
-
-
-    /* =======================================================
-       MODAL
-    ======================================================== */
-
-    function openModal(id) {
-
-      const item =
-        allListings.find(
-          property =>
-            Number(property.id) ===
-            Number(id)
-        );
-
-
-      if (!item) {
-        return;
-      }
-
-
-      document
-        .getElementById(
-          "modalMainImage"
-        )
-        .style.backgroundImage =
-        `url("${item.image}")`;
-
-
-      document
-        .getElementById(
-          "modalImageTwo"
-        )
-        .style.backgroundImage =
-        `url("${item.image2}")`;
-
-
-      document
-        .getElementById(
-          "modalImageThree"
-        )
-        .style.backgroundImage =
-        `url("${item.image3}")`;
-
-
-      document
-        .getElementById(
-          "modalType"
-        )
-        .textContent =
-        item.typ === "kauf"
-          ? "ZUM KAUF"
-          : "ZUR MIETE";
-
-
-      document
-        .getElementById(
-          "modalTitle"
-        )
-        .textContent =
-        item.titel;
-
-
-      document
-        .getElementById(
-          "modalLocation"
-        )
-        .textContent =
-        item.ort;
-
-
-      document
-        .getElementById(
-          "modalRooms"
-        )
-        .textContent =
-        `${item.zimmer} Zimmer`;
-
-
-      document
-        .getElementById(
-          "modalArea"
-        )
-        .textContent =
-        `${item.flaeche} m²`;
-
-
-      document
-        .getElementById(
-          "modalCategory"
-        )
-        .textContent =
-        item.kategorie;
-
-
-      document
-        .getElementById(
-          "modalId"
-        )
-        .textContent =
-        `#${item.id}`;
-
-
-      document
-        .getElementById(
-          "modalDescription"
-        )
-        .textContent =
-        item.description;
-
-
-      document
-        .getElementById(
-          "modalPrice"
-        )
-        .textContent =
-        item.preisText ||
-        formatPrice(item.preis);
-
-
-      document
-        .getElementById(
-          "propertyModal"
-        )
-        .classList.add(
-          "open"
-        );
-
-
-      document.body.style.overflow =
-        "hidden";
-
-    }
-
-
-    function closeModal() {
-
-      document
-        .getElementById(
-          "propertyModal"
-        )
-        .classList.remove(
-          "open"
-        );
-
-
-      document.body.style.overflow =
-        "";
-
-    }
-
-
-    function closeModalOutside(event) {
-
-      if (
-        event.target.id ===
-        "propertyModal"
-      ) {
-
-        closeModal();
-
-      }
-
-    }
-
-
-    function contactProperty() {
-
-      alert(
-        "Hier wird später das Kontaktformular für dieses Inserat geöffnet."
-      );
-
-    }
-
-
-    /* =======================================================
-       RESET MAP
-    ======================================================== */
-
-    function resetMap() {
-
-      if (!filteredListings.length) {
-        return;
-      }
-
-
-      const bounds =
-        filteredListings
-          .filter(
-            item =>
-              item.lat &&
-              item.lng
-          )
-          .map(
-            item => [
-              item.lat,
-              item.lng
-            ]
-          );
-
-
-      if (bounds.length) {
-
-        map.fitBounds(
-          bounds,
-          {
-            padding: [
-              60,
-              60
-            ],
-            maxZoom: 11
-          }
-        );
-
-      }
-
-    }
-
-
-    /* =======================================================
-       LOAD DATA
-    ======================================================== */
-
-    async function loadListings() {
-
-      try {
-
-        if (db) {
-
-          const {
-            data,
-            error
-          } =
-            await db
-              .from("inserate")
-              .select("*");
-
-
-          if (
-            !error &&
-            data &&
-            data.length
-          ) {
-
-            allListings =
-              data.map(
-                normalizeItem
-              );
-
-            filteredListings =
-              [...allListings];
-
-            renderListings();
-
-            renderMap();
-
-            return;
-
-          }
-
-        }
-
-      } catch (error) {
-
-        console.warn(
-          "Supabase error:",
-          error
-        );
-
-      }
-
-
-      /* fallback */
-
-      allListings =
-        fallbackListings.map(
-          normalizeItem
-        );
-
-
-      filteredListings =
-        [...allListings];
-
-
-      renderListings();
-
-      renderMap();
-
-    }
-
-
-    /* =======================================================
-       KEYBOARD
-    ======================================================== */
-
-    document.addEventListener(
-      "keydown",
-      event => {
+document.addEventListener(
+    "keydown",
+    event => {
 
         if (
-          event.key === "Escape"
+            event.key === "Escape"
         ) {
 
-          closeModal();
+            closeModal();
 
         }
 
-      }
+    }
+);
+
+
+/* =========================================================
+   LIVE SEARCH
+   ========================================================= */
+
+document
+    .getElementById("searchInput")
+    .addEventListener(
+        "input",
+        () => {
+
+            renderProperties();
+
+            renderExplorer();
+
+        }
     );
 
 
-    /* =======================================================
-       INITIALIZE
-    ======================================================== */
+document
+    .getElementById("typeSelect")
+    .addEventListener(
+        "change",
+        () => {
 
-    loadListings();
+            renderProperties();
 
+            renderExplorer();
 
-    setTimeout(
-      () => {
-
-        map.invalidateSize();
-
-      },
-      500
+        }
     );
 
-  </script>
+
+</script>
 
 </body>
 </html>
