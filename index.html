@@ -88,21 +88,14 @@ HEADER
     position:absolute;
     top:0;
     left:0;
+    right:0;
     width:100%;
     z-index:100;
     color:white;
     background:transparent;
-    transition:background .25s ease, backdrop-filter .25s ease;
+    /* scrollt mit der Seite weg – bleibt NICHT kleben */
 }
 
-.header.is-scrolled{
-    position:fixed;
-    background:rgba(23,42,35,.88);
-    backdrop-filter:blur(16px) saturate(140%);
-    -webkit-backdrop-filter:blur(16px) saturate(140%);
-    border-bottom:1px solid rgba(255,255,255,.08);
-    box-shadow:0 8px 28px rgba(0,0,0,.12);
-}
 
 .nav{
     height:72px;
@@ -224,24 +217,48 @@ HEADER
 }
 
 .nav-glass{
-    height:44px;
-
-    padding:0 16px;
-
+    height:40px;
+    padding:0 15px;
     border-radius:999px;
-
     color:white;
-
-    background:rgba(255,255,255,.14);
-
-    border:1px solid rgba(255,255,255,.28);
-
-    backdrop-filter:blur(24px) saturate(140%);
-    -webkit-backdrop-filter:blur(24px) saturate(140%);
-
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.24);
-    transition:.2s;
+    font-size:13px;
+    font-weight:600;
+    position:relative;
+    isolation:isolate;
+    overflow:hidden;
+    background: linear-gradient(
+        180deg,
+        rgba(255,255,255,.38) 0%,
+        rgba(255,255,255,.14) 48%,
+        rgba(255,255,255,.08) 100%
+    );
+    border: 1px solid rgba(255,255,255,.28);
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.65),
+        inset 0 -1px 0 rgba(255,255,255,.06),
+        0 1px 2px rgba(0,0,0,.05),
+        0 8px 20px rgba(0,0,0,.1);
+    transition: background .25s ease, box-shadow .25s ease, transform .15s ease;
 }
+.nav-glass::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    border-radius:inherit;
+    background: linear-gradient(
+        120deg,
+        rgba(255,255,255,.35) 0%,
+        transparent 40%,
+        transparent 60%,
+        rgba(255,255,255,.12) 100%
+    );
+    pointer-events:none;
+    opacity:.9;
+}
+
+
 
 .nav-glass.has-badge{
     position:relative;
@@ -353,27 +370,47 @@ HEADER
 }
 
 .nav-glass:hover{
-    background:rgba(255,255,255,.2);
+    background: linear-gradient(
+        180deg,
+        rgba(255,255,255,.48) 0%,
+        rgba(255,255,255,.2) 50%,
+        rgba(255,255,255,.12) 100%
+    );
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.75),
+        0 2px 4px rgba(0,0,0,.06),
+        0 12px 28px rgba(0,0,0,.12);
 }
+.nav-glass:active{ transform:scale(.97); }
+.nav-glass.is-active{
+    background: linear-gradient(180deg, rgba(255,255,255,.5) 0%, rgba(255,255,255,.22) 100%);
+}
+
 
 .hotelier-btn{
-    height:44px;
-
-    padding:0 18px;
-
+    height:40px;
+    padding:0 16px;
     border-radius:999px;
-
-    background:white;
     color:var(--green);
-
     font-weight:700;
-
-    transition:.2s;
+    font-size:13px;
+    position:relative;
+    overflow:hidden;
+    background: linear-gradient(180deg, rgba(255,255,255,.96) 0%, rgba(255,255,255,.82) 100%);
+    border: 1px solid rgba(255,255,255,.65);
+    backdrop-filter: blur(30px) saturate(160%);
+    -webkit-backdrop-filter: blur(30px) saturate(160%);
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.95),
+        0 4px 18px rgba(0,0,0,.12);
+    transition: background .2s, transform .15s, box-shadow .2s;
 }
-
 .hotelier-btn:hover{
+    background: linear-gradient(180deg, #fff 0%, rgba(255,255,255,.9) 100%);
     transform:translateY(-1px);
+    box-shadow: inset 0 1px 0 #fff, 0 8px 24px rgba(0,0,0,.14);
 }
+
 
 .mobile-menu{
     display:none;
@@ -416,65 +453,50 @@ HERO
 .hero-slide{
     position:absolute;
     inset:0;
-
     background-size:cover;
     background-position:center;
-    transform:scale(1.02);
-
+    transform:scale(1.04);
     opacity:0;
-    animation:heroFade 28s cubic-bezier(.22,1,.36,1) infinite;
+    /* weicher Ken-Burns + Crossfade, 11s pro Bild */
+    animation:heroFade 44s cubic-bezier(.4,0,.2,1) infinite;
+    will-change: opacity, transform;
 }
-
 .hero-slide:nth-child(1){
-    background-image:url("https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=2200&q=90");
+    background-image:url("https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?auto=format&fit=crop&w=2200&q=90");
     animation-delay:0s;
 }
-
 .hero-slide:nth-child(2){
-    background-image:url("https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=2200&q=90");
-    animation-delay:7s;
+    background-image:url("https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=2200&q=90");
+    animation-delay:11s;
 }
-
 .hero-slide:nth-child(3){
     background-image:url("https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=2200&q=90");
-    animation-delay:14s;
+    animation-delay:22s;
 }
-
 .hero-slide:nth-child(4){
-    background-image:url("https://images.unsplash.com/photo-1521295121783-8a321d551ad2?auto=format&fit=crop&w=2200&q=90");
-    animation-delay:21s;
+    background-image:url("https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=2200&q=90");
+    animation-delay:33s;
 }
-
 .hero-bg{
     position:absolute;
     inset:0;
-
     background:linear-gradient(
         180deg,
-        rgba(13,29,24,.45),
-        rgba(13,29,24,.25) 45%,
-        rgba(13,29,24,.55)
+        rgba(10,22,18,.42) 0%,
+        rgba(10,22,18,.18) 45%,
+        rgba(10,22,18,.52) 100%
     );
-
     z-index:1;
+    pointer-events:none;
 }
-
 @keyframes heroFade{
-    0%, 100%{
-        opacity:0;
-        transform:scale(1.02);
-    }
-
-    6%, 26%{
-        opacity:1;
-        transform:scale(1.01);
-    }
-
-    32%, 100%{
-        opacity:0;
-        transform:scale(1.03);
-    }
+    0%{ opacity:0; transform:scale(1.05); }
+    4%{ opacity:1; transform:scale(1.04); }
+    22%{ opacity:1; transform:scale(1.0); }
+    26%{ opacity:0; transform:scale(1.0); }
+    100%{ opacity:0; transform:scale(1.0); }
 }
+
 
 .hero-content{
     position:relative;
@@ -489,33 +511,30 @@ HERO
     display:inline-flex;
     align-items:center;
     gap:8px;
-
-    padding:8px 14px;
-
-    border-radius:999px;
-
-    background:rgba(255,255,255,.12);
-
-    border:1px solid rgba(255,255,255,.22);
-
-    backdrop-filter:blur(18px);
-
-    font-size:12px;
-    font-weight:600;
-
+    padding:0;
     margin-bottom:16px;
+    background:none;
+    border:none;
+    box-shadow:none;
+    backdrop-filter:none;
+    -webkit-backdrop-filter:none;
+    font-size:13px;
+    font-weight:600;
+    color:rgba(255,255,255,.95);
+    letter-spacing:.02em;
 }
 
 .hero-dot{
     width:8px;
     height:8px;
     flex-shrink:0;
-
     border-radius:50%;
-
-    background:linear-gradient(135deg, #bde5c4, #5f9e75);
-    box-shadow:0 0 0 2px rgba(255,255,255,.18), 0 4px 10px rgba(0,0,0,.2);
+    background:#7dce88;
+    box-shadow:0 0 0 3px rgba(125,206,136,.28), 0 0 10px rgba(125,206,136,.45);
 }
+.hero-dot::after{ display:none; content:none; }
+
+
 
 .hero h1{
     font-family:"Playfair Display",serif;
@@ -561,21 +580,17 @@ SEARCH
 }
 
 .search-box{
-    background:rgba(255,255,255,.82);
-
-    border:1px solid rgba(255,255,255,.7);
-
-    border-radius:18px;
-
+    background: linear-gradient(180deg, rgba(255,255,255,.78) 0%, rgba(255,255,255,.62) 100%);
+    border:1px solid rgba(255,255,255,.55);
+    border-radius:22px;
     padding:10px;
-
     box-shadow:
-        0 20px 50px rgba(12,28,24,.14),
-        inset 0 1px 0 rgba(255,255,255,.6);
-
-    backdrop-filter:blur(22px) saturate(130%);
-    -webkit-backdrop-filter:blur(22px) saturate(130%);
+        inset 0 1px 0 rgba(255,255,255,.85),
+        0 20px 50px rgba(12,28,24,.14);
+    backdrop-filter:blur(40px) saturate(180%);
+    -webkit-backdrop-filter:blur(40px) saturate(180%);
 }
+
 
 .search-main{
     display:grid;
@@ -670,25 +685,27 @@ SEARCH
 
 .search-button{
     margin:6px;
-
     min-width:108px;
-
-    border-radius:10px;
-
-    background:var(--green);
-
+    border-radius:14px;
     color:white;
-
     font-size:14px;
-
     font-weight:700;
-
-    transition:.2s;
+    position:relative;
+    overflow:hidden;
+    background: linear-gradient(180deg, rgba(61,107,89,.95) 0%, rgba(33,75,61,.9) 100%);
+    border: 1px solid rgba(255,255,255,.25);
+    backdrop-filter: blur(16px) saturate(150%);
+    -webkit-backdrop-filter: blur(16px) saturate(150%);
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.3),
+        0 4px 16px rgba(33,75,61,.3);
+    transition: background .2s, transform .15s, box-shadow .2s;
 }
-
 .search-button:hover{
-    background:var(--green-dark);
+    background: linear-gradient(180deg, rgba(70,120,100,.98) 0%, rgba(23,55,46,.95) 100%);
 }
+.search-button:active{ transform:scale(.98); }
+
 
 .search-summary{
     margin-top:8px;
@@ -931,18 +948,19 @@ section[id]{
 }
 
 .load-more{
-    padding:12px 18px;
+    padding:12px 22px;
     border-radius:999px;
-    background:rgba(33,75,61,.94);
     color:white;
     font-size:13px;
     font-weight:700;
-    box-shadow:0 10px 24px rgba(33,75,61,.18);
+    background: linear-gradient(180deg, rgba(61,107,89,.95) 0%, rgba(33,75,61,.9) 100%);
+    border: 1px solid rgba(255,255,255,.2);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.25), 0 10px 24px rgba(33,75,61,.22);
 }
+.load-more:hover{ transform:translateY(-1px); }
 
-.load-more:hover{
-    transform:translateY(-1px);
-}
 
 /* =========================
 HOTELS
@@ -1775,6 +1793,295 @@ RESPONSIVE
     }
 }
 
+
+.staylo-pin{ background:transparent; border:0; }
+.staylo-pin-dot{
+  display:block; width:16px; height:16px; border-radius:50%;
+  background:#214b3d; border:2.5px solid #fff;
+  box-shadow:0 3px 10px rgba(0,0,0,.35);
+}
+.staylo-popup strong{ display:block; font-size:14px; color:#214b3d; }
+.staylo-popup span{ display:block; font-size:12px; color:#66706a; margin-top:2px; }
+.map-canvas{ height:440px; width:100%; background:#e8ebe6; }
+
+/* ============================================
+   APPLE LIQUID GLASS (approx. for web)
+   Specular top edge + blur + soft refraction rim
+   ============================================ */
+.lg {
+    position: relative;
+    isolation: isolate;
+    background: linear-gradient(
+        180deg,
+        rgba(255,255,255,.34) 0%,
+        rgba(255,255,255,.12) 45%,
+        rgba(255,255,255,.08) 100%
+    );
+    border: 1px solid transparent;
+    background-clip: padding-box;
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.55),
+        inset 0 -1px 0 rgba(255,255,255,.08),
+        0 1px 2px rgba(0,0,0,.04),
+        0 8px 24px rgba(0,0,0,.1);
+    transition: background .25s ease, box-shadow .25s ease, transform .15s ease, border-color .25s ease;
+}
+.lg::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    border-radius:inherit;
+    padding:1px;
+    background: linear-gradient(
+        165deg,
+        rgba(255,255,255,.7) 0%,
+        rgba(255,255,255,.15) 35%,
+        rgba(255,255,255,.05) 60%,
+        rgba(255,255,255,.25) 100%
+    );
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events:none;
+}
+.lg:hover{
+    background: linear-gradient(
+        180deg,
+        rgba(255,255,255,.42) 0%,
+        rgba(255,255,255,.16) 50%,
+        rgba(255,255,255,.1) 100%
+    );
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.65),
+        inset 0 -1px 0 rgba(255,255,255,.1),
+        0 2px 4px rgba(0,0,0,.05),
+        0 12px 28px rgba(0,0,0,.12);
+}
+.lg:active{ transform: scale(.97); }
+
+/* solid light glass (for primary CTA on dark) */
+.lg-solid{
+    position:relative;
+    isolation:isolate;
+    background: linear-gradient(
+        180deg,
+        rgba(255,255,255,.95) 0%,
+        rgba(255,255,255,.82) 100%
+    );
+    border: 1px solid rgba(255,255,255,.6);
+    backdrop-filter: blur(30px) saturate(160%);
+    -webkit-backdrop-filter: blur(30px) saturate(160%);
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.9),
+        0 4px 16px rgba(0,0,0,.12);
+}
+.lg-solid:hover{
+    background: linear-gradient(180deg, #fff 0%, rgba(255,255,255,.9) 100%);
+    transform: translateY(-1px);
+}
+
+/* green glass CTA */
+.lg-green{
+    position:relative;
+    isolation:isolate;
+    color:#fff !important;
+    background: linear-gradient(
+        180deg,
+        rgba(61,107,89,.92) 0%,
+        rgba(33,75,61,.88) 100%
+    );
+    border: 1px solid rgba(255,255,255,.22);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.28),
+        0 4px 18px rgba(33,75,61,.28);
+}
+.lg-green:hover{
+    background: linear-gradient(180deg, rgba(61,107,89,.98) 0%, rgba(23,55,46,.95) 100%);
+}
+
+
+/* SUBPAGES: Kategorien & Regionen */
+.page-block{
+    background:#fff;
+    padding:72px 0 90px;
+    border-top:1px solid var(--border);
+}
+.page-block .page-intro{
+    max-width:620px;
+    margin-bottom:40px;
+}
+.page-kicker{
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--green);
+    margin-bottom:10px;
+}
+.page-intro h2{
+    font-family:"Playfair Display",serif;
+    font-size:clamp(28px,4vw,40px);
+    letter-spacing:-.03em;
+    margin-bottom:12px;
+}
+.page-intro p{
+    color:var(--grey);
+    font-size:15px;
+    line-height:1.65;
+}
+.style-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:18px;
+}
+.style-card{
+    display:grid;
+    grid-template-columns:1fr 1.15fr;
+    gap:0;
+    background:#f7f8f5;
+    border:1px solid var(--border);
+    border-radius:18px;
+    overflow:hidden;
+    min-height:210px;
+}
+.style-card img{
+    width:100%;
+    height:100%;
+    min-height:210px;
+    object-fit:cover;
+}
+.style-body{
+    padding:22px 22px 20px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+.style-body .tag{
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--green);
+    margin-bottom:8px;
+}
+.style-body h3{
+    font-family:"Playfair Display",serif;
+    font-size:22px;
+    margin-bottom:8px;
+}
+.style-body p{
+    font-size:13px;
+    color:var(--grey);
+    line-height:1.55;
+    margin-bottom:14px;
+}
+.style-body a{
+    font-size:13px;
+    font-weight:700;
+    color:var(--green);
+}
+.region-detail-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:18px;
+}
+.region-detail{
+    background:#f7f8f5;
+    border:1px solid var(--border);
+    border-radius:18px;
+    overflow:hidden;
+}
+.region-detail-img{
+    height:160px;
+}
+.region-detail-img img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+.region-detail-body{ padding:20px 22px 22px; }
+.region-detail-body .num{
+    font-size:11px;
+    font-weight:700;
+    color:#9da39d;
+    letter-spacing:.06em;
+    margin-bottom:6px;
+}
+.region-detail-body h3{
+    font-family:"Playfair Display",serif;
+    font-size:22px;
+    margin-bottom:8px;
+}
+.region-detail-body p{
+    font-size:13px;
+    color:var(--grey);
+    line-height:1.55;
+    margin-bottom:12px;
+}
+.region-detail-body .traits{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    margin-bottom:14px;
+}
+.region-detail-body .traits span{
+    font-size:11px;
+    font-weight:600;
+    padding:5px 10px;
+    border-radius:999px;
+    background:#fff;
+    border:1px solid var(--border);
+    color:var(--green);
+}
+@media(max-width:800px){
+    .style-grid,.region-detail-grid{ grid-template-columns:1fr; }
+    .style-card{ grid-template-columns:1fr; }
+    .style-card img{ min-height:160px; height:160px; }
+}
+
+
+/* SPA views */
+.view-page{ display:none; min-height:100vh; background:#fff; padding-top:88px; }
+.view-page.is-active{ display:block; }
+body.show-subpage .view-home{ display:none; }
+body.show-subpage .header{
+    position:fixed !important;
+    top:0; left:0; right:0;
+    z-index:1000;
+    background:rgba(20,36,30,.88);
+    backdrop-filter:blur(24px) saturate(160%);
+    -webkit-backdrop-filter:blur(24px) saturate(160%);
+    border-bottom:1px solid rgba(255,255,255,.12);
+    color:#fff;
+}
+body.show-subpage .logo-text span:first-child{ color:#fff; }
+.view-page .page-topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    margin-bottom:28px;
+}
+.view-page .back-home{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-size:13px;
+    font-weight:700;
+    color:var(--green);
+    padding:8px 14px;
+    border-radius:999px;
+    border:1px solid var(--border);
+    background:#fff;
+}
+.view-page .back-home:hover{ background:#f3f5f1; }
+
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -1812,17 +2119,12 @@ Hotels
 
 <div class="nav-item has-menu">
 
-<span data-i18n="nav.categories">Kategorien</span>
+<a href="#kategorien" data-i18n="nav.categories" style="color:inherit">Kategorien</a>
 
 <div class="dropdown">
 
-<div class="dropdown-title" data-i18n="categories.title">
-Finde deine Kategorie
-</div>
-
-<div class="dropdown-subtitle" data-i18n="categories.subtitle">
-Wähle den Stil deines Aufenthalts – von Luxus bis Natur.
-</div>
+<div class="dropdown-title">Hotelstile</div>
+<div class="dropdown-subtitle">Direkt filtern oder alle Stile mit Erklärung ansehen.</div>
 
 <div class="dropdown-grid">
 
@@ -1868,11 +2170,11 @@ Nachhaltig
 
 
 <div class="nav-item has-menu">
-<span data-i18n="nav.regions">Regionen</span>
+<a href="#regionen" data-i18n="nav.regions" style="color:inherit">Regionen</a>
 
 <div class="dropdown regions-dd">
-<div class="dropdown-title" data-i18n="regions.title">Südtirol entdecken</div>
-<div class="dropdown-subtitle">Beliebte Regionen auf einen Blick</div>
+<div class="dropdown-title">Regionen</div>
+<div class="dropdown-subtitle">Schnell wählen oder alle Regionen mit Unterschieden entdecken.</div>
 <div class="dropdown-grid">
 <a class="dropdown-link" href="#regionen">Meran <small>Therme · Wein · Kurort</small></a>
 <a class="dropdown-link" href="#regionen">Bozen <small>Stadt · Kultur · Ausgangspunkt</small></a>
@@ -1883,7 +2185,7 @@ Nachhaltig
 <a class="dropdown-link" href="#regionen">Eisacktal <small>Brixen · Klöster</small></a>
 <a class="dropdown-link" href="#regionen">Vinschgau <small>Obst · Weite · Burgen</small></a>
 </div>
-<a class="dropdown-cta" href="#regionen">Alle Regionen →</a>
+<a class="dropdown-cta" href="#regionen">Südtirol entdecken →</a>
 </div>
 
 </div>
@@ -1943,6 +2245,9 @@ Für Hoteliers
 
 </header>
 
+<div id="view-home" class="view-home">
+
+
 
 <!-- =========================
 HERO
@@ -1960,12 +2265,9 @@ HERO
 
 <div class="container hero-content">
 
-<div class="hero-label" data-i18n="hero.label">
-
-<span class="hero-dot"></span>
-
-Hotels in Südtirol
-
+<div class="hero-label">
+<span class="hero-dot" aria-hidden="true"></span>
+<span data-i18n="hero.label">Hotels in Südtirol</span>
 </div>
 
 
@@ -2001,14 +2303,12 @@ SEARCH
 
 <div class="search-field">
 
-<span class="search-label" data-i18n="search.where">
-Wo?
-</span>
+<span class="search-label">Südtirol</span>
 
 <select class="search-select" id="location">
 
 <option value="all">
-Ganz Südtirol
+Ort wählen
 </option>
 
 <option value="meran">
@@ -2855,6 +3155,177 @@ ab € 198 <span>/ Nacht</span>
 
 </article>
 
+
+<article class="hotel-card is-hidden" data-type="boutique">
+<div class="hotel-image">
+<img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1000&q=85" alt="">
+<span class="hotel-badge">Boutique</span>
+<button class="favorite">♡</button>
+</div>
+<div class="hotel-body">
+<div class="hotel-location">Lana</div>
+<h3 class="hotel-name">Casa Verde</h3>
+<p class="hotel-description">Kleines Boutique-Hotel zwischen Obstgärten und Stadt.</p>
+<div class="hotel-bottom">
+<div class="hotel-price">ab € 138 <span>/ Nacht</span></div>
+<div class="hotel-rating">★ 4.7</div>
+</div>
+</div>
+</article>
+
+<article class="hotel-card is-hidden" data-type="luxus">
+<div class="hotel-image">
+<img src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=1000&q=85" alt="">
+<span class="hotel-badge">Luxus</span>
+<button class="favorite">♡</button>
+</div>
+<div class="hotel-body">
+<div class="hotel-location">Meran</div>
+<h3 class="hotel-name">Villa Palmaiola</h3>
+<p class="hotel-description">Historische Villa mit Park und feinem Frühstück.</p>
+<div class="hotel-bottom">
+<div class="hotel-price">ab € 265 <span>/ Nacht</span></div>
+<div class="hotel-rating">★ 4.9</div>
+</div>
+</div>
+</article>
+
+<article class="hotel-card is-hidden" data-type="berg">
+<div class="hotel-image">
+<img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=1000&q=85" alt="">
+<span class="hotel-badge">Berghotel</span>
+<button class="favorite">♡</button>
+</div>
+<div class="hotel-body">
+<div class="hotel-location">Toblach</div>
+<h3 class="hotel-name">Drei Zinnen Lodge</h3>
+<p class="hotel-description">Ausgangslage für Touren zu den Drei Zinnen.</p>
+<div class="hotel-bottom">
+<div class="hotel-price">ab € 156 <span>/ Nacht</span></div>
+<div class="hotel-rating">★ 4.6</div>
+</div>
+</div>
+</article>
+
+<article class="hotel-card is-hidden" data-type="wellness">
+<div class="hotel-image">
+<img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1000&q=85" alt="">
+<span class="hotel-badge">Wellness</span>
+<button class="favorite">♡</button>
+</div>
+<div class="hotel-body">
+<div class="hotel-location">Naturns</div>
+<h3 class="hotel-name">Quellenhof Spa</h3>
+<p class="hotel-description">Großer Wellnessbereich und ruhige Zimmersuiten.</p>
+<div class="hotel-bottom">
+<div class="hotel-price">ab € 220 <span>/ Nacht</span></div>
+<div class="hotel-rating">★ 4.8</div>
+</div>
+</div>
+</article>
+
+<article class="hotel-card is-hidden" data-type="design">
+<div class="hotel-image">
+<img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=1000&q=85" alt="">
+<span class="hotel-badge">Design</span>
+<button class="favorite">♡</button>
+</div>
+<div class="hotel-body">
+<div class="hotel-location">Bozen</div>
+<h3 class="hotel-name">Stadthotel Linien</h3>
+<p class="hotel-description">Modernes Designhotel im Zentrum von Bozen.</p>
+<div class="hotel-bottom">
+<div class="hotel-price">ab € 149 <span>/ Nacht</span></div>
+<div class="hotel-rating">★ 4.5</div>
+</div>
+</div>
+</article>
+
+<article class="hotel-card is-hidden" data-type="familie">
+<div class="hotel-image">
+<img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1000&q=85" alt="">
+<span class="hotel-badge">Familie</span>
+<button class="favorite">♡</button>
+</div>
+<div class="hotel-body">
+<div class="hotel-location">Kastelruth</div>
+<h3 class="hotel-name">Alm Familienresort</h3>
+<p class="hotel-description">Viel Platz, Spielbereiche und Nähe zur Seiser Alm.</p>
+<div class="hotel-bottom">
+<div class="hotel-price">ab € 175 <span>/ Nacht</span></div>
+<div class="hotel-rating">★ 4.7</div>
+</div>
+</div>
+</article>
+
+<article class="hotel-card is-hidden" data-type="boutique">
+<div class="hotel-image">
+<img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=1000&q=85" alt="">
+<span class="hotel-badge">Boutique</span>
+<button class="favorite">♡</button>
+</div>
+<div class="hotel-body">
+<div class="hotel-location">Brixen</div>
+<h3 class="hotel-name">Hofgarten Rooms</h3>
+<p class="hotel-description">Ruhige Boutique-Zimmer am Rand der Altstadt.</p>
+<div class="hotel-bottom">
+<div class="hotel-price">ab € 128 <span>/ Nacht</span></div>
+<div class="hotel-rating">★ 4.6</div>
+</div>
+</div>
+</article>
+
+<article class="hotel-card is-hidden" data-type="berg">
+<div class="hotel-image">
+<img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1000&q=85" alt="">
+<span class="hotel-badge">Chalet</span>
+<button class="favorite">♡</button>
+</div>
+<div class="hotel-body">
+<div class="hotel-location">Wolkenstein</div>
+<h3 class="hotel-name">Sëlva Mountain Chalet</h3>
+<p class="hotel-description">Holzchalet mit direktem Blick auf die Dolomiten.</p>
+<div class="hotel-bottom">
+<div class="hotel-price">ab € 210 <span>/ Nacht</span></div>
+<div class="hotel-rating">★ 4.9</div>
+</div>
+</div>
+</article>
+
+<article class="hotel-card is-hidden" data-type="luxus">
+<div class="hotel-image">
+<img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1000&q=85" alt="">
+<span class="hotel-badge">Luxus</span>
+<button class="favorite">♡</button>
+</div>
+<div class="hotel-body">
+<div class="hotel-location">Kaltern</div>
+<h3 class="hotel-name">See.Hotel Kaltern</h3>
+<p class="hotel-description">Seezugang, Wein und gehobener Service am Kalterer See.</p>
+<div class="hotel-bottom">
+<div class="hotel-price">ab € 240 <span>/ Nacht</span></div>
+<div class="hotel-rating">★ 4.8</div>
+</div>
+</div>
+</article>
+
+<article class="hotel-card is-hidden" data-type="wellness">
+<div class="hotel-image">
+<img src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=1000&q=85" alt="">
+<span class="hotel-badge">Wellness</span>
+<button class="favorite">♡</button>
+</div>
+<div class="hotel-body">
+<div class="hotel-location">Schenna</div>
+<h3 class="hotel-name">Schenna Panorama Spa</h3>
+<p class="hotel-description">Ausblick über Meran und ausgedehnter Spa-Bereich.</p>
+<div class="hotel-bottom">
+<div class="hotel-price">ab € 198 <span>/ Nacht</span></div>
+<div class="hotel-rating">★ 4.7</div>
+</div>
+</div>
+</article>
+
 </div>
 
 <div class="load-more-row">
@@ -2879,67 +3350,11 @@ ab € 198 <span>/ Nacht</span>
 </div>
 </section>
 
-<section class="section category-section" id="kategorien">
-<div class="container">
-<div class="section-header">
-<div>
-<div class="section-title" data-i18n="categories.title">Finde deine Kategorie</div>
-<div class="section-subtitle" data-i18n="categories.subtitle">Wähle den Stil deines Aufenthalts – von Luxus bis Natur.</div>
-</div>
-</div>
-<div class="category-grid">
-<a class="category-card" href="#hotels">
-<img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=85" alt="Luxus">
-<div class="category-overlay"><div class="category-name">Luxushotels</div></div>
-</a>
-<a class="category-card" href="#hotels">
-<img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=85" alt="Wellness">
-<div class="category-overlay"><div class="category-name">Wellness</div></div>
-</a>
-<a class="category-card" href="#hotels">
-<img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=85" alt="Berg">
-<div class="category-overlay"><div class="category-name">Berghotels</div></div>
-</a>
-<a class="category-card" href="#hotels">
-<img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=800&q=85" alt="Boutique">
-<div class="category-overlay"><div class="category-name">Boutique</div></div>
-</a>
-<a class="category-card" href="#hotels">
-<img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=800&q=85" alt="Design">
-<div class="category-overlay"><div class="category-name">Design</div></div>
-</a>
-<a class="category-card" href="#hotels">
-<img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=800&q=85" alt="Familie">
-<div class="category-overlay"><div class="category-name">Familienhotels</div></div>
-</a>
-<a class="category-card" href="#hotels">
-<img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=800&q=85" alt="Chalet">
-<div class="category-overlay"><div class="category-name">Chalets &amp; Lodges</div></div>
-</a>
-<a class="category-card" href="#hotels">
-<img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=85" alt="Adults">
-<div class="category-overlay"><div class="category-name">Adults Only</div></div>
-</a>
-</div>
-</div>
-</section>
 
-<section class="section" id="regionen">
-<div class="container">
-<div class="section-header">
-<div>
-<div class="section-title">Südtirol entdecken</div>
-<div class="section-subtitle">Regionen mit Charakter</div>
-</div>
-</div>
-<div class="region-grid">
-<article class="region"><div class="region-image"><img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=700&q=85" alt="Meran"></div><div class="region-content"><div class="region-number">01</div><h3>Meran</h3><p>Therme, Wein &amp; mediterranes Flair</p></div></article>
-<article class="region"><div class="region-image"><img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=700&q=85" alt="Dolomiten"></div><div class="region-content"><div class="region-number">02</div><h3>Dolomiten</h3><p>UNESCO-Weltnaturerbe</p></div></article>
-<article class="region"><div class="region-image"><img src="https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=700&q=85" alt="Gröden"></div><div class="region-content"><div class="region-number">03</div><h3>Gröden</h3><p>Ski, Kultur &amp; Bergdörfer</p></div></article>
-<article class="region"><div class="region-image"><img src="https://images.unsplash.com/photo-1521295121783-8a321d551ad2?auto=format&fit=crop&w=700&q=85" alt="Vinschgau"></div><div class="region-content"><div class="region-number">04</div><h3>Vinschgau</h3><p>Weite, Obstgärten &amp; Burgen</p></div></article>
-</div>
-</div>
-</section>
+
+
+
+
 
 <section class="feature" id="ueber-uns">
 
@@ -2965,9 +3380,7 @@ Gästen zu helfen, den richtigen Ort für ihre Reise
 zu finden.
 </p>
 
-<a href="#" class="feature-btn" data-i18n="feature.link">
-Südtirol entdecken
-</a>
+<a href="#regionen" class="feature-btn" data-i18n="feature.link">Südtirol entdecken</a>
 
 </div>
 
@@ -3173,6 +3586,188 @@ Made in South Tyrol · Italy
 </div>
 
 </footer>
+</div><!-- /view-home -->
+<div id="view-kategorien" class="view-page"><section class="page-block" id="kategorien">
+<div class="container">
+<div class="page-topbar">
+<a href="#home" class="back-home">← Zur Startseite</a>
+</div>
+<div class="page-intro">
+<p class="page-kicker">Staylo · Stile</p>
+<h2>Finde deine Kategorie</h2>
+<p>Nicht jedes Hotel fühlt sich gleich an. Hier siehst du die wichtigsten Stile – mit einer kurzen Erklärung, wofür sie stehen und für wen sie passen.</p>
+</div>
+<div class="style-grid">
+<article class="style-card">
+<img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=900&q=85" alt="">
+<div class="style-body">
+<span class="tag">Premium</span>
+<h3>Luxushotels</h3>
+<p>Höchster Komfort, feiner Service und oft besondere Architektur. Ideal, wenn der Aufenthalt selbst zum Erlebnis werden soll.</p>
+<a href="#hotels">Hotels ansehen →</a>
+</div>
+</article>
+<article class="style-card">
+<img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=900&q=85" alt="">
+<div class="style-body">
+<span class="tag">Erholung</span>
+<h3>Wellnesshotels</h3>
+<p>Spa, Sauna, Ruhebereiche. Für Gäste, die Bergluft mit bewusster Regeneration verbinden wollen.</p>
+<a href="#hotels">Hotels ansehen →</a>
+</div>
+</article>
+<article class="style-card">
+<img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=900&q=85" alt="">
+<div class="style-body">
+<span class="tag">Alpin</span>
+<h3>Berghotels</h3>
+<p>Nah an Wegen, Pisten und Gipfeln. Authentisch, oft familiengeführt – stark für aktive Tage.</p>
+<a href="#hotels">Hotels ansehen →</a>
+</div>
+</article>
+<article class="style-card">
+<img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=900&q=85" alt="">
+<div class="style-body">
+<span class="tag">Charakter</span>
+<h3>Boutique Hotels</h3>
+<p>Kleine Häuser mit Persönlichkeit. Weniger Standard, mehr Gastgeber-Nähe und individuelle Atmosphäre.</p>
+<a href="#hotels">Hotels ansehen →</a>
+</div>
+</article>
+<article class="style-card">
+<img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=900&q=85" alt="">
+<div class="style-body">
+<span class="tag">Modern</span>
+<h3>Design Hotels</h3>
+<p>Klare Linien, starke Materialien, zeitgemäße Zimmer. Für alle, die Stil und Architektur mitdenken.</p>
+<a href="#hotels">Hotels ansehen →</a>
+</div>
+</article>
+<article class="style-card">
+<img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=900&q=85" alt="">
+<div class="style-body">
+<span class="tag">Gemeinsam</span>
+<h3>Familienhotels</h3>
+<p>Mehr Platz, flexible Angebote und kindgerechte Infrastruktur – entspannt reisen mit der ganzen Familie.</p>
+<a href="#hotels">Hotels ansehen →</a>
+</div>
+</article>
+<article class="style-card">
+<img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=900&q=85" alt="">
+<div class="style-body">
+<span class="tag">Natur</span>
+<h3>Chalets &amp; Lodges</h3>
+<p>Holz, Alm und Weitblick. Rückzugsorte, wenn du Nähe zur Landschaft und Ruhe suchst.</p>
+<a href="#hotels">Hotels ansehen →</a>
+</div>
+</article>
+<article class="style-card">
+<img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=85" alt="">
+<div class="style-body">
+<span class="tag">Ruhe</span>
+<h3>Adults Only</h3>
+<p>Häuser nur für Erwachsene. Leise Abende, klarer Fokus auf Erholung – ohne Kinderbetrieb.</p>
+<a href="#hotels">Hotels ansehen →</a>
+</div>
+</article>
+</div>
+</div>
+</section></div>
+<div id="view-regionen" class="view-page"><section class="page-block" id="regionen" style="background:#f7f8f5;">
+<div class="container">
+<div class="page-topbar">
+<a href="#home" class="back-home">← Zur Startseite</a>
+</div>
+<div class="page-intro">
+<p class="page-kicker">Staylo · Regionen</p>
+<h2>Südtirol entdecken</h2>
+<p>Jede Region hat einen anderen Charakter – von mediterranem Flair bis zu alpinen Gipfeln. Hier die Unterschiede auf einen Blick.</p>
+</div>
+<div class="region-detail-grid">
+<article class="region-detail">
+<div class="region-detail-img"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=900&q=85" alt="Meran"></div>
+<div class="region-detail-body">
+<div class="num">01 · Burggrafenamt</div>
+<h3>Meran &amp; Umgebung</h3>
+<p>Mildes Klima, Promenaden, Therme und Weinberge. Ideal für Kurzurlaube, Kultur und entspannte Tage.</p>
+<div class="traits"><span>Therme</span><span>Wein</span><span>Kurort</span></div>
+<a href="#karte" style="font-size:13px;font-weight:700;color:var(--green);">Auf der Karte →</a>
+</div>
+</article>
+<article class="region-detail">
+<div class="region-detail-img"><img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=85" alt="Dolomiten"></div>
+<div class="region-detail-body">
+<div class="num">02 · Dolomiten</div>
+<h3>Dolomiten</h3>
+<p>UNESCO-Weltnaturerbe. Dramatische Gipfel, legendäre Wanderwege und ikonische Bergkulissen.</p>
+<div class="traits"><span>UNESCO</span><span>Wandern</span><span>Gipfel</span></div>
+<a href="#karte" style="font-size:13px;font-weight:700;color:var(--green);">Auf der Karte →</a>
+</div>
+</article>
+<article class="region-detail">
+<div class="region-detail-img"><img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=900&q=85" alt="Gröden"></div>
+<div class="region-detail-body">
+<div class="num">03 · Val Gardena</div>
+<h3>Gröden</h3>
+<p>Ski, Ladinische Kultur und Dörfer wie Ortisei. Stark im Winter, lebendig auch im Sommer.</p>
+<div class="traits"><span>Ski</span><span>Kultur</span><span>Dörfer</span></div>
+<a href="#karte" style="font-size:13px;font-weight:700;color:var(--green);">Auf der Karte →</a>
+</div>
+</article>
+<article class="region-detail">
+<div class="region-detail-img"><img src="https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?auto=format&fit=crop&w=900&q=85" alt="Seiser Alm"></div>
+<div class="region-detail-body">
+<div class="num">04 · Schlerngebiet</div>
+<h3>Seiser Alm</h3>
+<p>Weite Almflächen und Panorama. Perfekt für Familien, Genusswanderer und ruhige Bergtage.</p>
+<div class="traits"><span>Alm</span><span>Panorama</span><span>Familie</span></div>
+<a href="#karte" style="font-size:13px;font-weight:700;color:var(--green);">Auf der Karte →</a>
+</div>
+</article>
+<article class="region-detail">
+<div class="region-detail-img"><img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=900&q=85" alt="Pustertal"></div>
+<div class="region-detail-body">
+<div class="num">05 · Pustertal</div>
+<h3>Pustertal</h3>
+<p>Von Bruneck bis zu den Drei Zinnen. Kronplatz, Naturparks und klare Bergluft.</p>
+<div class="traits"><span>Kronplatz</span><span>Natur</span><span>Sport</span></div>
+<a href="#karte" style="font-size:13px;font-weight:700;color:var(--green);">Auf der Karte →</a>
+</div>
+</article>
+<article class="region-detail">
+<div class="region-detail-img"><img src="https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=900&q=85" alt="Eisacktal"></div>
+<div class="region-detail-body">
+<div class="num">06 · Eisacktal</div>
+<h3>Eisacktal &amp; Brixen</h3>
+<p>Historische Städte, Klöster und Täler. Gute Basis zwischen Nord und Süd.</p>
+<div class="traits"><span>Brixen</span><span>Kultur</span><span>Lage</span></div>
+<a href="#karte" style="font-size:13px;font-weight:700;color:var(--green);">Auf der Karte →</a>
+</div>
+</article>
+<article class="region-detail">
+<div class="region-detail-img"><img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=85" alt="Vinschgau"></div>
+<div class="region-detail-body">
+<div class="num">07 · Vinschgau</div>
+<h3>Vinschgau</h3>
+<p>Weite Tallandschaft, Obstgärten und Burgen. Trocken, sonnig, etwas rauer Charakter.</p>
+<div class="traits"><span>Obst</span><span>Burgen</span><span>Weite</span></div>
+<a href="#karte" style="font-size:13px;font-weight:700;color:var(--green);">Auf der Karte →</a>
+</div>
+</article>
+<article class="region-detail">
+<div class="region-detail-img"><img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=900&q=85" alt="Bozen"></div>
+<div class="region-detail-body">
+<div class="num">08 · Landeshauptstadt</div>
+<h3>Bozen</h3>
+<p>Urbaner Ausgangspunkt mit Museen, Gastronomie und schnellen Verbindungen in alle Täler.</p>
+<div class="traits"><span>Stadt</span><span>Kultur</span><span>Hub</span></div>
+<a href="#karte" style="font-size:13px;font-weight:700;color:var(--green);">Auf der Karte →</a>
+</div>
+</article>
+</div>
+</div>
+</section></div>
+
 
 
 <script>
@@ -3444,8 +4039,8 @@ if(languageToggle && languageMenu){
         event.stopPropagation();
         languageMenu.classList.toggle("open");
         languageToggle.classList.toggle("is-active", languageMenu.classList.contains("open"));
-        favoritesPanel.classList.remove("open");
-        favoritesToggle.classList.remove("is-active");
+        if(favoritesPanel) favoritesPanel.classList.remove("open");
+        if(favoritesToggle) favoritesToggle.classList.remove("is-active");
     });
 
     document.querySelectorAll(".lang-option").forEach(option => {
@@ -3539,7 +4134,7 @@ function updateSummary() {
 if(slider){
     slider.addEventListener("input", () => {
         updateSummary();
-        applySearchFilters();
+        applySearchFilters(false);
     });
 }
 
@@ -3547,7 +4142,7 @@ if(slider){
     if(input){
         input.addEventListener("change", () => {
             updateSummary();
-            applySearchFilters();
+            applySearchFilters(false);
         });
     }
 });
@@ -3670,10 +4265,10 @@ if(favoritesToggle && favoritesPanel){
 }
 
 window.addEventListener("click", () => {
-    favoritesPanel.classList.remove("open");
-    favoritesToggle.classList.remove("is-active");
-    languageMenu.classList.remove("open");
-    languageToggle.classList.remove("is-active");
+    if(favoritesPanel) favoritesPanel.classList.remove("open");
+    if(favoritesToggle) favoritesToggle.classList.remove("is-active");
+    if(languageMenu) languageMenu.classList.remove("open");
+    if(languageToggle) languageToggle.classList.remove("is-active");
 });
 
 updateFavoritesCount();
@@ -3709,7 +4304,7 @@ function getCardPrice(card){
     return match ? parseInt(match[0], 10) : 0;
 }
 
-function applySearchFilters(){
+function applySearchFilters(shouldScroll){
     const location = locationSelect ? locationSelect.value : "all";
     const type = typeSelect ? typeSelect.value : "all";
     const maxPrice = slider ? parseInt(slider.value, 10) : 500;
@@ -3750,58 +4345,48 @@ function applySearchFilters(){
         summary.innerHTML = `${currentSummary} · <strong>${visibleCount} Ergebnis${visibleCount === 1 ? "" : "se"}</strong>`;
     }
 
-    document
-    .getElementById("hotels")
-    .scrollIntoView({
-        behavior:"smooth",
-        block:"start"
-    });
+    if(shouldScroll){
+        const hotelsEl = document.getElementById("hotels");
+        if(hotelsEl){
+            hotelsEl.scrollIntoView({ behavior:"smooth", block:"start" });
+        }
+    }
 }
 
 if(searchButton){
-
     searchButton.addEventListener("click", () => {
-        applySearchFilters();
+        applySearchFilters(true);
     });
-
 }
 
 if(locationSelect){
-    locationSelect.addEventListener("change", applySearchFilters);
+    locationSelect.addEventListener("change", () => applySearchFilters(false));
 }
 
 if(typeSelect){
-    typeSelect.addEventListener("change", applySearchFilters);
+    typeSelect.addEventListener("change", () => applySearchFilters(false));
 }
 
-applySearchFilters();
+applySearchFilters(false);
 
 
 /* =========================
 SCROLL HEADER
 ========================= */
 
-window.addEventListener("scroll", () => {
-    const header = document.querySelector(".header");
-    if(!header) return;
-    header.classList.toggle("is-scrolled", window.scrollY > 40);
-});
+/* Header scrollt mit – kein fixed */
 
 
 /* =========================
 MOBILE MENU
 ========================= */
 
-const mobileMenu =
-document.querySelector(".mobile-menu");
-
-mobileMenu.addEventListener("click", () => {
-
-    alert(
-        "Das mobile Menü wird in der nächsten Version eingerichtet."
-    );
-
-});
+const mobileMenu = document.querySelector(".mobile-menu");
+if(mobileMenu){
+    mobileMenu.addEventListener("click", () => {
+        alert("Das mobile Menü wird in der nächsten Version eingerichtet.");
+    });
+}
 
 
 /* MAP */
@@ -3810,33 +4395,117 @@ mobileMenu.addEventListener("click", () => {
     var el = document.getElementById("stayloMap");
     if(!el || typeof L === "undefined") return;
     try{
-      var map = L.map("stayloMap", { scrollWheelZoom:false }).setView([46.5, 11.35], 9);
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution: "&copy; OpenStreetMap",
-        maxZoom: 16
+      var map = L.map("stayloMap", { scrollWheelZoom:false }).setView([46.65, 11.35], 9);
+      L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
+        attribution: "&copy; OpenStreetMap &copy; CARTO",
+        maxZoom: 18,
+        subdomains: "abcd"
       }).addTo(map);
-      var points = [
-        [46.668, 11.164, "Meran"],
-        [46.498, 11.354, "Bozen"],
-        [46.574, 11.671, "Brixen"],
-        [46.575, 11.672, "Ortisei / Gröden"],
-        [46.796, 11.936, "Bruneck"],
-        [46.55, 11.64, "Kastelruth"]
+
+      var suedtirol = [
+        [46.92,10.40],[47.10,11.20],[47.05,12.05],[46.85,12.35],
+        [46.55,12.40],[46.35,12.10],[46.22,11.55],[46.20,11.10],
+        [46.30,10.55],[46.50,10.35],[46.75,10.30],[46.92,10.40]
       ];
-      points.forEach(function(p){
-        L.circleMarker([p[0], p[1]], {
-          radius: 8,
-          color: "#214b3d",
-          weight: 2,
-          fillColor: "#3d6b59",
-          fillOpacity: 0.9
-        }).bindPopup("<strong>"+p[2]+"</strong>").addTo(map);
+      var border = L.polygon(suedtirol, {
+        color:"#214b3d", weight:2.5, opacity:0.9,
+        fillColor:"#214b3d", fillOpacity:0.07
+      }).addTo(map);
+      map.fitBounds(border.getBounds(), { padding:[28,28], maxZoom:10 });
+
+      var hotels = [
+        [46.6683,11.1595,"Hotel Meran Vista","Meran · ab € 145"],
+        [46.4983,11.3548,"Urban Stay Bozen","Bozen · ab € 119"],
+        [46.7150,11.6550,"Brixen Design Hotel","Brixen · ab € 132"],
+        [46.5760,11.6710,"Alpenblick Lodge","Ortisei · ab € 168"],
+        [46.7963,11.9365,"Basecamp Bruneck","Bruneck · ab € 69"],
+        [46.5680,11.5610,"Seiser Alm Chalet","Kastelruth · ab € 195"],
+        [46.6710,10.7680,"Vinschgau Retreat","Schlanders · ab € 155"],
+        [46.4200,11.3400,"Weinstraße Hotel","Kaltern · ab € 128"],
+        [46.55,11.64,"Alpine Grand Hotel","Seiser Alm · ab € 245"],
+        [46.62,11.15,"Quellenhof Retreat","Passeier · ab € 210"]
+      ];
+      var icon = L.divIcon({
+        className:"staylo-pin",
+        html:'<span class="staylo-pin-dot"></span>',
+        iconSize:[18,18], iconAnchor:[9,9], popupAnchor:[0,-12]
+      });
+      hotels.forEach(function(h){
+        L.marker([h[0],h[1]], {icon:icon})
+          .bindPopup('<div class="staylo-popup"><strong>'+h[2]+'</strong><span>'+h[3]+'</span></div>')
+          .addTo(map);
       });
       setTimeout(function(){ map.invalidateSize(); }, 300);
     }catch(e){ console.warn("Map:", e); }
   }
   if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
   else boot();
+})();
+
+
+/* =========================
+   SPA: Home / Kategorien / Regionen
+========================= */
+(function(){
+  function showView(name){
+    var home = document.getElementById("view-home");
+    var kat = document.getElementById("view-kategorien");
+    var reg = document.getElementById("view-regionen");
+    if(!home) return;
+
+    document.body.classList.toggle("show-subpage", name !== "home");
+
+    if(kat) kat.classList.toggle("is-active", name === "kategorien");
+    if(reg) reg.classList.toggle("is-active", name === "regionen");
+
+    if(name === "home"){
+      if(kat) kat.classList.remove("is-active");
+      if(reg) reg.classList.remove("is-active");
+      home.style.display = "";
+    } else {
+      home.style.display = "none";
+    }
+
+    window.scrollTo(0, 0);
+  }
+
+  function route(){
+    var h = (location.hash || "#home").replace("#","");
+    if(h === "kategorien") showView("kategorien");
+    else if(h === "regionen") showView("regionen");
+    else showView("home");
+  }
+
+  window.addEventListener("hashchange", route);
+  // intercept links
+  document.addEventListener("click", function(e){
+    var a = e.target.closest("a[href='#kategorien'], a[href='#regionen'], a[href='#home'], a[href='#']");
+    if(!a) return;
+    var href = a.getAttribute("href");
+    if(href === "#kategorien" || href === "#regionen" || href === "#home"){
+      // let hashchange handle; ensure hash set
+      if(location.hash !== href){
+        // default ok
+      }
+    }
+    if(href === "#" || (a.classList.contains("logo"))){
+      e.preventDefault();
+      location.hash = "#home";
+      showView("home");
+    }
+  });
+
+  // logo to home
+  var logo = document.querySelector(".logo");
+  if(logo){
+    logo.addEventListener("click", function(e){
+      e.preventDefault();
+      location.hash = "#home";
+      showView("home");
+    });
+  }
+
+  route();
 })();
 
 </script>
