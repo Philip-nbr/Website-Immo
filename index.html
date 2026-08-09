@@ -423,9 +423,9 @@ SEARCH
 
     border:1px solid rgba(255,255,255,.9);
 
-    border-radius:22px;
+    border-radius:24px;
 
-    padding:10px;
+    padding:12px;
 
     box-shadow:
         0 25px 70px rgba(0,0,0,.19);
@@ -463,15 +463,15 @@ SEARCH
     display:grid;
 
     grid-template-columns:
-        1.15fr
+        1.1fr
         1fr
-        1fr
-        1fr
+        .9fr
+        .9fr
         auto;
 
     border:1px solid var(--border);
 
-    border-radius:15px;
+    border-radius:16px;
 
     overflow:hidden;
 
@@ -479,7 +479,7 @@ SEARCH
 }
 
 .search-field{
-    min-height:67px;
+    min-height:72px;
 
     padding:12px 16px;
 
@@ -506,7 +506,9 @@ SEARCH
     margin-bottom:5px;
 }
 
-.search-select{
+.search-select,
+.search-input,
+.search-date{
     border:0;
 
     outline:0;
@@ -522,10 +524,18 @@ SEARCH
     width:100%;
 }
 
+.search-input{
+    appearance:textfield;
+}
+
+.search-date{
+    color:#214b3d;
+}
+
 .search-button{
     margin:7px;
 
-    min-width:120px;
+    min-width:132px;
 
     border-radius:12px;
 
@@ -542,6 +552,17 @@ SEARCH
 
 .search-button:hover{
     background:var(--green-dark);
+}
+
+.search-summary{
+    margin-top:10px;
+    padding:0 4px;
+    color:#5f675f;
+    font-size:12px;
+}
+
+.search-summary strong{
+    color:var(--green);
 }
 
 /* =========================
@@ -1727,7 +1748,6 @@ Unterkünfte
 
 <div class="search-main">
 
-
 <div class="search-field">
 
 <span class="search-label">
@@ -1772,35 +1792,40 @@ Vinschgau
 
 </div>
 
+<div class="search-field">
+
+<span class="search-label">
+Anreise
+</span>
+
+<input class="search-date" type="date" id="checkIn" value="2026-08-14">
+
+</div>
 
 <div class="search-field">
 
 <span class="search-label">
-Wann?
+Abreise
 </span>
 
-<select class="search-select">
-
-<option>
-Reisedaten auswählen
-</option>
-
-<option>
-Dieses Wochenende
-</option>
-
-<option>
-Nächste Woche
-</option>
-
-<option>
-Nächster Monat
-</option>
-
-</select>
+<input class="search-date" type="date" id="checkOut" value="2026-08-17">
 
 </div>
 
+<div class="search-field">
+
+<span class="search-label">
+Zimmer
+</span>
+
+<select class="search-select" id="guests">
+<option value="1">1 Zimmer</option>
+<option value="2" selected>2 Zimmer</option>
+<option value="3">3 Zimmer</option>
+<option value="4">4 Zimmer</option>
+</select>
+
+</div>
 
 <div class="search-field">
 
@@ -1842,46 +1867,16 @@ Familienhotel
 
 </div>
 
-
-<div class="search-field">
-
-<span class="search-label">
-Preis / Nacht
-</span>
-
-<select class="search-select">
-
-<option>
-Bis € 150
-</option>
-
-<option>
-Bis € 200
-</option>
-
-<option>
-Bis € 300
-</option>
-
-<option>
-Bis € 500
-</option>
-
-<option>
-500 €+
-</option>
-
-</select>
-
-</div>
-
-
 <button class="search-button" id="searchButton">
 
 Suchen
 
 </button>
 
+</div>
+
+<div class="search-summary" id="searchSummary">
+<span>2 Zimmer · <strong>3 Nächte</strong> · ab <strong>€ 145 / Nacht</strong></span>
 </div>
 
 
@@ -3074,7 +3069,28 @@ document.getElementById("priceSlider");
 const priceValue =
 document.getElementById("priceValue");
 
-slider.addEventListener("input", () => {
+const summary =
+document.getElementById("searchSummary");
+
+const checkIn =
+document.getElementById("checkIn");
+
+const checkOut =
+document.getElementById("checkOut");
+
+const guests =
+document.getElementById("guests");
+
+function updateSummary() {
+
+    const start = new Date(checkIn.value);
+    const end = new Date(checkOut.value);
+
+    const nights = Math.max(1, Math.round((end - start) / (1000 * 60 * 60 * 24)));
+
+    const roomCount = parseInt(guests.value, 10) || 1;
+    const pricePerNight = slider ? slider.value : 150;
+    const total = roomCount * nights * pricePerNight;
 
     if(slider.value >= 500){
 
@@ -3084,10 +3100,35 @@ slider.addEventListener("input", () => {
 
         priceValue.textContent =
         "€ " + slider.value;
+    }
+
+    if(summary){
+
+        summary.innerHTML =
+        `<span>${roomCount} Zimmer · <strong>${nights} Nacht${nights > 1 ? "en" : ""}</strong> · ab <strong>€ ${pricePerNight} / Nacht</strong></span>`;
 
     }
 
+    if(total > 0){
+
+        summary.innerHTML +=
+        ` · Gesamt <strong>ca. € ${total}</strong>`;
+
+    }
+
+}
+
+if(slider){
+    slider.addEventListener("input", updateSummary);
+}
+
+[checkIn, checkOut, guests].forEach(input => {
+    if(input){
+        input.addEventListener("change", updateSummary);
+    }
 });
+
+updateSummary();
 
 
 /* =========================
