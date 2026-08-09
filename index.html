@@ -7,7 +7,7 @@
 <title>Staylo – Hotels in Südtirol</title>
 
 <meta name="description"
-content="Staylo – Entdecke Hotels, Resorts und besondere Unterkünfte in Südtirol.">
+content="Staylo – Entdecke Hotels und besondere Unterkünfte in ganz Südtirol.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,11 +20,12 @@ content="Staylo – Entdecke Hotels, Resorts und besondere Unterkünfte in Südt
     --green:#214b3d;
     --green-dark:#17372e;
     --green-light:#3d6b59;
+    --green-soft:#e9f0eb;
     --cream:#f6f5f1;
     --white:#ffffff;
     --black:#151716;
-    --grey:#6d716d;
-    --border:#e5e6e1;
+    --grey:#70756f;
+    --border:#e1e4df;
     --gold:#b89a65;
     --radius:18px;
     --max:1240px;
@@ -47,11 +48,6 @@ body{
     -webkit-font-smoothing:antialiased;
 }
 
-a{
-    text-decoration:none;
-    color:inherit;
-}
-
 button,
 input,
 select{
@@ -59,13 +55,18 @@ select{
 }
 
 button{
-    cursor:pointer;
     border:0;
+    cursor:pointer;
+}
+
+a{
+    color:inherit;
+    text-decoration:none;
 }
 
 img{
-    width:100%;
     display:block;
+    width:100%;
     object-fit:cover;
 }
 
@@ -74,18 +75,52 @@ img{
     margin:auto;
 }
 
+
+/* =====================================================
+   TOP BAR
+===================================================== */
+
+.topbar{
+    height:38px;
+    background:#10241d;
+    color:rgba(255,255,255,.75);
+    font-size:12px;
+}
+
+.topbar-inner{
+    height:100%;
+    display:flex;
+    justify-content:flex-end;
+    align-items:center;
+    gap:22px;
+}
+
+.topbar a:hover{
+    color:white;
+}
+
+
 /* =====================================================
    HEADER
 ===================================================== */
 
 .header{
     position:absolute;
-    top:0;
+    top:38px;
     left:0;
     width:100%;
     z-index:100;
     color:white;
-    transition:.3s;
+    transition:.25s;
+}
+
+.header.scrolled{
+    position:fixed;
+    top:0;
+    background:rgba(18,40,32,.88);
+    backdrop-filter:blur(22px);
+    -webkit-backdrop-filter:blur(22px);
+    border-bottom:1px solid rgba(255,255,255,.1);
 }
 
 .nav{
@@ -99,24 +134,23 @@ img{
 .logo{
     display:flex;
     align-items:center;
-    font-size:21px;
+    font-size:22px;
     font-weight:700;
-    letter-spacing:-.04em;
-    color:white;
+    letter-spacing:-.045em;
 }
 
 .logo-mark{
-    width:30px;
-    height:30px;
+    width:31px;
+    height:31px;
     border-radius:50%;
-    background:rgba(255,255,255,.95);
-    margin-right:9px;
+    background:white;
     display:flex;
     align-items:center;
     justify-content:center;
     color:var(--green);
     font-size:12px;
     font-weight:800;
+    margin-right:9px;
 }
 
 .logo-text span:first-child{
@@ -124,21 +158,20 @@ img{
 }
 
 .logo-text span:last-child{
-    color:#91b49f;
+    color:#8fb39d;
 }
 
 .nav-center{
     display:flex;
     align-items:center;
-    gap:28px;
-    font-size:14px;
+    gap:29px;
 }
 
 .nav-item{
     position:relative;
+    padding:12px 0;
     color:rgba(255,255,255,.9);
-    padding:10px 0;
-    transition:.2s;
+    font-size:14px;
 }
 
 .nav-item:hover{
@@ -147,7 +180,6 @@ img{
 
 .nav-item.has-menu::after{
     content:"⌄";
-    font-size:12px;
     margin-left:5px;
     opacity:.7;
 }
@@ -155,99 +187,146 @@ img{
 .nav-right{
     display:flex;
     align-items:center;
-    gap:9px;
+    gap:8px;
 }
 
-.nav-glass{
+.glass-btn{
     height:42px;
     padding:0 15px;
     border-radius:999px;
-    border:1px solid rgba(255,255,255,.25);
-    background:rgba(255,255,255,.12);
+    color:white;
+    background:rgba(255,255,255,.11);
+    border:1px solid rgba(255,255,255,.24);
     backdrop-filter:blur(18px);
     -webkit-backdrop-filter:blur(18px);
-    color:white;
-    display:flex;
-    align-items:center;
-    gap:8px;
     font-size:13px;
 }
 
-.nav-glass:hover{
-    background:rgba(255,255,255,.2);
+.glass-btn:hover{
+    background:rgba(255,255,255,.19);
 }
 
 .hotelier-btn{
-    background:white;
-    color:var(--green);
-    border-radius:999px;
     height:42px;
     padding:0 17px;
+    border-radius:999px;
+    background:white;
+    color:var(--green);
     font-weight:700;
+    font-size:13px;
 }
 
 .mobile-menu{
     display:none;
 }
 
+
+/* =====================================================
+   DROPDOWN
+===================================================== */
+
+.dropdown{
+    position:absolute;
+    top:54px;
+    left:50%;
+    transform:translateX(-50%) translateY(-8px);
+    width:620px;
+    padding:24px;
+    background:rgba(255,255,255,.97);
+    color:var(--black);
+    border-radius:22px;
+    border:1px solid rgba(255,255,255,.8);
+    box-shadow:0 25px 70px rgba(0,0,0,.2);
+    backdrop-filter:blur(25px);
+    -webkit-backdrop-filter:blur(25px);
+    opacity:0;
+    visibility:hidden;
+    transition:.2s;
+}
+
+.nav-item:hover .dropdown{
+    opacity:1;
+    visibility:visible;
+    transform:translateX(-50%) translateY(0);
+}
+
+.dropdown-title{
+    font-family:"Playfair Display",serif;
+    font-size:23px;
+    margin-bottom:17px;
+}
+
+.dropdown-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:7px;
+}
+
+.dropdown-link{
+    padding:12px;
+    border-radius:11px;
+    font-size:13px;
+    color:#565d57;
+}
+
+.dropdown-link:hover{
+    background:var(--green-soft);
+    color:var(--green);
+}
+
+
 /* =====================================================
    HERO
 ===================================================== */
 
 .hero{
-    min-height:760px;
+    min-height:660px;
     position:relative;
-    color:white;
     display:flex;
     align-items:center;
-    overflow:hidden;
+    color:white;
+    overflow:visible;
 }
 
 .hero-bg{
     position:absolute;
     inset:0;
-
-    background-image:
+    background:
         linear-gradient(
             90deg,
-            rgba(12,28,23,.80) 0%,
-            rgba(12,28,23,.46) 48%,
-            rgba(12,28,23,.14) 100%
+            rgba(12,31,24,.82),
+            rgba(12,31,24,.42) 55%,
+            rgba(12,31,24,.18)
         ),
         linear-gradient(
             0deg,
-            rgba(12,28,23,.58),
+            rgba(10,27,21,.55),
             transparent 55%
         ),
         url("https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=2200&q=90");
 
     background-size:cover;
-    background-position:center center;
-
-    transform:scale(1.02);
+    background-position:center;
 }
 
 .hero-content{
     position:relative;
     z-index:2;
-
-    padding-top:20px;
-    transform:translateY(-35px);
+    padding-top:65px;
 }
 
 .hero-label{
     display:inline-flex;
     align-items:center;
-    gap:9px;
+    gap:8px;
     padding:8px 13px;
     border-radius:999px;
-    background:rgba(255,255,255,.13);
+    background:rgba(255,255,255,.12);
     border:1px solid rgba(255,255,255,.2);
-    backdrop-filter:blur(16px);
-    -webkit-backdrop-filter:blur(16px);
-    font-size:12px;
-    font-weight:600;
-    letter-spacing:.08em;
+    backdrop-filter:blur(15px);
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:.09em;
     text-transform:uppercase;
     margin-bottom:18px;
 }
@@ -255,17 +334,16 @@ img{
 .hero-label-dot{
     width:6px;
     height:6px;
-    border-radius:50%;
     background:#a9cfb7;
+    border-radius:50%;
 }
 
 .hero h1{
     font-family:"Playfair Display",serif;
-    font-size:clamp(48px,7vw,82px);
+    font-size:clamp(48px,6.5vw,76px);
     line-height:1.02;
-    font-weight:600;
-    letter-spacing:-.045em;
-    max-width:760px;
+    letter-spacing:-.05em;
+    max-width:750px;
 }
 
 .hero h1 em{
@@ -274,365 +352,281 @@ img{
 }
 
 .hero-text{
-    max-width:570px;
-    font-size:17px;
-    line-height:1.7;
-    color:rgba(255,255,255,.84);
+    max-width:550px;
     margin-top:20px;
+    font-size:16px;
+    line-height:1.65;
+    color:rgba(255,255,255,.82);
 }
+
 
 /* =====================================================
    SEARCH
 ===================================================== */
 
-.search-wrapper{
+.search-area{
     position:relative;
     z-index:20;
-    margin-top:-72px;
+    margin-top:-86px;
 }
 
 .search-box{
-    background:rgba(255,255,255,.95);
-    border:1px solid rgba(255,255,255,.75);
-    border-radius:24px;
-    padding:10px;
-
-    box-shadow:
-        0 25px 70px rgba(0,0,0,.18),
-        0 5px 20px rgba(0,0,0,.05);
-
+    background:rgba(255,255,255,.96);
+    border:1px solid rgba(255,255,255,.8);
+    border-radius:23px;
+    box-shadow:0 25px 70px rgba(0,0,0,.17);
     backdrop-filter:blur(25px);
     -webkit-backdrop-filter:blur(25px);
+    padding:10px;
 }
 
 .search-main{
     display:grid;
-    grid-template-columns:1.3fr 1fr 1fr 1fr auto;
-    gap:7px;
+    grid-template-columns:1.15fr 1fr 1fr 1fr 112px;
+    gap:0;
 }
 
 .search-field{
-    padding:11px 14px;
+    min-height:65px;
+    padding:10px 16px;
     border-right:1px solid var(--border);
-    min-height:58px;
-}
-
-.search-field:last-of-type{
-    border-right:0;
 }
 
 .search-label{
     display:block;
+    color:#919790;
     font-size:10px;
-    text-transform:uppercase;
-    letter-spacing:.08em;
-    color:#92958f;
     font-weight:700;
-    margin-bottom:5px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    margin-bottom:6px;
 }
 
 .search-value{
+    color:#242925;
     font-size:14px;
     font-weight:600;
-    color:#252825;
 }
 
 .search-value.muted{
-    color:#888c87;
+    color:#7c827c;
     font-weight:500;
 }
 
 .search-button{
-    min-width:112px;
-    border-radius:16px;
+    margin:6px;
+    border-radius:15px;
     background:var(--green);
     color:white;
-    font-weight:700;
     font-size:14px;
-    transition:.2s;
+    font-weight:700;
 }
 
 .search-button:hover{
     background:var(--green-dark);
-    transform:translateY(-1px);
 }
+
+.details-row{
+    border-top:1px solid var(--border);
+    margin-top:5px;
+    padding:11px 6px 2px;
+    display:flex;
+    justify-content:flex-end;
+}
+
+.details-toggle{
+    color:var(--green);
+    background:none;
+    font-size:12px;
+    font-weight:700;
+}
+
 
 /* =====================================================
    DETAILSUCHE
 ===================================================== */
 
-.details{
-    display:flex;
-    justify-content:flex-end;
-    padding:9px 5px 2px;
-}
-
-.details button{
-    background:none;
-    color:var(--green);
-    font-size:12px;
-    font-weight:700;
-}
-
-/* Panel */
-
-.details-panel{
+.advanced-search{
     display:none;
-    margin-top:8px;
-    padding:22px;
-
-    background:#f8f9f6;
-
-    border:1px solid var(--border);
-    border-radius:18px;
-
-    animation:detailsOpen .25s ease;
+    border-top:1px solid var(--border);
+    margin-top:10px;
+    padding:20px 8px 8px;
 }
 
-.details-panel.open{
+.advanced-search.open{
     display:block;
 }
 
-@keyframes detailsOpen{
-    from{
-        opacity:0;
-        transform:translateY(-5px);
-    }
-
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
-}
-
-.details-grid{
+.advanced-grid{
     display:grid;
-    grid-template-columns:1fr 1fr 1fr;
-    gap:16px;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
 }
 
-.detail-group{
-    background:white;
+.detail-field{
+    padding:14px;
     border:1px solid var(--border);
-    border-radius:15px;
-    padding:16px;
+    border-radius:14px;
+    background:#fafbf9;
 }
 
-.detail-title{
-    font-size:11px;
+.detail-field label{
+    display:block;
+    font-size:10px;
     text-transform:uppercase;
-    letter-spacing:.07em;
+    letter-spacing:.08em;
     font-weight:700;
-    color:#8b908a;
-    margin-bottom:9px;
+    color:#858b85;
+    margin-bottom:8px;
 }
 
-.detail-select{
+.detail-field select,
+.detail-field input{
     width:100%;
     border:0;
+    outline:0;
     background:transparent;
-    font-size:14px;
-    font-weight:600;
-    color:#252825;
-    outline:none;
-}
-
-.price-top{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:10px;
-}
-
-.price-value{
-    color:var(--green);
-    font-weight:700;
-    font-size:14px;
+    font-size:13px;
+    color:#252a26;
 }
 
 .price-slider{
     width:100%;
     accent-color:var(--green);
-    cursor:pointer;
 }
 
-.detail-checks{
+.price-display{
     display:flex;
-    flex-wrap:wrap;
-    gap:8px;
-}
-
-.detail-check{
-    border:1px solid var(--border);
-    background:#fff;
-    border-radius:999px;
-    padding:8px 11px;
+    justify-content:space-between;
+    margin-top:5px;
+    color:var(--green);
     font-size:12px;
-    color:#555b55;
-    transition:.2s;
-}
-
-.detail-check.active{
-    background:var(--green);
-    color:white;
-    border-color:var(--green);
-}
-
-.details-actions{
-    display:flex;
-    justify-content:flex-end;
-    margin-top:16px;
-}
-
-.apply-details{
-    background:var(--green);
-    color:white;
-    padding:11px 18px;
-    border-radius:999px;
-    font-size:13px;
     font-weight:700;
 }
 
-.apply-details:hover{
-    background:var(--green-dark);
-}
 
 /* =====================================================
-   SECTION
+   PORTAL CONTENT
 ===================================================== */
 
-.section{
-    padding:58px 0;
+.portal{
+    padding:55px 0 20px;
 }
 
-.section-header{
+.portal-heading{
     display:flex;
-    justify-content:space-between;
     align-items:end;
-    margin-bottom:25px;
+    justify-content:space-between;
+    margin-bottom:24px;
 }
 
-.section-title{
+.portal-heading h2{
     font-family:"Playfair Display",serif;
     font-size:34px;
     letter-spacing:-.035em;
-    font-weight:600;
 }
 
-.section-subtitle{
-    margin-top:5px;
+.portal-heading p{
     color:var(--grey);
     font-size:14px;
+    margin-top:5px;
 }
 
-.view-all{
+.portal-link{
     color:var(--green);
-    font-weight:700;
     font-size:13px;
+    font-weight:700;
 }
+
 
 /* =====================================================
-   HOTEL CARDS
+   HOTEL GRID
 ===================================================== */
 
 .hotel-grid{
     display:grid;
     grid-template-columns:repeat(3,1fr);
-    gap:19px;
+    gap:18px;
 }
 
 .hotel-card{
     background:white;
     border:1px solid var(--border);
-    border-radius:20px;
+    border-radius:19px;
     overflow:hidden;
     transition:.25s;
 }
 
-.hotel-card.hidden{
-    display:none;
-}
-
 .hotel-card:hover{
     transform:translateY(-4px);
-    box-shadow:0 20px 45px rgba(25,35,29,.1);
+    box-shadow:0 20px 45px rgba(25,35,29,.11);
 }
 
 .hotel-image{
-    height:245px;
+    height:230px;
     position:relative;
-    overflow:hidden;
 }
 
 .hotel-image img{
     height:100%;
-    transition:.5s;
-}
-
-.hotel-card:hover .hotel-image img{
-    transform:scale(1.04);
 }
 
 .hotel-badge{
     position:absolute;
-    top:13px;
     left:13px;
+    top:13px;
     padding:7px 10px;
-    background:rgba(255,255,255,.9);
-    backdrop-filter:blur(12px);
     border-radius:999px;
-    font-size:11px;
-    font-weight:700;
+    background:rgba(255,255,255,.91);
+    backdrop-filter:blur(12px);
     color:var(--green);
+    font-size:10px;
+    font-weight:700;
 }
 
 .favorite{
     position:absolute;
     right:13px;
     top:13px;
-    width:36px;
-    height:36px;
+    width:37px;
+    height:37px;
     border-radius:50%;
-    background:rgba(255,255,255,.88);
-    backdrop-filter:blur(12px);
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    background:rgba(255,255,255,.9);
     font-size:18px;
 }
 
 .hotel-body{
-    padding:18px;
+    padding:17px;
 }
 
 .hotel-location{
-    font-size:11px;
-    color:#858a84;
+    color:#888e87;
+    font-size:10px;
     text-transform:uppercase;
-    letter-spacing:.06em;
+    letter-spacing:.07em;
     font-weight:700;
 }
 
 .hotel-name{
     font-family:"Playfair Display",serif;
-    font-size:23px;
-    font-weight:600;
-    margin-top:4px;
-    letter-spacing:-.025em;
+    font-size:22px;
+    margin-top:5px;
 }
 
 .hotel-description{
     color:var(--grey);
-    font-size:13px;
+    font-size:12px;
     line-height:1.55;
-    margin-top:7px;
+    margin-top:6px;
 }
 
-.hotel-bottom{
+.hotel-info{
     display:flex;
     justify-content:space-between;
-    align-items:end;
-    margin-top:17px;
+    align-items:center;
+    border-top:1px solid var(--border);
+    margin-top:15px;
+    padding-top:14px;
 }
 
 .hotel-price{
@@ -641,36 +635,39 @@ img{
 }
 
 .hotel-price span{
-    color:#929690;
-    font-size:11px;
+    color:#929790;
+    font-size:10px;
     font-weight:500;
 }
 
-.hotel-rating{
+.rating{
+    color:var(--green);
     font-size:12px;
     font-weight:700;
-    color:var(--green);
 }
+
 
 /* =====================================================
    CATEGORIES
 ===================================================== */
 
 .category-section{
-    background:#ebece7;
+    padding:65px 0;
+    background:#e9ece7;
+    margin-top:50px;
 }
 
 .category-grid{
     display:grid;
     grid-template-columns:repeat(4,1fr);
-    gap:13px;
+    gap:14px;
 }
 
 .category-card{
-    height:210px;
-    position:relative;
-    overflow:hidden;
+    height:190px;
     border-radius:18px;
+    overflow:hidden;
+    position:relative;
     color:white;
 }
 
@@ -689,7 +686,7 @@ img{
     display:flex;
     align-items:end;
     padding:18px;
-    background:linear-gradient(transparent 35%,rgba(0,0,0,.7));
+    background:linear-gradient(transparent 30%,rgba(0,0,0,.7));
 }
 
 .category-name{
@@ -697,126 +694,142 @@ img{
     font-size:22px;
 }
 
+
 /* =====================================================
    REGIONS
 ===================================================== */
 
+.regions{
+    padding:70px 0;
+}
+
 .region-grid{
     display:grid;
     grid-template-columns:repeat(4,1fr);
-    gap:13px;
+    gap:14px;
 }
 
 .region{
-    background:white;
-    border:1px solid var(--border);
-    border-radius:17px;
-    padding:22px;
-    transition:.2s;
+    min-height:170px;
+    position:relative;
+    overflow:hidden;
+    border-radius:18px;
+    color:white;
 }
 
-.region:hover{
-    border-color:var(--green);
-    transform:translateY(-2px);
+.region img{
+    height:100%;
+    transition:.5s;
+}
+
+.region:hover img{
+    transform:scale(1.05);
+}
+
+.region-overlay{
+    position:absolute;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    justify-content:end;
+    padding:18px;
+    background:linear-gradient(transparent 25%,rgba(0,0,0,.72));
 }
 
 .region-number{
-    color:#a0a49e;
-    font-size:11px;
-    font-weight:700;
+    font-size:10px;
+    opacity:.7;
 }
 
 .region h3{
     font-family:"Playfair Display",serif;
-    font-size:21px;
-    margin-top:13px;
+    font-size:22px;
+    margin-top:4px;
 }
 
 .region p{
-    color:var(--grey);
-    font-size:12px;
-    margin-top:5px;
+    font-size:11px;
+    opacity:.8;
+    margin-top:3px;
 }
+
 
 /* =====================================================
    FEATURE
 ===================================================== */
 
 .feature{
-    padding:25px 0 75px;
+    padding:10px 0 70px;
 }
 
 .feature-box{
-    min-height:450px;
+    min-height:410px;
     border-radius:25px;
     overflow:hidden;
     position:relative;
     color:white;
-
-    background-image:
-        linear-gradient(90deg,rgba(17,36,29,.86),rgba(17,36,29,.18)),
+    background:
+        linear-gradient(90deg,rgba(17,39,31,.9),rgba(17,39,31,.2)),
         url("https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1800&q=90");
-
     background-size:cover;
     background-position:center;
-
     display:flex;
     align-items:center;
 }
 
 .feature-content{
-    padding:55px;
-    max-width:610px;
+    padding:50px;
+    max-width:620px;
 }
 
 .feature-content small{
     text-transform:uppercase;
     letter-spacing:.1em;
-    font-weight:700;
     color:#bcd3c5;
+    font-weight:700;
 }
 
 .feature-content h2{
     font-family:"Playfair Display",serif;
-    font-size:46px;
+    font-size:45px;
     line-height:1.08;
     margin-top:12px;
 }
 
 .feature-content p{
-    color:rgba(255,255,255,.78);
+    max-width:510px;
+    color:rgba(255,255,255,.76);
     line-height:1.65;
-    margin:16px 0 23px;
-    max-width:500px;
+    margin:15px 0 22px;
 }
 
-.feature-btn{
+.feature-button{
     display:inline-flex;
-    padding:12px 18px;
     background:white;
     color:var(--green);
     border-radius:999px;
-    font-weight:700;
+    padding:12px 18px;
     font-size:13px;
+    font-weight:700;
 }
+
 
 /* =====================================================
    HOTELIER
 ===================================================== */
 
-.hotelier-section{
-    padding:30px 0 80px;
+.hotelier{
+    padding:0 0 75px;
 }
 
 .hotelier-box{
     background:var(--green-dark);
     color:white;
     border-radius:25px;
-    padding:50px;
-
+    padding:48px;
     display:grid;
     grid-template-columns:1.2fr .8fr;
-    gap:50px;
+    gap:45px;
     align-items:center;
 }
 
@@ -826,40 +839,41 @@ img{
 }
 
 .hotelier-box p{
-    color:rgba(255,255,255,.72);
-    line-height:1.7;
     max-width:530px;
+    color:rgba(255,255,255,.7);
+    line-height:1.7;
     margin:14px 0 22px;
 }
 
-.hotelier-link{
+.hotelier-button{
     display:inline-flex;
-    background:white;
-    color:var(--green);
     padding:12px 18px;
     border-radius:999px;
+    background:white;
+    color:var(--green);
     font-size:13px;
     font-weight:700;
 }
 
-.hotelier-side{
-    padding:26px;
-    border-radius:20px;
-    background:rgba(255,255,255,.07);
+.hotelier-info{
     border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.06);
+    padding:25px;
+    border-radius:19px;
 }
 
-.hotelier-side strong{
+.hotelier-info strong{
     display:block;
     font-size:14px;
-    margin-bottom:8px;
+    margin-bottom:7px;
 }
 
-.hotelier-side span{
-    font-size:13px;
+.hotelier-info span{
+    color:rgba(255,255,255,.62);
+    font-size:12px;
     line-height:1.6;
-    color:rgba(255,255,255,.65);
 }
+
 
 /* =====================================================
    FOOTER
@@ -868,19 +882,20 @@ img{
 footer{
     background:#111713;
     color:white;
-    padding:60px 0 25px;
+    padding:58px 0 25px;
 }
 
 .footer-grid{
     display:grid;
     grid-template-columns:1.5fr 1fr 1fr 1fr;
     gap:40px;
-    padding-bottom:50px;
+    padding-bottom:45px;
 }
 
 .footer-logo{
-    font-size:21px;
+    font-size:22px;
     font-weight:700;
+    letter-spacing:-.04em;
 }
 
 .footer-logo span{
@@ -888,25 +903,25 @@ footer{
 }
 
 .footer-about{
-    color:#858b86;
-    font-size:13px;
-    line-height:1.7;
     max-width:300px;
-    margin-top:13px;
+    color:#858b86;
+    font-size:12px;
+    line-height:1.7;
+    margin-top:12px;
 }
 
 .footer-column h4{
-    font-size:12px;
+    color:#c6cbc7;
     text-transform:uppercase;
     letter-spacing:.08em;
-    color:#c7cbc7;
+    font-size:11px;
     margin-bottom:14px;
 }
 
 .footer-column a{
     display:block;
     color:#858b86;
-    font-size:13px;
+    font-size:12px;
     margin:9px 0;
 }
 
@@ -915,77 +930,14 @@ footer{
 }
 
 .footer-bottom{
-    border-top:1px solid rgba(255,255,255,.09);
-    padding-top:22px;
+    border-top:1px solid rgba(255,255,255,.08);
+    padding-top:21px;
     display:flex;
     justify-content:space-between;
-    gap:20px;
-    flex-wrap:wrap;
-    color:#686f6a;
-    font-size:11px;
+    color:#68706a;
+    font-size:10px;
 }
 
-/* =====================================================
-   DROPDOWN
-===================================================== */
-
-.dropdown{
-    position:absolute;
-    top:72px;
-    left:50%;
-
-    width:min(850px,calc(100vw - 40px));
-
-    background:rgba(255,255,255,.96);
-    color:var(--black);
-
-    border:1px solid rgba(255,255,255,.8);
-    border-radius:22px;
-
-    padding:25px;
-
-    box-shadow:0 25px 70px rgba(0,0,0,.2);
-
-    backdrop-filter:blur(25px);
-    -webkit-backdrop-filter:blur(25px);
-
-    opacity:0;
-    visibility:hidden;
-
-    transform:translateX(-50%) translateY(-8px);
-
-    transition:.2s;
-}
-
-.nav-item:hover .dropdown{
-    opacity:1;
-    visibility:visible;
-    transform:translateX(-50%) translateY(0);
-}
-
-.dropdown-title{
-    font-family:"Playfair Display",serif;
-    font-size:22px;
-    margin-bottom:18px;
-}
-
-.dropdown-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:8px;
-}
-
-.dropdown-link{
-    padding:12px;
-    border-radius:12px;
-    color:#555b55;
-    font-size:13px;
-}
-
-.dropdown-link:hover{
-    background:#eef1ed;
-    color:var(--green);
-}
 
 /* =====================================================
    MOBILE
@@ -997,25 +949,17 @@ footer{
         gap:15px;
     }
 
-    .nav-right .nav-glass:first-child{
-        display:none;
-    }
-
     .search-main{
         grid-template-columns:1fr 1fr;
     }
 
     .search-field{
-        border-right:0;
         border-bottom:1px solid var(--border);
+        border-right:0;
     }
 
     .search-button{
         min-height:50px;
-    }
-
-    .details-grid{
-        grid-template-columns:1fr 1fr;
     }
 
     .hotel-grid{
@@ -1027,15 +971,28 @@ footer{
         grid-template-columns:repeat(2,1fr);
     }
 
+    .advanced-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
     .footer-grid{
         grid-template-columns:repeat(2,1fr);
     }
 }
 
+
 @media(max-width:750px){
 
     .container{
         width:min(calc(100% - 28px),var(--max));
+    }
+
+    .topbar{
+        display:none;
+    }
+
+    .header{
+        top:0;
     }
 
     .nav{
@@ -1054,31 +1011,27 @@ footer{
         display:flex;
         width:40px;
         height:40px;
+        align-items:center;
+        justify-content:center;
         border-radius:50%;
         background:rgba(255,255,255,.13);
         border:1px solid rgba(255,255,255,.2);
-        align-items:center;
-        justify-content:center;
         color:white;
     }
 
     .hero{
-        min-height:690px;
-    }
-
-    .hero-content{
-        transform:translateY(-20px);
+        min-height:620px;
     }
 
     .hero h1{
-        font-size:48px;
+        font-size:46px;
     }
 
-    .hero-text{
-        font-size:15px;
+    .hero-content{
+        padding-top:40px;
     }
 
-    .search-wrapper{
+    .search-area{
         margin-top:-55px;
     }
 
@@ -1086,15 +1039,11 @@ footer{
         grid-template-columns:1fr;
     }
 
-    .search-field{
-        border-bottom:1px solid var(--border);
-    }
-
     .search-button{
-        height:52px;
+        height:50px;
     }
 
-    .details-grid{
+    .advanced-grid{
         grid-template-columns:1fr;
     }
 
@@ -1102,76 +1051,33 @@ footer{
         grid-template-columns:1fr;
     }
 
-    .hotel-image{
-        height:260px;
-    }
-
-    .section{
-        padding:43px 0;
-    }
-
-    .section-header{
-        align-items:start;
-    }
-
-    .section-title{
-        font-size:29px;
-    }
-
-    .category-grid{
-        grid-template-columns:1fr 1fr;
-    }
-
-    .category-card{
-        height:170px;
-    }
-
+    .category-grid,
     .region-grid{
         grid-template-columns:1fr 1fr;
-    }
-
-    .feature-content{
-        padding:32px;
-    }
-
-    .feature-content h2{
-        font-size:35px;
     }
 
     .hotelier-box{
         grid-template-columns:1fr;
         padding:32px;
-        gap:25px;
-    }
-
-    .hotelier-box h2{
-        font-size:34px;
     }
 
     .footer-grid{
         grid-template-columns:1fr 1fr;
-        gap:30px 20px;
     }
 }
+
 
 @media(max-width:480px){
 
     .hero h1{
-        font-size:43px;
+        font-size:42px;
     }
 
     .hero{
-        min-height:650px;
+        min-height:600px;
     }
 
-    .category-grid{
-        grid-template-columns:1fr;
-    }
-
-    .category-card{
-        height:190px;
-    }
-
+    .category-grid,
     .region-grid{
         grid-template-columns:1fr;
     }
@@ -1180,25 +1086,46 @@ footer{
         grid-template-columns:1fr;
     }
 
-    .nav-right .nav-glass{
-        display:none;
-    }
-
     .footer-bottom{
         flex-direction:column;
+        gap:8px;
+    }
+
+    .nav-right .glass-btn:first-child{
+        display:none;
     }
 }
 
 </style>
 </head>
 
+
 <body>
+
+
+<!-- =====================================================
+     TOP BAR
+===================================================== -->
+
+<div class="topbar">
+
+<div class="container topbar-inner">
+
+<a href="#">Über Staylo</a>
+<a href="#">Kontakt</a>
+<a href="#">DE</a>
+<a href="#">♡ Favoriten</a>
+
+</div>
+
+</div>
+
 
 <!-- =====================================================
      HEADER
 ===================================================== -->
 
-<header class="header">
+<header class="header" id="header">
 
 <div class="container nav">
 
@@ -1212,11 +1139,13 @@ footer{
 
 </a>
 
+
 <nav class="nav-center">
 
 <div class="nav-item">
 Hotels
 </div>
+
 
 <div class="nav-item has-menu">
 
@@ -1241,9 +1170,11 @@ Hotels nach Kategorie
 <div class="dropdown-link">Chalets & Lodges</div>
 
 </div>
+
 </div>
 
 </div>
+
 
 <div class="nav-item has-menu">
 
@@ -1268,31 +1199,30 @@ Südtirol entdecken
 <div class="dropdown-link">Vinschgau</div>
 
 </div>
+
 </div>
 
 </div>
+
 
 <div class="nav-item">
 Über uns
 </div>
 
-<div class="nav-item">
-Für Hoteliers
-</div>
-
 </nav>
+
 
 <div class="nav-right">
 
-<button class="nav-glass">
+<button class="glass-btn">
 ♡ Favoriten
 </button>
 
-<button class="nav-glass">
+<button class="glass-btn">
 DE
 </button>
 
-<button class="nav-glass">
+<button class="glass-btn">
 Anmelden
 </button>
 
@@ -1322,19 +1252,24 @@ Für Hoteliers
 <div class="container hero-content">
 
 <div class="hero-label">
+
 <span class="hero-label-dot"></span>
+
 Hotels in Südtirol
+
 </div>
+
 
 <h1>
 Dein nächster Aufenthalt<br>
 in den <em>Dolomiten.</em>
 </h1>
 
+
 <p class="hero-text">
-Entdecke besondere Hotels, Resorts und Rückzugsorte
-in Südtirol – von kleinen Boutique-Hotels bis zu
-außergewöhnlichen Luxusresorts.
+Finde Hotels, Resorts und besondere Unterkünfte
+in ganz Südtirol – einfach suchen, vergleichen
+und entdecken.
 </p>
 
 </div>
@@ -1346,23 +1281,26 @@ außergewöhnlichen Luxusresorts.
      SEARCH
 ===================================================== -->
 
-<div class="container search-wrapper">
+<div class="container search-area">
 
 <div class="search-box">
 
+
 <div class="search-main">
+
 
 <div class="search-field">
 
 <span class="search-label">
-Wo?
+Was suchst du?
 </span>
 
 <div class="search-value">
-Südtirol
+Hotels in Südtirol
 </div>
 
 </div>
+
 
 <div class="search-field">
 
@@ -1370,104 +1308,41 @@ Südtirol
 Region
 </span>
 
-<div class="search-value muted" id="regionValue">
-Alle Regionen
-</div>
-
-</div>
-
-<div class="search-field">
-
-<span class="search-label">
-Hotelart
-</span>
-
-<div class="search-value muted" id="typeValue">
-Alle Hotelarten
-</div>
-
-</div>
-
-<div class="search-field">
-
-<span class="search-label">
-Preis / Nacht
-</span>
-
-<div class="search-value muted" id="priceValue">
-Bis € 500+
-</div>
-
-</div>
-
-<button class="search-button" id="searchButton">
-Suchen
-</button>
-
-</div>
-
-
-<div class="details">
-
-<button id="detailsButton">
-+ Detailsuche
-</button>
-
-</div>
-
-
-<!-- =====================================================
-     DETAILSUCHE PANEL
-===================================================== -->
-
-<div class="details-panel" id="detailsPanel">
-
-<div class="details-grid">
-
-
-<!-- REGION -->
-
-<div class="detail-group">
-
-<div class="detail-title">
-Region
-</div>
-
-<select class="detail-select" id="regionSelect">
+<select class="search-value muted" id="regionSelect">
 
 <option value="all">
 Alle Regionen
 </option>
 
-<option value="meran">
+<option>
 Meran & Umgebung
 </option>
 
-<option value="bozen">
+<option>
 Bozen & Umgebung
 </option>
 
-<option value="groeden">
+<option>
+Dolomiten
+</option>
+
+<option>
 Gröden
 </option>
 
-<option value="seiser">
+<option>
 Seiser Alm
 </option>
 
-<option value="pustertal">
+<option>
 Pustertal
 </option>
 
-<option value="eisacktal">
+<option>
 Eisacktal
 </option>
 
-<option value="passeiertal">
-Passeiertal
-</option>
-
-<option value="vinschgau">
+<option>
 Vinschgau
 </option>
 
@@ -1476,50 +1351,44 @@ Vinschgau
 </div>
 
 
-<!-- HOTELART -->
+<div class="search-field">
 
-<div class="detail-group">
-
-<div class="detail-title">
+<span class="search-label">
 Hotelart
-</div>
+</span>
 
-<select class="detail-select" id="typeSelect">
+<select class="search-value muted" id="typeSelect">
 
-<option value="all">
+<option>
 Alle Hotelarten
 </option>
 
-<option value="luxus">
-Luxushotels
+<option>
+Luxushotel
 </option>
 
-<option value="wellness">
-Wellnesshotels
+<option>
+Wellnesshotel
 </option>
 
-<option value="berg">
-Berghotels
+<option>
+Berghotel
 </option>
 
-<option value="boutique">
-Boutique Hotels
+<option>
+Boutique Hotel
 </option>
 
-<option value="design">
-Design Hotels
+<option>
+Design Hotel
 </option>
 
-<option value="familie">
-Familienhotels
+<option>
+Familienhotel
 </option>
 
-<option value="adults">
+<option>
 Adults Only
-</option>
-
-<option value="nachhaltig">
-Nachhaltige Hotels
 </option>
 
 </select>
@@ -1527,21 +1396,47 @@ Nachhaltige Hotels
 </div>
 
 
-<!-- PREIS -->
+<div class="search-field">
 
-<div class="detail-group">
+<span class="search-label">
+Preis / Nacht
+</span>
 
-<div class="price-top">
-
-<div class="detail-title" style="margin-bottom:0;">
-Maximaler Preis
-</div>
-
-<div class="price-value" id="priceSliderValue">
-500+
+<div class="search-value" id="mainPrice">
+Bis € 150
 </div>
 
 </div>
+
+
+<button class="search-button" id="searchButton">
+Suchen
+</button>
+
+</div>
+
+
+<div class="details-row">
+
+<button class="details-toggle" id="detailsToggle">
++ Detailsuche
+</button>
+
+</div>
+
+
+<!-- DETAILSUCHE -->
+
+<div class="advanced-search" id="advancedSearch">
+
+<div class="advanced-grid">
+
+
+<div class="detail-field">
+
+<label>
+Preis maximal
+</label>
 
 <input
 type="range"
@@ -1549,121 +1444,89 @@ class="price-slider"
 id="priceSlider"
 min="50"
 max="500"
+value="150"
 step="10"
-value="500"
 >
 
-</div>
+<div class="price-display">
 
+<span>€ 50</span>
 
-<!-- MERKMALE -->
-
-<div class="detail-group">
-
-<div class="detail-title">
-Besondere Merkmale
-</div>
-
-<div class="detail-checks">
-
-<button class="detail-check" data-filter="pool">
-Pool
-</button>
-
-<button class="detail-check" data-filter="spa">
-Spa
-</button>
-
-<button class="detail-check" data-filter="familie">
-Familienfreundlich
-</button>
-
-<button class="detail-check" data-filter="haustier">
-Haustiere
-</button>
+<span id="priceValue">
+Bis € 150
+</span>
 
 </div>
 
 </div>
 
 
-<!-- GÄSTE -->
+<div class="detail-field">
 
-<div class="detail-group">
+<label>
+Hotelart
+</label>
 
-<div class="detail-title">
-Zimmer & Gäste
-</div>
+<select id="advancedType">
 
-<select class="detail-select">
-
-<option>
-2 Erwachsene
-</option>
-
-<option>
-1 Erwachsener
-</option>
-
-<option>
-2 Erwachsene + 1 Kind
-</option>
-
-<option>
-2 Erwachsene + 2 Kinder
-</option>
-
-<option>
-3 Erwachsene
-</option>
-
-<option>
-4 Erwachsene
-</option>
+<option>Alle Hotelarten</option>
+<option>Luxushotel</option>
+<option>Wellnesshotel</option>
+<option>Berghotel</option>
+<option>Boutique Hotel</option>
+<option>Design Hotel</option>
+<option>Familienhotel</option>
+<option>Adults Only</option>
+<option>Nachhaltiges Hotel</option>
 
 </select>
 
 </div>
 
 
-<!-- SORTIERUNG -->
+<div class="detail-field">
 
-<div class="detail-group">
+<label>
+Region
+</label>
 
-<div class="detail-title">
-Sortieren nach
-</div>
+<select id="advancedRegion">
 
-<select class="detail-select" id="sortSelect">
-
-<option value="recommended">
-Empfohlen
-</option>
-
-<option value="price-low">
-Preis aufsteigend
-</option>
-
-<option value="price-high">
-Preis absteigend
-</option>
-
-<option value="rating">
-Bewertung
-</option>
+<option>Alle Regionen</option>
+<option>Meran & Umgebung</option>
+<option>Bozen & Umgebung</option>
+<option>Dolomiten</option>
+<option>Gröden</option>
+<option>Seiser Alm</option>
+<option>Pustertal</option>
+<option>Eisacktal</option>
+<option>Vinschgau</option>
 
 </select>
 
 </div>
 
+
+<div class="detail-field">
+
+<label>
+Besonderheiten
+</label>
+
+<select>
+
+<option>Keine Auswahl</option>
+<option>Pool</option>
+<option>Spa</option>
+<option>Panoramablick</option>
+<option>Haustiere erlaubt</option>
+<option>Familienfreundlich</option>
+<option>Nachhaltig</option>
+
+</select>
+
 </div>
 
-
-<div class="details-actions">
-
-<button class="apply-details" id="applyDetails">
-Auswahl anwenden
-</button>
 
 </div>
 
@@ -1678,50 +1541,42 @@ Auswahl anwenden
      HOTELS
 ===================================================== -->
 
-<section class="section">
+<section class="portal">
 
 <div class="container">
 
-<div class="section-header">
+
+<div class="portal-heading">
 
 <div>
 
-<h2 class="section-title">
-Hotels in Südtirol
+<h2>
+Besondere Hotels für dich
 </h2>
 
-<p class="section-subtitle" id="resultText">
-Besondere Unterkünfte aus ganz Südtirol.
+<p>
+Entdecke ausgewählte Unterkünfte aus ganz Südtirol.
 </p>
 
 </div>
 
-<a href="#" class="view-all">
+<a href="#" class="portal-link">
 Alle Hotels →
 </a>
 
 </div>
 
 
-<div class="hotel-grid" id="hotelGrid">
+<div class="hotel-grid">
 
 
-<!-- HOTEL 1 -->
+<!-- 1 -->
 
-<article
-class="hotel-card"
-data-region="meran"
-data-type="boutique"
-data-price="145"
-data-rating="4.8"
->
+<article class="hotel-card">
 
 <div class="hotel-image">
 
-<img
-src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1000&q=85"
-alt="Hotel in Meran"
->
+<img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1000&q=85">
 
 <span class="hotel-badge">
 Boutique
@@ -1748,13 +1603,13 @@ Ruhiges Boutique-Hotel zwischen Weinbergen
 und der Kurstadt Meran.
 </p>
 
-<div class="hotel-bottom">
+<div class="hotel-info">
 
 <div class="hotel-price">
-ab € 145 <span>/ Nacht</span>
+ab €145 <span>/ Nacht</span>
 </div>
 
-<div class="hotel-rating">
+<div class="rating">
 ★ 4.8
 </div>
 
@@ -1765,22 +1620,13 @@ ab € 145 <span>/ Nacht</span>
 </article>
 
 
-<!-- HOTEL 2 -->
+<!-- 2 -->
 
-<article
-class="hotel-card"
-data-region="groeden"
-data-type="berg"
-data-price="168"
-data-rating="4.9"
->
+<article class="hotel-card">
 
 <div class="hotel-image">
 
-<img
-src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=1000&q=85"
-alt="Berghotel in Gröden"
->
+<img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=1000&q=85">
 
 <span class="hotel-badge">
 Berghotel
@@ -1807,13 +1653,13 @@ Modernes Design trifft auf Dolomitenblick
 und alpine Ruhe.
 </p>
 
-<div class="hotel-bottom">
+<div class="hotel-info">
 
 <div class="hotel-price">
-ab € 168 <span>/ Nacht</span>
+ab €168 <span>/ Nacht</span>
 </div>
 
-<div class="hotel-rating">
+<div class="rating">
 ★ 4.9
 </div>
 
@@ -1824,22 +1670,13 @@ ab € 168 <span>/ Nacht</span>
 </article>
 
 
-<!-- HOTEL 3 -->
+<!-- 3 -->
 
-<article
-class="hotel-card"
-data-region="passeiertal"
-data-type="wellness"
-data-price="210"
-data-rating="4.9"
->
+<article class="hotel-card">
 
 <div class="hotel-image">
 
-<img
-src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1000&q=85"
-alt="Wellnesshotel im Passeiertal"
->
+<img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1000&q=85">
 
 <span class="hotel-badge">
 Wellness
@@ -1866,13 +1703,13 @@ Wellness, Ruhe und Natur für eine entspannte
 Auszeit in den Bergen.
 </p>
 
-<div class="hotel-bottom">
+<div class="hotel-info">
 
 <div class="hotel-price">
-ab € 210 <span>/ Nacht</span>
+ab €210 <span>/ Nacht</span>
 </div>
 
-<div class="hotel-rating">
+<div class="rating">
 ★ 4.9
 </div>
 
@@ -1883,25 +1720,16 @@ ab € 210 <span>/ Nacht</span>
 </article>
 
 
-<!-- HOTEL 4 -->
+<!-- 4 -->
 
-<article
-class="hotel-card"
-data-region="bozen"
-data-type="design"
-data-price="89"
-data-rating="4.6"
->
+<article class="hotel-card">
 
 <div class="hotel-image">
 
-<img
-src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1000&q=85"
-alt="Hotel in Bozen"
->
+<img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1000&q=85">
 
 <span class="hotel-badge">
-Design
+City
 </span>
 
 <button class="favorite">
@@ -1925,13 +1753,13 @@ Modernes Hotel mitten in Bozen – ideal für
 Stadt und Ausflüge.
 </p>
 
-<div class="hotel-bottom">
+<div class="hotel-info">
 
 <div class="hotel-price">
-ab € 89 <span>/ Nacht</span>
+ab €89 <span>/ Nacht</span>
 </div>
 
-<div class="hotel-rating">
+<div class="rating">
 ★ 4.6
 </div>
 
@@ -1942,22 +1770,13 @@ ab € 89 <span>/ Nacht</span>
 </article>
 
 
-<!-- HOTEL 5 -->
+<!-- 5 -->
 
-<article
-class="hotel-card"
-data-region="seiser"
-data-type="luxus"
-data-price="195"
-data-rating="4.9"
->
+<article class="hotel-card">
 
 <div class="hotel-image">
 
-<img
-src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1000&q=85"
-alt="Luxushotel auf der Seiser Alm"
->
+<img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1000&q=85">
 
 <span class="hotel-badge">
 Dolomiten
@@ -1980,17 +1799,17 @@ Alpine Chalet Hotel
 </h3>
 
 <p class="hotel-description">
-Direkt an der Seiser Alm mit alpinem Design
-und außergewöhnlicher Aussicht.
+Alpines Design, Natur und außergewöhnliche
+Aussicht auf die Dolomiten.
 </p>
 
-<div class="hotel-bottom">
+<div class="hotel-info">
 
 <div class="hotel-price">
-ab € 195 <span>/ Nacht</span>
+ab €195 <span>/ Nacht</span>
 </div>
 
-<div class="hotel-rating">
+<div class="rating">
 ★ 4.9
 </div>
 
@@ -2001,22 +1820,13 @@ ab € 195 <span>/ Nacht</span>
 </article>
 
 
-<!-- HOTEL 6 -->
+<!-- 6 -->
 
-<article
-class="hotel-card"
-data-region="eisacktal"
-data-type="design"
-data-price="132"
-data-rating="4.7"
->
+<article class="hotel-card">
 
 <div class="hotel-image">
 
-<img
-src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=1000&q=85"
-alt="Designhotel in Brixen"
->
+<img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=1000&q=85">
 
 <span class="hotel-badge">
 Design
@@ -2043,13 +1853,13 @@ Historisches Gebäude, modernes Design und
 ruhiger Innenhof.
 </p>
 
-<div class="hotel-bottom">
+<div class="hotel-info">
 
 <div class="hotel-price">
-ab € 132 <span>/ Nacht</span>
+ab €132 <span>/ Nacht</span>
 </div>
 
-<div class="hotel-rating">
+<div class="rating">
 ★ 4.7
 </div>
 
@@ -2070,20 +1880,20 @@ ab € 132 <span>/ Nacht</span>
      CATEGORIES
 ===================================================== -->
 
-<section class="section category-section">
+<section class="category-section">
 
 <div class="container">
 
-<div class="section-header">
+<div class="portal-heading">
 
 <div>
 
-<h2 class="section-title">
+<h2>
 Finde deinen Stil
 </h2>
 
-<p class="section-subtitle">
-Von alpinen Rückzugsorten bis zu modernen Designhotels.
+<p>
+Hotels nach deinen Vorstellungen entdecken.
 </p>
 
 </div>
@@ -2098,37 +1908,48 @@ Von alpinen Rückzugsorten bis zu modernen Designhotels.
 <img src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=900&q=85">
 
 <div class="category-overlay">
-<div class="category-name">Luxushotels</div>
+<div class="category-name">
+Luxushotels
+</div>
 </div>
 
 </div>
+
 
 <div class="category-card">
 
 <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=85">
 
 <div class="category-overlay">
-<div class="category-name">Wellness</div>
+<div class="category-name">
+Wellness
+</div>
 </div>
 
 </div>
+
 
 <div class="category-card">
 
 <img src="https://images.unsplash.com/photo-1486911278844-a81c5267e227?auto=format&fit=crop&w=900&q=85">
 
 <div class="category-overlay">
-<div class="category-name">Berghotels</div>
+<div class="category-name">
+Berghotels
+</div>
 </div>
 
 </div>
+
 
 <div class="category-card">
 
 <img src="https://images.unsplash.com/photo-1601918774946-25832a4be0d6?auto=format&fit=crop&w=900&q=85">
 
 <div class="category-overlay">
-<div class="category-name">Boutique</div>
+<div class="category-name">
+Boutique
+</div>
 </div>
 
 </div>
@@ -2141,23 +1962,23 @@ Von alpinen Rückzugsorten bis zu modernen Designhotels.
 
 
 <!-- =====================================================
-     REGIONS
+     REGIONEN
 ===================================================== -->
 
-<section class="section">
+<section class="regions">
 
 <div class="container">
 
-<div class="section-header">
+<div class="portal-heading">
 
 <div>
 
-<h2 class="section-title">
+<h2>
 Südtirol entdecken
 </h2>
 
-<p class="section-subtitle">
-Finde dein Hotel in der Region, die zu dir passt.
+<p>
+Finde dein Hotel in deiner Lieblingsregion.
 </p>
 
 </div>
@@ -2167,53 +1988,90 @@ Finde dein Hotel in der Region, die zu dir passt.
 
 <div class="region-grid">
 
+
 <div class="region">
+
+<img src="https://images.unsplash.com/photo-1530789253388-582c481c54b0?auto=format&fit=crop&w=900&q=85">
+
+<div class="region-overlay">
+
 <span class="region-number">01</span>
-<h3>Meran</h3>
-<p>Kurstadt · Berge · Wein</p>
+
+<h3>
+Meran
+</h3>
+
+<p>
+Kurstadt · Wein · Berge
+</p>
+
 </div>
 
+</div>
+
+
 <div class="region">
+
+<img src="https://images.unsplash.com/photo-1464278533981-50106e6176b1?auto=format&fit=crop&w=900&q=85">
+
+<div class="region-overlay">
+
 <span class="region-number">02</span>
-<h3>Dolomiten</h3>
-<p>UNESCO · Berge · Natur</p>
+
+<h3>
+Dolomiten
+</h3>
+
+<p>
+Berge · Natur · Abenteuer
+</p>
+
 </div>
 
+</div>
+
+
 <div class="region">
+
+<img src="https://images.unsplash.com/photo-1605649487212-47bdab064df7?auto=format&fit=crop&w=900&q=85">
+
+<div class="region-overlay">
+
 <span class="region-number">03</span>
-<h3>Bozen</h3>
-<p>Stadt · Wein · Kultur</p>
+
+<h3>
+Bozen
+</h3>
+
+<p>
+Stadt · Kultur · Wein
+</p>
+
 </div>
 
+</div>
+
+
 <div class="region">
+
+<img src="https://images.unsplash.com/photo-1533130061792-64b345e4a833?auto=format&fit=crop&w=900&q=85">
+
+<div class="region-overlay">
+
 <span class="region-number">04</span>
-<h3>Gröden</h3>
-<p>Dolomiten · Ski · Wandern</p>
+
+<h3>
+Gröden
+</h3>
+
+<p>
+Dolomiten · Ski · Wandern
+</p>
+
 </div>
 
-<div class="region">
-<span class="region-number">05</span>
-<h3>Seiser Alm</h3>
-<p>Almen · Wandern · Aussicht</p>
 </div>
 
-<div class="region">
-<span class="region-number">06</span>
-<h3>Pustertal</h3>
-<p>Natur · Kronplatz · Dolomiten</p>
-</div>
-
-<div class="region">
-<span class="region-number">07</span>
-<h3>Eisacktal</h3>
-<p>Brixen · Wein · Berge</p>
-</div>
-
-<div class="region">
-<span class="region-number">08</span>
-<h3>Vinschgau</h3>
-<p>Apfelgärten · Natur · Ruhe</p>
-</div>
 
 </div>
 
@@ -2234,7 +2092,9 @@ Finde dein Hotel in der Region, die zu dir passt.
 
 <div class="feature-content">
 
-<small>Staylo · Südtirol</small>
+<small>
+Staylo · Südtirol
+</small>
 
 <h2>
 Mehr als nur<br>
@@ -2243,11 +2103,12 @@ ein Hotel.
 
 <p>
 Entdecke Orte, an denen nicht nur das Zimmer
-stimmt. Staylo verbindet besondere Hotels mit
-den Menschen, die Südtirol erleben möchten.
+stimmt. Staylo bringt besondere Unterkünfte
+und Menschen zusammen, die Südtirol erleben
+möchten.
 </p>
 
-<a href="#" class="feature-btn">
+<a href="#" class="feature-button">
 Südtirol entdecken
 </a>
 
@@ -2264,7 +2125,7 @@ Südtirol entdecken
      HOTELIER
 ===================================================== -->
 
-<section class="hotelier-section">
+<section class="hotelier">
 
 <div class="container">
 
@@ -2277,27 +2138,27 @@ Dein Hotel auf Staylo.
 </h2>
 
 <p>
-Du betreibst ein Hotel, Resort, Chalet oder eine
-besondere Unterkunft in Südtirol? Bald kannst du
-dein Haus auf Staylo präsentieren und neue Gäste
-erreichen.
+Präsentiere dein Hotel, Resort, Chalet oder
+deine besondere Unterkunft auf einer modernen
+Plattform für Südtirol.
 </p>
 
-<a href="#" class="hotelier-link">
+<a href="#" class="hotelier-button">
 Mehr für Hoteliers →
 </a>
 
 </div>
 
-<div class="hotelier-side">
+
+<div class="hotelier-info">
 
 <strong>
-Für Hotels in ganz Südtirol
+Einfach. Modern. Sichtbar.
 </strong>
 
 <span>
-Professionelle Präsentation, hochwertige Bilder
-und mehr Sichtbarkeit für dein Haus.
+Kostenlos starten, professionell präsentieren
+und neue Gäste auf dein Haus aufmerksam machen.
 </span>
 
 </div>
@@ -2318,6 +2179,7 @@ und mehr Sichtbarkeit für dein Haus.
 <div class="container">
 
 <div class="footer-grid">
+
 
 <div>
 
@@ -2340,42 +2202,94 @@ info@staylo.it
 
 <div class="footer-column">
 
-<h4>Entdecken</h4>
+<h4>
+Entdecken
+</h4>
 
-<a href="#">Hotels</a>
-<a href="#">Luxushotels</a>
-<a href="#">Wellness</a>
-<a href="#">Berghotels</a>
-<a href="#">Boutique Hotels</a>
+<a href="#">
+Hotels
+</a>
+
+<a href="#">
+Luxushotels
+</a>
+
+<a href="#">
+Wellness
+</a>
+
+<a href="#">
+Berghotels
+</a>
+
+<a href="#">
+Boutique Hotels
+</a>
 
 </div>
 
 
 <div class="footer-column">
 
-<h4>Regionen</h4>
+<h4>
+Regionen
+</h4>
 
-<a href="#">Meran</a>
-<a href="#">Bozen</a>
-<a href="#">Dolomiten</a>
-<a href="#">Gröden</a>
-<a href="#">Seiser Alm</a>
+<a href="#">
+Meran
+</a>
+
+<a href="#">
+Bozen
+</a>
+
+<a href="#">
+Dolomiten
+</a>
+
+<a href="#">
+Gröden
+</a>
+
+<a href="#">
+Seiser Alm
+</a>
 
 </div>
 
 
 <div class="footer-column">
 
-<h4>Staylo</h4>
+<h4>
+Staylo
+</h4>
 
-<a href="#">Über uns</a>
-<a href="#">Für Hoteliers</a>
-<a href="#">Kontakt</a>
-<a href="#">Impressum</a>
-<a href="#">Datenschutz</a>
-<a href="#">Cookies</a>
+<a href="#">
+Über uns
+</a>
+
+<a href="#">
+Für Hoteliers
+</a>
+
+<a href="#">
+Kontakt
+</a>
+
+<a href="#">
+Impressum
+</a>
+
+<a href="#">
+Datenschutz
+</a>
+
+<a href="#">
+Cookies
+</a>
 
 </div>
+
 
 </div>
 
@@ -2399,34 +2313,47 @@ Made in South Tyrol · Italy
 
 <script>
 
+
 /* =====================================================
-   DETAILSUCHE ÖFFNEN / SCHLIESSEN
+   HEADER SCROLL
 ===================================================== */
 
-const detailsButton =
-document.getElementById("detailsButton");
+window.addEventListener("scroll",function(){
 
-const detailsPanel =
-document.getElementById("detailsPanel");
+    const header=document.getElementById("header");
 
-detailsButton.addEventListener("click", () => {
+    if(window.scrollY>40){
+        header.classList.add("scrolled");
+    }else{
+        header.classList.remove("scrolled");
+    }
 
-    const isOpen =
-        detailsPanel.classList.contains("open");
+});
 
-    if(isOpen){
 
-        detailsPanel.classList.remove("open");
+/* =====================================================
+   DETAILSUCHE
+===================================================== */
 
-        detailsButton.textContent =
-            "+ Detailsuche";
+const detailsToggle=
+document.getElementById("detailsToggle");
+
+const advancedSearch=
+document.getElementById("advancedSearch");
+
+detailsToggle.addEventListener("click",function(){
+
+    advancedSearch.classList.toggle("open");
+
+    if(advancedSearch.classList.contains("open")){
+
+        detailsToggle.textContent=
+        "− Detailsuche schließen";
 
     }else{
 
-        detailsPanel.classList.add("open");
-
-        detailsButton.textContent =
-            "− Detailsuche schließen";
+        detailsToggle.textContent=
+        "+ Detailsuche";
 
     }
 
@@ -2437,286 +2364,73 @@ detailsButton.addEventListener("click", () => {
    PREIS SLIDER
 ===================================================== */
 
-const priceSlider =
+const slider=
 document.getElementById("priceSlider");
 
-const priceSliderValue =
-document.getElementById("priceSliderValue");
-
-const priceValue =
+const priceValue=
 document.getElementById("priceValue");
 
+const mainPrice=
+document.getElementById("mainPrice");
 
-priceSlider.addEventListener("input", () => {
 
-    const value =
-        Number(priceSlider.value);
+function updatePrice(){
 
-    if(value >= 500){
+    const value=parseInt(slider.value);
 
-        priceSliderValue.textContent =
-            "500+";
+    if(value>=500){
 
-        priceValue.textContent =
-            "Bis € 500+";
+        priceValue.textContent="€ 500+";
+        mainPrice.textContent="€ 500+";
 
     }else{
 
-        priceSliderValue.textContent =
-            "€ " + value;
+        priceValue.textContent=
+        "Bis € "+value;
 
-        priceValue.textContent =
-            "Bis € " + value;
-
-    }
-
-});
-
-
-/* =====================================================
-   REGION + HOTELART
-===================================================== */
-
-const regionSelect =
-document.getElementById("regionSelect");
-
-const typeSelect =
-document.getElementById("typeSelect");
-
-const regionValue =
-document.getElementById("regionValue");
-
-const typeValue =
-document.getElementById("typeValue");
-
-
-regionSelect.addEventListener("change", () => {
-
-    regionValue.textContent =
-        regionSelect.options[
-            regionSelect.selectedIndex
-        ].text;
-
-});
-
-
-typeSelect.addEventListener("change", () => {
-
-    typeValue.textContent =
-        typeSelect.options[
-            typeSelect.selectedIndex
-        ].text;
-
-});
-
-
-/* =====================================================
-   BESONDERE MERKMALE
-===================================================== */
-
-const detailChecks =
-document.querySelectorAll(".detail-check");
-
-detailChecks.forEach(button => {
-
-    button.addEventListener("click", () => {
-
-        button.classList.toggle("active");
-
-    });
-
-});
-
-
-/* =====================================================
-   HOTEL FILTER
-===================================================== */
-
-function filterHotels(){
-
-    const selectedRegion =
-        regionSelect.value;
-
-    const selectedType =
-        typeSelect.value;
-
-    const maxPrice =
-        Number(priceSlider.value);
-
-    const hotels =
-        document.querySelectorAll(".hotel-card");
-
-    let visibleHotels = 0;
-
-
-    hotels.forEach(hotel => {
-
-        const hotelRegion =
-            hotel.dataset.region;
-
-        const hotelType =
-            hotel.dataset.type;
-
-        const hotelPrice =
-            Number(hotel.dataset.price);
-
-
-        const regionMatch =
-            selectedRegion === "all" ||
-            hotelRegion === selectedRegion;
-
-
-        const typeMatch =
-            selectedType === "all" ||
-            hotelType === selectedType;
-
-
-        const priceMatch =
-            maxPrice >= 500 ||
-            hotelPrice <= maxPrice;
-
-
-        if(
-            regionMatch &&
-            typeMatch &&
-            priceMatch
-        ){
-
-            hotel.classList.remove("hidden");
-
-            visibleHotels++;
-
-        }else{
-
-            hotel.classList.add("hidden");
-
-        }
-
-    });
-
-
-    const resultText =
-        document.getElementById("resultText");
-
-
-    if(visibleHotels === 0){
-
-        resultText.textContent =
-            "Keine Hotels mit deinen Kriterien gefunden.";
-
-    }else{
-
-        resultText.textContent =
-            visibleHotels +
-            " passende Unterkünfte aus Südtirol.";
+        mainPrice.textContent=
+        "Bis € "+value;
 
     }
 
 }
 
 
+slider.addEventListener("input",updatePrice);
+
+
 /* =====================================================
-   DETAILS ANWENDEN
+   HOTELART
 ===================================================== */
 
-document
-.getElementById("applyDetails")
-.addEventListener("click", () => {
+const typeSelect=
+document.getElementById("typeSelect");
 
-    filterHotels();
+const advancedType=
+document.getElementById("advancedType");
 
-    detailsPanel.classList.remove("open");
 
-    detailsButton.textContent =
-        "+ Detailsuche";
+typeSelect.addEventListener("change",function(){
 
-    document
-        .querySelector(".section")
-        .scrollIntoView({
-            behavior:"smooth",
-            block:"start"
-        });
+    advancedType.value=this.value;
 
 });
 
 
 /* =====================================================
-   SUCHBUTTON
+   REGION
 ===================================================== */
 
-document
-.getElementById("searchButton")
-.addEventListener("click", () => {
+const regionSelect=
+document.getElementById("regionSelect");
 
-    filterHotels();
-
-    document
-        .querySelector(".section")
-        .scrollIntoView({
-            behavior:"smooth",
-            block:"start"
-        });
-
-});
+const advancedRegion=
+document.getElementById("advancedRegion");
 
 
-/* =====================================================
-   SORTIERUNG
-===================================================== */
+regionSelect.addEventListener("change",function(){
 
-const sortSelect =
-document.getElementById("sortSelect");
-
-const hotelGrid =
-document.getElementById("hotelGrid");
-
-
-sortSelect.addEventListener("change", () => {
-
-    const hotels =
-        Array.from(
-            hotelGrid.querySelectorAll(".hotel-card")
-        );
-
-
-    if(sortSelect.value === "price-low"){
-
-        hotels.sort(
-            (a,b) =>
-            Number(a.dataset.price) -
-            Number(b.dataset.price)
-        );
-
-    }
-
-
-    if(sortSelect.value === "price-high"){
-
-        hotels.sort(
-            (a,b) =>
-            Number(b.dataset.price) -
-            Number(a.dataset.price)
-        );
-
-    }
-
-
-    if(sortSelect.value === "rating"){
-
-        hotels.sort(
-            (a,b) =>
-            Number(b.dataset.rating) -
-            Number(a.dataset.rating)
-        );
-
-    }
-
-
-    hotels.forEach(hotel => {
-
-        hotelGrid.appendChild(hotel);
-
-    });
+    advancedRegion.value=this.value;
 
 });
 
@@ -2725,25 +2439,21 @@ sortSelect.addEventListener("change", () => {
    FAVORITEN
 ===================================================== */
 
-const favorites =
-document.querySelectorAll(".favorite");
+document.querySelectorAll(".favorite")
+.forEach(function(button){
 
-favorites.forEach(button => {
-
-    button.addEventListener("click", event => {
+    button.addEventListener("click",function(event){
 
         event.preventDefault();
         event.stopPropagation();
 
-        if(
-            button.textContent.trim() === "♡"
-        ){
+        if(this.textContent.trim()==="♡"){
 
-            button.textContent = "♥";
+            this.textContent="♥";
 
         }else{
 
-            button.textContent = "♡";
+            this.textContent="♡";
 
         }
 
@@ -2753,39 +2463,19 @@ favorites.forEach(button => {
 
 
 /* =====================================================
-   HEADER GLASS BEIM SCROLLEN
+   SUCHE
 ===================================================== */
 
-window.addEventListener("scroll", () => {
+document.getElementById("searchButton")
+.addEventListener("click",function(){
 
-    const header =
-        document.querySelector(".header");
-
-    if(window.scrollY > 30){
-
-        header.style.background =
-            "rgba(17,31,25,.78)";
-
-        header.style.backdropFilter =
-            "blur(20px)";
-
-        header.style.webkitBackdropFilter =
-            "blur(20px)";
-
-    }else{
-
-        header.style.background =
-            "transparent";
-
-        header.style.backdropFilter =
-            "none";
-
-        header.style.webkitBackdropFilter =
-            "none";
-
-    }
+    document.querySelector(".portal")
+    .scrollIntoView({
+        behavior:"smooth"
+    });
 
 });
+
 
 </script>
 
