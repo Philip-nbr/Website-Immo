@@ -357,11 +357,79 @@ img{
 }
 
 /* =========================
+   DETAIL SEARCH
+========================= */
+
+.details-panel{
+    display:none;
+    margin-top:12px;
+    padding:22px;
+    border-top:1px solid var(--border);
+    background:rgba(255,255,255,.55);
+    border-radius:18px;
+}
+
+.details-panel.open{
+    display:block;
+}
+
+.details-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:18px;
+}
+
+.detail-item{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:15px;
+    padding:16px;
+}
+
+.detail-item label{
+    display:block;
+    font-size:11px;
+    font-weight:700;
+    color:#858a84;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    margin-bottom:10px;
+}
+
+.detail-item select{
+    width:100%;
+    border:0;
+    outline:0;
+    background:white;
+    color:#252825;
+    font-size:14px;
+    font-weight:600;
+}
+
+.price-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:10px;
+}
+
+.price-value{
+    color:var(--green);
+    font-size:14px;
+    font-weight:700;
+}
+
+.price-slider{
+    width:100%;
+    accent-color:var(--green);
+}
+
+/* =========================
    QUICK LINKS
 ========================= */
 
 .quick{
-    padding:32px 0 12px;
+    padding:24px 0 4px;
 }
 
 .quick-row{
@@ -397,7 +465,7 @@ img{
 ========================= */
 
 .section{
-    padding:58px 0;
+    padding:35px 0;
 }
 
 .section-header{
@@ -820,7 +888,6 @@ footer{
     position:absolute;
     top:72px;
     left:50%;
-    transform:translateX(-50%);
     width:min(850px,calc(100vw - 40px));
     background:rgba(255,255,255,.96);
     color:var(--black);
@@ -904,6 +971,10 @@ footer{
     .footer-grid{
         grid-template-columns:repeat(2,1fr);
     }
+
+    .details-grid{
+        grid-template-columns:1fr;
+    }
 }
 
 @media(max-width:750px){
@@ -973,7 +1044,7 @@ footer{
     }
 
     .section{
-        padding:43px 0;
+        padding:30px 0;
     }
 
     .section-header{
@@ -1111,7 +1182,6 @@ Hotels nach Kategorie
 
 </div>
 
-
 <div class="nav-item has-menu">
 
 Regionen
@@ -1139,7 +1209,6 @@ Südtirol entdecken
 
 </div>
 
-
 <div class="nav-item">
 Über uns
 </div>
@@ -1149,7 +1218,6 @@ Für Hoteliers
 </div>
 
 </nav>
-
 
 <div class="nav-right">
 
@@ -1233,19 +1301,17 @@ Südtirol
 
 </div>
 
-
 <div class="search-field">
 
 <span class="search-label">
 Region
 </span>
 
-<div class="search-value muted">
+<div class="search-value muted" id="mainRegion">
 Alle Regionen
 </div>
 
 </div>
-
 
 <div class="search-field">
 
@@ -1253,12 +1319,11 @@ Alle Regionen
 Hotelart
 </span>
 
-<div class="search-value muted">
+<div class="search-value muted" id="mainType">
 Alle Hotelarten
 </div>
 
 </div>
-
 
 <div class="search-field">
 
@@ -1266,12 +1331,11 @@ Alle Hotelarten
 Preis / Nacht
 </span>
 
-<div class="search-value muted">
+<div class="search-value muted" id="mainPrice">
 Bis € 150
 </div>
 
 </div>
-
 
 <button class="search-button">
 Suchen
@@ -1282,9 +1346,154 @@ Suchen
 
 <div class="details">
 
-<button>
+<button id="detailsButton">
 + Detailsuche
 </button>
+
+</div>
+
+
+<!-- =========================
+     DETAIL PANEL
+========================= -->
+
+<div class="details-panel" id="detailsPanel">
+
+<div class="details-grid">
+
+<div class="detail-item">
+
+<label>
+Region
+</label>
+
+<select id="regionSelect">
+
+<option value="Alle Regionen">
+Alle Regionen
+</option>
+
+<option value="Meran & Umgebung">
+Meran & Umgebung
+</option>
+
+<option value="Bozen & Umgebung">
+Bozen & Umgebung
+</option>
+
+<option value="Dolomiten">
+Dolomiten
+</option>
+
+<option value="Gröden">
+Gröden
+</option>
+
+<option value="Seiser Alm">
+Seiser Alm
+</option>
+
+<option value="Pustertal">
+Pustertal
+</option>
+
+<option value="Eisacktal">
+Eisacktal
+</option>
+
+<option value="Passeiertal">
+Passeiertal
+</option>
+
+<option value="Vinschgau">
+Vinschgau
+</option>
+
+</select>
+
+</div>
+
+
+<div class="detail-item">
+
+<label>
+Hotelart
+</label>
+
+<select id="typeSelect">
+
+<option value="Alle Hotelarten">
+Alle Hotelarten
+</option>
+
+<option value="Luxushotels">
+Luxushotels
+</option>
+
+<option value="Wellnesshotels">
+Wellnesshotels
+</option>
+
+<option value="Berghotels">
+Berghotels
+</option>
+
+<option value="Boutique Hotels">
+Boutique Hotels
+</option>
+
+<option value="Design Hotels">
+Design Hotels
+</option>
+
+<option value="Familienhotels">
+Familienhotels
+</option>
+
+<option value="Adults Only">
+Adults Only
+</option>
+
+<option value="Nachhaltige Hotels">
+Nachhaltige Hotels
+</option>
+
+</select>
+
+</div>
+
+
+<div class="detail-item">
+
+<label>
+Preis pro Nacht
+</label>
+
+<div class="price-row">
+
+<span>
+Maximaler Preis
+</span>
+
+<span class="price-value" id="priceValue">
+€ 150
+</span>
+
+</div>
+
+<input
+type="range"
+class="price-slider"
+id="priceSlider"
+min="50"
+max="500"
+step="10"
+value="150"
+>
+
+</div>
+
+</div>
 
 </div>
 
@@ -1378,8 +1587,6 @@ Alle Hotels →
 <div class="hotel-grid">
 
 
-<!-- HOTEL 1 -->
-
 <article class="hotel-card">
 
 <div class="hotel-image">
@@ -1430,8 +1637,6 @@ ab € 145 <span>/ Nacht</span>
 
 </article>
 
-
-<!-- HOTEL 2 -->
 
 <article class="hotel-card">
 
@@ -1484,8 +1689,6 @@ ab € 168 <span>/ Nacht</span>
 </article>
 
 
-<!-- HOTEL 3 -->
-
 <article class="hotel-card">
 
 <div class="hotel-image">
@@ -1536,8 +1739,6 @@ ab € 210 <span>/ Nacht</span>
 
 </article>
 
-
-<!-- HOTEL 4 -->
 
 <article class="hotel-card">
 
@@ -1590,8 +1791,6 @@ ab € 89 <span>/ Nacht</span>
 </article>
 
 
-<!-- HOTEL 5 -->
-
 <article class="hotel-card">
 
 <div class="hotel-image">
@@ -1642,8 +1841,6 @@ ab € 195 <span>/ Nacht</span>
 
 </article>
 
-
-<!-- HOTEL 6 -->
 
 <article class="hotel-card">
 
@@ -1959,7 +2156,6 @@ und mehr Sichtbarkeit für dein Haus.
 
 <div class="footer-grid">
 
-
 <div>
 
 <div class="footer-logo">
@@ -2018,7 +2214,6 @@ info@staylo.it
 
 </div>
 
-
 </div>
 
 
@@ -2041,16 +2236,9 @@ Made in South Tyrol · Italy
 
 <script>
 
-/*
-=================================================
-STAYLO
-Momentan bewusst nur visuelle Funktionen.
-Die meisten Buttons sind noch Platzhalter.
-=================================================
-*/
-
-
-/* Quick Filter */
+/* =========================
+   QUICK FILTER
+========================= */
 
 const chips = document.querySelectorAll(".quick-chip");
 
@@ -2067,7 +2255,9 @@ chips.forEach(chip => {
 });
 
 
-/* Favoriten */
+/* =========================
+   FAVORITEN
+========================= */
 
 const favorites = document.querySelectorAll(".favorite");
 
@@ -2089,7 +2279,9 @@ favorites.forEach(button => {
 });
 
 
-/* Search Button */
+/* =========================
+   SEARCH
+========================= */
 
 const searchButton = document.querySelector(".search-button");
 
@@ -2102,25 +2294,105 @@ searchButton.addEventListener("click", () => {
 });
 
 
-/* Detailsuche */
+/* =========================
+   DETAILSUCHE ÖFFNEN
+========================= */
 
-const detailsButton = document.querySelector(".details button");
+const detailsButton =
+document.getElementById("detailsButton");
+
+const detailsPanel =
+document.getElementById("detailsPanel");
 
 detailsButton.addEventListener("click", () => {
 
-    detailsButton.textContent =
-        detailsButton.textContent.includes("Details")
-        ? "− Detailsuche schließen"
-        : "+ Detailsuche";
+    detailsPanel.classList.toggle("open");
+
+    if(detailsPanel.classList.contains("open")){
+
+        detailsButton.textContent =
+        "− Detailsuche schließen";
+
+    }else{
+
+        detailsButton.textContent =
+        "+ Detailsuche";
+
+    }
 
 });
 
 
-/* Header Glass Effekt beim Scrollen */
+/* =========================
+   PREIS SLIDER
+========================= */
+
+const priceSlider =
+document.getElementById("priceSlider");
+
+const priceValue =
+document.getElementById("priceValue");
+
+const mainPrice =
+document.getElementById("mainPrice");
+
+priceSlider.addEventListener("input", () => {
+
+    const value = priceSlider.value;
+
+    priceValue.textContent =
+        "€ " + value;
+
+    mainPrice.textContent =
+        "Bis € " + value;
+
+});
+
+
+/* =========================
+   REGION
+========================= */
+
+const regionSelect =
+document.getElementById("regionSelect");
+
+const mainRegion =
+document.getElementById("mainRegion");
+
+regionSelect.addEventListener("change", () => {
+
+    mainRegion.textContent =
+        regionSelect.value;
+
+});
+
+
+/* =========================
+   HOTELART
+========================= */
+
+const typeSelect =
+document.getElementById("typeSelect");
+
+const mainType =
+document.getElementById("mainType");
+
+typeSelect.addEventListener("change", () => {
+
+    mainType.textContent =
+        typeSelect.value;
+
+});
+
+
+/* =========================
+   HEADER GLASS BEIM SCROLLEN
+========================= */
 
 window.addEventListener("scroll", () => {
 
-    const header = document.querySelector(".header");
+    const header =
+    document.querySelector(".header");
 
     if(window.scrollY > 30){
 
