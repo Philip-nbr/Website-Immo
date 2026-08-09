@@ -1678,7 +1678,7 @@ RESPONSIVE
 </head>
 
 
-<body>
+<body id="top">
 
 <!-- =========================
 HEADER
@@ -1688,7 +1688,7 @@ HEADER
 
 <div class="container nav">
 
-<a href="#" class="logo">
+<a href="#top" class="logo" aria-label="Staylo – zur Startseite">
 
 <img class="logo-mark logo-image" src="./YtDCk.jpg" alt="Staylo Logo">
 
@@ -1706,11 +1706,13 @@ Hotels
 </a>
 
 
-<div class="nav-item has-menu">
+<div class="nav-dropdown">
 
+<button class="nav-item has-menu" type="button" aria-expanded="false" aria-controls="categoriesMenu">
 <span data-i18n="nav.categories">Kategorien</span>
+</button>
 
-<div class="dropdown">
+<div class="dropdown" id="categoriesMenu">
 
 <div class="dropdown-title" data-i18n="categories.title">
 Finde deine Kategorie
@@ -1722,39 +1724,39 @@ Wähle den Stil deines Aufenthalts – von Luxus bis Natur.
 
 <div class="dropdown-grid">
 
-<a class="dropdown-link" href="#hotels">
+<a class="dropdown-link" href="#hotels" data-filter-type="luxus" data-i18n="category.luxus">
 Luxushotels
 </a>
 
-<a class="dropdown-link" href="#hotels">
+<a class="dropdown-link" href="#hotels" data-filter-type="wellness" data-i18n="category.wellness">
 Wellnesshotels
 </a>
 
-<a class="dropdown-link" href="#hotels">
+<a class="dropdown-link" href="#hotels" data-filter-type="berg" data-i18n="category.berg">
 Berghotels
 </a>
 
-<a class="dropdown-link" href="#hotels">
+<a class="dropdown-link" href="#hotels" data-filter-type="boutique" data-i18n="category.boutique">
 Boutique Hotels
 </a>
 
-<a class="dropdown-link" href="#hotels">
+<a class="dropdown-link" href="#hotels" data-filter-type="design" data-i18n="category.design">
 Design Hotels
 </a>
 
-<a class="dropdown-link" href="#hotels">
+<a class="dropdown-link" href="#hotels" data-filter-type="familie" data-i18n="category.familie">
 Familienhotels
 </a>
 
-<a class="dropdown-link" href="#hotels">
+<a class="dropdown-link" href="#hotels" data-filter-tag="adults" data-i18n="category.adults">
 Adults Only
 </a>
 
-<a class="dropdown-link" href="#hotels">
+<a class="dropdown-link" href="#hotels" data-filter-tag="nachhaltig" data-i18n="category.sustainable">
 Nachhaltig
 </a>
 
-<a class="dropdown-link" href="#hotels">
+<a class="dropdown-link" href="#hotels" data-filter-tag="chalet" data-i18n="category.chalets">
 Chalets & Lodges
 </a>
 
@@ -1765,11 +1767,13 @@ Chalets & Lodges
 </div>
 
 
-<div class="nav-item has-menu">
+<div class="nav-dropdown">
 
+<button class="nav-item has-menu" type="button" aria-expanded="false" aria-controls="regionsMenu">
 <span data-i18n="nav.regions">Regionen</span>
+</button>
 
-<div class="dropdown">
+<div class="dropdown" id="regionsMenu">
 
 <div class="dropdown-title" data-i18n="regions.title">
 Südtirol entdecken
@@ -1777,39 +1781,39 @@ Südtirol entdecken
 
 <div class="dropdown-grid">
 
-<a class="dropdown-link" href="#regionen">
+<a class="dropdown-link" href="#hotels" data-filter-location="meran">
 Meran
 </a>
 
-<a class="dropdown-link" href="#regionen">
+<a class="dropdown-link" href="#hotels" data-filter-location="bozen">
 Bozen
 </a>
 
-<a class="dropdown-link" href="#regionen">
+<a class="dropdown-link" href="#hotels" data-filter-location="dolomiten">
 Dolomiten
 </a>
 
-<a class="dropdown-link" href="#regionen">
+<a class="dropdown-link" href="#hotels" data-filter-location="groden">
 Gröden
 </a>
 
-<a class="dropdown-link" href="#regionen">
+<a class="dropdown-link" href="#hotels" data-filter-location="seiser alm">
 Seiser Alm
 </a>
 
-<a class="dropdown-link" href="#regionen">
+<a class="dropdown-link" href="#hotels" data-filter-location="pustertal">
 Pustertal
 </a>
 
-<a class="dropdown-link" href="#regionen">
+<a class="dropdown-link" href="#hotels" data-filter-location="eisacktal">
 Eisacktal
 </a>
 
-<a class="dropdown-link" href="#regionen">
+<a class="dropdown-link" href="#hotels" data-filter-location="passeiertal">
 Passeiertal
 </a>
 
-<a class="dropdown-link" href="#regionen">
+<a class="dropdown-link" href="#hotels" data-filter-location="vinschgau">
 Vinschgau
 </a>
 
@@ -1856,15 +1860,15 @@ Für Hoteliers
 <button class="lang-option" data-lang="en" type="button">English</button>
 </div>
 
-<button class="nav-glass" data-i18n="nav.login">
+<button class="nav-glass" type="button" id="loginButton" data-i18n="nav.login">
 Anmelden
 </button>
 
-<button class="hotelier-btn">
+<button class="hotelier-btn" type="button" id="hotelierNavButton">
 Für Hoteliers
 </button>
 
-<button class="mobile-menu">
+<button class="mobile-menu" type="button" id="mobileMenu" aria-label="Menü öffnen" aria-expanded="false" aria-controls="mobileNav">
 ☰
 </button>
 
@@ -1873,6 +1877,27 @@ Für Hoteliers
 </div>
 
 </header>
+
+<nav class="mobile-nav" id="mobileNav" aria-label="Mobile Navigation" aria-hidden="true">
+<div class="container mobile-nav-inner">
+<a href="#hotels" class="mobile-nav-link" data-i18n="nav.hotels">Hotels</a>
+<a href="#kategorien" class="mobile-nav-link" data-i18n="nav.categories">Kategorien</a>
+<a href="#regionen" class="mobile-nav-link" data-i18n="nav.regions">Regionen</a>
+<a href="#ueber-uns" class="mobile-nav-link" data-i18n="nav.about">Über uns</a>
+<a href="#hotelier" class="mobile-nav-link" data-i18n="nav.hoteliers">Für Hoteliers</a>
+
+<div class="mobile-nav-actions">
+<button class="mobile-nav-action" type="button" id="mobileFavoritesButton">♡ <span data-i18n="favorites.title">Favoriten</span></button>
+<button class="mobile-nav-action" type="button" id="mobileLoginButton" data-i18n="nav.login">Anmelden</button>
+</div>
+
+<div class="mobile-language" aria-label="Sprache auswählen">
+<button class="lang-option" data-lang="de" type="button">Deutsch</button>
+<button class="lang-option" data-lang="it" type="button">Italiano</button>
+<button class="lang-option" data-lang="en" type="button">English</button>
+</div>
+</div>
+</nav>
 
 
 <!-- =========================
