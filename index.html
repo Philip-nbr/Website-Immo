@@ -260,22 +260,22 @@ HERO
 }
 
 .hero-slide:nth-child(1){
-    background-image:url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2200&q=90");
+    background-image:url("https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=2200&q=90");
     animation-delay:0s;
 }
 
 .hero-slide:nth-child(2){
-    background-image:url("https://images.unsplash.com/photo-1517824806704-9040b037703b?auto=format&fit=crop&w=2200&q=90");
+    background-image:url("https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=2200&q=90");
     animation-delay:5s;
 }
 
 .hero-slide:nth-child(3){
-    background-image:url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=2200&q=90");
+    background-image:url("https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=2200&q=90");
     animation-delay:10s;
 }
 
 .hero-slide:nth-child(4){
-    background-image:url("https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=2200&q=90");
+    background-image:url("https://images.unsplash.com/photo-1521295121783-8a321d551ad2?auto=format&fit=crop&w=2200&q=90");
     animation-delay:15s;
 }
 
@@ -397,33 +397,33 @@ SEARCH
 
     border:1px solid rgba(255,255,255,.9);
 
-    border-radius:26px;
+    border-radius:24px;
 
-    padding:14px;
+    padding:12px;
 
     box-shadow:
-        0 24px 70px rgba(0,0,0,.16);
+        0 25px 70px rgba(0,0,0,.19);
 
-    backdrop-filter:blur(24px);
-    -webkit-backdrop-filter:blur(24px);
+    backdrop-filter:blur(25px);
+    -webkit-backdrop-filter:blur(25px);
 }
 
 .search-tabs{
     display:flex;
 
-    margin-bottom:10px;
+    margin-bottom:8px;
 }
 
 .search-tab{
-    padding:10px 16px;
+    padding:11px 18px;
 
-    border-radius:999px;
+    border-radius:12px;
 
     background:transparent;
 
     color:#707570;
 
-    font-size:12px;
+    font-size:13px;
 
     font-weight:600;
 }
@@ -437,15 +437,15 @@ SEARCH
     display:grid;
 
     grid-template-columns:
-        1.15fr
-        .95fr
-        .95fr
-        .85fr
+        1.1fr
+        1fr
+        .9fr
+        .9fr
         auto;
 
     border:1px solid var(--border);
 
-    border-radius:18px;
+    border-radius:16px;
 
     overflow:hidden;
 
@@ -453,7 +453,7 @@ SEARCH
 }
 
 .search-field{
-    min-height:74px;
+    min-height:72px;
 
     padding:12px 16px;
 
@@ -513,9 +513,9 @@ SEARCH
 .search-button{
     margin:7px;
 
-    min-width:132px;
+    min-width:120px;
 
-    border-radius:14px;
+    border-radius:12px;
 
     background:var(--green);
 
@@ -3003,6 +3003,18 @@ Made in South Tyrol · Italy
 
 
 <script>
+
+window.history.scrollRestoration = "manual";
+
+window.addEventListener("load", () => {
+    window.scrollTo(0, 0);
+});
+
+window.addEventListener("pageshow", (event) => {
+    if(event.persisted){
+        window.scrollTo(0, 0);
+    }
+});
 
 /* =========================
 DETAILSUCHE
