@@ -168,6 +168,7 @@ HEADER
     display:flex;
     align-items:center;
     gap:8px;
+    position:relative;
 }
 
 .nav-glass{
@@ -214,6 +215,88 @@ HEADER
     font-weight:700;
     border:2px solid rgba(255,255,255,.95);
     box-shadow:0 4px 10px rgba(0,0,0,.18);
+}
+
+.nav-glass.is-active{
+    background:rgba(255,255,255,.24);
+}
+
+.lang-menu,
+.favorites-panel{
+    position:absolute;
+    top:58px;
+    right:0;
+    min-width:220px;
+    padding:12px;
+    border-radius:16px;
+    background:rgba(255,255,255,.97);
+    color:var(--black);
+    border:1px solid rgba(0,0,0,.06);
+    box-shadow:0 18px 45px rgba(0,0,0,.16);
+    z-index:220;
+    opacity:0;
+    visibility:hidden;
+    transform:translateY(6px);
+    transition:.2s ease;
+}
+
+.lang-menu.open,
+.favorites-panel.open{
+    opacity:1;
+    visibility:visible;
+    transform:translateY(0);
+}
+
+.lang-option,
+.favorites-item{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:10px 10px;
+    border-radius:10px;
+    background:transparent;
+    color:var(--black);
+    font-size:13px;
+    text-align:left;
+}
+
+.lang-option:hover,
+.favorites-item:hover{
+    background:#f2f4f1;
+}
+
+.lang-option + .lang-option{
+    margin-top:4px;
+}
+
+.favorites-title{
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:#6b736d;
+    margin-bottom:8px;
+}
+
+.favorites-empty{
+    padding:8px 2px;
+    color:#66706a;
+    font-size:13px;
+    line-height:1.5;
+}
+
+.favorites-item strong{
+    display:block;
+    font-size:13px;
+}
+
+.favorites-item span{
+    display:block;
+    font-size:11px;
+    color:#707570;
+    margin-top:2px;
 }
 
 .nav-glass:hover{
@@ -1599,7 +1682,7 @@ S
 
 <nav class="nav-center">
 
-<a href="#hotels" class="nav-item">
+<a href="#hotels" class="nav-item" data-i18n="nav.hotels">
 Hotels
 </a>
 
@@ -1718,12 +1801,12 @@ Vinschgau
 </div>
 
 
-<a href="#ueber-uns" class="nav-item">
+<a href="#ueber-uns" class="nav-item" data-i18n="nav.about">
 Über uns
 </a>
 
 
-<a href="#hotelier" class="nav-item">
+<a href="#hotelier" class="nav-item" data-i18n="nav.hoteliers">
 Für Hoteliers
 </a>
 
@@ -1732,16 +1815,29 @@ Für Hoteliers
 
 <div class="nav-right">
 
-<button class="nav-glass has-badge" type="button" aria-label="Favoriten">
+<button class="nav-glass has-badge" type="button" id="favoritesToggle" aria-label="Favoriten">
 ♡
 <span class="nav-badge" id="favoritesCount">0</span>
 </button>
 
-<button class="nav-glass">
-DE
+<div class="favorites-panel" id="favoritesPanel" aria-live="polite">
+<div class="favorites-title" data-i18n="favorites.title">Favoriten</div>
+<div class="favorites-list" id="favoritesList">
+<div class="favorites-empty" data-i18n="favorites.empty">Noch keine Favoriten ausgewählt.</div>
+</div>
+</div>
+
+<button class="nav-glass" id="languageToggle" type="button" aria-label="Sprache">
+<span id="currentLanguage">DE</span>
 </button>
 
-<button class="nav-glass">
+<div class="lang-menu" id="languageMenu">
+<button class="lang-option" data-lang="de" type="button">Deutsch</button>
+<button class="lang-option" data-lang="it" type="button">Italiano</button>
+<button class="lang-option" data-lang="en" type="button">English</button>
+</div>
+
+<button class="nav-glass" data-i18n="nav.login">
 Anmelden
 </button>
 
@@ -1776,7 +1872,7 @@ HERO
 
 <div class="container hero-content">
 
-<div class="hero-label">
+<div class="hero-label" data-i18n="hero.label">
 
 <span class="hero-dot"></span>
 
@@ -1785,7 +1881,7 @@ Hotels in Südtirol
 </div>
 
 
-<h1>
+<h1 id="heroTitle">
 
 Dein Aufenthalt<br>
 in <em>Südtirol.</em>
@@ -1793,7 +1889,7 @@ in <em>Südtirol.</em>
 </h1>
 
 
-<p class="hero-subtitle">
+<p class="hero-subtitle" data-i18n="hero.subtitle">
 
 Finde besondere Hotels, Resorts und Unterkünfte
 für deine nächste Auszeit in Südtirol.
@@ -1815,11 +1911,11 @@ SEARCH
 
 <div class="search-tabs">
 
-<button class="search-tab active">
+<button class="search-tab active" data-i18n="search.tab.hotels">
 Hotels
 </button>
 
-<button class="search-tab">
+<button class="search-tab" data-i18n="search.tab.stays">
 Unterkünfte
 </button>
 
@@ -1829,7 +1925,7 @@ Unterkünfte
 
 <div class="search-field">
 
-<span class="search-label">
+<span class="search-label" data-i18n="search.where">
 Wo?
 </span>
 
@@ -1873,7 +1969,7 @@ Vinschgau
 
 <div class="search-field">
 
-<span class="search-label">
+<span class="search-label" data-i18n="search.arrival">
 Anreise
 </span>
 
@@ -1883,7 +1979,7 @@ Anreise
 
 <div class="search-field">
 
-<span class="search-label">
+<span class="search-label" data-i18n="search.departure">
 Abreise
 </span>
 
@@ -1893,7 +1989,7 @@ Abreise
 
 <div class="search-field">
 
-<span class="search-label">
+<span class="search-label" data-i18n="search.rooms">
 Zimmer
 </span>
 
@@ -1908,7 +2004,7 @@ Zimmer
 
 <div class="search-field">
 
-<span class="search-label">
+<span class="search-label" data-i18n="search.type">
 Hotelart
 </span>
 
@@ -1946,7 +2042,7 @@ Familienhotel
 
 </div>
 
-<button class="search-button" id="searchButton">
+<button class="search-button" id="searchButton" data-i18n="search.button">
 
 Suchen
 
@@ -1960,7 +2056,7 @@ Suchen
 
 <div class="details-toggle">
 
-<button id="detailsButton">
+<button id="detailsButton" data-i18n="details.open">
 
 + Detailsuche
 
@@ -2112,17 +2208,17 @@ HOTELS
 
 <div>
 
-<h2 class="section-title">
+<h2 class="section-title" data-i18n="section.title">
 Ausgewählte Hotels für dich
 </h2>
 
-<p class="section-subtitle">
+<p class="section-subtitle" data-i18n="section.subtitle">
 Besondere Unterkünfte aus ganz Südtirol.
 </p>
 
 </div>
 
-<a href="#" class="view-all">
+<a href="#" class="view-all" data-i18n="view.all">
 Alle Hotels →
 </a>
 
@@ -2777,23 +2873,165 @@ document.getElementById("detailsButton");
 const detailsSearch =
 document.getElementById("detailsSearch");
 
+const translations = {
+    de:{
+        "nav.hotels":"Hotels",
+        "nav.categories":"Kategorien",
+        "nav.regions":"Regionen",
+        "nav.about":"Über uns",
+        "nav.hoteliers":"Für Hoteliers",
+        "nav.login":"Anmelden",
+        "hero.label":"Hotels in Südtirol",
+        "hero.subtitle":"Finde besondere Hotels, Resorts und Unterkünfte für deine nächste Auszeit in Südtirol.",
+        "search.tab.hotels":"Hotels",
+        "search.tab.stays":"Unterkünfte",
+        "search.where":"Wo?",
+        "search.arrival":"Anreise",
+        "search.departure":"Abreise",
+        "search.rooms":"Zimmer",
+        "search.type":"Hotelart",
+        "search.button":"Suchen",
+        "details.open":"+ Detailsuche",
+        "details.close":"− Detailsuche schließen",
+        "section.title":"Ausgewählte Hotels für dich",
+        "section.subtitle":"Besondere Unterkünfte aus ganz Südtirol.",
+        "view.all":"Alle Hotels →",
+        "favorites.title":"Favoriten",
+        "favorites.empty":"Noch keine Favoriten ausgewählt."
+    },
+    it:{
+        "nav.hotels":"Hotel",
+        "nav.categories":"Categorie",
+        "nav.regions":"Regioni",
+        "nav.about":"Chi siamo",
+        "nav.hoteliers":"Per hotelier",
+        "nav.login":"Accedi",
+        "hero.label":"Hotel in Alto Adige",
+        "hero.subtitle":"Trova hotel, resort e strutture speciali per la tua prossima fuga in Alto Adige.",
+        "search.tab.hotels":"Hotel",
+        "search.tab.stays":"Strutture",
+        "search.where":"Dove?",
+        "search.arrival":"Arrivo",
+        "search.departure":"Partenza",
+        "search.rooms":"Camere",
+        "search.type":"Tipo di hotel",
+        "search.button":"Cerca",
+        "details.open":"+ Ricerca dettagliata",
+        "details.close":"− Chiudi ricerca dettagliata",
+        "section.title":"Hotel selezionati per te",
+        "section.subtitle":"Strutture speciali in tutto l’Alto Adige.",
+        "view.all":"Tutti gli hotel →",
+        "favorites.title":"Preferiti",
+        "favorites.empty":"Nessun preferito selezionato."
+    },
+    en:{
+        "nav.hotels":"Hotels",
+        "nav.categories":"Categories",
+        "nav.regions":"Regions",
+        "nav.about":"About us",
+        "nav.hoteliers":"For hoteliers",
+        "nav.login":"Log in",
+        "hero.label":"Hotels in South Tyrol",
+        "hero.subtitle":"Find special hotels, resorts and stays for your next escape in South Tyrol.",
+        "search.tab.hotels":"Hotels",
+        "search.tab.stays":"Stays",
+        "search.where":"Where?",
+        "search.arrival":"Arrival",
+        "search.departure":"Departure",
+        "search.rooms":"Rooms",
+        "search.type":"Hotel type",
+        "search.button":"Search",
+        "details.open":"+ More filters",
+        "details.close":"− Close filters",
+        "section.title":"Handpicked hotels for you",
+        "section.subtitle":"Special stays across South Tyrol.",
+        "view.all":"All hotels →",
+        "favorites.title":"Favorites",
+        "favorites.empty":"No favorites selected yet."
+    }
+};
+
+let currentLanguage = "de";
+
+function applyTranslations(lang){
+
+    currentLanguage = lang;
+
+    document.documentElement.lang = lang;
+
+    const heroTitle = document.getElementById("heroTitle");
+
+    if(heroTitle){
+
+        const titleMap = {
+            de:"Dein Aufenthalt<br>in <em>Südtirol.</em>",
+            it:"Il tuo soggiorno<br>in <em>Alto Adige.</em>",
+            en:"Your stay<br>in <em>South Tyrol.</em>"
+        };
+
+        heroTitle.innerHTML = titleMap[lang] || titleMap.de;
+    }
+
+    document.querySelectorAll("[data-i18n]").forEach(element => {
+
+        const key = element.getAttribute("data-i18n");
+
+        if(translations[lang][key]){
+            element.textContent = translations[lang][key];
+        }
+
+    });
+
+    const currentLanguageLabel = document.getElementById("currentLanguage");
+
+    if(currentLanguageLabel){
+        currentLanguageLabel.textContent = lang.toUpperCase();
+    }
+
+    if(detailsButton && detailsSearch){
+
+        const isOpen = detailsSearch.classList.contains("open");
+
+        detailsButton.textContent = isOpen
+            ? translations[lang]["details.close"]
+            : translations[lang]["details.open"];
+    }
+
+    updateSummary();
+}
+
+const languageToggle = document.getElementById("languageToggle");
+const languageMenu = document.getElementById("languageMenu");
+
+if(languageToggle && languageMenu){
+
+    languageToggle.addEventListener("click", event => {
+        event.stopPropagation();
+        languageMenu.classList.toggle("open");
+        languageToggle.classList.toggle("is-active", languageMenu.classList.contains("open"));
+        favoritesPanel.classList.remove("open");
+        favoritesToggle.classList.remove("is-active");
+    });
+
+    document.querySelectorAll(".lang-option").forEach(option => {
+        option.addEventListener("click", () => {
+            applyTranslations(option.getAttribute("data-lang") || "de");
+            languageMenu.classList.remove("open");
+            languageToggle.classList.remove("is-active");
+        });
+    });
+}
+
 if(detailsButton && detailsSearch){
 
     detailsButton.addEventListener("click", () => {
 
         detailsSearch.classList.toggle("open");
 
-        if(detailsSearch.classList.contains("open")){
-
-            detailsButton.textContent =
-            "− Detailsuche schließen";
-
-        }else{
-
-            detailsButton.textContent =
-            "+ Detailsuche";
-
-        }
+        detailsButton.textContent =
+        detailsSearch.classList.contains("open")
+            ? translations[currentLanguage]["details.close"]
+            : translations[currentLanguage]["details.open"];
 
     });
 
@@ -2885,6 +3123,9 @@ document.querySelectorAll(".favorite");
 
 const favoritesCount =
 document.getElementById("favoritesCount");
+const favoritesToggle = document.getElementById("favoritesToggle");
+const favoritesPanel = document.getElementById("favoritesPanel");
+const favoritesList = document.getElementById("favoritesList");
 
 const updateFavoritesCount = () => {
 
@@ -2898,6 +3139,50 @@ const updateFavoritesCount = () => {
     ).length;
 
     favoritesCount.textContent = activeCount;
+};
+
+const updateFavoritesList = () => {
+
+    if(!favoritesList){
+        return;
+    }
+
+    const activeCards = Array.from(favoriteButtons).filter(button =>
+        button.classList.contains("active")
+    ).map(button => {
+
+        const card = button.closest(".hotel-card");
+        const name = card?.querySelector(".hotel-name")?.textContent?.trim() || "Hotel";
+        const location = card?.querySelector(".hotel-location")?.textContent?.trim() || "";
+
+        return { name, location };
+    });
+
+    if(activeCards.length === 0){
+
+        favoritesList.innerHTML =
+        `<div class="favorites-empty" data-i18n="favorites.empty">Noch keine Favoriten ausgewählt.</div>`;
+
+    }else{
+
+        favoritesList.innerHTML = activeCards.map(item => `
+            <div class="favorites-item">
+                <div>
+                    <strong>${item.name}</strong>
+                    <span>${item.location}</span>
+                </div>
+                <span>♥</span>
+            </div>
+        `).join("");
+    }
+
+    document.querySelectorAll("[data-i18n]").forEach(element => {
+        const key = element.getAttribute("data-i18n");
+
+        if(translations[currentLanguage][key]){
+            element.textContent = translations[currentLanguage][key];
+        }
+    });
 };
 
 favoriteButtons.forEach(button => {
@@ -2925,12 +3210,34 @@ favoriteButtons.forEach(button => {
         }
 
         updateFavoritesCount();
+        updateFavoritesList();
 
     });
 
 });
 
+if(favoritesToggle && favoritesPanel){
+
+    favoritesToggle.addEventListener("click", event => {
+        event.stopPropagation();
+        favoritesPanel.classList.toggle("open");
+        favoritesToggle.classList.toggle("is-active", favoritesPanel.classList.contains("open"));
+        languageMenu.classList.remove("open");
+        languageToggle.classList.remove("is-active");
+        updateFavoritesList();
+    });
+}
+
+window.addEventListener("click", () => {
+    favoritesPanel.classList.remove("open");
+    favoritesToggle.classList.remove("is-active");
+    languageMenu.classList.remove("open");
+    languageToggle.classList.remove("is-active");
+});
+
 updateFavoritesCount();
+updateFavoritesList();
+applyTranslations("de");
 
 
 /* =========================
