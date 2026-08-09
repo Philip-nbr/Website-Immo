@@ -113,8 +113,8 @@ HEADER
 }
 
 .logo-mark{
-    width:24px;
-    height:24px;
+    width:36px;
+    height:36px;
     border-radius:50%;
 
     background:rgba(255,255,255,.92);
@@ -2610,7 +2610,7 @@ ab € 175 <span>/ Nacht</span>
 
 </article>
 
-<article class="hotel-card is-hidden" data-type="luxus">
+<article class="hotel-card" data-type="luxus">
 
 <div class="hotel-image">
 
@@ -2654,7 +2654,7 @@ ab € 285 <span>/ Nacht</span>
 
 </article>
 
-<article class="hotel-card is-hidden" data-type="wellness">
+<article class="hotel-card" data-type="wellness">
 
 <div class="hotel-image">
 
@@ -2698,7 +2698,7 @@ ab € 229 <span>/ Nacht</span>
 
 </article>
 
-<article class="hotel-card is-hidden" data-type="design">
+<article class="hotel-card" data-type="design">
 
 <div class="hotel-image">
 
@@ -2742,7 +2742,7 @@ ab € 174 <span>/ Nacht</span>
 
 </article>
 
-<article class="hotel-card is-hidden" data-type="berg">
+<article class="hotel-card" data-type="berg">
 
 <div class="hotel-image">
 
@@ -3263,12 +3263,17 @@ function applyTranslations(lang){
 }
 
 const loadMoreButton = document.getElementById("loadMoreButton");
+const loadMoreRow = document.querySelector(".load-more-row");
 const hiddenHotelCards = Array.from(document.querySelectorAll(".hotel-card.is-hidden"));
 
 function updateLoadMoreButton(){
 
     if(!loadMoreButton){
         return;
+    }
+
+    if(loadMoreRow){
+        loadMoreRow.style.display = hiddenHotelCards.length > 0 ? "flex" : "none";
     }
 
     if(hiddenHotelCards.length > 0){
