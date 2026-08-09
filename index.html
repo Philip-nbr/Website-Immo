@@ -105,15 +105,15 @@ HEADER
 .logo{
     display:flex;
     align-items:center;
-    gap:10px;
-    font-size:22px;
+    gap:8px;
+    font-size:20px;
     font-weight:700;
     letter-spacing:-.05em;
 }
 
 .logo-mark{
-    width:38px;
-    height:38px;
+    width:30px;
+    height:30px;
     border-radius:50%;
 
     background:rgba(255,255,255,.92);
@@ -1958,10 +1958,6 @@ SEARCH
 Hotels
 </button>
 
-<button class="search-tab" data-i18n="search.tab.stays">
-Unterkünfte
-</button>
-
 </div>
 
 <div class="search-main">
@@ -1978,31 +1974,31 @@ Wo?
 Ganz Südtirol
 </option>
 
-<option>
+<option value="meran">
 Meran
 </option>
 
-<option>
+<option value="bozen">
 Bozen
 </option>
 
-<option>
+<option value="groden">
 Gröden
 </option>
 
-<option>
+<option value="seiser alm">
 Seiser Alm
 </option>
 
-<option>
+<option value="pustertal">
 Pustertal
 </option>
 
-<option>
+<option value="eisacktal">
 Eisacktal
 </option>
 
-<option>
+<option value="vinschgau">
 Vinschgau
 </option>
 
@@ -3428,12 +3424,18 @@ function updateSummary() {
 }
 
 if(slider){
-    slider.addEventListener("input", updateSummary);
+    slider.addEventListener("input", () => {
+        updateSummary();
+        applySearchFilters();
+    });
 }
 
 [checkIn, checkOut, guests].forEach(input => {
     if(input){
-        input.addEventListener("change", updateSummary);
+        input.addEventListener("change", () => {
+            updateSummary();
+            applySearchFilters();
+        });
     }
 });
 
@@ -3579,46 +3581,87 @@ document.getElementById("location");
 const typeSelect =
 document.getElementById("hotelType");
 
+function normalizeText(value){
+    return (value || "")
+        .toString()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim();
+}
+
+function getCardPrice(card){
+    const priceText = card.querySelector(".hotel-price")?.textContent || "";
+    const match = priceText.match(/\d+/);
+    return match ? parseInt(match[0], 10) : 0;
+}
+
+function applySearchFilters(){
+    const location = locationSelect ? locationSelect.value : "all";
+    const type = typeSelect ? typeSelect.value : "all";
+    const maxPrice = slider ? parseInt(slider.value, 10) : 500;
+
+    const cards = document.querySelectorAll(".hotel-card");
+    let visibleCount = 0;
+
+    cards.forEach(card => {
+        const cardType = card.dataset.type;
+        const cardLocation = normalizeText(card.querySelector(".hotel-location")?.textContent || "");
+        const cardPrice = getCardPrice(card);
+
+        let show = true;
+
+        if(type !== "all" && cardType !== type){
+            show = false;
+        }
+
+        if(show && location !== "all"){
+            show = cardLocation.includes(normalizeText(location));
+        }
+
+        if(show && cardPrice > maxPrice){
+            show = false;
+        }
+
+        card.style.display = show ? "" : "none";
+
+        if(show){
+            visibleCount += 1;
+        }
+    });
+
+    updateSummary();
+
+    if(summary){
+        const currentSummary = summary.innerHTML;
+        summary.innerHTML = `${currentSummary} · <strong>${visibleCount} Ergebnis${visibleCount === 1 ? "" : "se"}</strong>`;
+    }
+
+    document
+    .getElementById("hotels")
+    .scrollIntoView({
+        behavior:"smooth",
+        block:"start"
+    });
+}
+
 if(searchButton){
 
     searchButton.addEventListener("click", () => {
-
-        const location =
-        locationSelect ? locationSelect.value : "all";
-
-        const type =
-        typeSelect ? typeSelect.value : "all";
-
-        const cards =
-        document.querySelectorAll(".hotel-card");
-
-        cards.forEach(card => {
-
-            const cardType =
-            card.dataset.type;
-
-            let show = true;
-
-            if(type !== "all" && cardType !== type){
-
-                show = false;
-
-            }
-
-            card.style.display =
-            show ? "" : "none";
-
-        });
-
-        document
-        .getElementById("hotels")
-        .scrollIntoView({
-            behavior:"smooth"
-        });
-
+        applySearchFilters();
     });
 
 }
+
+if(locationSelect){
+    locationSelect.addEventListener("change", applySearchFilters);
+}
+
+if(typeSelect){
+    typeSelect.addEventListener("change", applySearchFilters);
+}
+
+applySearchFilters();
 
 
 /* =========================
