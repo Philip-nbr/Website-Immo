@@ -87,6 +87,7 @@ HEADER
     width:100%;
     z-index:100;
     color:white;
+    background:linear-gradient(180deg, rgba(7,17,14,.26), rgba(7,17,14,0));
 }
 
 .nav{
@@ -180,13 +181,14 @@ HEADER
 
     color:white;
 
-    background:rgba(255,255,255,.11);
+    background:rgba(255,255,255,.14);
 
-    border:1px solid rgba(255,255,255,.25);
+    border:1px solid rgba(255,255,255,.28);
 
-    backdrop-filter:blur(22px);
-    -webkit-backdrop-filter:blur(22px);
+    backdrop-filter:blur(24px) saturate(140%);
+    -webkit-backdrop-filter:blur(24px) saturate(140%);
 
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.24);
     transition:.2s;
 }
 
@@ -506,19 +508,20 @@ SEARCH
 }
 
 .search-box{
-    background:rgba(255,255,255,.96);
+    background:rgba(255,255,255,.78);
 
-    border:1px solid rgba(255,255,255,.9);
+    border:1px solid rgba(255,255,255,.7);
 
     border-radius:24px;
 
     padding:12px;
 
     box-shadow:
-        0 25px 70px rgba(0,0,0,.19);
+        0 30px 80px rgba(12,28,24,.16),
+        inset 0 1px 0 rgba(255,255,255,.6);
 
-    backdrop-filter:blur(25px);
-    -webkit-backdrop-filter:blur(25px);
+    backdrop-filter:blur(30px) saturate(140%);
+    -webkit-backdrop-filter:blur(30px) saturate(140%);
 }
 
 .search-tabs{
@@ -879,6 +882,26 @@ section[id]{
     font-weight:700;
 }
 
+.load-more-row{
+    display:flex;
+    justify-content:center;
+    margin-top:22px;
+}
+
+.load-more{
+    padding:12px 18px;
+    border-radius:999px;
+    background:rgba(33,75,61,.94);
+    color:white;
+    font-size:13px;
+    font-weight:700;
+    box-shadow:0 10px 24px rgba(33,75,61,.18);
+}
+
+.load-more:hover{
+    transform:translateY(-1px);
+}
+
 /* =========================
 HOTELS
 ========================= */
@@ -893,22 +916,29 @@ HOTELS
 }
 
 .hotel-card{
-    background:white;
+    background:rgba(255,255,255,.9);
 
-    border:1px solid var(--border);
+    border:1px solid rgba(255,255,255,.7);
 
     border-radius:18px;
 
     overflow:hidden;
 
     transition:.25s;
+    box-shadow:0 12px 30px rgba(20,31,25,.06);
+    backdrop-filter:blur(16px) saturate(120%);
+    -webkit-backdrop-filter:blur(16px) saturate(120%);
 }
 
 .hotel-card:hover{
     transform:translateY(-4px);
 
     box-shadow:
-        0 20px 45px rgba(25,35,29,.1);
+        0 24px 50px rgba(25,35,29,.12);
+}
+
+.hotel-card.is-hidden{
+    display:none;
 }
 
 .hotel-image{
@@ -1689,15 +1719,15 @@ Hotels
 
 <div class="nav-item has-menu">
 
-Kategorien
+<span data-i18n="nav.categories">Kategorien</span>
 
 <div class="dropdown">
 
-<div class="dropdown-title">
+<div class="dropdown-title" data-i18n="categories.title">
 Finde deine Kategorie
 </div>
 
-<div class="dropdown-subtitle">
+<div class="dropdown-subtitle" data-i18n="categories.subtitle">
 Wähle den Stil deines Aufenthalts – von Luxus bis Natur.
 </div>
 
@@ -1748,11 +1778,11 @@ Chalets & Lodges
 
 <div class="nav-item has-menu">
 
-Regionen
+<span data-i18n="nav.regions">Regionen</span>
 
 <div class="dropdown">
 
-<div class="dropdown-title">
+<div class="dropdown-title" data-i18n="regions.title">
 Südtirol entdecken
 </div>
 
@@ -2603,7 +2633,186 @@ ab € 175 <span>/ Nacht</span>
 
 </article>
 
+<article class="hotel-card is-hidden" data-type="luxus">
 
+<div class="hotel-image">
+
+<img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1000&q=85">
+
+<span class="hotel-badge">
+Luxus
+</span>
+
+<button class="favorite">♡</button>
+
+</div>
+
+<div class="hotel-body">
+
+<div class="hotel-location">
+Meran · Südtirol
+</div>
+
+<h3 class="hotel-name">
+Casa di Montagna
+</h3>
+
+<p class="hotel-description">
+Panoramische Ruhe mit einem exklusiven Spa-Erlebnis.
+</p>
+
+<div class="hotel-bottom">
+
+<div class="hotel-price">
+ab € 285 <span>/ Nacht</span>
+</div>
+
+<div class="hotel-rating">
+★ 4.9
+</div>
+
+</div>
+
+</div>
+
+</article>
+
+<article class="hotel-card is-hidden" data-type="wellness">
+
+<div class="hotel-image">
+
+<img src="https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=1000&q=85">
+
+<span class="hotel-badge">
+Wellness
+</span>
+
+<button class="favorite">♡</button>
+
+</div>
+
+<div class="hotel-body">
+
+<div class="hotel-location">
+Seiser Alm
+</div>
+
+<h3 class="hotel-name">
+Sonnenhof Retreat
+</h3>
+
+<p class="hotel-description">
+Moderne Wellness-Oase mit Bergenblick und holistischer Ruhe.
+</p>
+
+<div class="hotel-bottom">
+
+<div class="hotel-price">
+ab € 229 <span>/ Nacht</span>
+</div>
+
+<div class="hotel-rating">
+★ 4.8
+</div>
+
+</div>
+
+</div>
+
+</article>
+
+<article class="hotel-card is-hidden" data-type="design">
+
+<div class="hotel-image">
+
+<img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1000&q=85">
+
+<span class="hotel-badge">
+Design
+</span>
+
+<button class="favorite">♡</button>
+
+</div>
+
+<div class="hotel-body">
+
+<div class="hotel-location">
+Bozen · Stadtzentrum
+</div>
+
+<h3 class="hotel-name">
+Studio Altura
+</h3>
+
+<p class="hotel-description">
+Städtischer Stil, hochwertige Details und ruhige Lage.
+</p>
+
+<div class="hotel-bottom">
+
+<div class="hotel-price">
+ab € 174 <span>/ Nacht</span>
+</div>
+
+<div class="hotel-rating">
+★ 4.7
+</div>
+
+</div>
+
+</div>
+
+</article>
+
+<article class="hotel-card is-hidden" data-type="berg">
+
+<div class="hotel-image">
+
+<img src="https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1000&q=85">
+
+<span class="hotel-badge">
+Berghotel
+</span>
+
+<button class="favorite">♡</button>
+
+</div>
+
+<div class="hotel-body">
+
+<div class="hotel-location">
+Pustertal
+</div>
+
+<h3 class="hotel-name">
+Alpenrose Lodge
+</h3>
+
+<p class="hotel-description">
+Ein charmantes Berghotel für aktive Tage und schöne Abende.
+</p>
+
+<div class="hotel-bottom">
+
+<div class="hotel-price">
+ab € 198 <span>/ Nacht</span>
+</div>
+
+<div class="hotel-rating">
+★ 4.8
+</div>
+
+</div>
+
+</div>
+
+</article>
+
+</div>
+
+<div class="load-more-row">
+<button class="load-more" id="loadMoreButton" data-i18n="load.more">Weitere laden</button>
 </div>
 
 </div>
@@ -2623,23 +2832,23 @@ FEATURE
 
 <div class="feature-content">
 
-<small>
+<small data-i18n="feature.small">
 Staylo · Südtirol
 </small>
 
-<h2>
+<h2 data-i18n="feature.title">
 Mehr als nur<br>
 ein Hotel.
 </h2>
 
-<p>
+<p data-i18n="feature.text">
 Staylo wurde gegründet, um besondere Unterkünfte
 in Südtirol einfacher auffindbar zu machen – und
 Gästen zu helfen, den richtigen Ort für ihre Reise
 zu finden.
 </p>
 
-<a href="#" class="feature-btn">
+<a href="#" class="feature-btn" data-i18n="feature.link">
 Südtirol entdecken
 </a>
 
@@ -2664,17 +2873,17 @@ HOTELIER
 
 <div>
 
-<h2>
+<h2 data-i18n="hotelier.title">
 Dein Hotel auf Staylo.
 </h2>
 
-<p>
+<p data-i18n="hotelier.text">
 Du betreibst ein Hotel, Resort, Chalet oder eine
 besondere Unterkunft in Südtirol? Präsentiere dein
 Haus auf Staylo und erreiche neue Gäste.
 </p>
 
-<a href="#" class="hotelier-button">
+<a href="#" class="hotelier-button" data-i18n="hotelier.button">
 Mehr für Hoteliers →
 </a>
 
@@ -2683,11 +2892,11 @@ Mehr für Hoteliers →
 
 <div class="hotelier-info">
 
-<strong>
+<strong data-i18n="hotelier.info.title">
 Einfach. Modern. Kostenlos zum Start.
 </strong>
 
-<span>
+<span data-i18n="hotelier.info.text">
 Professionelle Präsentation, hochwertige Bilder
 und mehr Sichtbarkeit für dein Haus.
 </span>
@@ -2720,7 +2929,7 @@ FOOTER
 Stay<span>lo</span>
 </div>
 
-<p class="footer-about">
+<p class="footer-about" data-i18n="footer.about1">
 
 Staylo ist eine unabhängige Plattform
 für besondere Hotels und Unterkünfte
@@ -2728,7 +2937,7 @@ in Südtirol.
 
 </p>
 
-<p class="footer-about">
+<p class="footer-about" data-i18n="footer.about2">
 
 Lana · Südtirol · Italien<br>
 info@staylo.it
@@ -2740,7 +2949,7 @@ info@staylo.it
 
 <div class="footer-column">
 
-<h4>
+<h4 data-i18n="footer.discover">
 Entdecken
 </h4>
 
@@ -2769,7 +2978,7 @@ Boutique Hotels
 
 <div class="footer-column">
 
-<h4>
+<h4 data-i18n="footer.regions">
 Regionen
 </h4>
 
@@ -2798,31 +3007,31 @@ Seiser Alm
 
 <div class="footer-column">
 
-<h4>
+<h4 data-i18n="footer.staylo">
 Staylo
 </h4>
 
-<a href="#ueber-uns">
+<a href="#ueber-uns" data-i18n="footer.aboutLink">
 Über uns
 </a>
 
-<a href="#hotelier">
+<a href="#hotelier" data-i18n="footer.hoteliersLink">
 Für Hoteliers
 </a>
 
-<a href="#">
+<a href="#" data-i18n="footer.contact">
 Kontakt
 </a>
 
-<a href="#">
+<a href="#" data-i18n="footer.imprint">
 Impressum
 </a>
 
-<a href="#">
+<a href="#" data-i18n="footer.privacy">
 Datenschutz
 </a>
 
-<a href="#">
+<a href="#" data-i18n="footer.cookies">
 Cookies
 </a>
 
@@ -2881,6 +3090,9 @@ const translations = {
         "nav.about":"Über uns",
         "nav.hoteliers":"Für Hoteliers",
         "nav.login":"Anmelden",
+        "categories.title":"Finde deine Kategorie",
+        "categories.subtitle":"Wähle den Stil deines Aufenthalts – von Luxus bis Natur.",
+        "regions.title":"Südtirol entdecken",
         "hero.label":"Hotels in Südtirol",
         "hero.subtitle":"Finde besondere Hotels, Resorts und Unterkünfte für deine nächste Auszeit in Südtirol.",
         "search.tab.hotels":"Hotels",
@@ -2896,8 +3108,30 @@ const translations = {
         "section.title":"Ausgewählte Hotels für dich",
         "section.subtitle":"Besondere Unterkünfte aus ganz Südtirol.",
         "view.all":"Alle Hotels →",
+        "load.more":"Weitere laden",
+        "load.less":"Weniger anzeigen",
         "favorites.title":"Favoriten",
-        "favorites.empty":"Noch keine Favoriten ausgewählt."
+        "favorites.empty":"Noch keine Favoriten ausgewählt.",
+        "feature.small":"Staylo · Südtirol",
+        "feature.title":"Mehr als nur\n\nein Hotel.",
+        "feature.text":"Staylo wurde gegründet, um besondere Unterkünfte in Südtirol einfacher auffindbar zu machen – und Gästen zu helfen, den richtigen Ort für ihre Reise zu finden.",
+        "feature.link":"Südtirol entdecken",
+        "hotelier.title":"Dein Hotel auf Staylo.",
+        "hotelier.text":"Du betreibst ein Hotel, Resort, Chalet oder eine besondere Unterkunft in Südtirol? Präsentiere dein Haus auf Staylo und erreiche neue Gäste.",
+        "hotelier.button":"Mehr für Hoteliers →",
+        "hotelier.info.title":"Einfach. Modern. Kostenlos zum Start.",
+        "hotelier.info.text":"Professionelle Präsentation, hochwertige Bilder und mehr Sichtbarkeit für dein Haus.",
+        "footer.about1":"Staylo ist eine unabhängige Plattform für besondere Hotels und Unterkünfte in Südtirol.",
+        "footer.about2":"Lana · Südtirol · Italien\ninfo@staylo.it",
+        "footer.discover":"Entdecken",
+        "footer.regions":"Regionen",
+        "footer.staylo":"Staylo",
+        "footer.aboutLink":"Über uns",
+        "footer.hoteliersLink":"Für Hoteliers",
+        "footer.contact":"Kontakt",
+        "footer.imprint":"Impressum",
+        "footer.privacy":"Datenschutz",
+        "footer.cookies":"Cookies"
     },
     it:{
         "nav.hotels":"Hotel",
@@ -2906,6 +3140,9 @@ const translations = {
         "nav.about":"Chi siamo",
         "nav.hoteliers":"Per hotelier",
         "nav.login":"Accedi",
+        "categories.title":"Scopri la tua categoria",
+        "categories.subtitle":"Scegli lo stile del tuo soggiorno – dal lusso alla natura.",
+        "regions.title":"Scopri l’Alto Adige",
         "hero.label":"Hotel in Alto Adige",
         "hero.subtitle":"Trova hotel, resort e strutture speciali per la tua prossima fuga in Alto Adige.",
         "search.tab.hotels":"Hotel",
@@ -2921,8 +3158,30 @@ const translations = {
         "section.title":"Hotel selezionati per te",
         "section.subtitle":"Strutture speciali in tutto l’Alto Adige.",
         "view.all":"Tutti gli hotel →",
+        "load.more":"Carica altro",
+        "load.less":"Mostra meno",
         "favorites.title":"Preferiti",
-        "favorites.empty":"Nessun preferito selezionato."
+        "favorites.empty":"Nessun preferito selezionato.",
+        "feature.small":"Staylo · Alto Adige",
+        "feature.title":"Più di un semplice hotel.",
+        "feature.text":"Staylo è nato per rendere le strutture speciali dell’Alto Adige più facili da trovare e aiutare gli ospiti a scegliere il posto giusto per il loro viaggio.",
+        "feature.link":"Scopri l’Alto Adige",
+        "hotelier.title":"Il tuo hotel su Staylo.",
+        "hotelier.text":"Gestisci un hotel, resort, chalet o una struttura speciale in Alto Adige? Presenta la tua casa su Staylo e raggiungi nuovi ospiti.",
+        "hotelier.button":"Per hotelier →",
+        "hotelier.info.title":"Semplice. Moderno. Gratis all’inizio.",
+        "hotelier.info.text":"Presentazione professionale, foto di alta qualità e maggiore visibilità per la tua casa.",
+        "footer.about1":"Staylo è una piattaforma indipendente per hotel e strutture speciali in Alto Adige.",
+        "footer.about2":"Lana · Alto Adige · Italia\ninfo@staylo.it",
+        "footer.discover":"Scopri",
+        "footer.regions":"Regioni",
+        "footer.staylo":"Staylo",
+        "footer.aboutLink":"Chi siamo",
+        "footer.hoteliersLink":"Per hotelier",
+        "footer.contact":"Contatti",
+        "footer.imprint":"Note legali",
+        "footer.privacy":"Privacy",
+        "footer.cookies":"Cookie"
     },
     en:{
         "nav.hotels":"Hotels",
@@ -2931,6 +3190,9 @@ const translations = {
         "nav.about":"About us",
         "nav.hoteliers":"For hoteliers",
         "nav.login":"Log in",
+        "categories.title":"Find your category",
+        "categories.subtitle":"Choose your stay style – from luxury to nature.",
+        "regions.title":"Discover South Tyrol",
         "hero.label":"Hotels in South Tyrol",
         "hero.subtitle":"Find special hotels, resorts and stays for your next escape in South Tyrol.",
         "search.tab.hotels":"Hotels",
@@ -2946,8 +3208,30 @@ const translations = {
         "section.title":"Handpicked hotels for you",
         "section.subtitle":"Special stays across South Tyrol.",
         "view.all":"All hotels →",
+        "load.more":"Load more",
+        "load.less":"Show less",
         "favorites.title":"Favorites",
-        "favorites.empty":"No favorites selected yet."
+        "favorites.empty":"No favorites selected yet.",
+        "feature.small":"Staylo · South Tyrol",
+        "feature.title":"More than just a hotel.",
+        "feature.text":"Staylo was created to make special stays in South Tyrol easier to discover and to help guests find the right place for their trip.",
+        "feature.link":"Discover South Tyrol",
+        "hotelier.title":"Your hotel on Staylo.",
+        "hotelier.text":"Do you run a hotel, resort, chalet or a special stay in South Tyrol? Present your property on Staylo and reach new guests.",
+        "hotelier.button":"For hoteliers →",
+        "hotelier.info.title":"Simple. Modern. Free to start.",
+        "hotelier.info.text":"Professional presentation, high-quality images and more visibility for your property.",
+        "footer.about1":"Staylo is an independent platform for special hotels and stays in South Tyrol.",
+        "footer.about2":"Lana · South Tyrol · Italy\ninfo@staylo.it",
+        "footer.discover":"Discover",
+        "footer.regions":"Regions",
+        "footer.staylo":"Staylo",
+        "footer.aboutLink":"About us",
+        "footer.hoteliersLink":"For hoteliers",
+        "footer.contact":"Contact",
+        "footer.imprint":"Imprint",
+        "footer.privacy":"Privacy",
+        "footer.cookies":"Cookies"
     }
 };
 
@@ -2998,6 +3282,35 @@ function applyTranslations(lang){
     }
 
     updateSummary();
+    updateLoadMoreButton();
+}
+
+const loadMoreButton = document.getElementById("loadMoreButton");
+const hiddenHotelCards = Array.from(document.querySelectorAll(".hotel-card.is-hidden"));
+
+function updateLoadMoreButton(){
+
+    if(!loadMoreButton){
+        return;
+    }
+
+    if(hiddenHotelCards.length > 0){
+        loadMoreButton.textContent = translations[currentLanguage]["load.more"];
+    }else{
+        loadMoreButton.textContent = translations[currentLanguage]["load.less"];
+    }
+}
+
+if(loadMoreButton){
+
+    loadMoreButton.addEventListener("click", () => {
+
+        const nextCards = hiddenHotelCards.splice(0, 4);
+
+        nextCards.forEach(card => card.classList.remove("is-hidden"));
+
+        updateLoadMoreButton();
+    });
 }
 
 const languageToggle = document.getElementById("languageToggle");
