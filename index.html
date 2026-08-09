@@ -186,6 +186,33 @@ HEADER
     transition:.2s;
 }
 
+.nav-glass.has-badge{
+    position:relative;
+    padding-right:20px;
+}
+
+.nav-badge{
+    position:absolute;
+    top:-4px;
+    right:-2px;
+
+    min-width:20px;
+    height:20px;
+    padding:0 6px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:999px;
+    background:#d64545;
+    color:white;
+    font-size:11px;
+    font-weight:700;
+    border:2px solid rgba(255,255,255,.95);
+    box-shadow:0 4px 10px rgba(0,0,0,.18);
+}
+
 .nav-glass:hover{
     background:rgba(255,255,255,.2);
 }
@@ -1677,6 +1704,14 @@ Vinschgau
 </div>
 
 
+<a href="#hotels" class="nav-item">
+Südtirol entdecken
+</a>
+
+<a href="#hotels" class="nav-item">
+Finde deine Kategorie
+</a>
+
 <a href="#ueber-uns" class="nav-item">
 Über uns
 </a>
@@ -1691,8 +1726,9 @@ Für Hoteliers
 
 <div class="nav-right">
 
-<button class="nav-glass">
+<button class="nav-glass has-badge" type="button" aria-label="Favoriten">
 ♡
+<span class="nav-badge" id="favoritesCount">0</span>
 </button>
 
 <button class="nav-glass">
@@ -2474,352 +2510,6 @@ ab € 175 <span>/ Nacht</span>
 
 
 <!-- =========================
-CATEGORIES
-========================= -->
-
-<section class="section category-section" id="kategorien">
-
-<div class="container">
-
-<div class="section-header">
-
-<div>
-
-<h2 class="section-title">
-Finde deinen Stil
-</h2>
-
-<p class="section-subtitle">
-Besondere Hotels für jede Art von Aufenthalt.
-</p>
-
-</div>
-
-</div>
-
-
-<div class="category-grid">
-
-
-<div class="category-card">
-
-<img src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=900&q=85">
-
-<div class="category-overlay">
-
-<div class="category-name">
-Luxushotels
-</div>
-
-</div>
-
-</div>
-
-
-<div class="category-card">
-
-<img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=85">
-
-<div class="category-overlay">
-
-<div class="category-name">
-Wellness
-</div>
-
-</div>
-
-</div>
-
-
-<div class="category-card">
-
-<img src="https://images.unsplash.com/photo-1486911278844-a81c5267e227?auto=format&fit=crop&w=900&q=85">
-
-<div class="category-overlay">
-
-<div class="category-name">
-Berghotels
-</div>
-
-</div>
-
-</div>
-
-
-<div class="category-card">
-
-<img src="https://images.unsplash.com/photo-1601918774946-25832a4be0d6?auto=format&fit=crop&w=900&q=85">
-
-<div class="category-overlay">
-
-<div class="category-name">
-Boutique
-</div>
-
-</div>
-
-</div>
-
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- =========================
-REGIONEN
-========================= -->
-
-<section class="section" id="regionen">
-
-<div class="container">
-
-<div class="section-header">
-
-<div>
-
-<h2 class="section-title">
-Südtirol entdecken
-</h2>
-
-<p class="section-subtitle">
-Finde dein Hotel in deiner Lieblingsregion.
-</p>
-
-</div>
-
-</div>
-
-
-<div class="region-grid">
-
-
-<div class="region">
-
-<div class="region-image">
-
-<img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=85">
-
-</div>
-
-<div class="region-content">
-
-<span class="region-number">
-01
-</span>
-
-<h3>
-Meran
-</h3>
-
-<p>
-Kurstadt · Wein · Berge
-</p>
-
-</div>
-
-</div>
-
-
-<div class="region">
-
-<div class="region-image">
-
-<img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800&q=85">
-
-</div>
-
-<div class="region-content">
-
-<span class="region-number">
-02
-</span>
-
-<h3>
-Dolomiten
-</h3>
-
-<p>
-Berge · Natur · Abenteuer
-</p>
-
-</div>
-
-</div>
-
-
-<div class="region">
-
-<div class="region-image">
-
-<img src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=800&q=85">
-
-</div>
-
-<div class="region-content">
-
-<span class="region-number">
-03
-</span>
-
-<h3>
-Gröden
-</h3>
-
-<p>
-Dolomiten · Wandern · Ski
-</p>
-
-</div>
-
-</div>
-
-
-<div class="region">
-
-<div class="region-image">
-
-<img src="https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=800&q=85">
-
-</div>
-
-<div class="region-content">
-
-<span class="region-number">
-04
-</span>
-
-<h3>
-Seiser Alm
-</h3>
-
-<p>
-Almen · Natur · Aussicht
-</p>
-
-</div>
-
-</div>
-
-
-<div class="region">
-
-<div class="region-image">
-
-<img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=85">
-
-</div>
-
-<div class="region-content">
-
-<span class="region-number">
-05
-</span>
-
-<h3>
-Pustertal
-</h3>
-
-<p>
-Kronplatz · Dolomiten · Natur
-</p>
-
-</div>
-
-</div>
-
-
-<div class="region">
-
-<div class="region-image">
-
-<img src="https://images.unsplash.com/photo-1464278533981-50106e6176b1?auto=format&fit=crop&w=800&q=85">
-
-</div>
-
-<div class="region-content">
-
-<span class="region-number">
-06
-</span>
-
-<h3>
-Eisacktal
-</h3>
-
-<p>
-Brixen · Wein · Berge
-</p>
-
-</div>
-
-</div>
-
-
-<div class="region">
-
-<div class="region-image">
-
-<img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=85">
-
-</div>
-
-<div class="region-content">
-
-<span class="region-number">
-07
-</span>
-
-<h3>
-Vinschgau
-</h3>
-
-<p>
-Natur · Ruhe · Apfelgärten
-</p>
-
-</div>
-
-</div>
-
-
-<div class="region">
-
-<div class="region-image">
-
-<img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=800&q=85">
-
-</div>
-
-<div class="region-content">
-
-<span class="region-number">
-08
-</span>
-
-<h3>
-Bozen
-</h3>
-
-<p>
-Stadt · Kultur · Wein
-</p>
-
-</div>
-
-</div>
-
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- =========================
 FEATURE
 ========================= -->
 
@@ -3184,15 +2874,35 @@ updateSummary();
 FAVORITEN
 ========================= */
 
-document
-.querySelectorAll(".favorite")
-.forEach(button => {
+const favoriteButtons =
+document.querySelectorAll(".favorite");
+
+const favoritesCount =
+document.getElementById("favoritesCount");
+
+const updateFavoritesCount = () => {
+
+    if(!favoritesCount){
+        return;
+    }
+
+    const activeCount =
+    Array.from(favoriteButtons).filter(button =>
+        button.classList.contains("active")
+    ).length;
+
+    favoritesCount.textContent = activeCount;
+};
+
+favoriteButtons.forEach(button => {
 
     button.addEventListener("click", event => {
 
         event.preventDefault();
 
-        if(button.textContent.trim() === "♡"){
+        const isActive = button.classList.toggle("active");
+
+        if(isActive){
 
             button.textContent = "♥";
 
@@ -3208,9 +2918,13 @@ document
 
         }
 
+        updateFavoritesCount();
+
     });
 
 });
+
+updateFavoritesCount();
 
 
 /* =========================
