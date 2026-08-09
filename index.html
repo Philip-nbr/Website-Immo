@@ -105,15 +105,16 @@ HEADER
 .logo{
     display:flex;
     align-items:center;
-    gap:8px;
-    font-size:20px;
+    gap:6px;
+    font-size:18px;
     font-weight:700;
     letter-spacing:-.05em;
+    line-height:1;
 }
 
 .logo-mark{
-    width:30px;
-    height:30px;
+    width:24px;
+    height:24px;
     border-radius:50%;
 
     background:rgba(255,255,255,.92);
@@ -537,31 +538,6 @@ SEARCH
 
     backdrop-filter:blur(22px) saturate(130%);
     -webkit-backdrop-filter:blur(22px) saturate(130%);
-}
-
-.search-tabs{
-    display:flex;
-
-    margin-bottom:6px;
-}
-
-.search-tab{
-    padding:9px 14px;
-
-    border-radius:10px;
-
-    background:transparent;
-
-    color:#707570;
-
-    font-size:13px;
-
-    font-weight:600;
-}
-
-.search-tab.active{
-    background:var(--green);
-    color:white;
 }
 
 .search-main{
@@ -1951,14 +1927,6 @@ SEARCH
 <div class="container search-wrapper">
 
 <div class="search-box">
-
-<div class="search-tabs">
-
-<button class="search-tab active" data-i18n="search.tab.hotels">
-Hotels
-</button>
-
-</div>
 
 <div class="search-main">
 
