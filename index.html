@@ -368,10 +368,10 @@ HERO
 
     background-size:cover;
     background-position:center;
-    transform:scale(1.01);
+    transform:scale(1.02);
 
     opacity:0;
-    animation:heroFade 20s ease-in-out infinite;
+    animation:heroFade 28s cubic-bezier(.22,1,.36,1) infinite;
 }
 
 .hero-slide:nth-child(1){
@@ -381,17 +381,17 @@ HERO
 
 .hero-slide:nth-child(2){
     background-image:url("https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=2200&q=90");
-    animation-delay:5s;
+    animation-delay:7s;
 }
 
 .hero-slide:nth-child(3){
     background-image:url("https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=2200&q=90");
-    animation-delay:10s;
+    animation-delay:14s;
 }
 
 .hero-slide:nth-child(4){
     background-image:url("https://images.unsplash.com/photo-1521295121783-8a321d551ad2?auto=format&fit=crop&w=2200&q=90");
-    animation-delay:15s;
+    animation-delay:21s;
 }
 
 .hero-bg{
@@ -411,17 +411,17 @@ HERO
 @keyframes heroFade{
     0%, 100%{
         opacity:0;
-        transform:scale(1.01);
+        transform:scale(1.02);
     }
 
-    3%, 22%{
+    6%, 26%{
         opacity:1;
-        transform:scale(1);
+        transform:scale(1.01);
     }
 
-    25%, 100%{
+    32%, 100%{
         opacity:0;
-        transform:scale(1.01);
+        transform:scale(1.03);
     }
 }
 
@@ -456,12 +456,14 @@ HERO
 }
 
 .hero-dot{
-    width:6px;
-    height:6px;
+    width:8px;
+    height:8px;
+    flex-shrink:0;
 
     border-radius:50%;
 
-    background:#a9cfb7;
+    background:linear-gradient(135deg, #bde5c4, #5f9e75);
+    box-shadow:0 0 0 2px rgba(255,255,255,.18), 0 4px 10px rgba(0,0,0,.2);
 }
 
 .hero h1{
