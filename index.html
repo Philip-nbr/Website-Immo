@@ -547,54 +547,57 @@ SEARCH
 }
 
 .top-discovery{
-    padding:0 0 20px;
+    padding:12px 0 0;
 }
 
 .top-discovery-card{
-    background:white;
+    background:rgba(255,255,255,.96);
     border:1px solid var(--border);
-    border-radius:22px;
-    padding:24px;
-    box-shadow:0 16px 40px rgba(20,31,25,.06);
-    display:grid;
-    grid-template-columns:1.1fr 1fr;
-    gap:22px;
+    border-radius:20px;
+    padding:16px 18px;
+    box-shadow:0 12px 30px rgba(20,31,25,.06);
+    display:flex;
+    flex-wrap:wrap;
+    gap:14px;
+    align-items:center;
+    justify-content:space-between;
 }
 
 .top-discovery-block{
     display:flex;
     flex-direction:column;
-    gap:12px;
+    gap:8px;
+    min-width:240px;
 }
 
 .top-discovery-title{
     font-family:"Playfair Display",serif;
-    font-size:24px;
-    letter-spacing:-.02em;
+    font-size:18px;
+    letter-spacing:-.01em;
     color:var(--black);
 }
 
 .top-discovery-text{
     color:var(--grey);
-    font-size:14px;
-    line-height:1.6;
+    font-size:13px;
+    line-height:1.5;
 }
 
 .top-discovery-grid{
     display:flex;
     flex-wrap:wrap;
-    gap:10px;
+    gap:8px;
 }
 
 .top-chip{
     display:inline-flex;
     align-items:center;
     justify-content:center;
-    padding:10px 14px;
+    padding:8px 12px;
     border-radius:999px;
     background:#f3f5f1;
     color:var(--green);
-    font-size:13px;
+    font-size:12px;
     font-weight:700;
     border:1px solid #e6ebe5;
 }
