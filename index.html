@@ -91,47 +91,54 @@ HEADER
     width:100%;
     z-index:100;
     color:white;
-    background:linear-gradient(180deg, rgba(7,17,14,.26), rgba(7,17,14,0));
+    background:transparent;
+    transition:background .25s ease, backdrop-filter .25s ease;
+}
+
+.header.is-scrolled{
+    position:fixed;
+    background:rgba(23,42,35,.88);
+    backdrop-filter:blur(16px) saturate(140%);
+    -webkit-backdrop-filter:blur(16px) saturate(140%);
+    border-bottom:1px solid rgba(255,255,255,.08);
+    box-shadow:0 8px 28px rgba(0,0,0,.12);
 }
 
 .nav{
-    height:82px;
+    height:72px;
     display:flex;
     align-items:center;
     justify-content:space-between;
-    gap:30px;
+    gap:20px;
 }
 
 .logo{
     display:flex;
     align-items:center;
-    gap:6px;
-    font-size:18px;
+    gap:10px;
+    font-size:17px;
     font-weight:700;
-    letter-spacing:-.05em;
+    letter-spacing:-.04em;
     line-height:1;
+    flex-shrink:0;
 }
 
 .logo-mark{
-    width:14px;
-    height:14px;
+    width:32px;
+    height:32px;
     border-radius:50%;
-
-    background:rgba(255,255,255,.92);
-
-    color:var(--green);
-
+    background:var(--green);
+    color:#f5f5f1;
     display:flex;
     align-items:center;
     justify-content:center;
-
-    font-size:14px;
-    font-weight:800;
-
+    font-family:"Playfair Display",serif;
+    font-size:16px;
+    font-weight:600;
     overflow:hidden;
-
-    box-shadow:
-        0 5px 20px rgba(0,0,0,.12);
+    box-shadow:0 4px 14px rgba(0,0,0,.18);
+    border:1.5px solid rgba(255,255,255,.35);
+    flex-shrink:0;
 }
 
 .logo-image{
@@ -141,42 +148,72 @@ HEADER
     display:block;
 }
 
+.logo-fallback{
+    line-height:1;
+    transform:translateY(-0.5px);
+}
+
+.logo-text{
+    display:flex;
+    align-items:baseline;
+    gap:0;
+}
+
 .logo-text span:first-child{
     color:white;
 }
 
 .logo-text span:last-child{
-    color:#91b49f;
+    color:#b8d0c2;
 }
 
 .nav-center{
     display:flex;
     align-items:center;
-    gap:24px;
+    justify-content:center;
+    gap:4px;
+    flex:1;
 }
 
 .nav-item{
     position:relative;
-
+    display:inline-flex;
+    align-items:center;
+    height:40px;
     color:rgba(255,255,255,.92);
-
-    font-size:14px;
+    font-size:13.5px;
     font-weight:500;
-
-    padding:10px 12px;
+    padding:0 14px;
     border-radius:999px;
     transition:.2s ease;
+    white-space:nowrap;
+    line-height:1;
 }
 
-.nav-item:hover{
+.nav-item:hover,
+.nav-item:focus-within{
     color:white;
-    background:rgba(255,255,255,.12);
+    background:rgba(255,255,255,.14);
 }
 
-.nav-item.has-menu::after{
-    content:"⌄";
-    margin-left:6px;
-    font-size:12px;
+.nav-item.has-menu{
+    cursor:default;
+}
+
+.nav-item.has-menu > span{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+}
+
+.nav-item.has-menu > span::after{
+    content:"";
+    width:0;
+    height:0;
+    border-left:4px solid transparent;
+    border-right:4px solid transparent;
+    border-top:4px solid rgba(255,255,255,.75);
+    margin-top:1px;
 }
 
 .nav-right{
@@ -560,61 +597,75 @@ SEARCH
 }
 
 .search-field{
-    min-height:62px;
-
-    padding:10px 14px;
-
+    min-height:66px;
+    padding:10px 16px;
     border-right:1px solid var(--border);
-
     display:flex;
     flex-direction:column;
     justify-content:center;
-
     position:relative;
+    transition:background .15s;
 }
 
 .search-label{
-    color:#929790;
-
+    color:#8a918a;
     text-transform:uppercase;
-
-    letter-spacing:.07em;
-
-    font-size:9px;
-
+    letter-spacing:.08em;
+    font-size:10px;
     font-weight:700;
-
-    margin-bottom:5px;
+    margin-bottom:6px;
 }
 
 .search-select,
 .search-input,
 .search-date{
     border:0;
-
     outline:0;
-
-    background:white;
-
-    color:#252925;
-
+    background:transparent;
+    color:#1c211e;
     font-size:14px;
-
     font-weight:600;
-
     width:100%;
+    font-family:inherit;
+    cursor:pointer;
 }
 
 .search-field:hover{
-    background:#f7f9f7;
+    background:#f5f8f5;
+}
+
+.search-field:focus-within{
+    background:#f0f5f1;
+    box-shadow:inset 0 0 0 1.5px rgba(33,75,61,.25);
 }
 
 .search-input{
     appearance:textfield;
+    cursor:text;
 }
 
 .search-date{
-    color:#214b3d;
+    color:var(--green);
+    color-scheme:light;
+    min-height:22px;
+}
+
+.search-date::-webkit-calendar-picker-indicator{
+    cursor:pointer;
+    opacity:.55;
+    padding:4px;
+    margin-left:4px;
+    border-radius:6px;
+    background-color:transparent;
+}
+
+.search-date::-webkit-calendar-picker-indicator:hover{
+    opacity:1;
+    background-color:rgba(33,75,61,.08);
+}
+
+.search-date:focus{
+    color:var(--green-dark);
 }
 
 .search-button{
@@ -1446,86 +1497,136 @@ footer{
     font-size:11px;
 }
 
+
+/* MAP */
+.map-shell{
+    border-radius:20px;
+    overflow:hidden;
+    border:1px solid var(--border);
+    background:#fff;
+    box-shadow:0 12px 30px rgba(20,31,25,.06);
+}
+.map-canvas{
+    height:380px;
+    width:100%;
+    background:#e8ebe6;
+}
+.map-note{
+    padding:10px 14px;
+    font-size:12px;
+    color:var(--grey);
+    border-top:1px solid var(--border);
+}
+
 /* =========================
 DROPDOWN
 ========================= */
 
 .dropdown{
     position:absolute;
-
-    top:58px;
-
+    top:calc(100% + 10px);
     left:50%;
-
-    transform:translateX(-50%) translateY(-8px);
-
-    width:600px;
-
-    background:rgba(255,255,255,.96);
-
+    transform:translateX(-50%) translateY(6px);
+    width:min(560px, calc(100vw - 32px));
+    background:#fff;
     color:var(--black);
-
-    border-radius:20px;
-
-    padding:22px;
-
-    box-shadow:0 25px 70px rgba(0,0,0,.2);
-
-    backdrop-filter:blur(25px);
-
+    border-radius:16px;
+    padding:18px;
+    border:1px solid rgba(0,0,0,.06);
+    box-shadow:0 20px 50px rgba(15,25,20,.18);
     opacity:0;
-
     visibility:hidden;
-
-    transition:.2s;
+    pointer-events:none;
+    transition:opacity .18s ease, transform .18s ease, visibility .18s;
+    z-index:200;
 }
 
-.nav-item:hover .dropdown{
+.nav-item:hover .dropdown,
+.nav-item:focus-within .dropdown{
     opacity:1;
-
     visibility:visible;
-
+    pointer-events:auto;
     transform:translateX(-50%) translateY(0);
 }
 
 .dropdown-title{
     font-family:"Playfair Display",serif;
-
-    font-size:21px;
-
-    margin-bottom:6px;
+    font-size:18px;
+    margin-bottom:4px;
+    letter-spacing:-.02em;
 }
 
 .dropdown-subtitle{
     color:#6d756f;
-    font-size:13px;
+    font-size:12.5px;
     margin-bottom:14px;
-    line-height:1.5;
+    line-height:1.45;
 }
 
 .dropdown-grid{
     display:grid;
-
-    grid-template-columns:
-        repeat(3,1fr);
-
-    gap:6px;
+    grid-template-columns:repeat(3,1fr);
+    gap:4px;
 }
 
 .dropdown-link{
-    padding:11px;
-
-    border-radius:11px;
-
-    color:#555b55;
-
-    font-size:12px;
+    display:block;
+    padding:10px 12px;
+    border-radius:10px;
+    color:#3d433e;
+    font-size:13px;
+    font-weight:500;
+    transition:background .15s, color .15s;
 }
 
 .dropdown-link:hover{
-    background:#edf1ed;
-
+    background:#eef3ef;
     color:var(--green);
+}
+
+.dropdown-link small{
+    display:block;
+    margin-top:2px;
+    font-size:11px;
+    font-weight:400;
+    color:#8a918a;
+}
+
+.dropdown-cta{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-top:14px;
+    padding:11px 16px;
+    border-radius:999px;
+    background:var(--green);
+    color:#fff !important;
+    font-size:13px;
+    font-weight:700;
+    transition:background .15s, transform .15s;
+}
+
+.dropdown-cta:hover{
+    background:var(--green-dark);
+    transform:translateY(-1px);
+}
+
+.dropdown.regions-dd{
+    width:min(480px, calc(100vw - 32px));
+}
+
+.dropdown.regions-dd .dropdown-grid{
+    grid-template-columns:repeat(2,1fr);
+}
+
+.dropdown.regions-dd .dropdown-link{
+    padding:12px 14px;
+    border:1px solid transparent;
+}
+
+.dropdown.regions-dd .dropdown-link:hover{
+    border-color:#dfe6e0;
+    background:#f6f9f6;
 }
 
 /* =========================
@@ -1675,6 +1776,8 @@ RESPONSIVE
 }
 
 </style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 
 
@@ -1689,9 +1792,10 @@ HEADER
 <div class="container nav">
 
 <a href="#" class="logo">
-
-<img class="logo-mark logo-image" src="./YtDCk.jpg" alt="Staylo Logo">
-
+<span class="logo-mark" aria-hidden="true">
+<img class="logo-image" src="./YtDCk.jpg" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+<span class="logo-fallback" style="display:none">S</span>
+</span>
 <div class="logo-text">
 <span>Stay</span><span>lo</span>
 </div>
@@ -1754,67 +1858,32 @@ Adults Only
 Nachhaltig
 </a>
 
-<a class="dropdown-link" href="#hotels">
-Chalets & Lodges
-</a>
-
+<a class="dropdown-link" href="#hotels">Chalets &amp; Lodges</a>
+<a class="dropdown-link" href="#hotels">City Hotels</a>
+<a class="dropdown-link" href="#hotels">Agriturismo</a>
 </div>
-
+<a class="dropdown-cta" href="#kategorien">Finde deine Kategorie →</a>
 </div>
-
 </div>
 
 
 <div class="nav-item has-menu">
-
 <span data-i18n="nav.regions">Regionen</span>
 
-<div class="dropdown">
-
-<div class="dropdown-title" data-i18n="regions.title">
-Südtirol entdecken
-</div>
-
+<div class="dropdown regions-dd">
+<div class="dropdown-title" data-i18n="regions.title">Südtirol entdecken</div>
+<div class="dropdown-subtitle">Beliebte Regionen auf einen Blick</div>
 <div class="dropdown-grid">
-
-<a class="dropdown-link" href="#regionen">
-Meran
-</a>
-
-<a class="dropdown-link" href="#regionen">
-Bozen
-</a>
-
-<a class="dropdown-link" href="#regionen">
-Dolomiten
-</a>
-
-<a class="dropdown-link" href="#regionen">
-Gröden
-</a>
-
-<a class="dropdown-link" href="#regionen">
-Seiser Alm
-</a>
-
-<a class="dropdown-link" href="#regionen">
-Pustertal
-</a>
-
-<a class="dropdown-link" href="#regionen">
-Eisacktal
-</a>
-
-<a class="dropdown-link" href="#regionen">
-Passeiertal
-</a>
-
-<a class="dropdown-link" href="#regionen">
-Vinschgau
-</a>
-
+<a class="dropdown-link" href="#regionen">Meran <small>Therme · Wein · Kurort</small></a>
+<a class="dropdown-link" href="#regionen">Bozen <small>Stadt · Kultur · Ausgangspunkt</small></a>
+<a class="dropdown-link" href="#regionen">Dolomiten <small>UNESCO · Gipfel · Wandern</small></a>
+<a class="dropdown-link" href="#regionen">Gröden <small>Ski · Val Gardena</small></a>
+<a class="dropdown-link" href="#regionen">Seiser Alm <small>Alm · Panorama</small></a>
+<a class="dropdown-link" href="#regionen">Pustertal <small>Kronplatz · Natur</small></a>
+<a class="dropdown-link" href="#regionen">Eisacktal <small>Brixen · Klöster</small></a>
+<a class="dropdown-link" href="#regionen">Vinschgau <small>Obst · Weite · Burgen</small></a>
 </div>
-
+<a class="dropdown-cta" href="#regionen">Alle Regionen →</a>
 </div>
 
 </div>
@@ -2791,15 +2860,86 @@ ab € 198 <span>/ Nacht</span>
 <div class="load-more-row">
 <button class="load-more" id="loadMoreButton" data-i18n="load.more">Weitere laden</button>
 </div>
-
 </div>
-
 </section>
 
+<section class="section" id="karte">
+<div class="container">
+<div class="section-header">
+<div>
+<div class="section-title">Hotels auf der Karte</div>
+<div class="section-subtitle">Überblick über ausgewählte Unterkünfte in Südtirol</div>
+</div>
+<a href="#hotels" class="view-all">Zu den Hotels →</a>
+</div>
+<div class="map-shell">
+<div id="stayloMap" class="map-canvas"></div>
+<p class="map-note">OpenStreetMap · Demo-Marker für Regionen</p>
+</div>
+</div>
+</section>
 
-<!-- =========================
-FEATURE
-========================= -->
+<section class="section category-section" id="kategorien">
+<div class="container">
+<div class="section-header">
+<div>
+<div class="section-title" data-i18n="categories.title">Finde deine Kategorie</div>
+<div class="section-subtitle" data-i18n="categories.subtitle">Wähle den Stil deines Aufenthalts – von Luxus bis Natur.</div>
+</div>
+</div>
+<div class="category-grid">
+<a class="category-card" href="#hotels">
+<img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=85" alt="Luxus">
+<div class="category-overlay"><div class="category-name">Luxushotels</div></div>
+</a>
+<a class="category-card" href="#hotels">
+<img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=85" alt="Wellness">
+<div class="category-overlay"><div class="category-name">Wellness</div></div>
+</a>
+<a class="category-card" href="#hotels">
+<img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=85" alt="Berg">
+<div class="category-overlay"><div class="category-name">Berghotels</div></div>
+</a>
+<a class="category-card" href="#hotels">
+<img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=800&q=85" alt="Boutique">
+<div class="category-overlay"><div class="category-name">Boutique</div></div>
+</a>
+<a class="category-card" href="#hotels">
+<img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=800&q=85" alt="Design">
+<div class="category-overlay"><div class="category-name">Design</div></div>
+</a>
+<a class="category-card" href="#hotels">
+<img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=800&q=85" alt="Familie">
+<div class="category-overlay"><div class="category-name">Familienhotels</div></div>
+</a>
+<a class="category-card" href="#hotels">
+<img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=800&q=85" alt="Chalet">
+<div class="category-overlay"><div class="category-name">Chalets &amp; Lodges</div></div>
+</a>
+<a class="category-card" href="#hotels">
+<img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=85" alt="Adults">
+<div class="category-overlay"><div class="category-name">Adults Only</div></div>
+</a>
+</div>
+</div>
+</section>
+
+<section class="section" id="regionen">
+<div class="container">
+<div class="section-header">
+<div>
+<div class="section-title">Südtirol entdecken</div>
+<div class="section-subtitle">Regionen mit Charakter</div>
+</div>
+</div>
+<div class="region-grid">
+<article class="region"><div class="region-image"><img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=700&q=85" alt="Meran"></div><div class="region-content"><div class="region-number">01</div><h3>Meran</h3><p>Therme, Wein &amp; mediterranes Flair</p></div></article>
+<article class="region"><div class="region-image"><img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=700&q=85" alt="Dolomiten"></div><div class="region-content"><div class="region-number">02</div><h3>Dolomiten</h3><p>UNESCO-Weltnaturerbe</p></div></article>
+<article class="region"><div class="region-image"><img src="https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=700&q=85" alt="Gröden"></div><div class="region-content"><div class="region-number">03</div><h3>Gröden</h3><p>Ski, Kultur &amp; Bergdörfer</p></div></article>
+<article class="region"><div class="region-image"><img src="https://images.unsplash.com/photo-1521295121783-8a321d551ad2?auto=format&fit=crop&w=700&q=85" alt="Vinschgau"></div><div class="region-content"><div class="region-number">04</div><h3>Vinschgau</h3><p>Weite, Obstgärten &amp; Burgen</p></div></article>
+</div>
+</div>
+</section>
 
 <section class="feature" id="ueber-uns">
 
@@ -3642,31 +3782,9 @@ SCROLL HEADER
 ========================= */
 
 window.addEventListener("scroll", () => {
-
-    const header =
-    document.querySelector(".header");
-
-    if(window.scrollY > 40){
-
-        header.style.background =
-        "rgba(17,31,25,.78)";
-
-        header.style.backdropFilter =
-        "blur(20px)";
-
-        header.style.webkitBackdropFilter =
-        "blur(20px)";
-
-    }else{
-
-        header.style.background =
-        "transparent";
-
-        header.style.backdropFilter =
-        "none";
-
-    }
-
+    const header = document.querySelector(".header");
+    if(!header) return;
+    header.classList.toggle("is-scrolled", window.scrollY > 40);
 });
 
 
@@ -3684,6 +3802,42 @@ mobileMenu.addEventListener("click", () => {
     );
 
 });
+
+
+/* MAP */
+(function initStayloMap(){
+  function boot(){
+    var el = document.getElementById("stayloMap");
+    if(!el || typeof L === "undefined") return;
+    try{
+      var map = L.map("stayloMap", { scrollWheelZoom:false }).setView([46.5, 11.35], 9);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "&copy; OpenStreetMap",
+        maxZoom: 16
+      }).addTo(map);
+      var points = [
+        [46.668, 11.164, "Meran"],
+        [46.498, 11.354, "Bozen"],
+        [46.574, 11.671, "Brixen"],
+        [46.575, 11.672, "Ortisei / Gröden"],
+        [46.796, 11.936, "Bruneck"],
+        [46.55, 11.64, "Kastelruth"]
+      ];
+      points.forEach(function(p){
+        L.circleMarker([p[0], p[1]], {
+          radius: 8,
+          color: "#214b3d",
+          weight: 2,
+          fillColor: "#3d6b59",
+          fillOpacity: 0.9
+        }).bindPopup("<strong>"+p[2]+"</strong>").addTo(map);
+      });
+      setTimeout(function(){ map.invalidateSize(); }, 300);
+    }catch(e){ console.warn("Map:", e); }
+  }
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+  else boot();
+})();
 
 </script>
 
