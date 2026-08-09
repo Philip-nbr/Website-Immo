@@ -229,7 +229,7 @@ HERO
 ========================= */
 
 .hero{
-    min-height:560px;
+    min-height:580px;
 
     position:relative;
 
@@ -264,7 +264,7 @@ HERO
     position:relative;
     z-index:2;
 
-    padding-top:70px;
+    padding-top:64px;
 
     text-align:center;
 }
@@ -321,11 +321,12 @@ HERO
 .hero-subtitle{
     margin:14px auto 0;
 
-    max-width:630px;
+    max-width:620px;
 
     font-size:15px;
 
     line-height:1.6;
+
     color:rgba(255,255,255,.9);
 }
 
@@ -338,7 +339,7 @@ SEARCH
 
     z-index:20;
 
-    margin-top:-82px;
+    margin-top:-70px;
 }
 
 .search-box{
@@ -581,7 +582,7 @@ CONTENT
 ========================= */
 
 .main-content{
-    padding-top:36px;
+    padding-top:42px;
 }
 
 .section{
@@ -1614,6 +1615,335 @@ für deine nächste Auszeit in Südtirol.
 
 
 <!-- =========================
+SEARCH
+========================= -->
+
+<div class="container search-wrapper">
+
+<div class="search-box">
+
+
+<div class="search-tabs">
+
+<button class="search-tab active">
+Hotels
+</button>
+
+<button class="search-tab">
+Unterkünfte
+</button>
+
+</div>
+
+
+<div class="search-main">
+
+
+<div class="search-field">
+
+<span class="search-label">
+Wo?
+</span>
+
+<select class="search-select" id="location">
+
+<option value="all">
+Ganz Südtirol
+</option>
+
+<option>
+Meran
+</option>
+
+<option>
+Bozen
+</option>
+
+<option>
+Gröden
+</option>
+
+<option>
+Seiser Alm
+</option>
+
+<option>
+Pustertal
+</option>
+
+<option>
+Eisacktal
+</option>
+
+<option>
+Vinschgau
+</option>
+
+</select>
+
+</div>
+
+
+<div class="search-field">
+
+<span class="search-label">
+Wann?
+</span>
+
+<select class="search-select">
+
+<option>
+Reisedaten auswählen
+</option>
+
+<option>
+Dieses Wochenende
+</option>
+
+<option>
+Nächste Woche
+</option>
+
+<option>
+Nächster Monat
+</option>
+
+</select>
+
+</div>
+
+
+<div class="search-field">
+
+<span class="search-label">
+Hotelart
+</span>
+
+<select class="search-select" id="hotelType">
+
+<option value="all">
+Alle Hotelarten
+</option>
+
+<option value="luxus">
+Luxushotel
+</option>
+
+<option value="wellness">
+Wellnesshotel
+</option>
+
+<option value="berg">
+Berghotel
+</option>
+
+<option value="boutique">
+Boutique Hotel
+</option>
+
+<option value="design">
+Design Hotel
+</option>
+
+<option value="familie">
+Familienhotel
+</option>
+
+</select>
+
+</div>
+
+
+<div class="search-field">
+
+<span class="search-label">
+Preis / Nacht
+</span>
+
+<select class="search-select">
+
+<option>
+Bis € 150
+</option>
+
+<option>
+Bis € 200
+</option>
+
+<option>
+Bis € 300
+</option>
+
+<option>
+Bis € 500
+</option>
+
+<option>
+500 €+
+</option>
+
+</select>
+
+</div>
+
+
+<button class="search-button" id="searchButton">
+
+Suchen
+
+</button>
+
+</div>
+
+
+<div class="details-toggle">
+
+<button id="detailsButton">
+
++ Detailsuche
+
+</button>
+
+</div>
+
+
+<div class="details-search" id="detailsSearch">
+
+
+<div class="details-grid">
+
+
+<div class="detail-box">
+
+<label>
+Preis pro Nacht
+</label>
+
+<div class="price-row">
+
+<input
+type="range"
+id="priceSlider"
+min="50"
+max="500"
+value="150"
+step="10"
+>
+
+<span class="price-value" id="priceValue">
+€ 150
+</span>
+
+</div>
+
+</div>
+
+
+<div class="detail-box">
+
+<label>
+Bewertung
+</label>
+
+<select>
+
+<option>
+Alle Bewertungen
+</option>
+
+<option>
+4,0+
+</option>
+
+<option>
+4,5+
+</option>
+
+<option>
+4,8+
+</option>
+
+</select>
+
+</div>
+
+
+<div class="detail-box">
+
+<label>
+Sterne
+</label>
+
+<select>
+
+<option>
+Alle Kategorien
+</option>
+
+<option>
+3 Sterne
+</option>
+
+<option>
+4 Sterne
+</option>
+
+<option>
+5 Sterne
+</option>
+
+</select>
+
+</div>
+
+
+<div class="detail-box">
+
+<label>
+Ausstattung
+</label>
+
+<select>
+
+<option>
+Alle Ausstattungen
+</option>
+
+<option>
+Pool
+</option>
+
+<option>
+Spa
+</option>
+
+<option>
+Sauna
+</option>
+
+<option>
+Restaurant
+</option>
+
+<option>
+Haustiere erlaubt
+</option>
+
+</select>
+
+</div>
+
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =========================
 HOTELS
 ========================= -->
 
@@ -1713,7 +2043,7 @@ Berghotel
 <div class="hotel-body">
 
 <div class="hotel-location">
-Gröden · Südtirol
+Gröden · Dolomiten
 </div>
 
 <h3 class="hotel-name">
@@ -1721,7 +2051,7 @@ Alpenblick Lodge
 </h3>
 
 <p class="hotel-description">
-Modernes Design mit Südtirol-Blick und alpiner Ruhe.
+Modernes Design mit Dolomitenblick und alpiner Ruhe.
 </p>
 
 <div class="hotel-bottom">
@@ -1862,7 +2192,7 @@ Alpine Grand Hotel
 </h3>
 
 <p class="hotel-description">
-Exklusiver Rückzugsort mit Blick auf Südtirol.
+Exklusiver Rückzugsort mit Blick auf die Dolomiten.
 </p>
 
 <div class="hotel-bottom">
@@ -2195,7 +2525,7 @@ Kurstadt · Wein · Berge
 </span>
 
 <h3>
-Südtirol
+Dolomiten
 </h3>
 
 <p>
@@ -2226,7 +2556,7 @@ Gröden
 </h3>
 
 <p>
-Südtirol · Wandern · Ski
+Dolomiten · Wandern · Ski
 </p>
 
 </div>
@@ -2280,7 +2610,7 @@ Pustertal
 </h3>
 
 <p>
-Kronplatz · Südtirol · Natur
+Kronplatz · Dolomiten · Natur
 </p>
 
 </div>
