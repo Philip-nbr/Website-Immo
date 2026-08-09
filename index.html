@@ -8,36 +8,48 @@
 
   <meta
     name="description"
-    content="Staylo — entdecke besondere Hotels, Resorts und Hideaways in Südtirol."
+    content="Staylo — Entdecke besondere Hotels in Südtirol. Von Boutique-Hotels über Wellness-Resorts bis zu alpinen Hideaways."
   />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
   <link
-    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap"
     rel="stylesheet"
   />
 
   <style>
     :root {
-      --bg: #f5f5f2;
-      --white: #ffffff;
-      --text: #171714;
-      --muted: #696963;
-      --soft: #8c8c84;
+      --bg: #f4f3ef;
+      --surface: rgba(255,255,255,.72);
+      --surface-solid: #ffffff;
+      --surface-soft: rgba(255,255,255,.52);
 
-      --green: #24483b;
-      --green-dark: #19352c;
-      --green-light: #3f6959;
+      --text: #151513;
+      --muted: #686861;
+      --light: #92928b;
 
-      --gold: #b79b69;
+      --green: #284c40;
+      --green-dark: #1c382f;
+      --green-light: #416d5d;
 
-      --border: rgba(20, 20, 16, .10);
-      --glass: rgba(255,255,255,.72);
+      --sand: #b69a6b;
+
+      --border: rgba(30,35,31,.10);
+      --border-light: rgba(255,255,255,.65);
+
+      --shadow-sm:
+        0 4px 20px rgba(25,28,24,.06);
+
+      --shadow-md:
+        0 14px 45px rgba(25,28,24,.10);
+
+      --shadow-lg:
+        0 30px 90px rgba(20,25,21,.16);
 
       --radius: 22px;
-      --radius-small: 14px;
+      --radius-sm: 14px;
 
       --max: 1240px;
     }
@@ -54,20 +66,31 @@
 
     body {
       font-family: "DM Sans", sans-serif;
-      background: var(--bg);
+      background:
+        radial-gradient(
+          circle at 10% 0%,
+          rgba(206,219,210,.55),
+          transparent 30%
+        ),
+        radial-gradient(
+          circle at 90% 10%,
+          rgba(228,217,194,.45),
+          transparent 28%
+        ),
+        var(--bg);
+
       color: var(--text);
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
     }
 
-    body.no-scroll {
+    body.modal-open {
       overflow: hidden;
     }
 
-    img {
-      display: block;
-      width: 100%;
-      object-fit: cover;
+    a {
+      color: inherit;
+      text-decoration: none;
     }
 
     button,
@@ -77,55 +100,62 @@
     }
 
     button {
-      border: none;
+      border: 0;
       cursor: pointer;
     }
 
-    a {
-      text-decoration: none;
-      color: inherit;
+    img {
+      display: block;
+      max-width: 100%;
     }
 
-    .container {
+    .wrap {
       width: min(calc(100% - 40px), var(--max));
       margin: 0 auto;
     }
 
-    /* =========================================================
+    /* =========================
        HEADER
-    ========================================================= */
+    ========================= */
 
-    .site-header {
+    .header {
       position: fixed;
-      top: 16px;
+      top: 0;
       left: 0;
-      width: 100%;
+      right: 0;
       z-index: 100;
 
-      pointer-events: none;
+      padding: 14px 0;
+
+      transition:
+        padding .3s ease,
+        background .3s ease;
+    }
+
+    .header.scrolled {
+      padding: 9px 0;
     }
 
     .nav {
-      pointer-events: auto;
-
-      height: 68px;
+      min-height: 66px;
 
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 25px;
 
-      padding: 8px 10px 8px 12px;
+      padding: 8px 10px 8px 14px;
 
-      background: rgba(255,255,255,.68);
-      backdrop-filter: blur(22px) saturate(150%);
-      -webkit-backdrop-filter: blur(22px) saturate(150%);
-
+      background: rgba(255,255,255,.60);
       border: 1px solid rgba(255,255,255,.75);
+
+      backdrop-filter: blur(22px) saturate(160%);
+      -webkit-backdrop-filter: blur(22px) saturate(160%);
 
       border-radius: 999px;
 
       box-shadow:
-        0 12px 40px rgba(20,20,15,.08),
+        0 10px 40px rgba(30,35,31,.08),
         inset 0 1px 0 rgba(255,255,255,.8);
     }
 
@@ -134,41 +164,39 @@
       align-items: center;
       gap: 10px;
 
-      padding-left: 4px;
-
-      font-size: 17px;
       font-weight: 700;
       letter-spacing: -.03em;
+      font-size: 18px;
     }
 
-    .brand-icon {
-      width: 42px;
-      height: 42px;
+    .brand-mark {
+      width: 38px;
+      height: 38px;
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: grid;
+      place-items: center;
 
       border-radius: 50%;
 
       background:
-        linear-gradient(145deg, #315e4d, #1d3c31);
+        linear-gradient(
+          145deg,
+          #355d4f,
+          #1e3b31
+        );
 
       color: white;
 
       box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.25),
-        0 5px 15px rgba(28,63,49,.22);
-    }
+        inset 0 1px 1px rgba(255,255,255,.25),
+        0 5px 15px rgba(30,60,48,.20);
 
-    .brand-icon span {
-      font-family: "Playfair Display", serif;
-      font-size: 18px;
-      font-weight: 600;
+      font-family: Fraunces, serif;
+      font-size: 17px;
     }
 
     .brand-name {
-      color: var(--text);
+      font-size: 18px;
     }
 
     .nav-links {
@@ -177,76 +205,120 @@
       gap: 6px;
     }
 
-    .nav-links a {
+    .nav-link {
       padding: 10px 15px;
-
       border-radius: 999px;
 
-      color: #55554f;
+      color: #555650;
+      font-size: 14px;
+      font-weight: 500;
 
-      font-size: 13px;
-      font-weight: 600;
-
-      transition: .2s ease;
+      transition:
+        background .2s ease,
+        color .2s ease;
     }
 
-    .nav-links a:hover {
-      background: rgba(255,255,255,.75);
+    .nav-link:hover {
+      background: rgba(255,255,255,.72);
       color: var(--text);
     }
 
-    .nav-cta {
-      padding: 11px 17px;
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-hotels {
+      padding: 11px 18px;
+
+      color: white;
+      background: var(--green);
 
       border-radius: 999px;
-
-      background: var(--green);
-      color: white;
 
       font-size: 13px;
       font-weight: 700;
 
-      transition: .2s ease;
+      transition:
+        transform .2s ease,
+        background .2s ease;
     }
 
-    .nav-cta:hover {
+    .nav-hotels:hover {
       background: var(--green-dark);
       transform: translateY(-1px);
     }
 
-    /* =========================================================
+    /* =========================
        HERO
-    ========================================================= */
+    ========================= */
 
     .hero {
-      padding-top: 108px;
-      min-height: 850px;
+      min-height: 820px;
 
       display: flex;
       align-items: center;
+
+      padding: 150px 0 80px;
+
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+
+      position: absolute;
+
+      width: 650px;
+      height: 650px;
+
+      top: -250px;
+      left: -230px;
+
+      border-radius: 50%;
+
+      background: rgba(180,205,190,.35);
+
+      filter: blur(30px);
+      pointer-events: none;
     }
 
     .hero-grid {
       display: grid;
-      grid-template-columns: .88fr 1.12fr;
-      gap: 55px;
+      grid-template-columns: .9fr 1.1fr;
+
+      gap: 65px;
       align-items: center;
+
+      position: relative;
+      z-index: 2;
     }
 
     .eyebrow {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: 9px;
 
-      margin-bottom: 22px;
+      margin-bottom: 20px;
+
+      padding: 7px 12px;
+
+      border-radius: 999px;
+
+      background: rgba(255,255,255,.58);
+      border: 1px solid rgba(255,255,255,.8);
+
+      backdrop-filter: blur(12px);
 
       color: var(--green);
 
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
 
       text-transform: uppercase;
-      letter-spacing: .14em;
+      letter-spacing: .13em;
     }
 
     .eyebrow-dot {
@@ -255,100 +327,105 @@
 
       border-radius: 50%;
 
-      background: var(--gold);
+      background: var(--sand);
     }
 
-    .hero-title {
-      max-width: 610px;
-
-      font-family: "Playfair Display", serif;
+    .hero h1 {
+      font-family: Fraunces, serif;
 
       font-size: clamp(48px, 6vw, 78px);
+
       line-height: .98;
+      letter-spacing: -.055em;
 
       font-weight: 600;
-      letter-spacing: -.055em;
+
+      max-width: 700px;
+
+      margin-bottom: 24px;
     }
 
-    .hero-title span {
+    .hero h1 span {
       color: var(--green);
     }
 
     .hero-text {
-      max-width: 490px;
-
-      margin-top: 25px;
+      max-width: 510px;
 
       color: var(--muted);
 
-      font-size: 16px;
-      line-height: 1.75;
+      font-size: 17px;
+      line-height: 1.7;
+
+      margin-bottom: 30px;
     }
 
-    .hero-buttons {
+    .hero-actions {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
 
-      margin-top: 32px;
+      margin-bottom: 30px;
     }
 
-    .button {
+    .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
 
       min-height: 48px;
 
-      padding: 0 21px;
+      padding: 0 20px;
 
       border-radius: 999px;
 
       font-size: 14px;
       font-weight: 700;
 
-      transition: .2s ease;
+      transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        background .2s ease;
     }
 
-    .button-primary {
-      background: var(--green);
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
       color: white;
+      background: var(--green);
 
-      box-shadow: 0 8px 22px rgba(35,71,58,.18);
+      box-shadow:
+        0 8px 22px rgba(40,76,64,.20);
     }
 
-    .button-primary:hover {
+    .btn-primary:hover {
       background: var(--green-dark);
-      transform: translateY(-2px);
     }
 
-    .button-secondary {
-      background: rgba(255,255,255,.7);
-
-      border: 1px solid var(--border);
-
+    .btn-glass {
       color: var(--text);
+
+      background: rgba(255,255,255,.58);
+
+      border: 1px solid rgba(255,255,255,.85);
+
+      backdrop-filter: blur(14px);
     }
 
-    .button-secondary:hover {
-      background: white;
-      transform: translateY(-2px);
-    }
-
-    .hero-note {
+    .hero-info {
       display: flex;
-      gap: 18px;
       flex-wrap: wrap;
+      gap: 18px;
 
-      margin-top: 25px;
+      color: var(--light);
 
-      color: var(--soft);
-
-      font-size: 12px;
+      font-size: 13px;
     }
 
-    .hero-note strong {
-      color: #55554f;
+    .hero-info strong {
+      color: var(--muted);
     }
 
     /* HERO IMAGE */
@@ -356,173 +433,188 @@
     .hero-image-wrap {
       position: relative;
 
-      height: 620px;
+      height: 590px;
 
-      border-radius: 32px;
+      border-radius: 34px;
 
       overflow: hidden;
 
-      box-shadow:
-        0 30px 80px rgba(20,20,15,.16);
+      box-shadow: var(--shadow-lg);
+
+      border: 1px solid rgba(255,255,255,.8);
     }
 
-    .hero-image {
-      height: 100%;
+    .hero-image-wrap::after {
+      content: "";
+
+      position: absolute;
+      inset: 0;
 
       background:
         linear-gradient(
           180deg,
-          rgba(0,0,0,0) 50%,
-          rgba(0,0,0,.42)
-        ),
-        url("https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1600&q=90");
+          transparent 50%,
+          rgba(10,20,16,.38)
+        );
 
-      background-size: cover;
-      background-position: center;
+      pointer-events: none;
     }
 
-    .hero-image-content {
+    .hero-image {
+      width: 100%;
+      height: 100%;
+
+      object-fit: cover;
+    }
+
+    .hero-floating {
       position: absolute;
 
       left: 22px;
       right: 22px;
       bottom: 22px;
 
+      z-index: 3;
+
       display: flex;
-      align-items: flex-end;
+      align-items: center;
       justify-content: space-between;
 
       gap: 15px;
-    }
 
-    .hero-glass-card {
-      padding: 17px 19px;
+      padding: 15px;
 
-      background: rgba(255,255,255,.77);
+      border-radius: 18px;
 
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
+      background: rgba(255,255,255,.74);
 
-      border: 1px solid rgba(255,255,255,.65);
+      border: 1px solid rgba(255,255,255,.85);
 
-      border-radius: 17px;
+      backdrop-filter: blur(20px) saturate(150%);
+      -webkit-backdrop-filter: blur(20px) saturate(150%);
 
       box-shadow:
-        0 10px 30px rgba(0,0,0,.13);
+        0 10px 35px rgba(0,0,0,.12);
     }
 
-    .hero-glass-card small {
-      display: block;
-
-      margin-bottom: 3px;
-
-      color: var(--muted);
-
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-    }
-
-    .hero-glass-card strong {
-      font-size: 15px;
-    }
-
-    .hero-rating {
+    .floating-left {
       display: flex;
       align-items: center;
-      gap: 8px;
-
-      padding: 12px 15px;
-
-      background: rgba(255,255,255,.78);
-
-      backdrop-filter: blur(18px);
-
-      border-radius: 999px;
-
-      font-size: 13px;
-      font-weight: 700;
+      gap: 12px;
     }
 
-    .star {
-      color: #b08d50;
-    }
+    .floating-icon {
+      width: 42px;
+      height: 42px;
 
-    /* =========================================================
-       SEARCH
-    ========================================================= */
-
-    .search-section {
-      position: relative;
-
-      margin-top: -70px;
-
-      z-index: 5;
-    }
-
-    .search-box {
       display: grid;
-      grid-template-columns: 1.2fr 1fr .8fr auto;
-      gap: 8px;
-
-      padding: 10px;
-
-      background: rgba(255,255,255,.78);
-
-      backdrop-filter: blur(22px);
-      -webkit-backdrop-filter: blur(22px);
-
-      border: 1px solid rgba(255,255,255,.9);
-
-      border-radius: 20px;
-
-      box-shadow:
-        0 20px 55px rgba(20,20,15,.11);
-    }
-
-    .search-field {
-      padding: 9px 12px;
-
-      border: 1px solid transparent;
+      place-items: center;
 
       border-radius: 13px;
 
-      background: rgba(245,245,242,.8);
+      background: var(--green);
+      color: white;
+
+      font-size: 18px;
     }
 
-    .search-field:focus-within {
-      background: white;
-      border-color: rgba(36,72,59,.2);
+    .floating-title {
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .floating-sub {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .floating-badge {
+      padding: 7px 10px;
+
+      background: rgba(40,76,64,.10);
+      color: var(--green);
+
+      border-radius: 999px;
+
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    /* =========================
+       SEARCH
+    ========================= */
+
+    .search-section {
+      margin-top: -95px;
+
+      position: relative;
+      z-index: 10;
+    }
+
+    .search-box {
+      padding: 14px;
+
+      display: grid;
+      grid-template-columns: 1.3fr 1fr 1fr auto;
+
+      gap: 9px;
+
+      background: rgba(255,255,255,.76);
+
+      border: 1px solid rgba(255,255,255,.9);
+
+      border-radius: 24px;
+
+      backdrop-filter: blur(25px) saturate(160%);
+      -webkit-backdrop-filter: blur(25px) saturate(160%);
+
+      box-shadow:
+        0 25px 70px rgba(25,30,26,.13),
+        inset 0 1px 0 rgba(255,255,255,.9);
+    }
+
+    .search-field {
+      min-height: 62px;
+
+      padding: 9px 14px;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      border-radius: 15px;
+
+      background: rgba(247,247,244,.72);
+
+      border: 1px solid rgba(30,35,31,.07);
     }
 
     .search-field label {
-      display: block;
-
-      margin-bottom: 2px;
-
-      color: var(--soft);
-
       font-size: 10px;
+
+      color: var(--light);
+
       font-weight: 700;
 
       text-transform: uppercase;
       letter-spacing: .08em;
+
+      margin-bottom: 2px;
     }
 
     .search-field input,
     .search-field select {
       width: 100%;
 
-      border: none;
-      outline: none;
+      border: 0;
+      outline: 0;
 
       background: transparent;
 
       color: var(--text);
 
       font-size: 14px;
-      font-weight: 500;
+      font-weight: 600;
     }
 
     .search-field select {
@@ -530,116 +622,170 @@
     }
 
     .search-button {
-      min-width: 115px;
+      align-self: stretch;
 
-      border-radius: 13px;
+      padding: 0 24px;
 
-      background: var(--green);
+      border-radius: 16px;
+
       color: white;
+      background: var(--green);
 
-      font-size: 14px;
       font-weight: 700;
+      font-size: 14px;
+
+      transition: background .2s ease;
     }
 
     .search-button:hover {
       background: var(--green-dark);
     }
 
-    /* =========================================================
-       SECTION
-    ========================================================= */
+    .filter-more {
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-    .section {
-      padding: 105px 0;
+      gap: 6px;
+
+      margin-top: 10px;
+
+      color: var(--muted);
+
+      font-size: 13px;
+      font-weight: 600;
     }
 
-    .section-header {
+    .filter-more:hover {
+      color: var(--green);
+    }
+
+    /* =========================
+       CATEGORY BAR
+    ========================= */
+
+    .category-section {
+      padding: 80px 0 25px;
+    }
+
+    .section-top {
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
 
       gap: 20px;
 
-      margin-bottom: 28px;
+      margin-bottom: 24px;
     }
 
-    .section-label {
-      margin-bottom: 8px;
-
-      color: var(--gold);
+    .section-kicker {
+      color: var(--green);
 
       font-size: 11px;
       font-weight: 700;
 
+      letter-spacing: .12em;
       text-transform: uppercase;
-      letter-spacing: .14em;
+
+      margin-bottom: 7px;
     }
 
     .section-title {
-      font-family: "Playfair Display", serif;
+      font-family: Fraunces, serif;
 
-      font-size: clamp(32px, 4vw, 46px);
+      font-size: clamp(28px, 4vw, 42px);
 
       line-height: 1.05;
-
-      letter-spacing: -.04em;
+      letter-spacing: -.035em;
 
       font-weight: 600;
     }
 
     .section-description {
-      max-width: 440px;
-
       color: var(--muted);
 
       font-size: 14px;
-      line-height: 1.65;
+
+      max-width: 420px;
     }
 
-    /* =========================================================
-       CATEGORIES
-    ========================================================= */
-
-    .category-row {
+    .categories {
       display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
+      gap: 9px;
 
-      margin-bottom: 25px;
+      overflow-x: auto;
+
+      padding-bottom: 5px;
+
+      scrollbar-width: none;
+    }
+
+    .categories::-webkit-scrollbar {
+      display: none;
     }
 
     .category {
-      padding: 9px 15px;
+      flex: 0 0 auto;
+
+      padding: 11px 17px;
 
       border-radius: 999px;
 
-      background: white;
+      background: rgba(255,255,255,.58);
 
-      border: 1px solid var(--border);
+      border: 1px solid rgba(30,35,31,.08);
 
       color: var(--muted);
 
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 700;
 
-      transition: .2s ease;
+      transition:
+        background .2s ease,
+        color .2s ease,
+        transform .2s ease;
     }
 
-    .category:hover,
+    .category:hover {
+      transform: translateY(-1px);
+    }
+
     .category.active {
-      background: var(--green);
-      border-color: var(--green);
-
       color: white;
+      background: var(--green);
+
+      border-color: var(--green);
     }
 
-    /* =========================================================
-       HOTEL GRID
-    ========================================================= */
+    /* =========================
+       HOTELS
+    ========================= */
+
+    .hotels-section {
+      padding: 30px 0 100px;
+    }
+
+    .results-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      margin-bottom: 20px;
+
+      color: var(--muted);
+
+      font-size: 13px;
+    }
+
+    .results-line strong {
+      color: var(--text);
+    }
 
     .hotel-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+
+      grid-template-columns:
+        repeat(3, minmax(0, 1fr));
 
       gap: 18px;
     }
@@ -647,13 +793,15 @@
     .hotel-card {
       position: relative;
 
-      overflow: hidden;
+      background: rgba(255,255,255,.68);
 
-      background: white;
-
-      border: 1px solid var(--border);
+      border: 1px solid rgba(255,255,255,.85);
 
       border-radius: var(--radius);
+
+      overflow: hidden;
+
+      box-shadow: var(--shadow-sm);
 
       cursor: pointer;
 
@@ -664,21 +812,22 @@
 
     .hotel-card:hover {
       transform: translateY(-5px);
-
-      box-shadow:
-        0 20px 50px rgba(20,20,15,.11);
+      box-shadow: var(--shadow-md);
     }
 
     .hotel-image {
       position: relative;
 
-      height: 275px;
+      height: 260px;
 
       overflow: hidden;
     }
 
     .hotel-image img {
+      width: 100%;
       height: 100%;
+
+      object-fit: cover;
 
       transition: transform .6s ease;
     }
@@ -687,364 +836,579 @@
       transform: scale(1.045);
     }
 
-    .hotel-badge {
+    .hotel-overlay {
       position: absolute;
+      inset: 0;
 
-      top: 12px;
-      left: 12px;
-
-      padding: 6px 10px;
-
-      background: rgba(255,255,255,.82);
-
-      backdrop-filter: blur(12px);
-
-      border: 1px solid rgba(255,255,255,.65);
-
-      border-radius: 999px;
-
-      color: var(--text);
-
-      font-size: 10px;
-      font-weight: 700;
-
-      text-transform: uppercase;
-      letter-spacing: .06em;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(0,0,0,.18),
+          transparent 45%,
+          rgba(0,0,0,.10)
+        );
     }
 
-    .hotel-fav {
+    .hotel-label {
       position: absolute;
 
-      top: 11px;
-      right: 11px;
+      top: 13px;
+      left: 13px;
 
-      width: 37px;
-      height: 37px;
+      padding: 7px 10px;
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      border-radius: 999px;
 
       background: rgba(255,255,255,.78);
 
       backdrop-filter: blur(12px);
 
+      font-size: 10px;
+      font-weight: 800;
+
+      text-transform: uppercase;
+      letter-spacing: .07em;
+    }
+
+    .hotel-heart {
+      position: absolute;
+
+      top: 12px;
+      right: 12px;
+
+      width: 38px;
+      height: 38px;
+
+      display: grid;
+      place-items: center;
+
       border-radius: 50%;
+
+      background: rgba(255,255,255,.72);
+
+      backdrop-filter: blur(12px);
 
       font-size: 16px;
 
-      transition: .2s;
+      transition:
+        transform .2s ease,
+        background .2s ease;
     }
 
-    .hotel-fav:hover {
-      background: white;
+    .hotel-heart:hover {
       transform: scale(1.08);
+      background: white;
     }
 
     .hotel-body {
-      padding: 17px;
+      padding: 17px 17px 18px;
     }
 
     .hotel-location {
-      color: var(--soft);
+      color: var(--light);
 
       font-size: 11px;
-      font-weight: 600;
+      font-weight: 700;
 
       text-transform: uppercase;
-      letter-spacing: .06em;
+      letter-spacing: .07em;
 
       margin-bottom: 5px;
     }
 
     .hotel-name {
-      margin-bottom: 7px;
-
-      font-family: "Playfair Display", serif;
+      font-family: Fraunces, serif;
 
       font-size: 22px;
-      font-weight: 600;
+
+      line-height: 1.1;
 
       letter-spacing: -.025em;
+
+      margin-bottom: 7px;
     }
 
-    .hotel-info {
+    .hotel-description {
+      color: var(--muted);
+
+      font-size: 13px;
+      line-height: 1.55;
+
+      min-height: 41px;
+
+      margin-bottom: 15px;
+    }
+
+    .hotel-bottom {
       display: flex;
-      align-items: center;
+      align-items: flex-end;
       justify-content: space-between;
 
       gap: 10px;
-
-      color: var(--muted);
-
-      font-size: 12px;
     }
 
-    .hotel-price {
+    .hotel-meta {
+      display: flex;
+      flex-wrap: wrap;
+
+      gap: 6px;
+    }
+
+    .hotel-meta span {
+      padding: 5px 8px;
+
+      border-radius: 999px;
+
+      background: rgba(40,76,64,.07);
+
       color: var(--green);
 
-      font-size: 14px;
+      font-size: 10px;
       font-weight: 700;
     }
 
-    .hotel-price span {
-      color: var(--soft);
-
-      font-size: 11px;
-      font-weight: 500;
+    .hotel-price {
+      text-align: right;
+      white-space: nowrap;
     }
 
-    /* =========================================================
-       FEATURE STRIP
-    ========================================================= */
+    .hotel-price small {
+      display: block;
 
-    .feature-section {
-      padding: 30px 0 105px;
+      color: var(--light);
+
+      font-size: 10px;
     }
 
-    .feature-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
+    .hotel-price strong {
+      color: var(--text);
 
-      gap: 12px;
+      font-size: 15px;
     }
 
-    .feature {
-      min-height: 180px;
+    /* =========================
+       EMPTY
+    ========================= */
 
-      padding: 26px;
+    .empty {
+      grid-column: 1 / -1;
 
-      background: white;
+      padding: 70px 20px;
+
+      text-align: center;
+
+      background: rgba(255,255,255,.65);
 
       border: 1px solid var(--border);
 
       border-radius: var(--radius);
-    }
-
-    .feature-icon {
-      width: 40px;
-      height: 40px;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      margin-bottom: 20px;
-
-      background: #eef1ed;
-
-      border-radius: 12px;
-
-      color: var(--green);
-
-      font-size: 17px;
-    }
-
-    .feature h3 {
-      margin-bottom: 7px;
-
-      font-size: 16px;
-    }
-
-    .feature p {
-      max-width: 320px;
 
       color: var(--muted);
-
-      font-size: 13px;
-      line-height: 1.6;
     }
 
-    /* =========================================================
-       HOTELIER CTA
-    ========================================================= */
+    .empty h3 {
+      color: var(--text);
 
-    .hotelier-section {
-      padding: 0 0 105px;
+      font-family: Fraunces, serif;
+
+      font-size: 25px;
+
+      margin-bottom: 8px;
     }
 
-    .hotelier-box {
-      position: relative;
+    /* =========================
+       FEATURE
+    ========================= */
+
+    .feature-section {
+      padding: 20px 0 100px;
+    }
+
+    .feature {
+      display: grid;
+
+      grid-template-columns: 1fr 1fr;
+
+      min-height: 480px;
 
       overflow: hidden;
 
-      display: grid;
-      grid-template-columns: 1.1fr .9fr;
-
-      min-height: 430px;
-
-      border-radius: 30px;
+      border-radius: 32px;
 
       background: var(--green);
+
+      box-shadow: var(--shadow-lg);
+    }
+
+    .feature-image {
+      min-height: 480px;
+    }
+
+    .feature-image img {
+      width: 100%;
+      height: 100%;
+
+      object-fit: cover;
+    }
+
+    .feature-content {
+      padding: 60px;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
 
       color: white;
     }
 
-    .hotelier-content {
-      position: relative;
-
-      z-index: 2;
-
-      padding: 60px;
+    .feature-content .section-kicker {
+      color: #cbb68c;
     }
 
-    .hotelier-label {
-      margin-bottom: 14px;
+    .feature-content h2 {
+      font-family: Fraunces, serif;
 
-      color: #cbb58a;
+      font-size: clamp(34px, 4vw, 50px);
 
-      font-size: 11px;
-      font-weight: 700;
-
-      text-transform: uppercase;
-      letter-spacing: .14em;
-    }
-
-    .hotelier-title {
-      max-width: 540px;
-
-      font-family: "Playfair Display", serif;
-
-      font-size: clamp(34px, 4vw, 52px);
-
-      line-height: 1.05;
+      line-height: 1.02;
 
       letter-spacing: -.04em;
+
+      margin-bottom: 18px;
     }
 
-    .hotelier-text {
-      max-width: 490px;
-
-      margin-top: 18px;
+    .feature-content p {
+      max-width: 450px;
 
       color: rgba(255,255,255,.72);
 
       font-size: 15px;
       line-height: 1.7;
+
+      margin-bottom: 24px;
     }
 
-    .hotelier-button {
-      margin-top: 28px;
+    .feature-points {
+      display: grid;
+      gap: 10px;
+
+      margin-bottom: 28px;
+    }
+
+    .feature-point {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      color: rgba(255,255,255,.88);
+
+      font-size: 13px;
+    }
+
+    .check {
+      width: 23px;
+      height: 23px;
+
+      display: grid;
+      place-items: center;
+
+      border-radius: 50%;
+
+      background: rgba(255,255,255,.12);
+
+      color: #d7c298;
+
+      font-size: 11px;
+    }
+
+    .btn-white {
+      width: fit-content;
 
       background: white;
       color: var(--green);
     }
 
-    .hotelier-button:hover {
-      transform: translateY(-2px);
+    .btn-white:hover {
+      background: #f5f5f2;
     }
 
-    .hotelier-image {
+    /* =========================
+       INSPIRATION
+    ========================= */
+
+    .inspiration-section {
+      padding: 0 0 100px;
+    }
+
+    .inspiration-grid {
+      display: grid;
+
+      grid-template-columns: 1.2fr .8fr .8fr;
+
+      gap: 15px;
+    }
+
+    .inspiration-card {
       position: relative;
 
-      min-height: 430px;
+      min-height: 300px;
+
+      overflow: hidden;
+
+      border-radius: 22px;
+
+      cursor: pointer;
+    }
+
+    .inspiration-card img {
+      width: 100%;
+      height: 100%;
+
+      object-fit: cover;
+
+      transition: transform .6s ease;
+    }
+
+    .inspiration-card:hover img {
+      transform: scale(1.05);
+    }
+
+    .inspiration-card::after {
+      content: "";
+
+      position: absolute;
+      inset: 0;
 
       background:
         linear-gradient(
-          90deg,
-          var(--green) 0%,
-          transparent 35%
-        ),
-        url("https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=1200&q=85");
-
-      background-size: cover;
-      background-position: center;
+          180deg,
+          transparent 45%,
+          rgba(0,0,0,.62)
+        );
     }
 
-    /* =========================================================
-       FOOTER
-    ========================================================= */
+    .inspiration-content {
+      position: absolute;
 
-    footer {
-      padding: 70px 0 30px;
+      left: 20px;
+      right: 20px;
+      bottom: 19px;
 
-      border-top: 1px solid var(--border);
+      z-index: 2;
 
-      background: #eeeee9;
+      color: white;
     }
 
-    .footer-grid {
-      display: grid;
-      grid-template-columns: 1.5fr 1fr 1fr 1fr;
-
-      gap: 45px;
-
-      padding-bottom: 55px;
-    }
-
-    .footer-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-
-      margin-bottom: 16px;
-    }
-
-    .footer-brand .brand-icon {
-      width: 36px;
-      height: 36px;
-    }
-
-    .footer-brand .brand-icon span {
-      font-size: 15px;
-    }
-
-    .footer-description {
-      max-width: 280px;
-
-      color: var(--muted);
-
-      font-size: 13px;
-      line-height: 1.7;
-    }
-
-    .footer-column h4 {
-      margin-bottom: 15px;
-
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-    }
-
-    .footer-column a {
+    .inspiration-content small {
       display: block;
 
-      margin-bottom: 9px;
+      opacity: .75;
+
+      font-size: 10px;
+      font-weight: 700;
+
+      text-transform: uppercase;
+      letter-spacing: .1em;
+
+      margin-bottom: 4px;
+    }
+
+    .inspiration-content h3 {
+      font-family: Fraunces, serif;
+
+      font-size: 24px;
+
+      line-height: 1.05;
+    }
+
+    /* =========================
+       ABOUT
+    ========================= */
+
+    .about-section {
+      padding: 0 0 100px;
+    }
+
+    .about-grid {
+      display: grid;
+
+      grid-template-columns: .8fr 1.2fr;
+
+      gap: 60px;
+
+      align-items: center;
+    }
+
+    .about-logo {
+      width: 170px;
+      height: 170px;
+
+      display: grid;
+      place-items: center;
+
+      border-radius: 50%;
+
+      background:
+        linear-gradient(
+          145deg,
+          #315a4b,
+          #1d392f
+        );
+
+      color: white;
+
+      font-family: Fraunces, serif;
+
+      font-size: 52px;
+
+      box-shadow:
+        0 25px 60px rgba(40,76,64,.20);
+    }
+
+    .about-content h2 {
+      font-family: Fraunces, serif;
+
+      font-size: clamp(32px, 4vw, 48px);
+
+      line-height: 1.05;
+
+      letter-spacing: -.04em;
+
+      margin-bottom: 15px;
+    }
+
+    .about-content p {
+      max-width: 650px;
 
       color: var(--muted);
 
-      font-size: 13px;
+      font-size: 15px;
+      line-height: 1.75;
 
-      transition: .2s;
+      margin-bottom: 20px;
     }
 
-    .footer-column a:hover {
-      color: var(--green);
-    }
-
-    .footer-bottom {
+    .about-stats {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
+      flex-wrap: wrap;
 
-      gap: 20px;
+      gap: 10px;
+    }
 
-      padding-top: 24px;
+    .stat {
+      padding: 13px 15px;
 
-      border-top: 1px solid var(--border);
+      border-radius: 15px;
 
-      color: var(--soft);
+      background: rgba(255,255,255,.58);
+
+      border: 1px solid var(--border);
+    }
+
+    .stat strong {
+      display: block;
+
+      font-size: 14px;
+    }
+
+    .stat span {
+      color: var(--light);
 
       font-size: 11px;
     }
 
-    /* =========================================================
+    /* =========================
+       FOOTER
+    ========================= */
+
+    footer {
+      padding: 70px 0 25px;
+
+      background: #eae9e4;
+
+      border-top: 1px solid rgba(30,35,31,.08);
+    }
+
+    .footer-grid {
+      display: grid;
+
+      grid-template-columns: 1.4fr 1fr 1fr 1fr;
+
+      gap: 45px;
+
+      padding-bottom: 50px;
+    }
+
+    .footer-brand {
+      max-width: 280px;
+    }
+
+    .footer-brand .brand {
+      margin-bottom: 15px;
+    }
+
+    .footer-brand p {
+      color: var(--muted);
+
+      font-size: 13px;
+      line-height: 1.7;
+
+      margin-bottom: 18px;
+    }
+
+    .footer-email {
+      color: var(--green);
+
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .footer-col h4 {
+      font-size: 12px;
+
+      text-transform: uppercase;
+      letter-spacing: .08em;
+
+      margin-bottom: 14px;
+    }
+
+    .footer-col a {
+      display: block;
+
+      color: var(--muted);
+
+      font-size: 13px;
+
+      margin-bottom: 9px;
+
+      transition: color .2s ease;
+    }
+
+    .footer-col a:hover {
+      color: var(--green);
+    }
+
+    .footer-bottom {
+      padding-top: 22px;
+
+      border-top: 1px solid rgba(30,35,31,.09);
+
+      display: flex;
+      justify-content: space-between;
+
+      gap: 20px;
+
+      color: var(--light);
+
+      font-size: 11px;
+    }
+
+    /* =========================
        MODAL
-    ========================================================= */
+    ========================= */
 
     .modal {
       position: fixed;
-
       inset: 0;
 
       z-index: 300;
@@ -1055,9 +1419,10 @@
 
       padding: 20px;
 
-      background: rgba(12,15,13,.55);
+      background: rgba(10,15,12,.48);
 
-      backdrop-filter: blur(12px);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
 
     .modal.open {
@@ -1066,16 +1431,17 @@
 
     .modal-box {
       width: min(900px, 100%);
-      max-height: 90vh;
+      max-height: 92vh;
 
       overflow: auto;
 
-      background: white;
+      background: #f8f8f5;
 
-      border-radius: 25px;
+      border: 1px solid rgba(255,255,255,.8);
 
-      box-shadow:
-        0 30px 100px rgba(0,0,0,.3);
+      border-radius: 28px;
+
+      box-shadow: var(--shadow-lg);
     }
 
     .modal-image {
@@ -1083,8 +1449,14 @@
 
       height: 360px;
 
-      background-size: cover;
-      background-position: center;
+      overflow: hidden;
+    }
+
+    .modal-image img {
+      width: 100%;
+      height: 100%;
+
+      object-fit: cover;
     }
 
     .modal-close {
@@ -1096,9 +1468,12 @@
       width: 42px;
       height: 42px;
 
+      display: grid;
+      place-items: center;
+
       border-radius: 50%;
 
-      background: rgba(255,255,255,.85);
+      background: rgba(255,255,255,.82);
 
       backdrop-filter: blur(12px);
 
@@ -1110,61 +1485,63 @@
     }
 
     .modal-location {
-      margin-bottom: 5px;
-
-      color: var(--soft);
+      color: var(--green);
 
       font-size: 11px;
-      font-weight: 700;
+      font-weight: 800;
 
       text-transform: uppercase;
-      letter-spacing: .08em;
+      letter-spacing: .1em;
+
+      margin-bottom: 6px;
     }
 
     .modal-title {
-      margin-bottom: 8px;
+      font-family: Fraunces, serif;
 
-      font-family: "Playfair Display", serif;
+      font-size: 38px;
 
-      font-size: 34px;
+      line-height: 1;
 
-      letter-spacing: -.03em;
+      letter-spacing: -.035em;
+
+      margin-bottom: 10px;
     }
 
-    .modal-meta {
+    .modal-description {
+      color: var(--muted);
+
+      max-width: 650px;
+
+      font-size: 14px;
+      line-height: 1.7;
+
+      margin-bottom: 20px;
+    }
+
+    .modal-details {
       display: flex;
       flex-wrap: wrap;
 
-      gap: 10px;
+      gap: 7px;
 
-      margin-bottom: 18px;
+      margin-bottom: 25px;
     }
 
-    .modal-tag {
+    .modal-detail {
       padding: 7px 10px;
 
       border-radius: 999px;
 
-      background: #f1f2ee;
+      background: rgba(40,76,64,.08);
 
-      color: var(--muted);
+      color: var(--green);
 
       font-size: 11px;
-      font-weight: 600;
+      font-weight: 700;
     }
 
-    .modal-description {
-      max-width: 650px;
-
-      margin-bottom: 25px;
-
-      color: var(--muted);
-
-      font-size: 14px;
-      line-height: 1.75;
-    }
-
-    .modal-bottom {
+    .modal-footer {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -1176,29 +1553,27 @@
       border-top: 1px solid var(--border);
     }
 
-    .modal-price {
-      color: var(--green);
+    .modal-price small {
+      display: block;
 
-      font-size: 20px;
-      font-weight: 700;
+      color: var(--light);
+
+      font-size: 11px;
     }
 
-    .modal-price span {
-      color: var(--soft);
-
-      font-size: 12px;
-      font-weight: 500;
+    .modal-price strong {
+      font-size: 22px;
     }
 
     .modal-actions {
       display: flex;
-      flex-wrap: wrap;
       gap: 8px;
+      flex-wrap: wrap;
     }
 
-    /* =========================================================
+    /* =========================
        TOAST
-    ========================================================= */
+    ========================= */
 
     .toast {
       position: fixed;
@@ -1208,50 +1583,61 @@
 
       z-index: 500;
 
-      padding: 12px 18px;
-
-      transform: translate(-50%, 20px);
-
-      background: #171714;
-      color: white;
-
-      border-radius: 999px;
-
-      font-size: 13px;
-      font-weight: 600;
+      transform:
+        translate(-50%, 20px);
 
       opacity: 0;
 
       pointer-events: none;
 
-      transition: .25s ease;
+      padding: 12px 18px;
+
+      border-radius: 999px;
+
+      background: #151513;
+      color: white;
+
+      font-size: 13px;
+      font-weight: 600;
+
+      box-shadow: var(--shadow-md);
+
+      transition:
+        opacity .25s ease,
+        transform .25s ease;
     }
 
     .toast.show {
       opacity: 1;
-      transform: translate(-50%, 0);
+
+      transform:
+        translate(-50%, 0);
     }
 
-    /* =========================================================
+    /* =========================
+       MOBILE MENU
+    ========================= */
+
+    .mobile-menu {
+      display: none;
+    }
+
+    /* =========================
        RESPONSIVE
-    ========================================================= */
+    ========================= */
 
-    @media (max-width: 1000px) {
-
-      .nav-links {
-        display: none;
-      }
+    @media (max-width: 1050px) {
 
       .hero-grid {
         grid-template-columns: 1fr;
       }
 
       .hero {
-        padding-top: 125px;
+        padding-top: 130px;
       }
 
       .hero-image-wrap {
-        height: 500px;
+        height: 480px;
       }
 
       .search-box {
@@ -1259,19 +1645,32 @@
       }
 
       .search-button {
-        height: 50px;
+        min-height: 60px;
       }
 
       .hotel-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
-      .hotelier-box {
+      .feature {
         grid-template-columns: 1fr;
       }
 
-      .hotelier-image {
-        display: none;
+      .feature-image {
+        height: 380px;
+        min-height: 0;
+      }
+
+      .inspiration-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .inspiration-card:first-child {
+        grid-column: 1 / -1;
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
       }
 
       .footer-grid {
@@ -1279,80 +1678,76 @@
       }
     }
 
-    @media (max-width: 650px) {
+    @media (max-width: 700px) {
 
-      .container {
-        width: min(calc(100% - 28px), var(--max));
-      }
-
-      .site-header {
-        top: 9px;
+      .wrap {
+        width: min(calc(100% - 24px), var(--max));
       }
 
       .nav {
-        height: 60px;
+        min-height: 58px;
       }
 
-      .brand-icon {
-        width: 38px;
-        height: 38px;
+      .nav-links {
+        display: none;
+      }
+
+      .nav-hotels {
+        display: none;
       }
 
       .brand-name {
-        font-size: 16px;
-      }
-
-      .nav-cta {
-        padding: 9px 13px;
-        font-size: 12px;
+        font-size: 17px;
       }
 
       .hero {
         min-height: auto;
-        padding-top: 105px;
+
+        padding: 115px 0 50px;
       }
 
-      .hero-title {
-        font-size: 49px;
+      .hero h1 {
+        font-size: clamp(44px, 13vw, 62px);
+      }
+
+      .hero-text {
+        font-size: 15px;
       }
 
       .hero-image-wrap {
-        height: 430px;
-        border-radius: 23px;
+        height: 420px;
+
+        border-radius: 25px;
       }
 
-      .hero-image-content {
+      .hero-floating {
         left: 12px;
         right: 12px;
         bottom: 12px;
       }
 
-      .hero-rating {
-        display: none;
-      }
-
       .search-section {
-        margin-top: -40px;
+        margin-top: 0;
       }
 
       .search-box {
         grid-template-columns: 1fr;
+
+        border-radius: 20px;
       }
 
       .search-button {
-        min-height: 48px;
+        min-height: 52px;
       }
 
-      .section {
-        padding: 75px 0;
+      .category-section {
+        padding-top: 55px;
       }
 
-      .section-header {
-        display: block;
-      }
+      .section-top {
+        align-items: flex-start;
 
-      .section-description {
-        margin-top: 12px;
+        flex-direction: column;
       }
 
       .hotel-grid {
@@ -1363,46 +1758,80 @@
         height: 250px;
       }
 
-      .feature-grid {
+      .feature {
+        border-radius: 23px;
+      }
+
+      .feature-content {
+        padding: 38px 25px;
+      }
+
+      .feature-image {
+        height: 300px;
+      }
+
+      .inspiration-grid {
         grid-template-columns: 1fr;
       }
 
-      .hotelier-content {
-        padding: 40px 25px;
+      .inspiration-card:first-child {
+        grid-column: auto;
+      }
+
+      .inspiration-card {
+        min-height: 260px;
+      }
+
+      .about-logo {
+        width: 130px;
+        height: 130px;
+
+        font-size: 40px;
       }
 
       .footer-grid {
         grid-template-columns: 1fr 1fr;
-        gap: 35px 20px;
+
+        gap: 30px;
       }
 
-      .footer-grid > div:first-child {
+      .footer-brand {
         grid-column: 1 / -1;
       }
 
       .footer-bottom {
-        display: block;
+        flex-direction: column;
+        gap: 7px;
       }
 
-      .footer-bottom div + div {
-        margin-top: 7px;
+      .modal {
+        padding: 8px;
       }
 
       .modal-image {
         height: 250px;
       }
 
-      .modal-bottom {
-        align-items: flex-start;
+      .modal-content {
+        padding: 22px;
+      }
+
+      .modal-title {
+        font-size: 31px;
+      }
+
+      .modal-footer {
         flex-direction: column;
+        align-items: stretch;
       }
 
       .modal-actions {
-        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr;
       }
 
-      .modal-actions .button {
-        flex: 1;
+      .modal-actions .btn {
+        width: 100%;
       }
     }
   </style>
@@ -1410,47 +1839,50 @@
 
 <body>
 
-  <!-- =========================================================
-       NAVIGATION
-  ========================================================= -->
+  <!-- =========================
+       HEADER
+  ========================= -->
 
-  <header class="site-header">
+  <header class="header" id="header">
 
-    <div class="container">
+    <div class="wrap">
 
       <nav class="nav">
 
         <a href="#" class="brand">
 
-          <div class="brand-icon">
-            <span>S</span>
-          </div>
+          <span class="brand-mark">S</span>
 
-          <span class="brand-name">
-            Staylo
-          </span>
+          <span class="brand-name">Staylo</span>
 
         </a>
 
         <div class="nav-links">
 
-          <a href="#hotels">
+          <a href="#hotels" class="nav-link">
             Hotels entdecken
           </a>
 
-          <a href="#kategorien">
+          <a href="#kategorien" class="nav-link">
             Kategorien
           </a>
 
-          <a href="#fuer-hotels">
-            Für Hotels
+          <a href="#inspiration" class="nav-link">
+            Inspiration
           </a>
 
         </div>
 
-        <a href="#hotels" class="nav-cta">
-          Entdecken
-        </a>
+        <div class="nav-actions">
+
+          <a
+            href="#fuer-hotels"
+            class="nav-hotels"
+          >
+            Für Hotels
+          </a>
+
+        </div>
 
       </nav>
 
@@ -1459,66 +1891,69 @@
   </header>
 
 
-  <!-- =========================================================
+  <!-- =========================
        HERO
-  ========================================================= -->
+  ========================= -->
 
   <main>
 
     <section class="hero">
 
-      <div class="container">
+      <div class="wrap">
 
         <div class="hero-grid">
 
-          <div>
+          <div class="hero-copy">
 
             <div class="eyebrow">
+
               <span class="eyebrow-dot"></span>
-              Südtirol, Italien
+
+              Südtirol entdecken
+
             </div>
 
-            <h1 class="hero-title">
+            <h1>
               Dein nächster
               <span>Lieblingsort.</span>
             </h1>
 
             <p class="hero-text">
-              Entdecke besondere Hotels, Resorts und Hideaways
-              in Südtirol. Von kleinen Boutique-Hotels bis zu
-              außergewöhnlichen Luxusresorts.
+              Entdecke besondere Hotels in Südtirol.
+              Von modernen Hideaways über alpine Hotels
+              bis zu exklusiven Wellness-Resorts.
             </p>
 
-            <div class="hero-buttons">
+            <div class="hero-actions">
 
               <a
                 href="#hotels"
-                class="button button-primary"
+                class="btn btn-primary"
               >
                 Hotels entdecken
               </a>
 
               <a
                 href="#kategorien"
-                class="button button-secondary"
+                class="btn btn-glass"
               >
-                Kategorien
+                Kategorien ansehen
               </a>
 
             </div>
 
-            <div class="hero-note">
+            <div class="hero-info">
 
               <span>
-                <strong>100 % Südtirol</strong>
+                <strong>Südtirol</strong> · Italien
               </span>
 
               <span>
-                <strong>Direkter Kontakt</strong>
+                <strong>Hotels</strong> · handverlesen
               </span>
 
               <span>
-                <strong>Keine Buchungsgebühr</strong>
+                <strong>Staylo</strong> · lokal gestartet
               </span>
 
             </div>
@@ -1528,29 +1963,37 @@
 
           <div class="hero-image-wrap">
 
-            <div class="hero-image"></div>
+            <img
+              class="hero-image"
+              src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1400&q=90"
+              alt="Modernes Hotel in Südtirol"
+            />
 
-            <div class="hero-image-content">
+            <div class="hero-floating">
 
-              <div class="hero-glass-card">
+              <div class="floating-left">
 
-                <small>
-                  Hotel des Monats
-                </small>
+                <div class="floating-icon">
+                  ✦
+                </div>
 
-                <strong>
-                  Forestis · Dolomiten
-                </strong>
+                <div>
+
+                  <div class="floating-title">
+                    Hotels mit Charakter
+                  </div>
+
+                  <div class="floating-sub">
+                    Berge · Design · Wellness
+                  </div>
+
+                </div>
 
               </div>
 
-              <div class="hero-rating">
-
-                <span class="star">★</span>
-
-                Südtirol entdecken
-
-              </div>
+              <span class="floating-badge">
+                Südtirol
+              </span>
 
             </div>
 
@@ -1563,26 +2006,26 @@
     </section>
 
 
-    <!-- =========================================================
+    <!-- =========================
          SEARCH
-    ========================================================= -->
+    ========================= -->
 
     <section class="search-section">
 
-      <div class="container">
+      <div class="wrap">
 
         <div class="search-box">
 
           <div class="search-field">
 
             <label>
-              Ort oder Region
+              Wo?
             </label>
 
             <input
-              id="searchLocation"
+              id="locationInput"
               type="text"
-              placeholder="z. B. Meran"
+              placeholder="Meran, Bozen, Gröden..."
             />
 
           </div>
@@ -1594,14 +2037,14 @@
               Hotelart
             </label>
 
-            <select id="searchType">
+            <select id="typeSelect">
 
-              <option value="alle">
+              <option value="all">
                 Alle Hotels
               </option>
 
               <option value="luxury">
-                Luxury
+                Luxushotels
               </option>
 
               <option value="boutique">
@@ -1612,12 +2055,12 @@
                 Wellness
               </option>
 
-              <option value="berg">
-                Berghotel
+              <option value="mountain">
+                Berghotels
               </option>
 
-              <option value="design">
-                Design
+              <option value="family">
+                Familienhotels
               </option>
 
             </select>
@@ -1628,29 +2071,29 @@
           <div class="search-field">
 
             <label>
-              Preis / Nacht
+              Preis pro Nacht
             </label>
 
-            <select id="searchPrice">
+            <select id="priceSelect">
 
-              <option value="0">
+              <option value="9999">
                 Beliebig
               </option>
 
               <option value="100">
-                bis € 100
+                Bis € 100
               </option>
 
               <option value="150">
-                bis € 150
+                Bis € 150
               </option>
 
-              <option value="250">
-                bis € 250
+              <option value="200">
+                Bis € 200
               </option>
 
-              <option value="400">
-                bis € 400
+              <option value="300">
+                Bis € 300
               </option>
 
             </select>
@@ -1661,8 +2104,109 @@
           <button
             class="search-button"
             id="searchButton"
+            type="button"
           >
             Suchen
+          </button>
+
+        </div>
+
+        <button
+          class="filter-more"
+          id="moreFilterButton"
+          type="button"
+        >
+          + Mehr Filter
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         CATEGORIES
+    ========================= -->
+
+    <section
+      class="category-section"
+      id="kategorien"
+    >
+
+      <div class="wrap">
+
+        <div class="section-top">
+
+          <div>
+
+            <div class="section-kicker">
+              Finde deinen Stil
+            </div>
+
+            <h2 class="section-title">
+              Was suchst du?
+            </h2>
+
+          </div>
+
+          <p class="section-description">
+            Egal ob Dolomiten-Auszeit, Wellness-Wochenende
+            oder Designhotel in der Stadt – entdecke Südtirol
+            auf deine Art.
+          </p>
+
+        </div>
+
+
+        <div class="categories">
+
+          <button
+            class="category active"
+            data-type="all"
+          >
+            Alle
+          </button>
+
+          <button
+            class="category"
+            data-type="luxury"
+          >
+            ✦ Luxus
+          </button>
+
+          <button
+            class="category"
+            data-type="boutique"
+          >
+            Boutique
+          </button>
+
+          <button
+            class="category"
+            data-type="wellness"
+          >
+            Wellness
+          </button>
+
+          <button
+            class="category"
+            data-type="mountain"
+          >
+            Berge
+          </button>
+
+          <button
+            class="category"
+            data-type="family"
+          >
+            Familie
+          </button>
+
+          <button
+            class="category"
+            data-type="city"
+          >
+            City
           </button>
 
         </div>
@@ -1672,87 +2216,27 @@
     </section>
 
 
-    <!-- =========================================================
+    <!-- =========================
          HOTELS
-    ========================================================= -->
+    ========================= -->
 
     <section
-      class="section"
+      class="hotels-section"
       id="hotels"
     >
 
-      <div class="container">
+      <div class="wrap">
 
-        <div class="section-header">
+        <div class="results-line">
 
-          <div>
+          <span>
+            <strong id="resultCount">9</strong>
+            Hotels gefunden
+          </span>
 
-            <div class="section-label">
-              Staylo Selection
-            </div>
-
-            <h2 class="section-title">
-              Hotels, die bleiben.
-            </h2>
-
-          </div>
-
-          <p class="section-description">
-
-            Eine Auswahl besonderer Unterkünfte in Südtirol.
-            Entdecke neue Orte und kontaktiere das Hotel direkt.
-
-          </p>
-
-        </div>
-
-
-        <div
-          class="category-row"
-          id="kategorien"
-        >
-
-          <button
-            class="category active"
-            data-category="alle"
-          >
-            Alle
-          </button>
-
-          <button
-            class="category"
-            data-category="luxury"
-          >
-            Luxury
-          </button>
-
-          <button
-            class="category"
-            data-category="boutique"
-          >
-            Boutique
-          </button>
-
-          <button
-            class="category"
-            data-category="wellness"
-          >
-            Wellness
-          </button>
-
-          <button
-            class="category"
-            data-category="berg"
-          >
-            Berge
-          </button>
-
-          <button
-            class="category"
-            data-category="design"
-          >
-            Design
-          </button>
+          <span>
+            Südtirol
+          </span>
 
         </div>
 
@@ -1767,66 +2251,193 @@
     </section>
 
 
-    <!-- =========================================================
-         FEATURES
-    ========================================================= -->
+    <!-- =========================
+         FOR HOTELS
+    ========================= -->
 
-    <section class="feature-section">
+    <section
+      class="feature-section"
+      id="fuer-hotels"
+    >
 
-      <div class="container">
+      <div class="wrap">
 
-        <div class="feature-grid">
+        <div class="feature">
 
-          <article class="feature">
+          <div class="feature-image">
 
-            <div class="feature-icon">
-              ✦
+            <img
+              src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=90"
+              alt="Hotel in Südtirol"
+            />
+
+          </div>
+
+          <div class="feature-content">
+
+            <div class="section-kicker">
+              Für Hoteliers
             </div>
 
-            <h3>
-              Nur Südtirol
-            </h3>
+            <h2>
+              Dein Hotel gehört auf Staylo.
+            </h2>
 
             <p>
-              Staylo konzentriert sich zunächst vollständig
-              auf Hotels in Südtirol.
+              Staylo bringt besondere Hotels in Südtirol
+              mit Menschen zusammen, die ihren nächsten
+              Aufenthalt bewusst auswählen.
             </p>
+
+            <div class="feature-points">
+
+              <div class="feature-point">
+
+                <span class="check">✓</span>
+
+                Kostenloses Hotelprofil
+
+              </div>
+
+              <div class="feature-point">
+
+                <span class="check">✓</span>
+
+                Eigene Bilder und Informationen
+
+              </div>
+
+              <div class="feature-point">
+
+                <span class="check">✓</span>
+
+                Direkter Kontakt zum Gast
+
+              </div>
+
+              <div class="feature-point">
+
+                <span class="check">✓</span>
+
+                Sichtbarkeit auf Staylo
+
+              </div>
+
+            </div>
+
+            <a
+              href="mailto:hotels@staylo.it?subject=Hotel%20auf%20Staylo"
+              class="btn btn-white"
+            >
+              Hotel vorstellen
+            </a>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         INSPIRATION
+    ========================= -->
+
+    <section
+      class="inspiration-section"
+      id="inspiration"
+    >
+
+      <div class="wrap">
+
+        <div class="section-top">
+
+          <div>
+
+            <div class="section-kicker">
+              Südtirol
+            </div>
+
+            <h2 class="section-title">
+              Wohin geht's?
+            </h2>
+
+          </div>
+
+          <p class="section-description">
+            Entdecke einige der schönsten Regionen
+            Südtirols und finde das passende Hotel.
+          </p>
+
+        </div>
+
+
+        <div class="inspiration-grid">
+
+          <article class="inspiration-card">
+
+            <img
+              src="https://images.unsplash.com/photo-1533130061792-64b345e4a833?auto=format&fit=crop&w=1400&q=90"
+              alt="Dolomiten"
+            />
+
+            <div class="inspiration-content">
+
+              <small>
+                Dolomiten
+              </small>
+
+              <h3>
+                Berge, Ruhe & Weitblick
+              </h3>
+
+            </div>
 
           </article>
 
 
-          <article class="feature">
+          <article class="inspiration-card">
 
-            <div class="feature-icon">
-              ↗
+            <img
+              src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=90"
+              alt="Hotel Meran"
+            />
+
+            <div class="inspiration-content">
+
+              <small>
+                Meran
+              </small>
+
+              <h3>
+                Stadt & Wellness
+              </h3>
+
             </div>
-
-            <h3>
-              Direkt zum Hotel
-            </h3>
-
-            <p>
-              Keine komplizierte Buchungsstrecke.
-              Du findest das Hotel und kannst direkt Kontakt aufnehmen.
-            </p>
 
           </article>
 
 
-          <article class="feature">
+          <article class="inspiration-card">
 
-            <div class="feature-icon">
-              ◇
+            <img
+              src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=90"
+              alt="Berge Südtirol"
+            />
+
+            <div class="inspiration-content">
+
+              <small>
+                Pustertal
+              </small>
+
+              <h3>
+                Alpine Auszeit
+              </h3>
+
             </div>
-
-            <h3>
-              Mehr als nur ein Hotel
-            </h3>
-
-            <p>
-              Wir wollen zeigen, was einen Ort besonders macht:
-              Atmosphäre, Design, Lage und Charakter.
-            </p>
 
           </article>
 
@@ -1837,46 +2448,86 @@
     </section>
 
 
-    <!-- =========================================================
-         HOTELIER
-    ========================================================= -->
+    <!-- =========================
+         ABOUT
+    ========================= -->
 
-    <section
-      class="hotelier-section"
-      id="fuer-hotels"
-    >
+    <section class="about-section">
 
-      <div class="container">
+      <div class="wrap">
 
-        <div class="hotelier-box">
+        <div class="about-grid">
 
-          <div class="hotelier-content">
+          <div>
 
-            <div class="hotelier-label">
-              Für Hoteliers
+            <div class="about-logo">
+              S
             </div>
-
-            <h2 class="hotelier-title">
-              Dein Hotel verdient
-              mehr Aufmerksamkeit.
-            </h2>
-
-            <p class="hotelier-text">
-              Staylo bringt besondere Hotels aus Südtirol
-              mit Menschen zusammen, die ihren nächsten Aufenthalt
-              entdecken möchten.
-            </p>
-
-            <a
-              href="mailto:hello@staylo.it?subject=Hotel%20bei%20Staylo"
-              class="button hotelier-button"
-            >
-              Hotel vorstellen
-            </a>
 
           </div>
 
-          <div class="hotelier-image"></div>
+          <div class="about-content">
+
+            <div class="section-kicker">
+              Über Staylo
+            </div>
+
+            <h2>
+              Südtirol.
+              Hotels.
+              Staylo.
+            </h2>
+
+            <p>
+              Staylo ist eine unabhängige Plattform für
+              Hotels in Südtirol. Unser Ziel ist einfach:
+              besondere Unterkünfte sichtbar machen und
+              Reisenden die Suche nach ihrem nächsten
+              Lieblingshotel erleichtern.
+            </p>
+
+            <p>
+              Wir starten bewusst lokal. Südtirol bietet
+              unglaublich viele unterschiedliche Hotels –
+              von kleinen Boutique-Häusern bis zu
+              internationalen Luxusresorts.
+            </p>
+
+            <div class="about-stats">
+
+              <div class="stat">
+
+                <strong>Südtirol</strong>
+
+                <span>
+                  Unser Startpunkt
+                </span>
+
+              </div>
+
+              <div class="stat">
+
+                <strong>Direkter Kontakt</strong>
+
+                <span>
+                  Ohne Buchungszwang
+                </span>
+
+              </div>
+
+              <div class="stat">
+
+                <strong>Modern</strong>
+
+                <span>
+                  Für die nächste Generation
+                </span>
+
+              </div>
+
+            </div>
+
+          </div>
 
         </div>
 
@@ -1887,40 +2538,48 @@
   </main>
 
 
-  <!-- =========================================================
+  <!-- =========================
        FOOTER
-  ========================================================= -->
+  ========================= -->
 
   <footer>
 
-    <div class="container">
+    <div class="wrap">
 
       <div class="footer-grid">
 
-        <div>
+        <div class="footer-brand">
 
-          <div class="footer-brand">
+          <div class="brand">
 
-            <div class="brand-icon">
-              <span>S</span>
-            </div>
+            <span class="brand-mark">
+              S
+            </span>
 
-            <strong>
+            <span class="brand-name">
               Staylo
-            </strong>
+            </span>
 
           </div>
 
-          <p class="footer-description">
-            Hotels entdecken. Südtirol erleben.
-            Eine unabhängige Plattform für besondere
-            Unterkünfte in Südtirol.
+          <p>
+            Hotels in Südtirol entdecken.
+            Moderne Unterkünfte, besondere Orte
+            und echte Inspiration für deine nächste
+            Auszeit.
           </p>
+
+          <a
+            href="mailto:info@staylo.it"
+            class="footer-email"
+          >
+            info@staylo.it
+          </a>
 
         </div>
 
 
-        <div class="footer-column">
+        <div class="footer-col">
 
           <h4>
             Entdecken
@@ -1934,50 +2593,66 @@
             Kategorien
           </a>
 
-          <a href="#hotels">
-            Hotels in Meran
+          <a href="#inspiration">
+            Inspiration
           </a>
 
           <a href="#hotels">
-            Hotels in Bozen
+            Hotels Meran
           </a>
 
           <a href="#hotels">
-            Hotels in den Dolomiten
+            Hotels Bozen
           </a>
 
         </div>
 
 
-        <div class="footer-column">
+        <div class="footer-col">
 
           <h4>
-            Für Hotels
+            Regionen
           </h4>
 
-          <a href="#fuer-hotels">
-            Hotel vorstellen
+          <a href="#hotels">
+            Meran & Umgebung
           </a>
 
-          <a href="mailto:hello@staylo.it">
-            Kontakt
+          <a href="#hotels">
+            Eisacktal
           </a>
 
-          <a href="#fuer-hotels">
-            Staylo für Hotels
+          <a href="#hotels">
+            Gröden
+          </a>
+
+          <a href="#hotels">
+            Pustertal
+          </a>
+
+          <a href="#hotels">
+            Seiser Alm
           </a>
 
         </div>
 
 
-        <div class="footer-column">
+        <div class="footer-col">
 
           <h4>
             Staylo
           </h4>
 
-          <a href="#">
-            Über Staylo
+          <a href="#fuer-hotels">
+            Für Hotels
+          </a>
+
+          <a href="mailto:hotels@staylo.it">
+            Hotel listen
+          </a>
+
+          <a href="mailto:info@staylo.it">
+            Kontakt
           </a>
 
           <a href="#">
@@ -1989,7 +2664,7 @@
           </a>
 
           <a href="#">
-            Cookies
+            Cookies verwalten
           </a>
 
         </div>
@@ -1999,17 +2674,13 @@
 
       <div class="footer-bottom">
 
-        <div>
-          © 2026 Staylo
-        </div>
+        <span>
+          © 2026 Staylo · Südtirol, Italien
+        </span>
 
-        <div>
-          Südtirol · Italien
-        </div>
-
-        <div>
-          hello@staylo.it
-        </div>
+        <span>
+          Hotels entdecken. Südtirol erleben.
+        </span>
 
       </div>
 
@@ -2018,9 +2689,9 @@
   </footer>
 
 
-  <!-- =========================================================
+  <!-- =========================
        HOTEL MODAL
-  ========================================================= -->
+  ========================= -->
 
   <div
     class="modal"
@@ -2029,14 +2700,18 @@
 
     <div class="modal-box">
 
-      <div
-        class="modal-image"
-        id="modalImage"
-      >
+      <div class="modal-image">
+
+        <img
+          id="modalImage"
+          src=""
+          alt=""
+        />
 
         <button
           class="modal-close"
           id="modalClose"
+          type="button"
         >
           ×
         </button>
@@ -2050,53 +2725,55 @@
           class="modal-location"
           id="modalLocation"
         >
+          Südtirol
         </div>
 
         <h2
           class="modal-title"
           id="modalTitle"
         >
+          Hotel
         </h2>
-
-
-        <div
-          class="modal-meta"
-          id="modalMeta"
-        >
-        </div>
-
 
         <p
           class="modal-description"
           id="modalDescription"
-        >
-        </p>
+        ></p>
 
+        <div
+          class="modal-details"
+          id="modalDetails"
+        ></div>
 
-        <div class="modal-bottom">
+        <div class="modal-footer">
 
-          <div
-            class="modal-price"
-            id="modalPrice"
-          >
+          <div class="modal-price">
+
+            <small>
+              Preis pro Nacht
+            </small>
+
+            <strong id="modalPrice">
+              —
+            </strong>
+
           </div>
-
 
           <div class="modal-actions">
 
             <a
               id="modalWebsite"
-              class="button button-secondary"
+              class="btn btn-glass"
               href="#"
               target="_blank"
-              rel="noopener"
+              rel="noopener noreferrer"
             >
               Hotel-Webseite
             </a>
 
             <a
-              id="modalEmail"
-              class="button button-primary"
+              id="modalContact"
+              class="btn btn-primary"
               href="#"
             >
               Hotel kontaktieren
@@ -2113,244 +2790,292 @@
   </div>
 
 
-  <!-- =========================================================
+  <!-- =========================
        TOAST
-  ========================================================= -->
+  ========================= -->
 
   <div
     class="toast"
     id="toast"
-  ></div>
+  >
+    Filter angewendet
+  </div>
 
-
-  <!-- =========================================================
-       JAVASCRIPT
-  ========================================================= -->
 
   <script>
+
+    /* ==========================================
+       HOTEL DATA
+    ========================================== */
 
     const hotels = [
 
       {
         id: 1,
         name: "Forestis",
-        region: "Dolomiten",
         location: "Brixen",
+        region: "Eisacktal",
         type: "luxury",
-        price: 390,
-        category: "Luxury",
+        city: "city",
+        price: 290,
+        category: "Luxushotel",
         image:
-          "https://images.unsplash.com/photo-1544986581-efac024faf62?auto=format&fit=crop&w=1200&q=90",
+          "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=90",
         description:
-          "Ein außergewöhnlicher Rückzugsort in den Dolomiten. Natur, Architektur und Ruhe treffen aufeinander.",
+          "Ein außergewöhnliches alpines Hideaway mit Blick auf die Dolomiten. Natur, Ruhe und minimalistisches Design treffen hier aufeinander.",
         website:
-          "https://www.forestis.it",
+          "https://www.forestis.it/",
         email:
-          "mailto:info@forestis.it"
+          "info@staylo.it"
       },
 
       {
         id: 2,
-        name: "ADLER Spa Resort",
-        region: "Seiser Alm",
-        location: "Kastelruth",
-        type: "wellness",
-        price: 285,
-        category: "Wellness",
+        name: "Alpenblick Lodge",
+        location: "Ortisei",
+        region: "Gröden",
+        type: "mountain",
+        city: "city",
+        price: 168,
+        category: "Berghotel",
         image:
-          "https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=1200&q=90",
+          "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=1200&q=90",
         description:
-          "Wellness und Natur direkt auf der Seiser Alm. Ein moderner Rückzugsort für eine Auszeit in den Bergen.",
+          "Modernes Berghotel mit direktem Blick auf die Dolomiten. Ideal für Wanderer, Skifahrer und alle, die gerne draußen sind.",
         website:
-          "https://www.adler-spa-resorts.com",
+          "#",
         email:
-          "mailto:info@adler-spa-resorts.com"
+          "info@staylo.it"
       },
 
       {
         id: 3,
-        name: "Hotel Therme Meran",
-        region: "Burggrafenamt",
-        location: "Meran",
+        name: "Quellenhof",
+        location: "Passeiertal",
+        region: "Meran & Umgebung",
         type: "wellness",
+        city: "city",
         price: 210,
         category: "Wellness",
         image:
-          "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=1200&q=90",
+          "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=90",
         description:
-          "Modernes Hotel mitten in Meran mit direkter Verbindung zur Therme und Blick auf die umliegenden Berge.",
+          "Großzügige Wellnessbereiche, Pools und alpine Landschaft. Ein Ort für Erholung und besondere Momente.",
         website:
-          "https://www.hoteltermemerano.it",
+          "#",
         email:
-          "mailto:info@hoteltermemerano.it"
+          "info@staylo.it"
       },
 
       {
         id: 4,
-        name: "Schgaguler Hotel",
-        region: "Dolomiten",
-        location: "Kastelruth",
-        type: "design",
-        price: 195,
-        category: "Design",
+        name: "Hotel Greif",
+        location: "Bozen",
+        region: "Bozen",
+        type: "boutique",
+        city: "city",
+        price: 145,
+        category: "Boutique",
         image:
-          "https://images.unsplash.com/photo-1601918774946-25832a4be0d6?auto=format&fit=crop&w=1200&q=90",
+          "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1200&q=90",
         description:
-          "Reduziertes Design, klare Architektur und ein beeindruckender Blick auf die Dolomiten.",
+          "Modernes Design mitten in Bozen. Perfekt für alle, die Stadt, Kultur und Südtirol miteinander verbinden möchten.",
         website:
-          "https://www.schgaguler.com",
+          "#",
         email:
-          "mailto:info@schgaguler.com"
+          "info@staylo.it"
       },
 
       {
         id: 5,
-        name: "Vigilius Mountain Resort",
-        region: "Meran & Umgebung",
-        location: "Lana",
-        type: "luxury",
-        price: 330,
-        category: "Luxury",
+        name: "Seiser Alm Retreat",
+        location: "Seiser Alm",
+        region: "Dolomiten",
+        type: "mountain",
+        city: "city",
+        price: 195,
+        category: "Berghotel",
         image:
-          "https://images.unsplash.com/photo-1601918774946-25832a4be0d6?auto=format&fit=crop&w=1200&q=90",
+          "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1200&q=90",
         description:
-          "Ein außergewöhnliches Mountain Resort oberhalb von Lana – mitten in der Natur und bewusst ruhig.",
+          "Alpine Architektur, große Ausblicke und unmittelbare Nähe zu den Wanderwegen der Seiser Alm.",
         website:
-          "https://www.vigilius.it",
+          "#",
         email:
-          "mailto:info@vigilius.it"
+          "info@staylo.it"
       },
 
       {
         id: 6,
-        name: "Hotel Greif",
-        region: "Südtirol",
-        location: "Bozen",
-        type: "design",
-        price: 145,
-        category: "Design",
+        name: "Vigilius Mountain Resort",
+        location: "Lana",
+        region: "Meran & Umgebung",
+        type: "luxury",
+        city: "city",
+        price: 260,
+        category: "Luxushotel",
         image:
-          "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1200&q=90",
+          "https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=1200&q=90",
         description:
-          "Urbanes Boutique-Hotel mitten in Bozen mit individuellem Design und zentraler Lage.",
+          "Ein außergewöhnlicher Rückzugsort in den Bergen oberhalb von Lana. Architektur, Natur und Ruhe.",
         website:
-          "https://www.greif.it",
+          "#",
         email:
-          "mailto:info@greif.it"
+          "info@staylo.it"
       },
 
       {
         id: 7,
-        name: "Forestis Lodge",
-        region: "Plose",
-        location: "Brixen",
-        type: "berg",
-        price: 250,
-        category: "Berge",
+        name: "Basecamp Bruneck",
+        location: "Bruneck",
+        region: "Pustertal",
+        type: "family",
+        city: "city",
+        price: 95,
+        category: "Familie",
         image:
-          "https://images.unsplash.com/photo-1510798831971-661eb04b3739?auto=format&fit=crop&w=1200&q=90",
+          "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=1200&q=90",
         description:
-          "Ruhiger Rückzugsort mit Panoramablick und direkter Nähe zu den Bergen.",
+          "Modern, unkompliziert und ideal gelegen für aktive Tage rund um den Kronplatz.",
         website:
-          "https://www.forestis.it",
+          "#",
         email:
-          "mailto:info@forestis.it"
+          "info@staylo.it"
       },
 
       {
         id: 8,
-        name: "Hotel Das Central",
-        region: "Vinschgau",
-        location: "Sölden",
-        type: "luxury",
-        price: 300,
-        category: "Luxury",
+        name: "Palazzo Verde",
+        location: "Brixen",
+        region: "Eisacktal",
+        type: "boutique",
+        city: "city",
+        price: 132,
+        category: "Boutique",
         image:
-          "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=1200&q=90",
+          "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1200&q=90",
         description:
-          "Luxuriöses Hotel mit starkem Fokus auf Kulinarik, Wellness und alpine Erlebnisse.",
+          "Kleines Designhotel mit ruhigem Innenhof und besonderer Atmosphäre mitten in der Altstadt.",
         website:
-          "https://www.central-soelden.com",
+          "#",
         email:
-          "mailto:info@central-soelden.com"
+          "info@staylo.it"
       },
 
       {
         id: 9,
-        name: "Boutique Hotel Stafler",
-        region: "Eisacktal",
-        location: "Mühlbach",
-        type: "boutique",
-        price: 135,
-        category: "Boutique",
+        name: "Dolomiten Nest",
+        location: "Toblach",
+        region: "Drei Zinnen",
+        type: "mountain",
+        city: "city",
+        price: 155,
+        category: "Berghotel",
         image:
-          "https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=1200&q=90",
+          "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=90",
         description:
-          "Kleines Hotel mit persönlicher Atmosphäre, regionaler Küche und alpinem Charakter.",
+          "Familiäres Hotel inmitten der Dolomiten. Ein perfekter Ausgangspunkt für Wanderungen und Naturerlebnisse.",
         website:
           "#",
         email:
-          "mailto:hello@staylo.it"
+          "info@staylo.it"
       }
 
     ];
 
 
-    const grid =
+    /* ==========================================
+       ELEMENTS
+    ========================================== */
+
+    const hotelGrid =
       document.getElementById("hotelGrid");
+
+    const resultCount =
+      document.getElementById("resultCount");
+
+    const locationInput =
+      document.getElementById("locationInput");
+
+    const typeSelect =
+      document.getElementById("typeSelect");
+
+    const priceSelect =
+      document.getElementById("priceSelect");
+
+    const searchButton =
+      document.getElementById("searchButton");
+
+    const categories =
+      document.querySelectorAll(".category");
 
     const modal =
       document.getElementById("hotelModal");
+
+    const modalClose =
+      document.getElementById("modalClose");
+
+    const modalImage =
+      document.getElementById("modalImage");
+
+    const modalLocation =
+      document.getElementById("modalLocation");
+
+    const modalTitle =
+      document.getElementById("modalTitle");
+
+    const modalDescription =
+      document.getElementById("modalDescription");
+
+    const modalDetails =
+      document.getElementById("modalDetails");
+
+    const modalPrice =
+      document.getElementById("modalPrice");
+
+    const modalWebsite =
+      document.getElementById("modalWebsite");
+
+    const modalContact =
+      document.getElementById("modalContact");
 
     const toast =
       document.getElementById("toast");
 
 
-    let activeCategory = "alle";
+    /* ==========================================
+       RENDER HOTELS
+    ========================================== */
 
+    function renderHotels(list) {
 
-    function showToast(message) {
-
-      toast.textContent = message;
-
-      toast.classList.add("show");
-
-      clearTimeout(window.toastTimer);
-
-      window.toastTimer =
-        setTimeout(() => {
-
-          toast.classList.remove("show");
-
-        }, 2200);
-
-    }
-
-
-    function renderHotels(list = hotels) {
+      resultCount.textContent = list.length;
 
       if (!list.length) {
 
-        grid.innerHTML = `
-          <div style="
-            grid-column:1/-1;
-            padding:60px;
-            text-align:center;
-            background:white;
-            border-radius:22px;
-            border:1px solid var(--border);
-            color:var(--muted);
-          ">
-            Keine passenden Hotels gefunden.
+        hotelGrid.innerHTML = `
+
+          <div class="empty">
+
+            <h3>
+              Keine Hotels gefunden
+            </h3>
+
+            <p>
+              Versuche einen anderen Ort,
+              eine andere Kategorie oder einen
+              höheren Preis.
+            </p>
+
           </div>
+
         `;
 
         return;
-
       }
 
 
-      grid.innerHTML = list.map(hotel => `
+      hotelGrid.innerHTML = list.map(hotel => `
 
         <article
           class="hotel-card"
@@ -2365,14 +3090,17 @@
               loading="lazy"
             />
 
-            <span class="hotel-badge">
+            <div class="hotel-overlay"></div>
+
+            <span class="hotel-label">
               ${hotel.category}
             </span>
 
             <button
-              class="hotel-fav"
+              class="hotel-heart"
+              type="button"
               aria-label="Favorit"
-              onclick="event.stopPropagation(); showToast('Favoriten folgen bald.')"
+              onclick="event.stopPropagation(); favoriteHotel(this)"
             >
               ♡
             </button>
@@ -2390,16 +3118,35 @@
               ${hotel.name}
             </h3>
 
-            <div class="hotel-info">
+            <p class="hotel-description">
+              ${hotel.description}
+            </p>
 
-              <span>
-                Südtirol
-              </span>
+            <div class="hotel-bottom">
 
-              <span class="hotel-price">
-                ab € ${hotel.price}
-                <span>/ Nacht</span>
-              </span>
+              <div class="hotel-meta">
+
+                <span>
+                  ${hotel.category}
+                </span>
+
+                <span>
+                  Südtirol
+                </span>
+
+              </div>
+
+              <div class="hotel-price">
+
+                <small>
+                  ab
+                </small>
+
+                <strong>
+                  € ${hotel.price}
+                </strong>
+
+              </div>
 
             </div>
 
@@ -2409,29 +3156,44 @@
 
       `).join("");
 
+
+      document
+        .querySelectorAll(".hotel-card")
+        .forEach(card => {
+
+          card.addEventListener(
+            "click",
+            () => {
+
+              const id =
+                Number(card.dataset.id);
+
+              openHotel(id);
+
+            }
+          );
+
+        });
+
     }
 
+
+    /* ==========================================
+       FILTER
+    ========================================== */
 
     function filterHotels() {
 
       const location =
-        document
-          .getElementById("searchLocation")
-          .value
+        locationInput.value
           .toLowerCase()
           .trim();
 
       const type =
-        document
-          .getElementById("searchType")
-          .value;
+        typeSelect.value;
 
-      const price =
-        Number(
-          document
-            .getElementById("searchPrice")
-            .value
-        );
+      const maxPrice =
+        Number(priceSelect.value);
 
 
       const filtered =
@@ -2439,19 +3201,18 @@
 
           const locationMatch =
             !location ||
+            hotel.name.toLowerCase().includes(location) ||
             hotel.location.toLowerCase().includes(location) ||
-            hotel.region.toLowerCase().includes(location) ||
-            hotel.name.toLowerCase().includes(location);
+            hotel.region.toLowerCase().includes(location);
 
 
           const typeMatch =
-            type === "alle" ||
+            type === "all" ||
             hotel.type === type;
 
 
           const priceMatch =
-            !price ||
-            hotel.price <= price;
+            hotel.price <= maxPrice;
 
 
           return (
@@ -2465,248 +3226,208 @@
 
       renderHotels(filtered);
 
-      document
-        .getElementById("hotels")
-        .scrollIntoView({
-          behavior: "smooth"
-        });
-
-
       showToast(
-        filtered.length +
-        (filtered.length === 1
-          ? " Hotel gefunden"
-          : " Hotels gefunden")
+        `${filtered.length} Hotel${filtered.length === 1 ? "" : "s"} gefunden`
       );
 
     }
 
 
-    function filterCategory(category) {
+    /* ==========================================
+       CATEGORY FILTER
+    ========================================== */
 
-      activeCategory = category;
+    categories.forEach(category => {
 
+      category.addEventListener(
+        "click",
+        () => {
 
-      document
-        .querySelectorAll(".category")
-        .forEach(button => {
+          categories.forEach(item => {
 
-          button.classList.toggle(
-            "active",
-            button.dataset.category === category
-          );
+            item.classList.remove("active");
 
-        });
+          });
 
+          category.classList.add("active");
 
-      if (category === "alle") {
+          const type =
+            category.dataset.type;
 
-        renderHotels(hotels);
+          typeSelect.value = type;
 
-        return;
+          filterHotels();
 
-      }
-
-
-      renderHotels(
-        hotels.filter(
-          hotel =>
-            hotel.type === category
-        )
+        }
       );
 
-    }
+    });
 
 
-    function openHotel(id) {
+    /* ==========================================
+       SEARCH BUTTON
+    ========================================== */
 
-      const hotel =
-        hotels.find(
-          h => h.id === Number(id)
-        );
-
-      if (!hotel) return;
-
-
-      document
-        .getElementById("modalImage")
-        .style.backgroundImage =
-          `url("${hotel.image}")`;
-
-
-      document
-        .getElementById("modalLocation")
-        .textContent =
-          `${hotel.location} · ${hotel.region}`;
-
-
-      document
-        .getElementById("modalTitle")
-        .textContent =
-          hotel.name;
-
-
-      document
-        .getElementById("modalMeta")
-        .innerHTML = `
-
-          <span class="modal-tag">
-            ${hotel.category}
-          </span>
-
-          <span class="modal-tag">
-            Südtirol
-          </span>
-
-        `;
-
-
-      document
-        .getElementById("modalDescription")
-        .textContent =
-          hotel.description;
-
-
-      document
-        .getElementById("modalPrice")
-        .innerHTML =
-          `ab € ${hotel.price}
-           <span>/ Nacht</span>`;
-
-
-      document
-        .getElementById("modalWebsite")
-        .href =
-          hotel.website;
-
-
-      document
-        .getElementById("modalEmail")
-        .href =
-          hotel.email;
-
-
-      modal.classList.add("open");
-
-      document.body.classList.add("no-scroll");
-
-    }
-
-
-    function closeHotel() {
-
-      modal.classList.remove("open");
-
-      document.body.classList.remove("no-scroll");
-
-    }
-
-
-    /* HOTEL CARDS */
-
-    grid.addEventListener(
+    searchButton.addEventListener(
       "click",
-      event => {
+      () => {
 
-        const card =
-          event.target.closest(".hotel-card");
+        filterHotels();
 
-        if (!card) return;
-
-        openHotel(card.dataset.id);
+        document
+          .getElementById("hotels")
+          .scrollIntoView({
+            behavior: "smooth"
+          });
 
       }
     );
 
 
-    /* CATEGORY BUTTONS */
+    /* ==========================================
+       ENTER SEARCH
+    ========================================== */
 
-    document
-      .querySelectorAll(".category")
-      .forEach(button => {
+    locationInput.addEventListener(
+      "keydown",
+      event => {
 
-        button.addEventListener(
-          "click",
-          () => {
+        if (event.key === "Enter") {
 
-            filterCategory(
-              button.dataset.category
-            );
+          filterHotels();
 
-          }
+        }
+
+      }
+    );
+
+
+    /* ==========================================
+       SELECT FILTER
+    ========================================== */
+
+    typeSelect.addEventListener(
+      "change",
+      filterHotels
+    );
+
+    priceSelect.addEventListener(
+      "change",
+      filterHotels
+    );
+
+
+    /* ==========================================
+       HOTEL MODAL
+    ========================================== */
+
+    function openHotel(id) {
+
+      const hotel =
+        hotels.find(
+          item => item.id === id
         );
 
-      });
+      if (!hotel) return;
 
 
-    /* SEARCH */
+      modalImage.src =
+        hotel.image;
 
-    document
-      .getElementById("searchButton")
-      .addEventListener(
-        "click",
-        filterHotels
+      modalImage.alt =
+        hotel.name;
+
+      modalLocation.textContent =
+        `${hotel.location} · ${hotel.region}`;
+
+      modalTitle.textContent =
+        hotel.name;
+
+      modalDescription.textContent =
+        hotel.description;
+
+      modalPrice.textContent =
+        `€ ${hotel.price}`;
+
+
+      modalDetails.innerHTML = `
+
+        <span class="modal-detail">
+          ${hotel.category}
+        </span>
+
+        <span class="modal-detail">
+          Südtirol
+        </span>
+
+        <span class="modal-detail">
+          Direktkontakt
+        </span>
+
+      `;
+
+
+      if (hotel.website === "#") {
+
+        modalWebsite.style.display =
+          "none";
+
+      } else {
+
+        modalWebsite.style.display =
+          "inline-flex";
+
+        modalWebsite.href =
+          hotel.website;
+
+      }
+
+
+      modalContact.href =
+        `mailto:${hotel.email}?subject=Anfrage%20über%20Staylo%20–%20${encodeURIComponent(hotel.name)}`;
+
+
+      modal.classList.add("open");
+
+      document.body.classList.add(
+        "modal-open"
       );
 
+    }
 
-    document
-      .getElementById("searchLocation")
-      .addEventListener(
-        "keydown",
-        event => {
 
-          if (event.key === "Enter") {
+    /* ==========================================
+       CLOSE MODAL
+    ========================================== */
 
-            filterHotels();
+    function closeModal() {
 
-          }
-
-        }
+      modal.classList.remove(
+        "open"
       );
 
-
-    /* SELECT TYPE */
-
-    document
-      .getElementById("searchType")
-      .addEventListener(
-        "change",
-        event => {
-
-          const type =
-            event.target.value;
-
-          if (type === "alle") {
-
-            filterCategory("alle");
-
-          } else {
-
-            filterCategory(type);
-
-          }
-
-        }
+      document.body.classList.remove(
+        "modal-open"
       );
 
+    }
 
-    /* MODAL CLOSE */
 
-    document
-      .getElementById("modalClose")
-      .addEventListener(
-        "click",
-        closeHotel
-      );
+    modalClose.addEventListener(
+      "click",
+      closeModal
+    );
 
 
     modal.addEventListener(
       "click",
       event => {
 
-        if (event.target === modal) {
+        if (
+          event.target === modal
+        ) {
 
-          closeHotel();
+          closeModal();
 
         }
 
@@ -2718,9 +3439,11 @@
       "keydown",
       event => {
 
-        if (event.key === "Escape") {
+        if (
+          event.key === "Escape"
+        ) {
 
-          closeHotel();
+          closeModal();
 
         }
 
@@ -2728,9 +3451,110 @@
     );
 
 
-    /* INITIAL */
+    /* ==========================================
+       FAVORITE
+    ========================================== */
 
-    renderHotels();
+    function favoriteHotel(button) {
+
+      const active =
+        button.textContent === "♥";
+
+      button.textContent =
+        active ? "♡" : "♥";
+
+      button.style.color =
+        active
+          ? ""
+          : "#b54a4a";
+
+      showToast(
+        active
+          ? "Aus Favoriten entfernt"
+          : "Zu Favoriten hinzugefügt"
+      );
+
+    }
+
+
+    /* ==========================================
+       MORE FILTER
+    ========================================== */
+
+    document
+      .getElementById("moreFilterButton")
+      .addEventListener(
+        "click",
+        () => {
+
+          showToast(
+            "Weitere Filter kommen bald."
+          );
+
+        }
+      );
+
+
+    /* ==========================================
+       TOAST
+    ========================================== */
+
+    let toastTimer;
+
+    function showToast(message) {
+
+      toast.textContent =
+        message;
+
+      toast.classList.add(
+        "show"
+      );
+
+      clearTimeout(
+        toastTimer
+      );
+
+      toastTimer =
+        setTimeout(
+          () => {
+
+            toast.classList.remove(
+              "show"
+            );
+
+          },
+          2400
+        );
+
+    }
+
+
+    /* ==========================================
+       HEADER SCROLL
+    ========================================== */
+
+    const header =
+      document.getElementById("header");
+
+    window.addEventListener(
+      "scroll",
+      () => {
+
+        header.classList.toggle(
+          "scrolled",
+          window.scrollY > 30
+        );
+
+      },
+      { passive: true }
+    );
+
+
+    /* ==========================================
+       INITIAL RENDER
+    ========================================== */
+
+    renderHotels(hotels);
 
   </script>
 
