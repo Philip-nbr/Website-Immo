@@ -137,7 +137,7 @@ HEADER
 .nav-center{
     display:flex;
     align-items:center;
-    gap:30px;
+    gap:24px;
 }
 
 .nav-item{
@@ -148,11 +148,14 @@ HEADER
     font-size:14px;
     font-weight:500;
 
-    padding:12px 0;
+    padding:10px 12px;
+    border-radius:999px;
+    transition:.2s ease;
 }
 
 .nav-item:hover{
     color:white;
+    background:rgba(255,255,255,.12);
 }
 
 .nav-item.has-menu::after{
@@ -1386,7 +1389,14 @@ DROPDOWN
 
     font-size:21px;
 
+    margin-bottom:6px;
+}
+
+.dropdown-subtitle{
+    color:#6d756f;
+    font-size:13px;
     margin-bottom:14px;
+    line-height:1.5;
 }
 
 .dropdown-grid{
@@ -1601,7 +1611,11 @@ Kategorien
 <div class="dropdown">
 
 <div class="dropdown-title">
-Hotels nach Kategorie
+Finde deine Kategorie
+</div>
+
+<div class="dropdown-subtitle">
+Wähle den Stil deines Aufenthalts – von Luxus bis Natur.
 </div>
 
 <div class="dropdown-grid">
@@ -1703,14 +1717,6 @@ Vinschgau
 
 </div>
 
-
-<a href="#hotels" class="nav-item">
-Südtirol entdecken
-</a>
-
-<a href="#hotels" class="nav-item">
-Finde deine Kategorie
-</a>
 
 <a href="#ueber-uns" class="nav-item">
 Über uns
