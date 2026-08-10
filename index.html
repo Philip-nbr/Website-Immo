@@ -481,13 +481,14 @@ img{
 }
 
 .hero{
-  min-height:480px;
+  min-height:560px;
   position:relative;
   display:flex;
   align-items:center;
   color:#fff;
   margin-top:calc(-1 * var(--header-h));
-  padding-top:var(--header-h)
+  padding-top:var(--header-h);
+  padding-bottom:72px
 }
 
 .hero-media{
@@ -500,8 +501,8 @@ img{
   position:absolute;
   inset:0;
   background-size:cover;
-  background-position:center;
-  transform:scale(1.02);
+  background-position:center 40%;
+  transform:scale(1.03);
   opacity:0;
   animation:heroFade 28s cubic-bezier(.22,1,.36,1) infinite
 }
@@ -617,7 +618,7 @@ img{
 .search-wrapper{
   position:relative;
   z-index:20;
-  margin-top:-48px
+  margin-top:-68px
 }
 
 .search-stack{
@@ -1174,6 +1175,10 @@ section[id]{
   box-shadow:0 24px 50px rgba(25,35,29,.12)
 }
 
+.hotel-card:active{
+  transform:translateY(-1px) scale(.99)
+}
+
 .hotel-card.is-hidden{
   display:none
 }
@@ -1557,11 +1562,24 @@ footer{
 .page-view{
   display:none;
   min-height:100vh;
-  background:var(--cream)
+  background:var(--cream);
+  opacity:0;
+  transform:translateY(18px);
+  will-change:opacity,transform
 }
 
 .page-view.is-active{
-  display:block
+  display:block;
+  animation:pageIn .48s cubic-bezier(.22,1,.36,1) forwards
+}
+
+@keyframes pageIn{
+  from{opacity:0;transform:translateY(18px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+body.is-subpage{
+  overflow-x:hidden
 }
 
 .page-hero{
@@ -1747,117 +1765,166 @@ footer{
 
 .hotel-detail-hero{
   position:relative;
-  height:min(420px,55vh);
+  height:min(460px,58vh);
+  min-height:320px;
   overflow:hidden;
-  background:#1a2e26
+  background:#1a2e26;
+  margin-top:0
 }
 
 .hotel-detail-hero img{
   width:100%;
   height:100%;
   object-fit:cover;
-  opacity:.92
+  opacity:.95;
+  transform:scale(1.04);
+  animation:heroImgIn .9s cubic-bezier(.22,1,.36,1) forwards
+}
+
+@keyframes heroImgIn{
+  from{transform:scale(1.08);opacity:.7}
+  to{transform:scale(1);opacity:.95}
 }
 
 .hotel-detail-hero .hd-overlay{
   position:absolute;
   inset:0;
-  background:linear-gradient(180deg,rgba(13,29,24,.35),rgba(13,29,24,.75));
+  background:linear-gradient(180deg,rgba(13,29,24,.25) 0%,rgba(13,29,24,.45) 40%,rgba(13,29,24,.82) 100%);
   display:flex;
   align-items:flex-end
 }
 
 .hotel-detail-hero .hd-content{
-  padding:32px 0 36px;
+  padding:28px 0 40px;
   color:#fff;
-  width:100%
+  width:100%;
+  animation:hdContentIn .55s cubic-bezier(.22,1,.36,1) .08s both
+}
+
+@keyframes hdContentIn{
+  from{opacity:0;transform:translateY(14px)}
+  to{opacity:1;transform:translateY(0)}
 }
 
 .hotel-detail-hero .hd-badge{
   display:inline-block;
-  padding:6px 12px;
+  padding:7px 13px;
   border-radius:999px;
-  background:rgba(255,255,255,.18);
+  background:rgba(255,255,255,.16);
+  border:1px solid rgba(255,255,255,.22);
+  backdrop-filter:blur(10px);
   font-size:11px;
   font-weight:700;
-  margin-bottom:10px
+  letter-spacing:.04em;
+  margin-bottom:12px
 }
 
 .hotel-detail-hero h1{
   font-family:"Playfair Display",serif;
-  font-size:clamp(28px,4vw,42px);
+  font-size:clamp(30px,4.2vw,46px);
   letter-spacing:-.03em;
-  line-height:1.1
+  line-height:1.08;
+  text-shadow:0 4px 24px rgba(0,0,0,.25)
 }
 
 .hotel-detail-hero .hd-meta{
-  margin-top:8px;
+  margin-top:10px;
   font-size:14px;
-  color:rgba(255,255,255,.85);
+  color:rgba(255,255,255,.88);
   display:flex;
   flex-wrap:wrap;
-  gap:12px
+  gap:14px;
+  align-items:center
+}
+
+.hotel-detail-hero .hd-meta span{
+  display:inline-flex;
+  align-items:center;
+  gap:6px
 }
 
 .hotel-detail-body{
-  padding:40px 0 72px
+  padding:36px 0 80px;
+  animation:hdBodyIn .5s cubic-bezier(.22,1,.36,1) .12s both
+}
+
+@keyframes hdBodyIn{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
 }
 
 .hd-layout{
   display:grid;
-  grid-template-columns:1.4fr .7fr;
-  gap:28px;
+  grid-template-columns:minmax(0,1.45fr) minmax(280px,.7fr);
+  gap:32px;
   align-items:start
 }
 
 .hd-main h2{
   font-family:"Playfair Display",serif;
-  font-size:24px;
-  margin-bottom:12px
+  font-size:26px;
+  letter-spacing:-.02em;
+  margin-bottom:14px;
+  color:var(--black)
 }
 
 .hd-main p{
   color:var(--grey);
-  font-size:15px;
-  line-height:1.7;
-  margin-bottom:14px
+  font-size:15.5px;
+  line-height:1.75;
+  margin-bottom:16px;
+  max-width:640px
+}
+
+.hd-main .hd-section{
+  margin-top:36px
 }
 
 .room-card{
   background:#fff;
   border:1px solid var(--border);
-  border-radius:16px;
-  padding:18px;
-  margin-bottom:12px;
+  border-radius:18px;
+  padding:16px;
+  margin-bottom:14px;
   display:grid;
-  grid-template-columns:120px 1fr auto;
-  gap:16px;
-  align-items:center
+  grid-template-columns:132px 1fr auto;
+  gap:18px;
+  align-items:center;
+  box-shadow:0 8px 24px rgba(20,31,25,.04);
+  transition:transform .25s var(--ease),box-shadow .25s var(--ease)
+}
+
+.room-card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 14px 32px rgba(20,31,25,.08)
 }
 
 .room-card img{
-  width:120px;
-  height:90px;
-  border-radius:12px;
-  object-fit:cover
+  width:132px;
+  height:96px;
+  border-radius:14px;
+  object-fit:cover;
+  background:#e8ebe6
 }
 
 .room-card h4{
-  font-size:16px;
+  font-size:16.5px;
   font-weight:700;
-  margin-bottom:4px
+  margin-bottom:5px;
+  color:var(--black)
 }
 
 .room-card p{
   font-size:13px;
   color:var(--grey);
   margin:0;
-  line-height:1.45
+  line-height:1.5;
+  max-width:none
 }
 
 .room-card .room-price{
   font-weight:700;
-  font-size:15px;
+  font-size:16px;
   color:var(--green);
   text-align:right;
   white-space:nowrap
@@ -1867,17 +1934,18 @@ footer{
   display:block;
   font-size:11px;
   font-weight:500;
-  color:#929690
+  color:#929690;
+  margin-top:2px
 }
 
 .hd-side{
   background:#fff;
   border:1px solid var(--border);
-  border-radius:18px;
-  padding:22px;
-  box-shadow:0 12px 32px rgba(20,31,25,.06);
+  border-radius:20px;
+  padding:24px;
+  box-shadow:0 16px 40px rgba(20,31,25,.07);
   position:sticky;
-  top:90px
+  top:calc(var(--header-h) + 16px)
 }
 
 .hd-side .hd-price{
@@ -1988,7 +2056,8 @@ body.is-subpage .site-main{
   }
 
   .hero{
-    min-height:420px
+    min-height:500px;
+    padding-bottom:56px
   }
 
   .hero h1{
@@ -1996,7 +2065,7 @@ body.is-subpage .site-main{
   }
 
   .search-wrapper{
-    margin-top:-40px
+    margin-top:-52px
   }
 
   .search-main{
@@ -2388,13 +2457,19 @@ body.is-subpage .site-main{
   function showPage(n){
     document.body.classList.add("is-subpage");
     Object.keys(pages).forEach(function(k){
-      pages[k].classList.toggle("is-active",k===n);
-    }
-    );
+      pages[k].classList.remove("is-active");
+    });
     window.scrollTo(0,0);
     closeMobile();
     closePanels();
     closeSearchPanels();
+    var target = pages[n];
+    if(!target) return;
+    // restart enter animation cleanly
+    void target.offsetWidth;
+    requestAnimationFrame(function(){
+      target.classList.add("is-active");
+    });
   }
   function showHome(){
     document.body.classList.remove("is-subpage");
@@ -2508,10 +2583,32 @@ body.is-subpage .site-main{
       return"<li>"+a+"</li>";
     }
     ).join("");
-    document.getElementById("hotelDetailRoot").innerHTML='<div class="hotel-detail-hero"><img src="'+h.img+'" alt=""><div class="hd-overlay"><div class="container hd-content"><a href="#" class="page-back" data-nav="home" style="color:rgba(255,255,255,.85)">← Zurück</a><div class="hd-badge">'+h.type+'</div><h1>'+h.name+'</h1><div class="hd-meta"><span>'+h.loc+'</span><span>★ '+h.rating.toFixed(1)+'</span></div></div></div></div><div class="hotel-detail-body"><div class="container hd-layout"><div class="hd-main"><h2>Über dieses Hotel</h2><p>'+(h.long||h.desc)+'</p><h2 style="margin-top:28px">Zimmerkategorien</h2>'+rooms+'</div><aside class="hd-side"><div class="hd-price">ab € '+h.price+' <span>/ Nacht</span></div><div class="hd-rating">★ '+h.rating.toFixed(1)+' Bewertung</div><ul class="hd-amenities">'+am+'</ul><button class="cta-btn" type="button" style="width:100%;justify-content:center;margin-top:8px">Anfrage senden</button><button class="cta-btn secondary" type="button" data-fav-detail="'+h.id+'" style="width:100%;justify-content:center;margin-top:10px">'+(favorites.some(function(f){
-      return f.id===h.id;
-    }
-    )?"♥ In Favoriten":"♡ Zu Favoriten")+'</button></aside></div></div>';
+    document.getElementById("hotelDetailRoot").innerHTML=
+      '<div class="hotel-detail-hero">'+
+        '<img src="'+h.img+'" alt="">'+
+        '<div class="hd-overlay"><div class="container hd-content">'+
+          '<a href="#" class="page-back" data-nav="home" style="color:rgba(255,255,255,.9)">← Zurück zu den Hotels</a>'+
+          '<div class="hd-badge">'+h.type+'</div>'+
+          '<h1>'+h.name+'</h1>'+
+          '<div class="hd-meta"><span>'+h.loc+'</span><span>★ '+h.rating.toFixed(1)+'</span></div>'+
+        '</div></div>'+
+      '</div>'+
+      '<div class="hotel-detail-body"><div class="container hd-layout">'+
+        '<div class="hd-main">'+
+          '<h2>Über dieses Hotel</h2>'+
+          '<p>'+(h.long||h.desc)+'</p>'+
+          '<div class="hd-section"><h2>Zimmerkategorien</h2>'+rooms+'</div>'+
+        '</div>'+
+        '<aside class="hd-side">'+
+          '<div class="hd-price">ab € '+h.price+' <span>/ Nacht</span></div>'+
+          '<div class="hd-rating">★ '+h.rating.toFixed(1)+' · Gästebewertung</div>'+
+          '<ul class="hd-amenities">'+am+'</ul>'+
+          '<button class="cta-btn" type="button" style="width:100%;justify-content:center;margin-top:8px">Anfrage senden</button>'+
+          '<button class="cta-btn secondary" type="button" data-fav-detail="'+h.id+'" style="width:100%;justify-content:center;margin-top:10px">'+
+            (favorites.some(function(f){ return f.id===h.id; }) ? "♥ In Favoriten" : "♡ Zu Favoriten")+
+          '</button>'+
+        '</aside>'+
+      '</div></div>';
     showPage("hotel");
   }
   function toggleFav(id){
