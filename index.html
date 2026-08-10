@@ -623,31 +623,31 @@ img{
 .search-stack{
   display:flex;
   flex-direction:column;
-  align-items:stretch
+  align-items:stretch;
+  filter:drop-shadow(0 16px 40px rgba(12,28,24,.12))
 }
 
 .dest-pills{
   display:flex;
   gap:0;
   padding:0;
-  margin:0 0 -1px 14px;
+  margin:0 0 0 16px;
   position:relative;
   z-index:3
 }
 
 .dest-pill{
-  padding:10px 20px 11px;
-  border-radius:14px 14px 0 0;
-  font-size:13px;
+  padding:9px 18px 8px;
+  border-radius:12px 12px 0 0;
+  font-size:12.5px;
   font-weight:700;
   background:#fff;
-  color:var(--green);
+  color:var(--green-dark);
   border:1px solid var(--border);
-  border-bottom:1px solid #fff;
-  margin-bottom:-1px;
-  box-shadow:none;
+  border-bottom:none;
   cursor:default;
-  letter-spacing:.01em
+  letter-spacing:.02em;
+  line-height:1.2
 }
 
 .dest-pill.is-active{
@@ -658,12 +658,35 @@ img{
 .search-box{
   background:#fff;
   border:1px solid var(--border);
-  border-radius:18px;
+  border-radius:16px;
   padding:10px;
-  box-shadow:0 20px 50px rgba(12,28,24,.14);
   position:relative;
-  z-index:2
+  z-index:2;
+  margin-top:0
 }
+
+/* custom destination autocomplete */
+.dest-wrap{position:relative;width:100%}
+.dest-dropdown{
+  position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:60;
+  background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:14px;
+  box-shadow:0 16px 40px rgba(15,25,20,.14);max-height:260px;overflow:auto;
+  display:none;padding:6px
+}
+.dest-dropdown.open{display:block}
+.dest-option{
+  width:100%;text-align:left;padding:10px 12px;border-radius:10px;
+  background:transparent;color:var(--black);font-size:13.5px;font-weight:600;
+  display:flex;flex-direction:column;gap:2px
+}
+.dest-option:hover,.dest-option.is-active{background:#eef3ef;color:var(--green)}
+.dest-option small{font-size:11px;font-weight:500;color:#8a918a}
+.dest-error{
+  display:none;margin-top:8px;padding:10px 12px;border-radius:12px;
+  background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;font-size:13px;font-weight:600
+}
+.dest-error.show{display:block}
+.search-field[data-panel="dest"]{overflow:visible}
 
 .search-main{
   display:grid;
@@ -2105,8 +2128,10 @@ body.is-subpage .site-main{
 <div class="search-main">
 <div class="search-field" data-panel="dest">
 <span class="search-label">Reiseziel</span>
-<input class="search-input-dest" id="destInput" type="text" placeholder="Wohin geht deine Reise?" list="destSuggestions" autocomplete="off">
-<datalist id="destSuggestions"><option value="Ganz Südtirol"><option value="Meran"><option value="Bozen"><option value="Gröden"><option value="Seiser Alm"><option value="Pustertal"><option value="Eisacktal"><option value="Vinschgau"><option value="Brixen"><option value="Dolomiten"></datalist>
+<div class="dest-wrap">
+<input class="search-input-dest" id="destInput" type="text" placeholder="Wohin geht deine Reise?" autocomplete="off" spellcheck="false">
+<div class="dest-dropdown" id="destDropdown" role="listbox"></div>
+</div>
 </div>
 <div class="search-field" data-panel="dates" id="datesField">
 <span class="search-label">Anreise – Abreise</span>
@@ -2127,6 +2152,7 @@ body.is-subpage .site-main{
 <button class="search-button" id="searchButton" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg> Suchen</button>
 </div>
 <div class="search-summary" id="searchSummary"></div>
+<div class="dest-error" id="destError" role="alert">Kein Ort in Südtirol gefunden. Bitte wähle eine Region oder einen Ort in Südtirol.</div>
 <div class="details-toggle"><button id="detailsButton" type="button">+ Detailsuche</button></div>
 <div class="details-search" id="detailsSearch"><div>
 <div class="details-grid">
@@ -2794,19 +2820,286 @@ body.is-subpage .site-main{
     if(occ.pets)parts.push("Haustier");
     document.getElementById("searchSummary").innerHTML="<span>"+parts.join(" · ")+" · <strong>"+nightLabel+"</strong> · bis <strong>€ "+price+" / Nacht</strong></span>";
   }
-  document.getElementById("destInput").addEventListener("input",updateSummary);
-  document.getElementById("searchButton").addEventListener("click",function(){
-    showHome();
-    setTimeout(function(){
-      var el=document.getElementById("hotels");
-      if(el)el.scrollIntoView({
-        behavior:"smooth"
-      }
-      );
-    },
-    50);
+  /* Destination autocomplete – only Südtirol */
+  var DESTINATIONS = [
+    { name: "Ganz Südtirol", province: "Südtirol", aliases: ["suedtirol","south tyrol","alto adige","all","ganz"] },
+    { name: "Abtei", province: "Südtirol", district: "Pustertal", aliases: ["badia", "badia", "badia"] },
+    { name: "Ahrntal", province: "Südtirol", district: "Pustertal", aliases: ["valle aurina", "valle aurina"] },
+    { name: "Aldein", province: "Südtirol", district: "Überetsch-Unterland", aliases: ["aldino", "aldino"] },
+    { name: "Algund", province: "Südtirol", district: "Burggrafenamt", aliases: ["lagundo", "lagundo"] },
+    { name: "Altrei", province: "Südtirol", district: "Überetsch-Unterland", aliases: ["anterivo", "anterivo"] },
+    { name: "Andrian", province: "Südtirol", district: "Überetsch-Unterland", aliases: ["andriano", "andriano"] },
+    { name: "Auer", province: "Südtirol", district: "Überetsch-Unterland", aliases: ["ora", "ora"] },
+    { name: "Barbian", province: "Südtirol", district: "Eisacktal", aliases: ["barbiano", "perbian", "barbiano"] },
+    { name: "Bozen", province: "Südtirol", district: "Bozen", aliases: ["bolzano", "balsan", "bulsan", "bolzano"] },
+    { name: "Branzoll", province: "Südtirol", district: "Überetsch-Unterland", aliases: ["bronzolo", "bronzolo"] },
+    { name: "Brenner", province: "Südtirol", district: "Wipptal", aliases: ["brennero", "prëner", "brennero"] },
+    { name: "Brixen", province: "Südtirol", district: "Eisacktal", aliases: ["bressanone", "persenon", "porsenù", "bressanone"] },
+    { name: "Bruneck", province: "Südtirol", district: "Pustertal", aliases: ["brunico", "bornech", "burnech", "brunico"] },
+    { name: "Burgstall", province: "Südtirol", district: "Burggrafenamt", aliases: ["postal", "postal"] },
+    { name: "Corvara", province: "Südtirol", district: "Pustertal", aliases: ["corvara in badia", "corvara", "curvea", "corvara in badia"] },
+    { name: "Deutschnofen", province: "Südtirol", district: "Salten-Schlern", aliases: ["nova ponente", "nova ponente"] },
+    { name: "Enneberg", province: "Südtirol", district: "Pustertal", aliases: ["marebbe", "mareo", "marebbe"] },
+    { name: "Eppan an der Weinstraße", province: "Südtirol", district: "Überetsch-Unterland", aliases: ["appiano sulla strada del vino", "eppan", "eppan", "appiano sulla strada del vino"] },
+    { name: "Feldthurns", province: "Südtirol", district: "Eisacktal", aliases: ["velturno", "velturno"] },
+    { name: "Franzensfeste", province: "Südtirol", district: "Wipptal", aliases: ["fortezza", "fortezza"] },
+    { name: "Freienfeld", province: "Südtirol", district: "Wipptal", aliases: ["campo di trens", "campo di trens"] },
+    { name: "Gais", province: "Südtirol", district: "Pustertal", aliases: ["gais", "gais"] },
+    { name: "Gargazon", province: "Südtirol", district: "Burggrafenamt", aliases: ["gargazzone", "gargazzone"] },
+    { name: "Glurns", province: "Südtirol", district: "Vinschgau", aliases: ["glorenza", "glorenza"] },
+    { name: "Graun im Vinschgau", province: "Südtirol", district: "Vinschgau", aliases: ["curon venosta", "graun", "graun", "curon venosta"] },
+    { name: "Gsies", province: "Südtirol", district: "Pustertal", aliases: ["valle di casies", "valle di casies"] },
+    { name: "Hafling", province: "Südtirol", district: "Burggrafenamt", aliases: ["avelengo", "avelengo"] },
+    { name: "Innichen", province: "Südtirol", district: "Pustertal", aliases: ["san candido", "sanciana", "san candido"] },
+    { name: "Jenesien", province: "Südtirol", district: "Salten-Schlern", aliases: ["san genesio atesino", "san genesio atesino"] },
+    { name: "Kaltern an der Weinstraße", province: "Südtirol", district: "Überetsch-Unterland", aliases: ["caldaro sulla strada del vino", "kaltern", "kaltern", "caldaro sulla strada del vino"] },
+    { name: "Karneid", province: "Südtirol", district: "Salten-Schlern", aliases: ["cornedo all'isarco", "cornedo all'isarco"] },
+    { name: "Kastelbell-Tschars", province: "Südtirol", district: "Vinschgau", aliases: ["castelbello-ciardes", "castelbello-ciardes"] },
+    { name: "Kastelruth", province: "Südtirol", district: "Salten-Schlern", aliases: ["castelrotto", "ciastel", "castelrotto"] },
+    { name: "Kiens", province: "Südtirol", district: "Pustertal", aliases: ["chienes", "chienes"] },
+    { name: "Klausen", province: "Südtirol", district: "Eisacktal", aliases: ["chiusa", "tluses", "tlüses", "chiusa"] },
+    { name: "Kuens", province: "Südtirol", district: "Burggrafenamt", aliases: ["caines", "caines"] },
+    { name: "Kurtatsch an der Weinstraße", province: "Südtirol", district: "Überetsch-Unterland", aliases: ["cortaccia sulla strada del vino", "kurtatsch", "kurtatsch", "cortaccia sulla strada del vino"] },
+    { name: "Kurtinig an der Weinstraße", province: "Südtirol", district: "Überetsch-Unterland", aliases: ["cortina sulla strada del vino", "kurtinig", "kurtinig", "cortina sulla strada del vino"] },
+    { name: "Laas", province: "Südtirol", district: "Vinschgau", aliases: ["lasa", "lasa"] },
+    { name: "Lajen", province: "Südtirol", district: "Eisacktal", aliases: ["laion", "laiun", "laion"] },
+    { name: "Lana", province: "Südtirol", district: "Burggrafenamt", aliases: ["lana", "lana"] },
+    { name: "Latsch", province: "Südtirol", district: "Vinschgau", aliases: ["laces", "laces"] },
+    { name: "Laurein", province: "Südtirol", district: "Burggrafenamt", aliases: ["lauregno", "lauregno"] },
+    { name: "Leifers", province: "Südtirol", district: "Überetsch-Unterland", aliases: ["laives", "laives"] },
+    { name: "Lüsen", province: "Südtirol", district: "Eisacktal", aliases: ["luson", "lujon", "lijun", "luson"] },
+    { name: "Mals", province: "Südtirol", district: "Vinschgau", aliases: ["malles venosta", "malles", "malles venosta"] },
+    { name: "Margreid an der Weinstraße", province: "Südtirol", district: "Überetsch-Unterland", aliases: ["magrè sulla strada del vino", "margreid", "margreid", "magrè sulla strada del vino"] },
+    { name: "Marling", province: "Südtirol", district: "Burggrafenamt", aliases: ["marlengo", "marlengo"] },
+    { name: "Martell", province: "Südtirol", district: "Vinschgau", aliases: ["martello", "martello"] },
+    { name: "Meran", province: "Südtirol", district: "Burggrafenamt", aliases: ["merano", "maran", "merano"] },
+    { name: "Mölten", province: "Südtirol", district: "Salten-Schlern", aliases: ["meltina", "meltina"] },
+    { name: "Montan an der Weinstraße", province: "Südtirol", district: "Überetsch-Unterland", aliases: ["montagna sulla strada del vino", "montan", "montan", "montagna sulla strada del vino"] },
+    { name: "Moos in Passeier", province: "Südtirol", district: "Burggrafenamt", aliases: ["moso in passiria", "moso in passiria"] },
+    { name: "Mühlbach", province: "Südtirol", district: "Eisacktal", aliases: ["rio di pusteria", "rio di pusteria"] },
+    { name: "Mühlwald", province: "Südtirol", district: "Pustertal", aliases: ["selva dei molini", "selva dei molini"] },
+    { name: "Nals", province: "Südtirol", district: "Burggrafenamt", aliases: ["nalles", "nalles"] },
+    { name: "Naturns", province: "Südtirol", district: "Burggrafenamt", aliases: ["naturno", "naturno"] },
+    { name: "Natz-Schabs", province: "Südtirol", district: "Eisacktal", aliases: ["naz-sciaves", "naz-sciaves"] },
+    { name: "Neumarkt", province: "Südtirol", district: "Überetsch-Unterland", aliases: ["egna", "egna"] },
+    { name: "Niederdorf", province: "Südtirol", district: "Pustertal", aliases: ["villabassa", "villabassa"] },
+    { name: "Olang", province: "Südtirol", district: "Pustertal", aliases: ["valdaora", "valdaura", "valdaora"] },
+    { name: "Partschins", province: "Südtirol", district: "Burggrafenamt", aliases: ["parcines", "parcines"] },
+    { name: "Percha", province: "Südtirol", district: "Pustertal", aliases: ["perca", "perca"] },
+    { name: "Pfalzen", province: "Südtirol", district: "Pustertal", aliases: ["falzes", "falzes"] },
+    { name: "Pfatten", province: "Südtirol", district: "Überetsch-Unterland", aliases: ["vadena", "vadena"] },
+    { name: "Pfitsch", province: "Südtirol", district: "Wipptal", aliases: ["val di vizze", "val di vizze"] },
+    { name: "Plaus", province: "Südtirol", district: "Burggrafenamt", aliases: ["plaus", "plaus"] },
+    { name: "Prad am Stilfserjoch", province: "Südtirol", district: "Vinschgau", aliases: ["prato allo stelvio", "prad", "prato allo stelvio"] },
+    { name: "Prags", province: "Südtirol", district: "Pustertal", aliases: ["braies", "braies"] },
+    { name: "Prettau", province: "Südtirol", district: "Pustertal", aliases: ["predoi", "predoi"] },
+    { name: "Proveis", province: "Südtirol", district: "Burggrafenamt", aliases: ["proves", "proves"] },
+    { name: "Rasen-Antholz", province: "Südtirol", district: "Pustertal", aliases: ["rasun anterselva", "rasun-anterselva", "rasun anterselva"] },
+    { name: "Ratschings", province: "Südtirol", district: "Wipptal", aliases: ["racines", "racines"] },
+    { name: "Riffian", province: "Südtirol", district: "Burggrafenamt", aliases: ["rifiano", "rifiano"] },
+    { name: "Ritten", province: "Südtirol", district: "Salten-Schlern", aliases: ["renon", "renon"] },
+    { name: "Rodeneck", province: "Südtirol", district: "Eisacktal", aliases: ["rodengo", "redant", "rodengo"] },
+    { name: "Salurn an der Weinstraße", province: "Südtirol", district: "Überetsch-Unterland", aliases: ["salorno sulla strada del vino", "salurn", "salorno", "salurn", "salorno sulla strada del vino"] },
+    { name: "Sand in Taufers", province: "Südtirol", district: "Pustertal", aliases: ["campo tures", "campo tures"] },
+    { name: "St. Christina in Gröden", province: "Südtirol", district: "Salten-Schlern", aliases: ["santa cristina valgardena", "santa cristina gherdëina", "santa cristina valgardena"] },
+    { name: "St. Leonhard in Passeier", province: "Südtirol", district: "Burggrafenamt", aliases: ["san leonardo in passiria", "san leonardo in passiria"] },
+    { name: "St. Lorenzen", province: "Südtirol", district: "Pustertal", aliases: ["san lorenzo di sebato", "san laurënz", "san lorenzo di sebato"] },
+    { name: "St. Martin in Passeier", province: "Südtirol", district: "Burggrafenamt", aliases: ["san martino in passiria", "san martino in passiria"] },
+    { name: "St. Martin in Thurn", province: "Südtirol", district: "Pustertal", aliases: ["san martino in badia", "san martin de tor", "san martino in badia"] },
+    { name: "St. Pankraz", province: "Südtirol", district: "Burggrafenamt", aliases: ["san pancrazio", "san pancrazio"] },
+    { name: "St. Ulrich in Gröden", province: "Südtirol", district: "Salten-Schlern", aliases: ["ortisei", "urtijëi", "st. ulrich", "ortisei"] },
+    { name: "Sarntal", province: "Südtirol", district: "Salten-Schlern", aliases: ["sarentino", "sarentino"] },
+    { name: "Schenna", province: "Südtirol", district: "Burggrafenamt", aliases: ["scena", "scena"] },
+    { name: "Schlanders", province: "Südtirol", district: "Vinschgau", aliases: ["silandro", "silandro"] },
+    { name: "Schluderns", province: "Südtirol", district: "Vinschgau", aliases: ["sluderno", "sluderno"] },
+    { name: "Schnals", province: "Südtirol", district: "Vinschgau", aliases: ["senales", "senales"] },
+    { name: "Sexten", province: "Südtirol", district: "Pustertal", aliases: ["sesto", "sest", "sesto"] },
+    { name: "Sterzing", province: "Südtirol", district: "Wipptal", aliases: ["vipiteno", "vipiteno"] },
+    { name: "Stilfs", province: "Südtirol", district: "Vinschgau", aliases: ["stelvio", "stelvio"] },
+    { name: "Taufers im Münstertal", province: "Südtirol", district: "Vinschgau", aliases: ["tubre", "taufers", "tubre"] },
+    { name: "Terenten", province: "Südtirol", district: "Pustertal", aliases: ["terento", "terento"] },
+    { name: "Terlan", province: "Südtirol", district: "Überetsch-Unterland", aliases: ["terlano", "terlano"] },
+    { name: "Tiers", province: "Südtirol", district: "Salten-Schlern", aliases: ["tires", "tires"] },
+    { name: "Tirol", province: "Südtirol", district: "Burggrafenamt", aliases: ["tirolo", "tirolo"] },
+    { name: "Tisens", province: "Südtirol", district: "Burggrafenamt", aliases: ["tesimo", "tesimo"] },
+    { name: "Toblach", province: "Südtirol", district: "Pustertal", aliases: ["dobbiaco", "dobbiaco"] },
+    { name: "Tramin an der Weinstraße", province: "Südtirol", district: "Überetsch-Unterland", aliases: ["termeno sulla strada del vino", "tramin", "tramin", "termeno sulla strada del vino"] },
+    { name: "Truden im Naturpark", province: "Südtirol", district: "Überetsch-Unterland", aliases: ["trodena nel parco naturale", "truden", "truden", "trodena nel parco naturale"] },
+    { name: "Tscherms", province: "Südtirol", district: "Burggrafenamt", aliases: ["cermes", "cermes"] },
+    { name: "Ulten", province: "Südtirol", district: "Burggrafenamt", aliases: ["ultimo", "ultimo"] },
+    { name: "Unsere Liebe Frau im Walde-St. Felix", province: "Südtirol", district: "Burggrafenamt", aliases: ["senale-san felice", "unsere liebe frau", "senale-san felice"] },
+    { name: "Vahrn", province: "Südtirol", district: "Eisacktal", aliases: ["varna", "varna"] },
+    { name: "Villanders", province: "Südtirol", district: "Eisacktal", aliases: ["villandro", "olaneres", "villandro"] },
+    { name: "Villnöß", province: "Südtirol", district: "Eisacktal", aliases: ["funes", "funès", "funes"] },
+    { name: "Vintl", province: "Südtirol", district: "Pustertal", aliases: ["vandoies", "vandoies"] },
+    { name: "Völs am Schlern", province: "Südtirol", district: "Salten-Schlern", aliases: ["fiè allo sciliar", "fíe", "fië", "fiè allo sciliar"] },
+    { name: "Vöran", province: "Südtirol", district: "Burggrafenamt", aliases: ["verano", "verano"] },
+    { name: "Waidbruck", province: "Südtirol", district: "Eisacktal", aliases: ["ponte gardena", "pruca", "ponte gardena"] },
+    { name: "Welsberg-Taisten", province: "Südtirol", district: "Pustertal", aliases: ["monguelfo-tesido", "monguelfo-tesido"] },
+    { name: "Welschnofen", province: "Südtirol", district: "Salten-Schlern", aliases: ["nova levante", "nova levante"] },
+    { name: "Wengen", province: "Südtirol", district: "Pustertal", aliases: ["la valle", "la val", "la valle"] },
+    { name: "Wolkenstein in Gröden", province: "Südtirol", district: "Salten-Schlern", aliases: ["selva di val gardena", "sëlva", "selva di valgardena", "selva di val gardena"] },
+    { name: "Gröden", province: "Südtirol", district: "Salten-Schlern", aliases: ["val gardena", "val gardena", "gardena"] },
+    { name: "Seiser Alm", province: "Südtirol", district: "Salten-Schlern", aliases: ["alpe di siusi", "alpe di siusi", "seiser"] },
+    { name: "Pustertal", province: "Südtirol", district: "Pustertal", aliases: ["val pusteria", "pusteria"] },
+    { name: "Vinschgau", province: "Südtirol", district: "Vinschgau", aliases: ["val venosta", "venosta"] },
+    { name: "Eisacktal", province: "Südtirol", district: "Eisacktal", aliases: ["valle isarco", "isarco"] },
+    { name: "Burggrafenamt", province: "Südtirol", district: "Burggrafenamt", aliases: ["burgraviato"] },
+    { name: "Überetsch-Unterland", province: "Südtirol", district: "Überetsch-Unterland", aliases: ["oltradige-bassa atesina", "überetsch", "unterland"] },
+    { name: "Salten-Schlern", province: "Südtirol", district: "Salten-Schlern", aliases: ["salto-sciliar", "salten", "schlern"] },
+    { name: "Wipptal", province: "Südtirol", district: "Wipptal", aliases: ["alta valle isarco"] },
+    { name: "Dolomiten", province: "Südtirol", district: "Südtirol", aliases: ["dolomiti", "dolomites"] },
+    { name: "Passeiertal", province: "Südtirol", district: "Burggrafenamt", aliases: ["val passiria", "passeier", "passiria"] },
+    { name: "Ultental", province: "Südtirol", district: "Burggrafenamt", aliases: ["val d'ultimo", "ulten"] }
+  ];
+
+  var destInput = document.getElementById("destInput");
+  var destDropdown = document.getElementById("destDropdown");
+  var destError = document.getElementById("destError");
+  var selectedDest = null;
+
+  function norm(s) {
+    return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/ß/g, "ss").trim();
   }
-  );
+
+  function formatDest(d) {
+    if (d.name === "Ganz Südtirol") return "Ganz Südtirol";
+    return d.name + ", " + d.province;
+  }
+
+  function matchDestinations(query) {
+    var q = norm(query);
+    if (!q) return DESTINATIONS.slice(0, 15);
+    return DESTINATIONS.filter(function (d) {
+      if (norm(d.name).indexOf(q) !== -1) return true;
+      if (norm(d.province).indexOf(q) !== -1) return true;
+      return (d.aliases || []).some(function (a) { return norm(a).indexOf(q) !== -1; });
+    }).slice(0, 15);
+  }
+
+  function findExactDest(query) {
+    var q = norm(query);
+    if (!q) return null;
+    // accept "Name, Südtirol"
+    var base = q.split(",")[0].trim();
+    for (var i = 0; i < DESTINATIONS.length; i++) {
+      var d = DESTINATIONS[i];
+      if (norm(d.name) === base || norm(d.name) === q) return d;
+      if (norm(formatDest(d)) === q) return d;
+      if ((d.aliases || []).some(function (a) { return norm(a) === base || norm(a) === q; })) return d;
+    }
+    // partial unique match
+    var matches = matchDestinations(base);
+    if (matches.length === 1) return matches[0];
+    return null;
+  }
+
+  function renderDestDropdown(list) {
+    if (!list.length) {
+      destDropdown.innerHTML = '<div class="dest-option" style="cursor:default;color:#b91c1c"><span>Kein Ort in Südtirol gefunden</span><small>Bitte Region oder Ort in Südtirol wählen</small></div>';
+      destDropdown.classList.add("open");
+      return;
+    }
+    destDropdown.innerHTML = list.map(function (d, i) {
+      return '<button type="button" class="dest-option" data-dest-idx="' + i + '" role="option"><span>' + d.name + '</span><small>' + d.province + '</small></button>';
+    }).join("");
+    destDropdown._list = list;
+    destDropdown.classList.add("open");
+  }
+
+  function pickDest(d) {
+    selectedDest = d;
+    destInput.value = formatDest(d);
+    destDropdown.classList.remove("open");
+    if (destError) destError.classList.remove("show");
+    updateSummary();
+  }
+
+  destInput.addEventListener("focus", function () {
+    renderDestDropdown(matchDestinations(destInput.value));
+  });
+
+  destInput.addEventListener("input", function () {
+    selectedDest = null;
+    if (destError) destError.classList.remove("show");
+    renderDestDropdown(matchDestinations(destInput.value));
+    updateSummary();
+  });
+
+  destDropdown.addEventListener("click", function (e) {
+    var btn = e.target.closest("[data-dest-idx]");
+    if (!btn || !destDropdown._list) return;
+    e.preventDefault();
+    e.stopPropagation();
+    pickDest(destDropdown._list[+btn.getAttribute("data-dest-idx")]);
+  });
+
+  destInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      var list = matchDestinations(destInput.value);
+      if (list.length === 1) pickDest(list[0]);
+      else if (list.length > 1) {
+        var exact = findExactDest(destInput.value);
+        if (exact) pickDest(exact);
+      }
+      document.getElementById("searchButton").click();
+    }
+    if (e.key === "Escape") destDropdown.classList.remove("open");
+  });
+
+  document.addEventListener("click", function (e) {
+    if (!e.target.closest(".dest-wrap")) destDropdown.classList.remove("open");
+  });
+
+  function resolveDestination() {
+    if (selectedDest) return selectedDest;
+    var v = (destInput.value || "").trim();
+    if (!v) return DESTINATIONS[0]; // Ganz Südtirol
+    return findExactDest(v);
+  }
+
+  document.getElementById("searchButton").addEventListener("click", function () {
+    var dest = resolveDestination();
+    if (!dest) {
+      if (destError) destError.classList.add("show");
+      destDropdown.classList.remove("open");
+      destInput.focus();
+      return;
+    }
+    if (destError) destError.classList.remove("show");
+    // auto-fill formatted value with province
+    pickDest(dest);
+    showHome();
+    // Filter hotel cards by region when possible (demo data)
+    var q = dest.name === "Ganz Südtirol" ? "" : dest.name.toLowerCase();
+    document.querySelectorAll(".hotel-card").forEach(function (card) {
+      card.classList.remove("is-hidden");
+      card.style.display = "";
+    });
+    if (q) {
+      var any = false;
+      document.querySelectorAll(".hotel-card").forEach(function (card) {
+        var loc = ((card.querySelector(".hotel-location") || {}).textContent || "").toLowerCase();
+        var ok = loc.indexOf(q) !== -1;
+        if (q.indexOf("seiser") !== -1 && loc.indexOf("seiser") !== -1) ok = true;
+        if (q.indexOf("gröden") !== -1 && loc.indexOf("gröden") !== -1) ok = true;
+        if (q === "dolomiten" && (loc.indexOf("dolomit") !== -1 || loc.indexOf("gröden") !== -1 || loc.indexOf("seiser") !== -1)) ok = true;
+        if (q === "passeiertal" && loc.indexOf("passeier") !== -1) ok = true;
+        if (ok) any = true;
+        card.style.display = ok ? "" : "none";
+      });
+      if (!any) {
+        // valid Südtirol place, but no demo hotels – show all
+        document.querySelectorAll(".hotel-card").forEach(function (card) { card.style.display = ""; });
+      }
+    }
+    setTimeout(function () {
+      var el = document.getElementById("hotels");
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+    }, 50);
+  });
+
   var mapInitialized=false;
   function initMap(){
     if(mapInitialized||typeof L==="undefined")return;
