@@ -2838,6 +2838,41 @@ img{max-width:100%;height:auto}
   .room-card .room-img-wrap{aspect-ratio:16 / 10 !important}
 }
 
+
+.footer-mail{color:var(--green);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+.footer-mail:hover{color:var(--green-dark)}
+.auth-overlay{
+  position:fixed;inset:0;z-index:400;
+  background:rgba(10,18,15,.45);backdrop-filter:blur(4px);
+  display:flex;align-items:center;justify-content:center;padding:20px
+}
+.auth-overlay[hidden]{display:none!important}
+.auth-modal{
+  position:relative;width:min(400px,100%);
+  background:#fff;border-radius:20px;padding:28px 24px 22px;
+  box-shadow:0 24px 60px rgba(0,0,0,.22)
+}
+.auth-close{
+  position:absolute;top:12px;right:14px;
+  width:36px;height:36px;border-radius:50%;
+  background:#f2f4f1;font-size:22px;line-height:1;color:#444
+}
+.auth-close:hover{background:#e8ebe6}
+.auth-modal h2{font-family:"Playfair Display",serif;font-size:26px;margin-bottom:8px}
+.auth-sub{font-size:14px;color:var(--grey);line-height:1.55;margin-bottom:20px}
+.auth-form{display:flex;flex-direction:column;gap:14px}
+.auth-label{display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.04em}
+.auth-label input{
+  padding:12px 14px;border-radius:12px;border:1px solid var(--border);
+  font-size:15px;font-weight:500;text-transform:none;letter-spacing:0;color:var(--black)
+}
+.auth-label input:focus{outline:none;border-color:var(--green);box-shadow:var(--focus)}
+.auth-submit{width:100%;justify-content:center;margin-top:6px}
+.auth-hint{margin-top:16px;font-size:13.5px;color:var(--grey);text-align:center}
+.auth-link{background:none;border:none;color:var(--green);font-weight:700;cursor:pointer;text-decoration:underline}
+.auth-note{margin-top:12px;font-size:12px;color:#8a918a;line-height:1.45;text-align:center}
+.nav-glass.is-logged{background:rgba(255,255,255,.28)}
+
 </style>
 </head>
 <body>
@@ -2885,7 +2920,7 @@ img{max-width:100%;height:auto}
 <button class="lang-option" data-lang="it" type="button">Italiano</button>
 <button class="lang-option" data-lang="en" type="button">English</button>
 </div>
-<button class="nav-glass" type="button">Anmelden</button>
+<button class="nav-glass" type="button" id="loginBtn">Anmelden</button>
 <button class="mobile-menu" id="mobileMenuBtn" aria-label="Menü" aria-expanded="false"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button>
 </div></div></header>
 <div class="mobile-scrim" id="mobileScrim"></div>
@@ -2965,6 +3000,11 @@ img{max-width:100%;height:auto}
 <label class="chip-check"><input type="checkbox" value="Pool"> Pool</label>
 <label class="chip-check"><input type="checkbox" value="Restaurant"> Restaurant</label>
 <label class="chip-check"><input type="checkbox" value="Skiraum"> Skiraum</label>
+<label class="chip-check"><input type="checkbox" value="Garten"> Garten</label>
+<label class="chip-check"><input type="checkbox" value="Halbpension"> Halbpension</label>
+<label class="chip-check"><input type="checkbox" value="Fine Dining"> Fine Dining</label>
+<label class="chip-check"><input type="checkbox" value="Familienzimmer"> Familienzimmer</label>
+<label class="chip-check"><input type="checkbox" value="Yoga"> Yoga</label>
 <label class="chip-check"><input type="checkbox" value="pets"> Haustiere</label>
 </div></div>
 </div></div></div>
@@ -3010,10 +3050,10 @@ img{max-width:100%;height:auto}
 </div></div></section>
 </main>
 <footer><div class="container"><div class="footer-grid">
-<div><div class="footer-logo">Stay<span>lo</span></div><p class="footer-about">Staylo ist eine unabhängige Plattform für besondere Hotels in Südtirol.</p><p class="footer-about">Lana · Südtirol · Italien<br>info@staylo.it</p></div>
+<div><div class="footer-logo">Stay<span>lo</span></div><p class="footer-about">Staylo ist eine unabhängige Plattform für besondere Hotels in Südtirol.</p><p class="footer-about">Lana · Südtirol · Italien<br><a href="mailto:info@staylo.it?subject=Anfrage%20über%20Staylo" class="footer-mail">info@staylo.it</a></p></div>
 <div class="footer-column"><h4>Entdecken</h4><a href="#hotels" data-nav="home">Hotels</a><a href="#page-categories" data-page="categories">Kategorien</a><a href="#page-regions" data-page="regions">Regionen</a></div>
 <div class="footer-column"><h4>Regionen</h4><a href="#page-regions" data-page="regions">Meran</a><a href="#page-regions" data-page="regions">Bozen</a><a href="#page-regions" data-page="regions">Dolomiten</a></div>
-<div class="footer-column"><h4>Staylo</h4><a href="#page-about" data-page="about">Über uns</a><a href="#page-hoteliers" data-page="hoteliers">Für Hoteliers</a><a href="#">Kontakt</a><a href="#">Impressum</a></div>
+<div class="footer-column"><h4>Staylo</h4><a href="#page-about" data-page="about">Über uns</a><a href="#page-hoteliers" data-page="hoteliers">Für Hoteliers</a><a href="#page-contact" data-page="contact">Kontakt</a><a href="#page-impressum" data-page="impressum">Impressum</a></div>
 </div>
 <div class="footer-bottom"><span>© 2026 Staylo · Hotels in Südtirol</span><span>Made in South Tyrol · Italy</span></div>
 </div></footer>
@@ -3068,6 +3108,38 @@ img{max-width:100%;height:auto}
 <a href="#page-hoteliers" class="cta-btn secondary" data-page="hoteliers" style="margin-left:10px">Für Hoteliers →</a>
 </div>
 </div></div></div>
+
+<div class="page-view" id="page-contact">
+  <div class="page-hero"><div class="container">
+    <a href="#" class="page-back" data-nav="home">← Zurück</a>
+    <h1>Kontakt</h1>
+    <p>Wir freuen uns auf deine Nachricht.</p>
+  </div></div>
+  <div class="container page-body" style="padding:32px 0 64px;max-width:640px">
+    <p style="color:var(--grey);line-height:1.7;margin-bottom:20px">Hast du Fragen zu Staylo, zu einem Hotel oder möchtest du dein Haus bei uns listen? Schreib uns – wir melden uns so schnell wie möglich.</p>
+    <p style="margin-bottom:8px"><strong>E-Mail</strong></p>
+    <p style="margin-bottom:20px"><a class="footer-mail" href="mailto:info@staylo.it?subject=Anfrage%20über%20Staylo">info@staylo.it</a></p>
+    <p style="margin-bottom:8px"><strong>Adresse</strong></p>
+    <p style="color:var(--grey);line-height:1.6">Staylo<br>Lana · Südtirol · Italien</p>
+    <p style="margin-top:28px"><a class="cta-btn" href="mailto:info@staylo.it?subject=Anfrage%20über%20Staylo">E-Mail schreiben</a></p>
+  </div>
+</div>
+<div class="page-view" id="page-impressum">
+  <div class="page-hero"><div class="container">
+    <a href="#" class="page-back" data-nav="home">← Zurück</a>
+    <h1>Impressum</h1>
+    <p>Angaben gemäß den gesetzlichen Vorgaben.</p>
+  </div></div>
+  <div class="container page-body" style="padding:32px 0 64px;max-width:640px">
+    <h2 style="font-size:18px;margin-bottom:10px">Anbieter</h2>
+    <p style="color:var(--grey);line-height:1.7;margin-bottom:18px">Staylo – Plattform für Hotels in Südtirol<br>Lana · Südtirol · Italien</p>
+    <h2 style="font-size:18px;margin-bottom:10px">Kontakt</h2>
+    <p style="color:var(--grey);line-height:1.7;margin-bottom:18px">E-Mail: <a class="footer-mail" href="mailto:info@staylo.it">info@staylo.it</a></p>
+    <h2 style="font-size:18px;margin-bottom:10px">Hinweis</h2>
+    <p style="color:var(--grey);line-height:1.7">Staylo ist eine unabhängige Hotelplattform. Die dargestellten Hotels und Preise dienen der Orientierung. Verbindliche Buchungen erfolgen über die jeweiligen Hotels bzw. deren Systeme. Dieses Impressum ist eine Vorlage und sollte vor dem Live-Betrieb rechtlich geprüft und vervollständigt werden.</p>
+  </div>
+</div>
+
 <div class="page-view" id="page-hotel"><div id="hotelDetailRoot"></div></div>
 
 <script>
@@ -3216,7 +3288,13 @@ img{max-width:100%;height:auto}
   }
   );
   var pages={
-    categories:document.getElementById("page-categories"),regions:document.getElementById("page-regions"),hoteliers:document.getElementById("page-hoteliers"),about:document.getElementById("page-about"),hotel:document.getElementById("page-hotel")
+    categories:document.getElementById("page-categories"),
+    regions:document.getElementById("page-regions"),
+    hoteliers:document.getElementById("page-hoteliers"),
+    about:document.getElementById("page-about"),
+    contact:document.getElementById("page-contact"),
+    impressum:document.getElementById("page-impressum"),
+    hotel:document.getElementById("page-hotel")
   };
   function showPage(n){
     document.body.classList.add("is-subpage");
@@ -3253,6 +3331,8 @@ img{max-width:100%;height:auto}
     else if(h==="page-regions"||h==="regions")showPage("regions");
     else if(h==="page-hoteliers"||h==="hoteliers")showPage("hoteliers");
     else if(h==="page-about"||h==="about")showPage("about");
+    else if(h==="page-contact"||h==="contact")showPage("contact");
+    else if(h==="page-impressum"||h==="impressum")showPage("impressum");
     else{
       showHome();
       if(h==="hotels"||h==="karte"){
@@ -4233,9 +4313,9 @@ img{max-width:100%;height:auto}
     var di = document.getElementById("destInput");
     if(di) di.value = "";
     var ps = document.getElementById("priceSlider");
-    if(ps){ ps.value = 250; }
+    if(ps){ ps.value = 500; }
     var pv = document.getElementById("priceValue");
-    if(pv) pv.textContent = "€ 250";
+    if(pv) pv.textContent = "€ 500";
     // reset activeFilters price display to match default slider for filter until search
     activeFilters.maxPrice = 500;
     var ss = document.getElementById("sortSelect");
@@ -4279,31 +4359,17 @@ img{max-width:100%;height:auto}
       attribution:"&copy; OpenStreetMap",maxZoom:18
     }
     ).addTo(map);
-    [{
-      name:"Meran",lat:46.668,lng:11.164
-    },
-    {
-      name:"Bozen",lat:46.498,lng:11.354
-    },
-    {
-      name:"Gröden",lat:46.555,lng:11.715
-    },
-    {
-      name:"Seiser Alm",lat:46.54,lng:11.64
-    },
-    {
-      name:"Brixen",lat:46.716,lng:11.656
-    },
-    {
-      name:"Pustertal",lat:46.74,lng:12.0
-    },
-    {
-      name:"Vinschgau",lat:46.63,lng:10.77
-    }
-    ].forEach(function(m){
-      L.marker([m.lat,m.lng]).addTo(map).bindPopup("<strong>"+m.name+"</strong>");
-    }
-    );
+    // Alle Hotels auf der Karte
+    HOTELS.forEach(function(h){
+      if(typeof h.lat !== "number" || typeof h.lng !== "number") return;
+      var marker = L.marker([h.lat, h.lng]).addTo(map);
+      marker.bindPopup(
+        "<strong>"+h.name+"</strong><br>"+
+        (h.location||"")+(h.region?", "+h.region:"")+"<br>"+
+        "ab € "+h.price+" / Nacht<br>"+
+        '<a href="#hotel-'+h.id+'" style="color:#214b3d;font-weight:700">Details ansehen →</a>'
+      );
+    });
     setTimeout(function(){
       map.invalidateSize();
     },
@@ -4433,13 +4499,131 @@ img{max-width:100%;height:auto}
     onScroll();
   })();
 
-    renderHotels();
+  
+  /* Auth modal (local demo session) */
+  var authOverlay = document.getElementById("authOverlay");
+  var loginBtn = document.getElementById("loginBtn");
+  var authMode = "login";
+  function getAuthUser(){
+    try{ return JSON.parse(localStorage.getItem("staylo_user")||"null"); }catch(e){ return null; }
+  }
+  function setAuthUser(user){
+    try{
+      if(user) localStorage.setItem("staylo_user", JSON.stringify(user));
+      else localStorage.removeItem("staylo_user");
+    }catch(e){}
+  }
+  function refreshAuthUI(){
+    var user = getAuthUser();
+    if(!loginBtn) return;
+    if(user && user.email){
+      loginBtn.textContent = user.email.split("@")[0];
+      loginBtn.classList.add("is-logged");
+      loginBtn.title = "Abmelden";
+    }else{
+      loginBtn.textContent = "Anmelden";
+      loginBtn.classList.remove("is-logged");
+      loginBtn.title = "Anmelden";
+    }
+  }
+  function openAuth(mode){
+    authMode = mode || "login";
+    var title = document.getElementById("authTitle");
+    var submit = document.querySelector(".auth-submit");
+    var toggle = document.getElementById("authRegisterToggle");
+    if(title) title.textContent = authMode === "register" ? "Registrieren" : "Anmelden";
+    if(submit) submit.textContent = authMode === "register" ? "Konto erstellen" : "Anmelden";
+    if(toggle) toggle.textContent = authMode === "register" ? "Anmelden" : "Registrieren";
+    var hint = toggle && toggle.parentElement;
+    if(hint && hint.classList.contains("auth-hint")){
+      hint.childNodes[0].textContent = authMode === "register" ? "Bereits ein Konto? " : "Noch kein Konto? ";
+    }
+    if(authOverlay){
+      authOverlay.hidden = false;
+      document.body.style.overflow = "hidden";
+      var em = document.getElementById("authEmail");
+      if(em) setTimeout(function(){ em.focus(); }, 50);
+    }
+  }
+  function closeAuth(){
+    if(authOverlay) authOverlay.hidden = true;
+    document.body.style.overflow = "";
+  }
+  if(loginBtn){
+    loginBtn.addEventListener("click", function(e){
+      e.stopPropagation();
+      var user = getAuthUser();
+      if(user && user.email){
+        setAuthUser(null);
+        refreshAuthUI();
+        showToast("Du wurdest abgemeldet.");
+        return;
+      }
+      openAuth("login");
+    });
+  }
+  var authClose = document.getElementById("authClose");
+  if(authClose) authClose.addEventListener("click", closeAuth);
+  if(authOverlay){
+    authOverlay.addEventListener("click", function(e){
+      if(e.target === authOverlay) closeAuth();
+    });
+  }
+  var regToggle = document.getElementById("authRegisterToggle");
+  if(regToggle){
+    regToggle.addEventListener("click", function(){
+      openAuth(authMode === "login" ? "register" : "login");
+    });
+  }
+  var authForm = document.getElementById("authForm");
+  if(authForm){
+    authForm.addEventListener("submit", function(e){
+      e.preventDefault();
+      var email = (document.getElementById("authEmail").value || "").trim();
+      var pass = document.getElementById("authPassword").value || "";
+      if(!email || pass.length < 6){
+        showToast("Bitte gültige E-Mail und Passwort (mind. 6 Zeichen) eingeben.");
+        return;
+      }
+      setAuthUser({ email: email, since: Date.now() });
+      closeAuth();
+      refreshAuthUI();
+      showToast(authMode === "register" ? "Konto erstellt – willkommen bei Staylo!" : "Erfolgreich angemeldet. Willkommen zurück!");
+      authForm.reset();
+    });
+  }
+  document.addEventListener("keydown", function(e){
+    if(e.key === "Escape" && authOverlay && !authOverlay.hidden) closeAuth();
+  });
+  refreshAuthUI();
+
+  renderHotels();
   renderFavorites();
   updateOccDisplay();
   updateDatesDisplay();
   routeFromHash();
 })();
 </script>
+
+<div class="auth-overlay" id="authOverlay" hidden>
+  <div class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+    <button type="button" class="auth-close" id="authClose" aria-label="Schließen">×</button>
+    <h2 id="authTitle">Anmelden</h2>
+    <p class="auth-sub">Melde dich an, um Favoriten geräteübergreifend zu speichern und Anfragen zu verwalten.</p>
+    <form id="authForm" class="auth-form">
+      <label class="auth-label">E-Mail
+        <input type="email" id="authEmail" required placeholder="name@beispiel.it" autocomplete="email">
+      </label>
+      <label class="auth-label">Passwort
+        <input type="password" id="authPassword" required placeholder="••••••••" autocomplete="current-password" minlength="6">
+      </label>
+      <button type="submit" class="cta-btn auth-submit">Anmelden</button>
+    </form>
+    <p class="auth-hint">Noch kein Konto? <button type="button" class="auth-link" id="authRegisterToggle">Registrieren</button></p>
+    <p class="auth-note">Demo: Die Anmeldung speichert deine Session lokal im Browser. Ein echtes Konto-System folgt später.</p>
+  </div>
+</div>
+
 <div class="staylo-toast" id="stayloToast" role="status" aria-live="polite"></div>
 </body>
 </html>
