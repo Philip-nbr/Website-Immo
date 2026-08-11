@@ -2,16 +2,44 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Staylo – Hotels in Südtirol | Besondere Unterkünfte finden</title>
-<meta name="description" content="Finde besondere Hotels und Unterkünfte in Südtirol – Meran, Bozen, Gröden, Pustertal, Vinschgau und Dolomiten. Staylo, deine Hotelplattform für Südtirol.">
-<meta name="keywords" content="Hotels Südtirol, Hotel Meran, Hotel Bozen, Hotels Dolomiten, Hotels Pustertal, Hotels Vinschgau, Unterkunft Südtirol">
+<meta name="description" content="Entdecke besondere Hotels, Boutique-Häuser und Wellness-Resorts in Südtirol – Meran, Bozen, Gröden, Pustertal, Vinschgau und Dolomiten. Staylo, die unabhängige Hotelplattform für Südtirol.">
+<meta name="keywords" content="Hotels Südtirol, Hotel Meran, Hotel Bozen, Hotels Dolomiten, Hotels Pustertal, Hotels Vinschgau, Boutique Hotel Südtirol, Wellnesshotel Südtirol, Unterkunft Südtirol">
+<meta name="author" content="Staylo">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://staylo.it/">
 <meta property="og:title" content="Staylo – Hotels in Südtirol">
-<meta property="og:description" content="Finde besondere Hotels und Unterkünfte in Südtirol.">
+<meta property="og:description" content="Finde besondere Hotels und Unterkünfte in Südtirol – Meran, Bozen, Dolomiten und mehr.">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="de_IT">
-<meta name="theme-color" content="#1a3c34">
+<meta property="og:url" content="https://staylo.it/">
+<meta property="og:site_name" content="Staylo">
+<meta property="og:image" content="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=85">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Staylo – Hotels in Südtirol">
+<meta name="twitter:description" content="Besondere Hotels und Unterkünfte in Südtirol finden.">
+<meta name="twitter:image" content="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=85">
+<meta name="theme-color" content="#214b3d">
+<meta name="color-scheme" content="light">
 <link rel="icon" type="image/jpeg" href="./YtDCk.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Staylo",
+  "url": "https://staylo.it/",
+  "description": "Unabhängige Hotelplattform für besondere Unterkünfte in Südtirol",
+  "inLanguage": "de-IT",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://staylo.it/#hotels?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
@@ -22,22 +50,38 @@
   --green:#214b3d;
   --green-dark:#17372e;
   --green-soft:#dfeae4;
+  --green-mid:#2a5c4a;
   --cream:#f4f4f0;
+  --cream-warm:#f7f5f0;
   --white:#fff;
   --black:#141816;
   --grey:#6b716c;
+  --grey-light:#8a918a;
   --border:#e3e6e1;
+  --border-soft:rgba(0,0,0,.06);
   --max:1200px;
+  --max-wide:1440px;
   --ease:cubic-bezier(.22,1,.36,1);
+  --ease-out:cubic-bezier(.16,1,.3,1);
   --header-h:68px;
+  --header-h-scrolled:58px;
   --radius:16px;
   --radius-sm:12px;
   --radius-lg:22px;
+  --radius-xl:28px;
   --shadow-sm:0 4px 16px rgba(15,25,20,.05);
   --shadow-md:0 12px 32px rgba(15,25,20,.08);
   --shadow-lg:0 20px 48px rgba(15,25,20,.12);
+  --shadow-xl:0 28px 64px rgba(15,25,20,.16);
   --space:20px;
-  --focus:0 0 0 3px rgba(33,75,61,.28)
+  --space-xs:8px;
+  --space-sm:12px;
+  --space-md:20px;
+  --space-lg:32px;
+  --space-xl:48px;
+  --focus:0 0 0 3px rgba(33,75,61,.28);
+  --touch-min:44px;
+  --transition:background .25s var(--ease),box-shadow .3s var(--ease),transform .25s var(--ease),border-color .25s var(--ease),color .2s var(--ease),opacity .25s var(--ease)
 }
 
 *{
@@ -100,10 +144,12 @@ img{
   z-index:100;
   color:#fff;
   height:var(--header-h);
-  background:rgba(23,42,35,.92);
+  background:rgba(23,42,35,.88);
   backdrop-filter:blur(20px) saturate(160%);
   -webkit-backdrop-filter:blur(20px) saturate(160%);
-  box-shadow:0 1px 0 rgba(255,255,255,.08),0 8px 28px rgba(0,0,0,.18)
+  box-shadow:0 1px 0 rgba(255,255,255,.08),0 8px 28px rgba(0,0,0,.14);
+  transition:height .32s var(--ease),background .28s var(--ease),box-shadow .28s var(--ease),backdrop-filter .28s var(--ease);
+  will-change:height,background
 }
 
 .nav{
@@ -118,11 +164,14 @@ img{
   display:flex;
   align-items:center;
   gap:10px;
-  font-size:17px;
+  font-size:18px;
   font-weight:700;
-  letter-spacing:-.02em;
-  flex-shrink:0
+  letter-spacing:-.03em;
+  flex-shrink:0;
+  transition:opacity .2s
 }
+.logo:hover{opacity:.92}
+.logo:focus-visible{outline:none;box-shadow:var(--focus);border-radius:8px}
 
 .logo-mark{
   width:32px;
@@ -169,19 +218,24 @@ img{
   position:relative;
   display:inline-flex;
   align-items:center;
+  min-height:var(--touch-min);
   height:40px;
   color:rgba(255,255,255,.94);
   font-size:13.5px;
   font-weight:600;
   padding:0 14px;
   border-radius:999px;
-  transition:.2s var(--ease);
+  transition:background .22s var(--ease),color .22s var(--ease),transform .15s ease;
   white-space:nowrap
 }
 
 .nav-item:hover,.nav-item:focus-within{
-  background:rgba(255,255,255,.16);
+  background:rgba(255,255,255,.18);
   color:#fff
+}
+.nav-item:focus-visible{
+  outline:none;
+  box-shadow:var(--focus)
 }
 
 .nav-item.has-menu{
@@ -451,7 +505,7 @@ img{
   right:0;
   height:100%;
   width:min(320px,84vw);
-  background:rgba(23,42,35,.97);
+  background:rgba(23,42,35,.98);
   color:#fff;
   z-index:300;
   padding:90px 26px 30px;
@@ -459,12 +513,20 @@ img{
   flex-direction:column;
   gap:4px;
   transform:translateX(100%);
-  transition:transform .42s cubic-bezier(.34,1.56,.64,1);
-  box-shadow:-20px 0 50px rgba(0,0,0,.25)
+  transition:transform .4s cubic-bezier(.22,1,.36,1);
+  box-shadow:-24px 0 56px rgba(0,0,0,.28);
+  will-change:transform
 }
 
 .mobile-drawer.open{
   transform:translateX(0)
+}
+body.drawer-open{
+  overflow:hidden;
+  touch-action:none
+}
+.mobile-scrim{
+  transition:opacity .38s var(--ease),visibility .38s
 }
 
 .mobile-drawer a{
@@ -495,14 +557,15 @@ img{
 }
 
 .hero{
-  min-height:560px;
+  min-height:min(88vh,720px);
   position:relative;
   display:flex;
   align-items:center;
+  justify-content:center;
   color:#fff;
   margin-top:calc(-1 * var(--header-h));
   padding-top:var(--header-h);
-  padding-bottom:72px
+  padding-bottom:88px
 }
 
 .hero-media{
@@ -516,54 +579,52 @@ img{
   inset:0;
   background-size:cover;
   background-position:center 40%;
-  transform:scale(1.03);
+  transform:scale(1.04);
   opacity:0;
-  animation:heroFade 28s cubic-bezier(.22,1,.36,1) infinite
+  animation:heroFade 32s cubic-bezier(.22,1,.36,1) infinite;
+  will-change:opacity,transform
 }
 
 .hero-slide:nth-child(1){
-  background-image:url("https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=2200&q=90");
+  background-image:url("https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=2400&q=90");
   animation-delay:0s
 }
 
 .hero-slide:nth-child(2){
-  background-image:url("https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=2200&q=90");
-  animation-delay:7s
+  background-image:url("https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=2400&q=90");
+  animation-delay:8s
 }
 
 .hero-slide:nth-child(3){
-  background-image:url("https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=2200&q=90");
-  animation-delay:14s
+  background-image:url("https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=2400&q=90");
+  animation-delay:16s
 }
 
 .hero-slide:nth-child(4){
-  background-image:url("https://images.unsplash.com/photo-1521295121783-8a321d551ad2?auto=format&fit=crop&w=2200&q=90");
-  animation-delay:21s
+  background-image:url("https://images.unsplash.com/photo-1521295121783-8a321d551ad2?auto=format&fit=crop&w=2400&q=90");
+  animation-delay:24s
 }
 
 .hero-bg{
   position:absolute;
   inset:0;
   z-index:1;
-  background:linear-gradient(180deg,rgba(13,29,24,.5),rgba(13,29,24,.28) 45%,rgba(13,29,24,.58))
+  background:linear-gradient(180deg,rgba(10,24,20,.55) 0%,rgba(13,29,24,.32) 42%,rgba(10,22,18,.62) 100%)
 }
 
 @keyframes heroFade{
   0%,100%{
     opacity:0;
-    transform:scale(1.02)
+    transform:scale(1.04)
   }
-
-  6%,26%{
+  5%,28%{
     opacity:1;
-    transform:scale(1.01)
+    transform:scale(1.0)
   }
-
-  32%,100%{
+  33%,100%{
     opacity:0;
-    transform:scale(1.03)
+    transform:scale(1.05)
   }
-
 }
 
 .hero-content{
@@ -609,30 +670,81 @@ img{
 
 .hero h1{
   font-family:"Playfair Display",serif;
-  font-size:clamp(40px,5vw,64px);
-  line-height:1.05;
-  letter-spacing:-.045em;
+  font-size:clamp(36px,5.2vw,68px);
+  line-height:1.06;
+  letter-spacing:-.04em;
   font-weight:600;
-  text-shadow:0 5px 25px rgba(0,0,0,.18)
+  text-shadow:0 6px 28px rgba(0,0,0,.22)
 }
 
 .hero h1 em{
   font-style:normal;
-  color:#c0d7c8
+  color:#c8dfd0
 }
 
 .hero-subtitle{
-  margin:12px auto 0;
-  max-width:600px;
-  font-size:15px;
-  line-height:1.65;
-  color:rgba(255,255,255,.9)
+  margin:14px auto 0;
+  max-width:540px;
+  font-size:clamp(14.5px,1.6vw,16.5px);
+  line-height:1.7;
+  color:rgba(255,255,255,.92);
+  font-weight:450
+}
+.hero-ctas{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  justify-content:center;
+  margin-top:28px
+}
+.hero-cta-primary{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:14px 24px;
+  min-height:var(--touch-min);
+  border-radius:999px;
+  background:#fff;
+  color:var(--green-dark);
+  font-size:14px;
+  font-weight:700;
+  box-shadow:0 10px 28px rgba(0,0,0,.18);
+  transition:transform .2s var(--ease),box-shadow .25s
+}
+.hero-cta-primary:hover{
+  transform:translateY(-2px);
+  box-shadow:0 14px 36px rgba(0,0,0,.22)
+}
+.hero-cta-secondary{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:14px 22px;
+  min-height:var(--touch-min);
+  border-radius:999px;
+  background:rgba(255,255,255,.12);
+  color:#fff;
+  font-size:14px;
+  font-weight:600;
+  border:1.5px solid rgba(255,255,255,.35);
+  backdrop-filter:blur(12px);
+  transition:background .2s,border-color .2s
+}
+.hero-cta-secondary:hover{
+  background:rgba(255,255,255,.2);
+  border-color:rgba(255,255,255,.5)
 }
 
 .search-wrapper{
   position:relative;
   z-index:20;
-  margin-top:-68px
+  margin-top:-72px
+}
+.search-wrapper.is-sticky .search-box{
+  position:sticky;
+  top:calc(var(--header-h-scrolled) + 8px);
+  z-index:40;
+  box-shadow:var(--shadow-lg)
 }
 
 .search-stack{
@@ -673,11 +785,16 @@ img{
 .search-box{
   background:#fff;
   border:1px solid var(--border);
-  border-radius:16px;
-  padding:10px;
+  border-radius:var(--radius-lg);
+  padding:12px;
   position:relative;
   z-index:2;
-  margin-top:0
+  margin-top:0;
+  box-shadow:var(--shadow-md),0 1px 0 rgba(255,255,255,.8) inset;
+  transition:box-shadow .3s var(--ease)
+}
+.search-box:focus-within{
+  box-shadow:var(--shadow-lg),0 0 0 2px rgba(33,75,61,.12)
 }
 
 /* custom destination autocomplete */
@@ -697,10 +814,12 @@ img{
 .dest-option:hover,.dest-option.is-active{background:#eef3ef;color:var(--green)}
 .dest-option small{font-size:11px;font-weight:500;color:#8a918a}
 .dest-error{
-  display:none;margin-top:8px;padding:10px 12px;border-radius:12px;
-  background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;font-size:13px;font-weight:600
+  display:none;margin-top:10px;padding:12px 14px;border-radius:12px;
+  background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;font-size:13.5px;font-weight:600;
+  align-items:center;gap:8px
 }
-.dest-error.show{display:block}
+.dest-error.show{display:flex}
+.dest-error::before{content:"⚠";font-size:15px;flex-shrink:0}
 .search-field[data-panel="dest"]{overflow:visible}
 
 .search-main{
@@ -713,8 +832,9 @@ img{
 }
 
 .search-field{
-  min-height:68px;
-  padding:10px 16px;
+  min-height:var(--touch-min);
+  min-height:72px;
+  padding:12px 18px;
   border-right:1px solid var(--border);
   display:flex;
   flex-direction:column;
@@ -771,7 +891,11 @@ img{
 }
 
 .search-input-dest::placeholder{
-  color:#9aa19a;
+  color:#7a827a;
+  font-weight:500
+}
+.search-value .placeholder{
+  color:#7a827a !important;
   font-weight:500
 }
 
@@ -844,11 +968,15 @@ img{
   background:transparent;
   display:flex;
   align-items:center;
-  justify-content:center
+  justify-content:center;
+  min-width:36px;
+  min-height:36px;
+  transition:background .15s,color .15s,transform .12s
 }
 
 .cal-day:hover:not(.disabled):not(.empty){
-  background:#eef3ef
+  background:#eef3ef;
+  transform:scale(1.06)
 }
 
 .cal-day.disabled{
@@ -860,15 +988,25 @@ img{
   pointer-events:none
 }
 
+.cal-day.is-weekend:not(.disabled):not(.empty):not(.range-start):not(.range-end):not(.in-range){
+  color:#5a6b5e
+}
+
+.cal-day.is-today:not(.range-start):not(.range-end){
+  box-shadow:inset 0 0 0 1.5px var(--green);
+  font-weight:700
+}
+
 .cal-day.in-range{
-  background:#e8f0eb;
+  background:#e0ebe4;
   border-radius:0
 }
 
 .cal-day.range-start,.cal-day.range-end{
   background:var(--green);
   color:#fff;
-  border-radius:50%
+  border-radius:50%;
+  box-shadow:0 4px 12px rgba(33,75,61,.3)
 }
 
 .cal-day.range-start.in-range{
@@ -877,6 +1015,19 @@ img{
 
 .cal-day.range-end.in-range{
   border-radius:0 50% 50% 0
+}
+
+@media(max-width:600px){
+  .search-field[data-panel="dates"] .search-panel{
+    left:50%;
+    transform:translateX(-50%);
+    width:min(100vw - 24px,360px);
+    max-width:calc(100vw - 24px)
+  }
+  .search-field[data-panel="dates"] .search-panel.open{
+    transform:translateX(-50%) translateY(0)
+  }
+  .cal-wrap{grid-template-columns:1fr !important;gap:16px}
 }
 
 .cal-nav{
@@ -977,23 +1128,33 @@ img{
 
 .search-button{
   margin:8px;
-  min-width:118px;
-  border-radius:12px;
+  min-width:128px;
+  min-height:var(--touch-min);
+  border-radius:var(--radius-sm);
   background:var(--green);
   color:#fff;
-  font-size:14px;
+  font-size:14.5px;
   font-weight:700;
   display:inline-flex;
   align-items:center;
   justify-content:center;
   gap:8px;
-  box-shadow:0 6px 18px rgba(33,75,61,.25)
+  box-shadow:0 8px 22px rgba(33,75,61,.28);
+  transition:background .22s,transform .2s var(--ease),box-shadow .25s
 }
 
 .search-button:hover{
   background:var(--green-dark);
-  transform:translateY(-1px)
+  transform:translateY(-2px);
+  box-shadow:0 12px 28px rgba(33,75,61,.34)
 }
+.search-button:active{transform:translateY(0)}
+.search-button.is-loading{
+  pointer-events:none;
+  opacity:.85
+}
+.search-button.is-loading svg{animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 
 .search-button svg{
   width:16px;
@@ -2388,9 +2549,37 @@ img{max-width:100%;height:auto}
   transition:background .25s var(--ease),box-shadow .25s var(--ease),border-color .25s var(--ease)
 }
 .header.is-scrolled{
-  background:rgba(245,245,241,.92);
-  border-bottom-color:rgba(0,0,0,.06);
-  box-shadow:0 8px 28px rgba(15,25,20,.06)
+  height:var(--header-h-scrolled);
+  background:rgba(245,245,241,.94);
+  backdrop-filter:blur(24px) saturate(140%);
+  -webkit-backdrop-filter:blur(24px) saturate(140%);
+  border-bottom:1px solid rgba(0,0,0,.06);
+  box-shadow:0 4px 24px rgba(15,25,20,.08);
+  color:var(--black)
+}
+.header.is-scrolled .nav-item{color:rgba(20,24,22,.88)}
+.header.is-scrolled .nav-item:hover,.header.is-scrolled .nav-item:focus-within{background:rgba(33,75,61,.1);color:var(--green-dark)}
+.header.is-scrolled .nav-item.has-menu>span::after{border-top-color:rgba(20,24,22,.55)}
+.header.is-scrolled .logo-text span:first-child{color:var(--black)}
+.header.is-scrolled .logo-text span:last-child{color:var(--green)}
+.header.is-scrolled .nav-glass{
+  color:var(--green-dark);
+  background:linear-gradient(135deg,rgba(33,75,61,.08),rgba(33,75,61,.04));
+  border-color:rgba(33,75,61,.18)
+}
+.header.is-scrolled .nav-glass:hover{
+  background:linear-gradient(135deg,rgba(33,75,61,.14),rgba(33,75,61,.08))
+}
+.header.is-scrolled .mobile-menu{background:rgba(33,75,61,.1);border-color:rgba(33,75,61,.2);color:var(--green-dark)}
+.header.is-scrolled .mobile-menu .bar{background:var(--green-dark)}
+.header.is-scrolled .logo-mark{border-color:rgba(33,75,61,.25)}
+.nav .nav-item.is-active{
+  background:rgba(255,255,255,.18);
+  color:#fff
+}
+.header.is-scrolled .nav-item.is-active{
+  background:rgba(33,75,61,.12);
+  color:var(--green-dark)
 }
 
 /* Hotel cards – consistent height & hierarchy */
@@ -2873,6 +3062,260 @@ img{max-width:100%;height:auto}
 .auth-note{margin-top:12px;font-size:12px;color:#8a918a;line-height:1.45;text-align:center}
 .nav-glass.is-logged{background:rgba(255,255,255,.28)}
 
+
+
+/* ===== Staylo 2026 polish batch ===== */
+.hotel-location{
+  display:flex;
+  align-items:center;
+  gap:5px
+}
+.hotel-location::before{
+  content:"📍";
+  font-size:11px;
+  opacity:.75;
+  flex-shrink:0
+}
+.hotel-stars{
+  letter-spacing:1.5px !important;
+  color:#c4a035 !important;
+  font-size:13px !important
+}
+.hotel-card .hotel-cta-mini{
+  display:inline-flex;
+  margin-top:8px;
+  padding:8px 14px;
+  min-height:36px;
+  border-radius:999px;
+  background:var(--green-soft);
+  color:var(--green-dark);
+  font-size:12.5px;
+  font-weight:700;
+  border:none;
+  cursor:pointer;
+  transition:background .2s,transform .15s
+}
+.hotel-card .hotel-cta-mini:hover{
+  background:var(--green);
+  color:#fff
+}
+.hotel-grid{
+  gap:clamp(14px,2vw,20px)
+}
+.load-more{
+  min-height:var(--touch-min);
+  padding:14px 28px;
+  box-shadow:0 8px 24px rgba(33,75,61,.2);
+  transition:background .2s,transform .2s,box-shadow .25s
+}
+.load-more:hover{
+  background:var(--green-dark);
+  transform:translateY(-2px);
+  box-shadow:0 12px 32px rgba(33,75,61,.28)
+}
+.load-more.is-loading{opacity:.8;pointer-events:none}
+.hotels-count{
+  transition:opacity .25s
+}
+.hotels-count.is-updating{opacity:.4}
+.filter-chip{
+  animation:chipIn .28s var(--ease)
+}
+@keyframes chipIn{
+  from{opacity:0;transform:scale(.92) translateY(4px)}
+  to{opacity:1;transform:scale(1) translateY(0)}
+}
+.empty-state::before{
+  content:"🏔️";
+  display:block;
+  font-size:42px;
+  margin-bottom:12px;
+  opacity:.85
+}
+.favorite{
+  min-width:44px !important;
+  min-height:44px !important;
+  width:44px !important;
+  height:44px !important;
+  font-size:18px !important;
+  box-shadow:0 4px 14px rgba(0,0,0,.1)
+}
+.favorite.is-active{
+  color:#c23b3b !important;
+  background:#fff !important
+}
+.map-shell{
+  border-radius:var(--radius-lg);
+  overflow:hidden
+}
+.map-canvas{
+  border-radius:var(--radius-lg) var(--radius-lg) 0 0
+}
+.map-legend{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px 18px;
+  padding:12px 16px;
+  font-size:12.5px;
+  color:var(--grey);
+  border-top:1px solid var(--border);
+  background:#fafaf8
+}
+.map-legend span{display:inline-flex;align-items:center;gap:6px}
+.map-legend i{
+  width:10px;height:10px;border-radius:50%;
+  background:var(--green);display:inline-block
+}
+.feature-box{
+  background-image:linear-gradient(105deg,rgba(12,28,22,.9),rgba(17,39,31,.45)),url("https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1800&q=90") !important
+}
+.feature-content{max-width:560px}
+.feature-btn{
+  min-height:var(--touch-min);
+  box-shadow:0 8px 24px rgba(0,0,0,.15)
+}
+.hotelier-box{
+  grid-template-columns:1.2fr .8fr
+}
+.hotelier-benefits{
+  list-style:none;padding:0;margin:16px 0 0
+}
+.hotelier-benefits li{
+  display:flex;gap:10px;align-items:flex-start;
+  padding:8px 0;font-size:14px;color:rgba(255,255,255,.8);line-height:1.45
+}
+.hotelier-benefits li::before{
+  content:"✓";color:#7dcea0;font-weight:700;flex-shrink:0
+}
+footer{padding:64px 0 36px}
+.footer-column a{
+  transition:color .2s,transform .15s;
+  padding:2px 0
+}
+.footer-column a:hover{color:#fff;transform:translateX(2px)}
+.footer-social{
+  display:flex;gap:10px;margin-top:18px
+}
+.footer-social a{
+  width:40px;height:40px;border-radius:50%;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);
+  display:flex;align-items:center;justify-content:center;
+  color:#c7cbc7;font-size:15px;transition:background .2s,color .2s
+}
+.footer-social a:hover{background:rgba(255,255,255,.16);color:#fff}
+.hd-side.hd-sticky-mobile{
+  position:fixed;left:0;right:0;bottom:0;z-index:80;
+  border-radius:18px 18px 0 0;margin:0;
+  box-shadow:0 -12px 40px rgba(0,0,0,.12);
+  padding:14px 18px calc(14px + env(safe-area-inset-bottom))
+}
+@media(min-width:901px){
+  .hd-side.hd-sticky-mobile{position:sticky;bottom:auto;left:auto;right:auto;border-radius:20px;box-shadow:0 16px 40px rgba(20,31,25,.08);padding:22px}
+}
+.hd-quick div{
+  padding:10px 12px;background:#f7f8f5;border-radius:12px;border:1px solid var(--border)
+}
+.hd-slider-count{
+  font-variant-numeric:tabular-nums;
+  letter-spacing:.02em
+}
+.hd-slider-track{
+  transition:transform .5s cubic-bezier(.22,1,.36,1)
+}
+.skeleton-card{
+  background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);
+  overflow:hidden;height:100%
+}
+.skeleton-img{
+  aspect-ratio:3/2;background:linear-gradient(90deg,#e8ebe6 25%,#f2f4f0 50%,#e8ebe6 75%);
+  background-size:200% 100%;animation:shimmer 1.4s ease infinite
+}
+.skeleton-line{
+  height:12px;border-radius:6px;margin:10px 16px;
+  background:linear-gradient(90deg,#e8ebe6 25%,#f2f4f0 50%,#e8ebe6 75%);
+  background-size:200% 100%;animation:shimmer 1.4s ease infinite
+}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+@media(max-width:750px){
+  .hero{min-height:min(78vh,560px);padding-bottom:64px}
+  .hero-ctas{margin-top:20px;gap:10px}
+  .hero-cta-primary,.hero-cta-secondary{padding:12px 18px;font-size:13.5px}
+  .search-wrapper{margin-top:-56px}
+}
+@media(min-width:1400px){
+  .container{width:min(calc(100% - 48px),var(--max-wide))}
+  .hotel-grid{grid-template-columns:repeat(4,1fr)}
+}
+/* Dark mode structure (inactive until class) */
+[data-theme="dark"]{
+  --cream:#1a1e1b;
+  --white:#222826;
+  --black:#f0f2f0;
+  --grey:#a0a8a2;
+  --border:#2e3530;
+  --green-soft:#24352e
+}
+.dropdown,.search-panel,.dest-dropdown,.lang-menu,.favorites-panel{
+  scrollbar-width:thin;
+  scrollbar-color:rgba(33,75,61,.25) transparent
+}
+.dropdown::-webkit-scrollbar,.dest-dropdown::-webkit-scrollbar{
+  width:6px
+}
+.dropdown::-webkit-scrollbar-thumb,.dest-dropdown::-webkit-scrollbar-thumb{
+  background:rgba(33,75,61,.25);border-radius:6px
+}
+.occ-ctrl button{
+  min-width:40px;min-height:40px;
+  transition:transform .15s,background .2s,border-color .2s
+}
+.occ-ctrl button:active{transform:scale(.9)}
+.pets-row{
+  border:1.5px solid transparent;
+  transition:border-color .2s,background .2s
+}
+.pets-row:has(input:checked){
+  border-color:var(--green);
+  background:#eef5f0
+}
+.details-search{
+  transition:grid-template-rows .4s var(--ease),opacity .3s,padding .4s
+}
+.price-row input[type="range"]{
+  height:6px;
+  accent-color:var(--green);
+  cursor:pointer
+}
+.reset-btn{
+  min-height:var(--touch-min) !important
+}
+.hotels-toolbar select{
+  min-height:var(--touch-min) !important
+}
+.lang-menu .lang-option{
+  min-height:44px
+}
+.lang-option[aria-selected="true"]{
+  background:#eef3ef;color:var(--green);font-weight:700
+}
+.favorites-panel{
+  border-radius:18px
+}
+.favorites-empty{
+  padding:28px 12px
+}
+.favorites-empty::before{
+  content:"♡";display:block;font-size:28px;margin-bottom:8px;opacity:.4
+}
+:focus-visible{
+  outline:none;
+  box-shadow:var(--focus)
+}
+@media (prefers-reduced-motion:reduce){
+  .hero-slide{animation:none !important;opacity:0}
+  .hero-slide:first-child{opacity:1;transform:none}
+}
+
 </style>
 </head>
 <body>
@@ -2941,6 +3384,10 @@ img{max-width:100%;height:auto}
 <div class="hero-label"><span class="hero-dot"></span>Hotels in Südtirol</div>
 <h1>Dein Aufenthalt<br>in <em>Südtirol.</em></h1>
 <p class="hero-subtitle">Finde besondere Hotels, Resorts und Unterkünfte für deine nächste Auszeit in Südtirol.</p>
+<div class="hero-ctas">
+  <a href="#hotels" class="hero-cta-primary" data-nav="home">Hotels entdecken</a>
+  <a href="#page-regions" class="hero-cta-secondary" data-page="regions">Regionen erkunden</a>
+</div>
 </div></section>
 <div class="container search-wrapper">
 <div class="search-stack">
@@ -3036,7 +3483,8 @@ img{max-width:100%;height:auto}
 </div></section>
 <section class="section" id="karte"><div class="container">
 <div class="section-header"><div><div class="section-title">Hotels auf der Karte</div><div class="section-subtitle">Überblick über ausgewählte Unterkünfte</div></div><a href="#hotels" class="view-all">Zu den Hotels →</a></div>
-<div class="map-shell"><div id="stayloMap" class="map-canvas"></div><p class="map-note">OpenStreetMap · Demo-Marker</p></div>
+<div class="map-shell"><div id="stayloMap" class="map-canvas" role="img" aria-label="Karte mit Hotels in Südtirol"></div>
+<div class="map-legend"><span><i></i> Hotelstandorte</span><span>OpenStreetMap · Demo-Marker</span></div></div>
 </div></section>
 <section class="feature"><div class="container"><div class="feature-box"><div class="feature-content">
 <small>Staylo · Südtirol</small><h2>Mehr als nur<br>ein Hotel.</h2>
@@ -3046,11 +3494,22 @@ img{max-width:100%;height:auto}
 <section class="hotelier"><div class="container"><div class="hotelier-box">
 <div><h2>Dein Hotel auf Staylo.</h2><p>Präsentiere dein Haus auf Staylo und erreiche neue Gäste – kostenlos zum Start.</p>
 <a href="#page-hoteliers" class="hotelier-button" data-page="hoteliers">Mehr für Hoteliers →</a></div>
-<div class="hotelier-info"><strong>Einfach. Modern. Kostenlos zum Start.</strong><span>Professionelle Präsentation und mehr Sichtbarkeit.</span></div>
+<div class="hotelier-info"><strong>Einfach. Modern. Kostenlos zum Start.</strong>
+<ul class="hotelier-benefits">
+  <li>Professionelle Präsentation deines Hauses</li>
+  <li>Mehr Sichtbarkeit bei Gästen aus DACH &amp; IT</li>
+  <li>Keine Einstiegsgebühr – kostenlos starten</li>
+  <li>Optional: Social-Media-Videos von uns</li>
+</ul></div>
 </div></div></section>
 </main>
 <footer><div class="container"><div class="footer-grid">
-<div><div class="footer-logo">Stay<span>lo</span></div><p class="footer-about">Staylo ist eine unabhängige Plattform für besondere Hotels in Südtirol.</p><p class="footer-about">Lana · Südtirol · Italien<br><a href="mailto:info@staylo.it?subject=Anfrage%20über%20Staylo" class="footer-mail">info@staylo.it</a></p></div>
+<div><div class="footer-logo">Stay<span>lo</span></div><p class="footer-about">Staylo ist eine unabhängige Plattform für besondere Hotels in Südtirol.</p><p class="footer-about">Lana · Südtirol · Italien<br><a href="mailto:info@staylo.it?subject=Anfrage%20über%20Staylo" class="footer-mail">info@staylo.it</a></p>
+<div class="footer-social" aria-label="Social Media">
+  <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">IG</a>
+  <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">FB</a>
+  <a href="mailto:info@staylo.it" aria-label="E-Mail">✉</a>
+</div></div>
 <div class="footer-column"><h4>Entdecken</h4><a href="#hotels" data-nav="home">Hotels</a><a href="#page-categories" data-page="categories">Kategorien</a><a href="#page-regions" data-page="regions">Regionen</a></div>
 <div class="footer-column"><h4>Regionen</h4><a href="#page-regions" data-page="regions">Meran</a><a href="#page-regions" data-page="regions">Bozen</a><a href="#page-regions" data-page="regions">Dolomiten</a></div>
 <div class="footer-column"><h4>Staylo</h4><a href="#page-about" data-page="about">Über uns</a><a href="#page-hoteliers" data-page="hoteliers">Für Hoteliers</a><a href="#page-contact" data-page="contact">Kontakt</a><a href="#page-impressum" data-page="impressum">Impressum</a></div>
@@ -3463,7 +3922,11 @@ img{max-width:100%;height:auto}
     var empty = document.getElementById("emptyState");
     var countEl = document.getElementById("hotelsCount");
     var filtered = getFilteredHotels();
-    if(countEl) countEl.textContent = filtered.length + " Hotel" + (filtered.length === 1 ? "" : "s");
+    if(countEl){
+      countEl.classList.add("is-updating");
+      countEl.textContent = filtered.length + " Hotel" + (filtered.length === 1 ? "" : "s");
+      requestAnimationFrame(function(){ setTimeout(function(){ countEl.classList.remove("is-updating"); }, 40); });
+    }
     if(empty) empty.hidden = filtered.length > 0;
     if(grid) grid.style.display = filtered.length ? "" : "none";
     var lb = document.getElementById("loadMoreButton");
@@ -3478,22 +3941,23 @@ img{max-width:100%;height:auto}
       var stars = h.stars ? "★".repeat(h.stars) + "☆".repeat(Math.max(0, 5 - h.stars)) : "";
       var reviews = h.reviews ? " (" + h.reviews + ")" : "";
       var petsBadge = h.pets ? '<span class="hotel-badge hotel-badge-pets">Haustiere</span>' : "";
-      return '<article class="hotel-card" data-id="'+h.id+'">'+
+      return '<article class="hotel-card" data-id="'+h.id+'" role="article">'+
         '<div class="hotel-image">'+
-          '<img src="'+h.img+'" alt="'+(h.name||"Hotel")+' in '+(h.location||"Südtirol")+'" loading="lazy" decoding="async">'+
+          '<img src="'+h.img+'" alt="'+(h.name||"Hotel")+' – '+(h.type||"Hotel")+' in '+(h.location||"Südtirol")+'" loading="lazy" decoding="async" width="600" height="400">'+
           '<span class="hotel-badge">'+h.type+'</span>'+petsBadge+
-          '<button class="favorite'+(fav?" is-active":"")+'" type="button" data-fav="'+h.id+'" aria-label="'+(fav?"Aus Favoriten entfernen":"Zu Favoriten hinzufügen")+'">'+(fav?"♥":"♡")+'</button>'+
+          '<button class="favorite'+(fav?" is-active":"")+'" type="button" data-fav="'+h.id+'" aria-label="'+(fav?"Aus Favoriten entfernen":"Zu Favoriten hinzufügen")+'" aria-pressed="'+(fav?"true":"false")+'">'+(fav?"♥":"♡")+'</button>'+
         '</div>'+
         '<div class="hotel-body">'+
-          (stars ? '<div class="hotel-stars" aria-label="'+h.stars+' Sterne">'+stars+'</div>' : '')+
-          '<div class="hotel-location">'+(h.location || h.loc || "")+(h.region ? ", "+h.region : "")+'</div>'+
+          (stars ? '<div class="hotel-stars" aria-label="'+h.stars+' von 5 Sternen">'+stars+'</div>' : '')+
+          '<div class="hotel-location">'+(h.location || h.loc || "")+(h.region ? " · "+h.region : "")+'</div>'+
           '<h3 class="hotel-name">'+h.name+'</h3>'+
           '<p class="hotel-description">'+h.desc+'</p>'+
           ((h.amenities&&h.amenities.length)?'<div class="hotel-amenities">'+(h.amenities.slice(0,4).map(function(a){return '<span class="hotel-amenity-pill">'+a+'</span>';}).join(""))+'</div>':'')+
           '<div class="hotel-bottom">'+
             '<div class="hotel-price">ab € '+h.price+' <span>/ Nacht</span></div>'+
-            '<div class="hotel-rating">★ '+h.rating.toFixed(1)+'<span class="hotel-reviews">'+reviews+'</span></div>'+
+            '<div class="hotel-rating" aria-label="Bewertung '+h.rating.toFixed(1)+' von 5'+reviews+'">★ '+h.rating.toFixed(1)+'<span class="hotel-reviews">'+reviews+'</span></div>'+
           '</div>'+
+          '<button type="button" class="hotel-cta-mini" data-open-hotel="'+h.id+'" aria-label="'+h.name+' ansehen">Details ansehen</button>'+
         '</div></article>';
     }).join("");
     if(lb) lb.style.display = visibleCount >= filtered.length ? "none" : "";
@@ -3512,7 +3976,17 @@ img{max-width:100%;height:auto}
       toggleFav(fb.getAttribute("data-fav"));
       return;
     }
-    // Badge/Image/Body: open via hash only (prevents double-open bug)
+    var openBtn=e.target.closest("[data-open-hotel]");
+    if(openBtn){
+      e.preventDefault();
+      e.stopPropagation();
+      var oid=openBtn.getAttribute("data-open-hotel");
+      if(oid){
+        if(location.hash==="#hotel-"+oid) openHotel(oid,true);
+        else location.hash="hotel-"+oid;
+      }
+      return;
+    }
     var card=e.target.closest(".hotel-card");
     if(card){
       var id=card.getAttribute("data-id");
@@ -3571,7 +4045,7 @@ img{max-width:100%;height:auto}
       '<div class="hotel-detail">'+
         '<div class="container">'+
           '<div class="hd-topbar">'+
-            '<a href="#hotels" class="page-back" data-nav="home">← Zurück zu den Hotels</a>'+
+            '<nav aria-label="Brotkrumen"><a href="#hotels" class="page-back" data-nav="home">← Hotels</a> <span style="opacity:.5;margin:0 6px">/</span> <span style="font-size:13px;font-weight:600;color:var(--green-dark)">'+h.name+'</span></nav>'+
           '</div>'+
           '<div class="hd-slider" id="hdSlider">'+
             '<div class="hd-slider-track" id="hdSliderTrack">'+
@@ -3801,9 +4275,12 @@ img{max-width:100%;height:auto}
     if(typeof destDropdown !== "undefined" && destDropdown) destDropdown.classList.remove("open");
     var drawer = document.getElementById("mobileDrawer");
     var scrim = document.getElementById("mobileScrim");
+    var mbtn = document.getElementById("mobileMenuBtn");
     if(drawer) drawer.classList.remove("open");
     if(scrim) scrim.classList.remove("open");
+    if(mbtn){ mbtn.classList.remove("is-open"); mbtn.setAttribute("aria-expanded","false"); }
     document.body.classList.remove("drawer-open");
+    if(typeof closeAuth === "function") closeAuth();
   });
 
   function closePanels(){
@@ -3822,6 +4299,7 @@ img{max-width:100%;height:auto}
     mobileScrim.classList.remove("open");
     mobileBtn.classList.remove("is-open");
     mobileBtn.setAttribute("aria-expanded","false");
+    document.body.classList.remove("drawer-open");
   }
   mobileBtn.addEventListener("click",function(){
     if(mobileDrawer.classList.contains("open"))closeMobile();
@@ -3830,6 +4308,7 @@ img{max-width:100%;height:auto}
       mobileScrim.classList.add("open");
       mobileBtn.classList.add("is-open");
       mobileBtn.setAttribute("aria-expanded","true");
+      document.body.classList.add("drawer-open");
     }
   }
   );
@@ -3922,12 +4401,15 @@ img{max-width:100%;height:auto}
     day++){
       var d=new Date(ms.getFullYear(),ms.getMonth(),day),disabled=d<today,cls="cal-day";
       if(disabled)cls+=" disabled";
+      var dow=d.getDay();
+      if(dow===0||dow===6)cls+=" is-weekend";
+      if(sameDay(d,today))cls+=" is-today";
       if(sameDay(d,checkIn))cls+=" range-start";
       if(sameDay(d,checkOut))cls+=" range-end";
       if(checkIn&&checkOut&&d>checkIn&&d<checkOut)cls+=" in-range";
       if(sameDay(d,checkIn)&&checkOut&&d<checkOut)cls+=" in-range";
       if(sameDay(d,checkOut)&&checkIn&&d>checkIn)cls+=" in-range";
-      html+='<button type="button" class="'+cls+'" data-date="'+ymd(d)+'"'+(disabled?" disabled":"")+">"+day+"</button>";
+      html+='<button type="button" class="'+cls+'" data-date="'+ymd(d)+'"'+(disabled?" disabled":"")+' aria-label="'+formatDE(d)+'">'+day+"</button>";
     }
     return html;
   }
@@ -4247,18 +4729,42 @@ img{max-width:100%;height:auto}
     pickDest(destDropdown._list[+btn.getAttribute("data-dest-idx")]);
   });
 
+  var destActiveIdx = -1;
   destInput.addEventListener("keydown", function (e) {
+    var opts = destDropdown.querySelectorAll(".dest-option[data-dest-idx]");
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      if (!destDropdown.classList.contains("open")) renderDestDropdown(matchDestinations(destInput.value));
+      opts = destDropdown.querySelectorAll(".dest-option[data-dest-idx]");
+      destActiveIdx = Math.min(destActiveIdx + 1, opts.length - 1);
+      opts.forEach(function(o,i){ o.classList.toggle("is-active", i === destActiveIdx); });
+      if(opts[destActiveIdx]) opts[destActiveIdx].scrollIntoView({block:"nearest"});
+      return;
+    }
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      destActiveIdx = Math.max(destActiveIdx - 1, 0);
+      opts.forEach(function(o,i){ o.classList.toggle("is-active", i === destActiveIdx); });
+      if(opts[destActiveIdx]) opts[destActiveIdx].scrollIntoView({block:"nearest"});
+      return;
+    }
     if (e.key === "Enter") {
       e.preventDefault();
-      var list = matchDestinations(destInput.value);
-      if (list.length === 1) pickDest(list[0]);
-      else if (list.length > 1) {
-        var exact = findExactDest(destInput.value);
-        if (exact) pickDest(exact);
+      if (destActiveIdx >= 0 && destDropdown._list && destDropdown._list[destActiveIdx]) {
+        pickDest(destDropdown._list[destActiveIdx]);
+        destActiveIdx = -1;
+      } else {
+        var list = matchDestinations(destInput.value);
+        if (list.length === 1) pickDest(list[0]);
+        else if (list.length > 1) {
+          var exact = findExactDest(destInput.value);
+          if (exact) pickDest(exact);
+        }
       }
       document.getElementById("searchButton").click();
+      return;
     }
-    if (e.key === "Escape") destDropdown.classList.remove("open");
+    if (e.key === "Escape") { destDropdown.classList.remove("open"); destActiveIdx = -1; }
   });
 
   document.addEventListener("click", function (e) {
@@ -4281,7 +4787,8 @@ img{max-width:100%;height:auto}
       return;
     }
     if (destError) destError.classList.remove("show");
-    // auto-fill formatted value with province
+    var sbtn = document.getElementById("searchButton");
+    if(sbtn){ sbtn.classList.add("is-loading"); sbtn.setAttribute("aria-busy","true"); }
     pickDest(dest);
     activeFilters.dest = dest;
     var priceEl = document.getElementById("priceSlider");
@@ -4294,6 +4801,8 @@ img{max-width:100%;height:auto}
     setTimeout(function () {
       var el = document.getElementById("hotels");
       if (el) el.scrollIntoView({ behavior: "smooth" });
+      var sbtn = document.getElementById("searchButton");
+      if(sbtn){ sbtn.classList.remove("is-loading"); sbtn.removeAttribute("aria-busy"); }
     }, 50);
   });
 
@@ -4596,6 +5105,20 @@ img{max-width:100%;height:auto}
     if(e.key === "Escape" && authOverlay && !authOverlay.hidden) closeAuth();
   });
   refreshAuthUI();
+
+
+  function updateNavActive(){
+    var h = (location.hash||"").replace("#","");
+    document.querySelectorAll(".nav-item[data-page], .nav-item[data-nav]").forEach(function(el){
+      el.classList.remove("is-active");
+      var p = el.getAttribute("data-page");
+      var n = el.getAttribute("data-nav");
+      if(p && (h === "page-"+p || h === p)) el.classList.add("is-active");
+      if(n === "home" && (!h || h === "hotels" || h === "karte")) el.classList.add("is-active");
+    });
+  }
+  window.addEventListener("hashchange", updateNavActive);
+  updateNavActive();
 
   renderHotels();
   renderFavorites();
