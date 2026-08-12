@@ -3982,6 +3982,449 @@ select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{
 }
 
 /* ============================================================
+   EXPLORE VIEW  (merged from the former explore.html)
+   Every rule is scoped to #page-suche because the two designs
+   share nine class names (bar, price, empty, open ...).
+   ============================================================ */
+/* ============================================================
+   STAYLO EXPLORE
+   A second interface for the same houses. Where the main site
+   is editorial — hero, sections, sub-pages — this one is a
+   working tool: results are the page, and the map is always
+   visible beside them. The list and the map are one object;
+   touching either highlights the other.
+   ============================================================ */
+#page-suche{
+  --green:#1d4034;
+  --green-dark:#132c24;
+  --green-mid:#2c5e4c;
+  --green-soft:#dde8e1;
+  --glow:#c2616e;
+  --glow-dark:#a34c58;
+  --glow-soft:#f7e6e8;
+  --stone:#edf0ec;
+  --white:#fff;
+  --ink:#14201b;
+  --grey:#5b665f;
+  --grey-light:#78837b;
+  --border:#dde3dd;
+
+  --mat-thin:blur(14px) saturate(170%);
+  --mat-thick:blur(34px) saturate(180%);
+  --glass:rgba(252,253,251,.78);
+  --glass-edge:rgba(255,255,255,.7);
+
+  --lift-1:0 2px 10px rgba(15,35,26,.08);
+  --lift-2:0 16px 40px -14px rgba(15,35,26,.28),0 2px 8px rgba(15,35,26,.05);
+  --lift-3:0 40px 80px -20px rgba(10,26,20,.42);
+
+  --spring:cubic-bezier(.32,.72,0,1);
+  --t-fast:170ms;
+  --t-base:300ms;
+
+  --bar-h:64px;
+  --rail-w:262px;
+  --map-w:34%;
+  --r:14px;
+  --r-lg:20px;
+}
+#page-suche button,#page-suche input,#page-suche select,#page-suche textarea{font:inherit;color:inherit}
+#page-suche button{cursor:pointer;border:0;background:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+#page-suche img{display:block;max-width:100%}
+#page-suche a{color:inherit;text-decoration:none}
+#page-suche h1,#page-suche h2,#page-suche h3{font-family:'Fraunces',Georgia,serif;font-weight:600;line-height:1.15;letter-spacing:-.02em}
+#page-suche :focus-visible{outline:3px solid var(--glow);outline-offset:2px;border-radius:6px}
+#page-suche .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+#page-suche .is-pressed{transform:scale(.975);transition:transform 90ms ease-out}
+/* ---------- Top bar: one line, always reachable ------------- */
+#page-suche .bar{
+  position:sticky;top:var(--header-h);z-index:60;
+  height:var(--bar-h);
+  display:flex;align-items:center;gap:14px;
+  padding:0 20px;
+  background:var(--glass);
+  -webkit-backdrop-filter:var(--mat-thick);
+  backdrop-filter:var(--mat-thick);
+  border-bottom:1px solid rgba(20,32,27,.08);
+  box-shadow:inset 0 1px 0 var(--glass-edge)
+}
+/* The way back to the landing page, stated rather than implied
+   by the logo alone. */
+#page-suche .homebtn{
+  display:inline-flex;align-items:center;gap:6px;flex:0 0 auto;
+  min-height:40px;padding:0 14px 0 11px;
+  border:1.5px solid var(--border);border-radius:999px;
+  background:var(--white);
+  font-size:14px;font-weight:600;color:var(--green-dark);
+  transition:background var(--t-fast) var(--spring),border-color var(--t-fast) var(--spring)
+}
+#page-suche .homebtn:hover{background:var(--green-soft);border-color:var(--green)}
+#page-suche .brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:17px;flex:0 0 auto}
+#page-suche .brand-mark{
+  width:32px;height:32px;border-radius:50%;
+  background:var(--green);color:#fff;
+  display:grid;place-items:center;
+  font-family:'Fraunces',Georgia,serif;font-size:16px
+}
+#page-suche .brand-name span{color:var(--green-mid)}
+#page-suche .searchwrap{
+  /* min-width:0 — a flex item defaults to min-width:auto and
+     would otherwise refuse to shrink, pushing the bar wider
+     than the screen on small phones. */
+  flex:1 1 auto;min-width:0;max-width:560px;position:relative;
+  display:flex;align-items:center;gap:10px;
+  height:46px;padding:0 8px 0 16px;
+  background:var(--white);
+  border:1.5px solid var(--border);
+  border-radius:999px;
+  transition:border-color var(--t-fast) var(--spring),box-shadow var(--t-fast) var(--spring)
+}
+#page-suche .searchwrap:focus-within{border-color:var(--green);box-shadow:0 0 0 4px rgba(29,64,52,.10)}
+#page-suche .searchwrap svg{flex:0 0 auto;color:var(--grey-light)}
+#page-suche #q{flex:1;border:0;outline:0;background:none;font-size:15px;min-width:0}
+#page-suche #q::placeholder{color:var(--grey-light)}
+#page-suche .clearq{
+  width:30px;height:30px;border-radius:50%;flex:0 0 auto;
+  display:grid;place-items:center;color:var(--grey);
+  background:rgba(20,32,27,.06);font-size:16px;line-height:1
+}
+#page-suche .clearq[hidden]{display:none}
+#page-suche .bar-right{display:flex;align-items:center;gap:8px;margin-left:auto;flex:0 0 auto}
+#page-suche .seg{
+  display:flex;gap:2px;padding:3px;
+  background:rgba(20,32,27,.06);border-radius:999px
+}
+#page-suche .seg button{
+  padding:7px 13px;border-radius:999px;
+  font-size:13.5px;font-weight:500;color:var(--grey);
+  min-height:34px;
+  transition:background var(--t-fast) var(--spring),color var(--t-fast) var(--spring)
+}
+#page-suche .seg button[aria-pressed="true"]{background:var(--white);color:var(--green-dark);font-weight:600;box-shadow:var(--lift-1)}
+#page-suche .filterbtn{
+  display:none;align-items:center;gap:7px;
+  height:42px;padding:0 15px;border-radius:999px;
+  background:var(--green);color:#fff;font-size:14px;font-weight:600
+}
+#page-suche .filterbtn .n{
+  background:rgba(255,255,255,.24);border-radius:999px;
+  padding:1px 7px;font-size:12px;font-variant-numeric:tabular-nums
+}
+/* ---------- Three-column workspace -------------------------- */
+#page-suche .shell{display:flex;align-items:flex-start;min-height:calc(100vh - var(--header-h) - var(--bar-h))}
+#page-suche .rail{
+  flex:0 0 var(--rail-w);
+  position:sticky;top:calc(var(--header-h) + var(--bar-h));
+  height:calc(100vh - var(--header-h) - var(--bar-h));
+  overflow-y:auto;
+  padding:22px 18px 40px;
+  border-right:1px solid var(--border);
+  background:rgba(255,255,255,.5)
+}
+#page-suche .rail h2{
+  font-family:'Lexend',sans-serif;font-weight:600;
+  font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--grey-light);margin:0 0 11px
+}
+#page-suche .fgroup{padding-bottom:20px;margin-bottom:20px;border-bottom:1px solid var(--border)}
+#page-suche .fgroup:last-child{border-bottom:0;margin-bottom:0}
+#page-suche .chips{display:flex;flex-wrap:wrap;gap:7px}
+#page-suche .chip{
+  display:inline-flex;align-items:center;gap:6px;
+  min-height:36px;padding:6px 13px;
+  border:1.5px solid var(--border);border-radius:999px;
+  background:var(--white);
+  font-size:13.5px;font-weight:500;color:var(--ink);
+  transition:background var(--t-fast) var(--spring),border-color var(--t-fast) var(--spring),color var(--t-fast) var(--spring)
+}
+#page-suche .chip .cnt{font-size:11.5px;color:var(--grey-light);font-variant-numeric:tabular-nums}
+#page-suche .chip:hover{border-color:var(--green-mid)}
+#page-suche .chip[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:#fff}
+#page-suche .chip[aria-pressed="true"] .cnt{color:rgba(255,255,255,.72)}
+#page-suche .chip .it{font-style:italic;opacity:.62;font-size:12px}
+#page-suche .rangerow{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+#page-suche .rangeval{font-weight:600;font-variant-numeric:tabular-nums;font-size:14px}
+#page-suche input[type=range]{width:100%;accent-color:var(--green);height:26px}
+#page-suche .resetall{
+  width:100%;min-height:42px;margin-top:4px;
+  border:1.5px solid var(--border);border-radius:999px;
+  font-size:13.5px;font-weight:600;color:var(--green-dark);background:var(--white)
+}
+#page-suche .resetall:hover{border-color:var(--green);background:var(--green-soft)}
+/* ---------- Results ---------------------------------------- */
+#page-suche .results{flex:1 1 auto;min-width:0;padding:20px 22px 60px}
+#page-suche .rhead{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:14px;flex-wrap:wrap;margin-bottom:16px
+}
+#page-suche .rcount{font-size:14.5px;color:var(--grey)}
+#page-suche .rcount strong{color:var(--ink);font-variant-numeric:tabular-nums}
+#page-suche .ctx{display:flex;flex-wrap:wrap;gap:7px;margin-top:7px}
+#page-suche .ctx:empty{display:none}
+#page-suche .ctxchip{
+  display:inline-flex;align-items:center;gap:7px;
+  min-height:32px;padding:4px 12px;border-radius:999px;
+  background:var(--green);color:#fff;
+  font-size:13px;font-weight:600
+}
+#page-suche .ctxchip:hover{background:var(--green-dark)}
+#page-suche .sortsel{
+  min-height:40px;padding:8px 12px;
+  border:1.5px solid var(--border);border-radius:10px;
+  background:var(--white);font-size:14px
+}
+#page-suche .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:16px}
+#page-suche .grid.is-list{grid-template-columns:1fr}
+#page-suche .card{
+  display:flex;flex-direction:column;
+  background:var(--white);
+  border:1px solid var(--border);
+  border-radius:var(--r-lg);
+  overflow:hidden;
+  text-align:left;
+  transition:transform var(--t-base) var(--spring),box-shadow var(--t-base) var(--spring),border-color var(--t-base) var(--spring)
+}
+#page-suche .card:hover{transform:translateY(-3px);box-shadow:var(--lift-2);border-color:rgba(20,32,27,.14)}
+/* The map is the other half of this list — a hovered pin lights
+   its card, so the two never feel like separate widgets. */
+#page-suche .card.is-linked{border-color:var(--green);box-shadow:0 0 0 3px rgba(29,64,52,.16),var(--lift-2)}
+#page-suche .card-photo{position:relative;aspect-ratio:3/2;overflow:hidden;background:var(--green-soft)}
+#page-suche .card-photo img{width:100%;height:100%;object-fit:cover;transition:transform .7s var(--spring)}
+#page-suche .card:hover .card-photo img{transform:scale(1.05)}
+#page-suche .card-tag{
+  position:absolute;top:10px;left:10px;
+  padding:5px 11px;border-radius:999px;
+  background:rgba(252,253,251,.86);
+  -webkit-backdrop-filter:var(--mat-thin);backdrop-filter:var(--mat-thin);
+  font-size:11.5px;font-weight:600;letter-spacing:.03em
+}
+#page-suche .fav{
+  position:absolute;top:8px;right:8px;
+  width:38px;height:38px;border-radius:50%;
+  display:grid;place-items:center;font-size:17px;
+  background:rgba(252,253,251,.86);
+  -webkit-backdrop-filter:var(--mat-thin);backdrop-filter:var(--mat-thin);
+  color:var(--grey)
+}
+#page-suche .fav[aria-pressed="true"]{color:var(--glow-dark)}
+#page-suche .card-body{display:flex;flex-direction:column;flex:1;padding:14px 16px 16px;gap:5px}
+#page-suche .card-loc{
+  display:flex;align-items:baseline;gap:7px;flex-wrap:wrap;
+  font-size:12px;color:var(--grey-light)
+}
+#page-suche .card-loc .it{font-style:italic}
+#page-suche .card-lad{
+  font-size:10.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--glow-dark);background:var(--glow-soft);
+  border-radius:999px;padding:1px 7px
+}
+#page-suche .card h3{font-size:17.5px}
+#page-suche .card-desc{font-size:13.5px;color:var(--grey);line-height:1.55}
+#page-suche .card-am{display:flex;flex-wrap:wrap;gap:5px;margin-top:2px}
+#page-suche .am{font-size:11.5px;color:var(--green-dark);background:var(--green-soft);border-radius:6px;padding:3px 8px}
+#page-suche .card-foot{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  gap:10px;margin-top:auto;padding-top:12px
+}
+#page-suche .price{font-size:19px;font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+#page-suche .price small{font-size:12px;font-weight:400;color:var(--grey-light)}
+#page-suche .rate{font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+#page-suche .rate.is-new{color:var(--glow-dark);font-weight:600}
+#page-suche .stars{color:#c9a227;font-size:12px;letter-spacing:1px}
+#page-suche .empty{
+  grid-column:1/-1;text-align:center;padding:60px 20px;
+  background:var(--white);border:1px solid var(--border);border-radius:var(--r-lg)
+}
+#page-suche .empty h3{font-size:20px;margin-bottom:8px}
+#page-suche .empty p{color:var(--grey);margin-bottom:18px}
+#page-suche .btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:46px;padding:12px 22px;border-radius:999px;
+  background:var(--green);color:#fff;font-size:15px;font-weight:600;
+  transition:background var(--t-fast) var(--spring)
+}
+#page-suche .btn:hover{background:var(--green-dark)}
+#page-suche .btn.ghost{background:var(--white);color:var(--green-dark);border:1.5px solid var(--border)}
+#page-suche .btn.ghost:hover{background:var(--green-soft);border-color:var(--green)}
+/* ---------- Map: always there, never a separate page -------- */
+#page-suche .mapcol{
+  flex:0 0 var(--map-w);
+  position:sticky;top:calc(var(--header-h) + var(--bar-h));
+  height:calc(100vh - var(--header-h) - var(--bar-h));
+  border-left:1px solid var(--border)
+}
+#page-suche #map{width:100%;height:100%;background:var(--green-soft)}
+#page-suche .mapnote{
+  position:absolute;left:12px;bottom:12px;z-index:500;
+  padding:7px 13px;border-radius:999px;
+  background:var(--glass);
+  -webkit-backdrop-filter:var(--mat-thin);backdrop-filter:var(--mat-thin);
+  border:1px solid rgba(20,32,27,.08);
+  font-size:12px;color:var(--grey);
+  box-shadow:var(--lift-1)
+}
+#page-suche .pinwrap{background:none;border:0}
+#page-suche .pin{
+  display:inline-block;transform:translate(-50%,-50%);
+  padding:6px 11px;border-radius:999px;
+  background:var(--white);color:var(--green-dark);
+  border:1.5px solid var(--green);
+  font-size:12.5px;font-weight:600;font-variant-numeric:tabular-nums;
+  white-space:nowrap;box-shadow:0 3px 10px rgba(15,35,26,.22);
+  transition:background var(--t-fast) var(--spring),color var(--t-fast) var(--spring),transform var(--t-fast) var(--spring)
+}
+#page-suche .pin:hover,#page-suche .pin.is-linked{
+  background:var(--green);color:#fff;
+  transform:translate(-50%,-50%) scale(1.12);
+  z-index:900
+}
+#page-suche .pin.is-fav{border-color:var(--glow)}
+#page-suche .leaflet-popup-content-wrapper{border-radius:14px;font-family:'Lexend',sans-serif;box-shadow:var(--lift-2)}
+#page-suche .leaflet-popup-content{margin:13px 15px;min-width:180px}
+#page-suche .pop strong{font-family:'Fraunces',Georgia,serif;font-size:15.5px;display:block;margin-bottom:2px}
+#page-suche .pop span{display:block;font-size:12.5px;color:var(--grey)}
+#page-suche .pop button{
+  margin-top:9px;min-height:36px;padding:8px 14px;border-radius:999px;
+  background:var(--green);color:#fff;font-size:13px;font-weight:600
+}
+/* ---------- Detail: a slide-over, not a new page ------------ */
+#page-suche .scrim{
+  position:fixed;inset:0;z-index:80;
+  background:rgba(9,20,16,.42);
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+  opacity:0;visibility:hidden;
+  transition:opacity var(--t-base) var(--spring),visibility var(--t-base) var(--spring)
+}
+#page-suche .scrim.open{opacity:1;visibility:visible}
+#page-suche .sheet{
+  position:fixed;top:0;right:0;z-index:90;
+  width:min(520px,100%);height:100%;
+  background:var(--white);
+  box-shadow:var(--lift-3);
+  overflow-y:auto;
+  transform:translateX(100%);
+  transition:transform var(--t-base) var(--spring);
+  will-change:transform
+}
+#page-suche .sheet.open{transform:translateX(0)}
+#page-suche .sheet-close{
+  position:absolute;top:14px;right:14px;z-index:2;
+  width:40px;height:40px;border-radius:50%;
+  display:grid;place-items:center;font-size:22px;line-height:1;
+  background:rgba(252,253,251,.86);
+  -webkit-backdrop-filter:var(--mat-thin);backdrop-filter:var(--mat-thin);
+  color:var(--green-dark);box-shadow:var(--lift-1)
+}
+#page-suche .sheet-photo{width:100%;aspect-ratio:16/10;object-fit:cover}
+#page-suche .sheet-body{padding:22px 24px 40px}
+#page-suche .sheet-body h2{font-size:26px;margin:6px 0 4px}
+#page-suche .sheet-facts{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));
+  gap:10px;margin:18px 0;
+  padding:14px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)
+}
+#page-suche .fact span{display:block;font-size:11.5px;color:var(--grey-light);letter-spacing:.05em;text-transform:uppercase}
+#page-suche .fact strong{font-size:15px;font-variant-numeric:tabular-nums}
+#page-suche .sheet-body p{color:var(--grey);margin-bottom:14px}
+#page-suche .sheet-am{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:20px}
+#page-suche .sheet-cta{display:flex;gap:10px;flex-wrap:wrap}
+/* ---------- Mobile: filters and map become overlays --------- */
+#page-suche .mapclose{display:none}
+@media (max-width:1180px){
+#page-suche{--map-w:36%}
+#page-suche .grid{grid-template-columns:1fr}
+}
+@media (max-width:980px){
+#page-suche .filterbtn{display:inline-flex}
+#page-suche .rail{
+    position:fixed;inset:auto 0 0 0;top:auto;z-index:85;
+    width:100%;height:min(80vh,560px);
+    border-right:0;border-top:1px solid var(--border);
+    border-radius:22px 22px 0 0;
+    background:var(--white);
+    box-shadow:var(--lift-3);
+    transform:translateY(100%);
+    transition:transform var(--t-base) var(--spring);
+    padding-top:26px
+  }
+#page-suche .rail.open{transform:translateY(0)}
+#page-suche .rail::before{
+    content:"";position:absolute;top:10px;left:50%;transform:translateX(-50%);
+    width:40px;height:4px;border-radius:99px;background:var(--border)
+  }
+#page-suche .mapcol{
+    position:fixed;inset:calc(var(--header-h) + var(--bar-h)) 0 0 0;z-index:70;
+    flex:none;width:100%;height:auto;
+    border-left:0;
+    opacity:0;visibility:hidden;
+    transition:opacity var(--t-base) var(--spring),visibility var(--t-base) var(--spring)
+  }
+#page-suche .mapcol.open{opacity:1;visibility:visible}
+#page-suche .mapclose{
+    display:inline-flex;align-items:center;gap:7px;
+    position:absolute;top:12px;right:12px;z-index:600;
+    min-height:42px;padding:0 16px;border-radius:999px;
+    background:var(--white);color:var(--green-dark);
+    font-size:14px;font-weight:600;box-shadow:var(--lift-2)
+  }
+#page-suche .results{padding:16px 16px 40px}
+#page-suche .grid{grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+#page-suche .brand-name{display:none}
+}
+@media (max-width:560px){
+#page-suche .bar{padding:0 12px;gap:8px}
+/* On a phone the back arrow alone carries the way out; the
+     logo would only be taking room from the search field. */
+#page-suche .brand{display:none}
+#page-suche .homebtn-label{display:none}
+#page-suche .homebtn{padding:0 11px}
+#page-suche .grid{grid-template-columns:1fr}
+/* One column already is the list view, so only the map toggle
+     earns space in the bar at this width. */
+#page-suche .seg{background:none;padding:0}
+#page-suche .seg #vGrid,#page-suche .seg #vList{display:none}
+#page-suche .seg #vMap{
+    min-height:42px;padding:0 15px;
+    background:var(--white);color:var(--green-dark);
+    border:1.5px solid var(--border);font-weight:600
+  }
+#page-suche .seg #vMap[aria-pressed="true"]{background:var(--green);color:#fff;border-color:var(--green)}
+#page-suche .filterbtn{padding:0 13px}
+}
+@media (prefers-reduced-transparency:reduce){
+#page-suche .bar,#page-suche .mapnote,#page-suche .card-tag,#page-suche .fav,#page-suche .sheet-close{background:#fff;backdrop-filter:none;-webkit-backdrop-filter:none}
+#page-suche .scrim{background:rgba(9,20,16,.75);backdrop-filter:none;-webkit-backdrop-filter:none}
+}
+@media (prefers-contrast:more){
+#page-suche{--grey:#3f4a44;--grey-light:#525d56;--border:#b9c4bb}
+#page-suche .card,#page-suche .chip,#page-suche .searchwrap{border-width:2px}
+}
+@media (prefers-reduced-motion:reduce){
+#page-suche .card:hover{transform:none}
+#page-suche .card:hover .card-photo img{transform:none}
+#page-suche .is-pressed{transform:none}
+}
+/* ---- Explore inside the site --------------------------------
+   The view drops the page's own scroll padding and keeps the
+   header at a fixed height, so the sticky sub-bar underneath it
+   never leaves a gap when the header would otherwise shrink. */
+#page-suche{padding:0}
+body.view-suche{padding-top:var(--header-h)}
+body.view-suche .header{height:var(--header-h)}
+body.view-suche .nav{height:var(--header-h)}
+body.view-suche .site-main{display:none}
+
+/* Same-document view transitions are Baseline since late 2025;
+   browsers without them simply cut, which is fine. */
+@media (prefers-reduced-motion:no-preference){
+  ::view-transition-old(root){animation:sxOut 160ms cubic-bezier(.4,0,1,1) both}
+  ::view-transition-new(root){animation:sxIn 260ms cubic-bezier(.32,.72,0,1) both}
+}
+@keyframes sxOut{to{opacity:0}}
+@keyframes sxIn{from{opacity:0}}
+
+
+/* ============================================================
    MATERIAL & MOTION LAYER
    Translucent surfaces as a floating functional layer, with a
    weight hierarchy: heavier materials separate structure
@@ -5900,6 +6343,88 @@ body.view-map .map-shell-sticky .map-canvas{
   </div>
 </div>
 
+<div class="page-view" id="page-suche">
+<div class="bar">
+  <div class="searchwrap">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+    <label class="sr-only" for="q">Hotel oder Ort suchen</label>
+    <input id="q" type="search" placeholder="Hotel, Ort oder Region – z. B. Meran" autocomplete="off" spellcheck="false">
+    <button class="clearq" id="clearQ" type="button" aria-label="Suche leeren" hidden>×</button>
+  </div>
+
+  <div class="bar-right">
+    <button class="filterbtn" id="openFilters" type="button">
+      Filter <span class="n" id="filterN" hidden>0</span>
+    </button>
+    <div class="seg" role="group" aria-label="Ansicht">
+      <button id="vGrid" type="button" aria-pressed="true">Raster</button>
+      <button id="vList" type="button" aria-pressed="false">Liste</button>
+      <button id="vMap"  type="button" aria-pressed="false">Karte</button>
+    </div>
+  </div>
+</div>
+
+<div class="shell">
+
+  <aside class="rail" id="rail" aria-label="Filter">
+    <div class="fgroup">
+      <h2>Region</h2>
+      <div class="chips" id="fRegion"></div>
+    </div>
+    <div class="fgroup">
+      <h2>Art des Hauses</h2>
+      <div class="chips" id="fType"></div>
+    </div>
+    <div class="fgroup">
+      <h2>Preis pro Nacht</h2>
+      <div class="rangerow"><label for="fPrice">bis</label><span class="rangeval" id="priceOut">€ 500</span></div>
+      <input type="range" id="fPrice" min="50" max="500" step="10" value="500">
+    </div>
+    <div class="fgroup">
+      <h2>Sterne</h2>
+      <div class="chips" id="fStars"></div>
+    </div>
+    <div class="fgroup">
+      <h2>Ausstattung</h2>
+      <div class="chips" id="fAmen"></div>
+    </div>
+    <div class="fgroup">
+      <button class="resetall" id="resetAll" type="button">Alle Filter zurücksetzen</button>
+    </div>
+  </aside>
+
+  <main class="results">
+    <div class="rhead">
+      <div><p class="rcount" id="count" role="status" aria-live="polite"></p>
+        <div class="ctx" id="ctx"></div></div>
+      <div>
+        <label class="sr-only" for="sort">Sortierung</label>
+        <select class="sortsel" id="sort">
+          <option value="rec">Empfohlen</option>
+          <option value="asc">Preis: aufsteigend</option>
+          <option value="desc">Preis: absteigend</option>
+          <option value="rating">Beste Bewertung</option>
+        </select>
+      </div>
+    </div>
+    <div class="grid" id="grid"></div>
+  </main>
+
+  <section class="mapcol" id="mapcol" aria-label="Karte">
+    <button class="mapclose" id="mapClose" type="button">Karte schließen</button>
+    <div id="map"></div>
+    <p class="mapnote">Preis pro Nacht · zeigt genau deine Auswahl</p>
+  </section>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" aria-hidden="true">
+  <button class="sheet-close" id="sheetClose" type="button" aria-label="Schließen">×</button>
+  <div id="sheetInner"></div>
+</aside>
+
+</div>
+
 <div class="page-view" id="page-hotel"><div id="hotelDetailRoot"></div></div>
 
 <div class="auth-overlay" id="authOverlay" hidden>
@@ -6011,6 +6536,79 @@ body.view-map .map-shell-sticky .map-canvas{
 </div>
 
 <div class="staylo-toast" id="stayloToast" role="status" aria-live="polite"></div>
+
+
+
+<script>
+/* ============================================================
+   HANDOVER TO THE EXPLORE VIEW
+   The landing content is for discovering, #suche is for searching.
+   Anything that means "show me the houses" switches view with the
+   search already applied.
+
+   Listens in the capture phase so the page's own handlers never
+   run for these clicks — nothing above had to be rewritten.
+   ============================================================ */
+(function(){
+  "use strict";
+  function currentSearch(){
+    var p=new URLSearchParams();
+    var dest=document.getElementById("destInput");
+    if(dest&&dest.value.trim())p.set("q",dest.value.trim());
+    var price=document.getElementById("priceSlider");
+    if(price&&+price.value<500)p.set("maxPrice",price.value);
+    document.querySelectorAll("#starFilters input:checked").forEach(function(i){p.append("stars",i.value);});
+    document.querySelectorAll("#amenityFilters input:checked").forEach(function(i){p.append("amen",i.value);});
+    return p;
+  }
+
+  /* Same document now — swap the query string and the #suche route
+     in one history entry, so Back returns to where you came from. */
+  function go(p){
+    var qs=p.toString();
+    var url=location.pathname+(qs?"?"+qs:"")+"#suche";
+    function apply(){
+      history.pushState(null,"",url);
+      window.dispatchEvent(new HashChangeEvent("hashchange"));
+    }
+    /* The transition is decoration. Navigation must never depend on
+       it: a hidden document aborts it, and the view would then never
+       change at all. */
+    if(document.startViewTransition&&!document.hidden){
+      try{
+        var t=document.startViewTransition(apply);
+        if(t&&t.finished&&t.finished.catch)t.finished.catch(function(){});
+        if(t&&t.ready&&t.ready.catch)t.ready.catch(function(){});
+        return;
+      }catch(e){/* fall through to a plain switch */}
+    }
+    apply();
+  }
+
+  document.addEventListener("click",function(e){
+    if(!e.target.closest)return;
+    var el=e.target.closest(
+      '#searchButton,.hero-cta-primary,.view-all,[data-category],[data-region],[data-nav="home"]'
+    );
+    if(!el)return;
+    /* "← Zurück" also carries data-nav="home" but means this
+       page's own home, not the search tool. */
+    if(el.classList.contains("page-back"))return;
+
+    var p=currentSearch();
+    var cat=el.getAttribute("data-category"),reg=el.getAttribute("data-region");
+    /* Categories travel by key; the explore view applies the very
+       same match function, so the two views can never drift apart
+       on what a category means. */
+    if(cat)p.append("cat",cat);
+    if(reg)p.append("region",reg);
+
+    e.preventDefault();
+    e.stopPropagation();
+    go(p);
+  },true);
+})();
+</script>
 
 <script>
 (function(){
@@ -6202,6 +6800,7 @@ body.view-map .map-shell-sticky .map-canvas{
     about:document.getElementById("page-about"),
     contact:document.getElementById("page-contact"),
     impressum:document.getElementById("page-impressum"),
+    suche:document.getElementById("page-suche"),
     hotel:document.getElementById("page-hotel")
   };
   function showPage(n){
@@ -6215,14 +6814,21 @@ body.view-map .map-shell-sticky .map-canvas{
     closeSearchPanels();
     var target = pages[n];
     if(!target) return;
-    // restart enter animation cleanly
+    /* The reflow above already restarts the enter animation, so the
+       class is set directly. Doing it inside requestAnimationFrame
+       left the view blank whenever the document was hidden — in a
+       background tab rAF never fires. */
     void target.offsetWidth;
-    requestAnimationFrame(function(){
-      target.classList.add("is-active");
-    });
+    target.classList.add("is-active");
   }
   function showHome(){
     document.body.classList.remove("is-subpage");
+    document.body.classList.remove("view-suche");
+    /* Drop a leftover search route, so a reload lands on the
+       landing page rather than back in the results. */
+    if(location.search||(location.hash||"").replace("#","").indexOf("suche")===0){
+      history.replaceState(null,"",location.pathname);
+    }
     Object.keys(pages).forEach(function(k){
       pages[k].classList.remove("is-active");
     }
@@ -6234,6 +6840,12 @@ body.view-map .map-shell-sticky .map-canvas{
   }
   function routeFromHash(){
     var h=(location.hash||"").replace("#","");
+    document.body.classList.toggle("view-suche",h.indexOf("suche")===0);
+    if(h.indexOf("suche")===0){
+      showPage("suche");
+      if(window.STAYLO_EXPLORE)window.STAYLO_EXPLORE.show();
+      return;
+    }
     if(h.indexOf("hotel-")===0)openHotel(h.replace("hotel-",""),true);
     else if(h==="page-categories"||h==="categories"){showPage("categories");renderCategoryPage();}
     else if(h==="page-regions"||h==="regions"){showPage("regions");renderRegionPage();}
@@ -6256,6 +6868,7 @@ body.view-map .map-shell-sticky .map-canvas{
     }
   }
   window.addEventListener("hashchange",routeFromHash);
+  window.addEventListener("popstate",routeFromHash);
   /* Südtirol ist dreisprachig: Deutsch, Italienisch und – in den ladinischen
      Tälern – Ladinisch. Jede Region trägt hier ihre echten Namen. */
   var REGION_INFO=[
@@ -6291,7 +6904,11 @@ body.view-map .map-shell-sticky .map-canvas{
   function renderCategoryPage(){
     var el=document.getElementById("categoryGrid");
     if(!el)return;
-    el.innerHTML=CATEGORIES.map(function(c){
+    /* Never advertise a category with nothing behind it. All eight
+       currently have houses; this only guards future additions. */
+    el.innerHTML=CATEGORIES.filter(function(c){
+      return HOTELS.filter(c.match).length>0;
+    }).map(function(c){
       /* Each category is illustrated by a real hotel from that category,
          so the page stays truthful as new houses are added. */
       var inCat=HOTELS.filter(c.match),n=inCat.length;
@@ -7726,6 +8343,10 @@ body.view-map .map-shell-sticky .map-canvas{
     loadListings().forEach(function(l){ HOTELS.push(listingToHotel(l)); });
   }
 
+  /* One source of truth: the explore view reads these very arrays,
+     so a hotelier's new listing shows up in both places. */
+  window.STAYLO_DATA={HOTELS:HOTELS,REGION_INFO:REGION_INFO,CATEGORIES:CATEGORIES};
+
   var mapInitialized=false,stayloMapInstance=null,mapMarkerLayer=null,mapMarkers={};
   function initMap(){
     if(mapInitialized)return;
@@ -8582,6 +9203,407 @@ body.view-map .map-shell-sticky .map-canvas{
   })();
 
   routeFromHash();
+})();
+</script>
+<script>
+/* ============================================================
+   EXPLORE VIEW LOGIC (merged from explore.html)
+   ============================================================ */
+(function(){
+  "use strict";
+  var D=window.STAYLO_DATA||{HOTELS:[],REGION_INFO:[],CATEGORIES:[]},
+      HOTELS=D.HOTELS, REGIONS=D.REGION_INFO, CATEGORIES=D.CATEGORIES||[];
+
+  var $=function(id){return document.getElementById(id);};
+  var esc=function(v){return String(v==null?"":v).replace(/[&<>"']/g,function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});};
+
+  var state={q:"",regions:[],types:[],stars:[],amen:[],cats:[],price:500,sort:"rec"};
+  var favs=[];
+  try{ favs=JSON.parse(localStorage.getItem("staylo_favorites")||"[]").map(function(f){return f.id||f;}); }catch(e){}
+
+  function catByKey(k){
+    for(var i=0;i<CATEGORIES.length;i++) if(CATEGORIES[i].key===k) return CATEGORIES[i];
+    return null;
+  }
+  function regionOf(name){
+    for(var i=0;i<REGIONS.length;i++) if(REGIONS[i].name===name) return REGIONS[i];
+    return null;
+  }
+
+  /* ---- Filtering ------------------------------------------- */
+  function matches(h){
+    if(state.q){
+      var q=state.q.toLowerCase();
+      var hay=(h.name+" "+(h.loc||"")+" "+(h.location||"")+" "+(h.type||"")+" "+(h.desc||"")).toLowerCase();
+      var r=regionOf(h.location);
+      if(r) hay+=" "+r.it.toLowerCase()+" "+(r.lad||"").toLowerCase();
+      if(hay.indexOf(q)===-1) return false;
+    }
+    if(state.regions.length && state.regions.indexOf(h.location)===-1) return false;
+    if(state.types.length   && state.types.indexOf(h.type)===-1) return false;
+    if(state.stars.length   && state.stars.indexOf(String(h.stars))===-1) return false;
+    if(h.price>state.price) return false;
+    for(var i=0;i<state.amen.length;i++){
+      if((h.amenities||[]).indexOf(state.amen[i])===-1) return false;
+    }
+    for(var j=0;j<state.cats.length;j++){
+      var c=catByKey(state.cats[j]);
+      if(c&&!c.match(h)) return false;
+    }
+    return true;
+  }
+  function filtered(){
+    var l=HOTELS.filter(matches);
+    if(state.sort==="asc")    l.sort(function(a,b){return a.price-b.price;});
+    if(state.sort==="desc")   l.sort(function(a,b){return b.price-a.price;});
+    if(state.sort==="rating") l.sort(function(a,b){return b.rating-a.rating;});
+    return l;
+  }
+  function activeCount(){
+    return state.regions.length+state.types.length+state.stars.length+state.amen.length+
+           state.cats.length+(state.price<500?1:0)+(state.q?1:0);
+  }
+
+  /* ---- Filter rail ----------------------------------------- */
+  function uniq(fn){
+    var seen={},out=[];
+    HOTELS.forEach(function(h){var v=fn(h); if(v&&!seen[v]){seen[v]=1;out.push(v);}});
+    return out;
+  }
+  function countIf(pred){ return HOTELS.filter(pred).length; }
+
+  function buildChips(el,items,key){
+    el.innerHTML=items.map(function(it){
+      return '<button class="chip" type="button" aria-pressed="false" data-k="'+key+'" data-v="'+esc(it.v)+'">'+
+        it.label+'<span class="cnt">'+it.n+'</span></button>';
+    }).join("");
+  }
+
+  buildChips($("fRegion"),REGIONS.filter(function(r){
+    return countIf(function(h){return h.location===r.name;})>0;
+  }).map(function(r){
+    return {v:r.name,n:countIf(function(h){return h.location===r.name;}),
+      label:esc(r.name)+' <span class="it">'+esc(r.it)+'</span>'};
+  }),"regions");
+
+  buildChips($("fType"),uniq(function(h){return h.type;}).map(function(t){
+    return {v:t,n:countIf(function(h){return h.type===t;}),label:esc(t)};
+  }),"types");
+
+  buildChips($("fStars"),["5","4","3"].filter(function(s){
+    return countIf(function(h){return String(h.stars)===s;})>0;
+  }).map(function(s){
+    return {v:s,n:countIf(function(h){return String(h.stars)===s;}),label:s+"&nbsp;★"};
+  }),"stars");
+
+  var amenAll=[];
+  HOTELS.forEach(function(h){(h.amenities||[]).forEach(function(a){if(amenAll.indexOf(a)===-1)amenAll.push(a);});});
+  buildChips($("fAmen"),amenAll.map(function(a){
+    return {v:a,n:countIf(function(h){return (h.amenities||[]).indexOf(a)!==-1;}),label:esc(a)};
+  }),"amen");
+
+  document.addEventListener("click",function(e){
+    var uc=e.target.closest&&e.target.closest("[data-uncat]");
+    if(uc){
+      var k=uc.getAttribute("data-uncat"),ix=state.cats.indexOf(k);
+      if(ix!==-1)state.cats.splice(ix,1);
+      render(); return;
+    }
+    var c=e.target.closest&&e.target.closest(".chip");
+    if(!c)return;
+    var k=c.getAttribute("data-k"),v=c.getAttribute("data-v"),arr=state[k],i=arr.indexOf(v);
+    if(i===-1)arr.push(v); else arr.splice(i,1);
+    c.setAttribute("aria-pressed",i===-1?"true":"false");
+    render();
+  });
+
+  $("fPrice").addEventListener("input",function(){
+    state.price=+this.value;
+    $("priceOut").textContent="€ "+state.price+(state.price>=500?"+":"");
+    render();
+  });
+  $("sort").addEventListener("change",function(){ state.sort=this.value; render(); });
+
+  var qt;
+  $("q").addEventListener("input",function(){
+    var v=this.value;
+    $("clearQ").hidden=!v;
+    clearTimeout(qt);
+    qt=setTimeout(function(){ state.q=v.trim(); render(); },160);
+  });
+  $("clearQ").addEventListener("click",function(){
+    $("q").value=""; state.q=""; this.hidden=true; render(); $("q").focus();
+  });
+  $("resetAll").addEventListener("click",function(){
+    state={q:"",regions:[],types:[],stars:[],amen:[],cats:[],price:500,sort:state.sort};
+    $("q").value=""; $("clearQ").hidden=true;
+    $("fPrice").value=500; $("priceOut").textContent="€ 500";
+    document.querySelectorAll('.chip[aria-pressed="true"]').forEach(function(c){c.setAttribute("aria-pressed","false");});
+    render();
+  });
+
+  /* ---- Cards ----------------------------------------------- */
+  function cardHTML(h){
+    var r=regionOf(h.location),fav=favs.indexOf(h.id)!==-1;
+    var stars=h.stars?'<span class="stars">'+"★".repeat(h.stars)+'</span>':"";
+    return '<article class="card" data-id="'+esc(h.id)+'">'+
+      '<div class="card-photo">'+
+        '<img src="'+esc(h.img)+'" alt="'+esc(h.name)+'" loading="lazy" width="600" height="400">'+
+        '<span class="card-tag">'+esc(h.type)+'</span>'+
+        '<button class="fav" type="button" aria-pressed="'+fav+'" data-fav="'+esc(h.id)+'" '+
+          'aria-label="'+esc(h.name)+' zu Favoriten">'+(fav?"♥":"♡")+'</button>'+
+      '</div>'+
+      '<div class="card-body">'+
+        '<p class="card-loc">'+stars+'<span>'+esc(h.location||"")+'</span>'+
+          (r?'<span class="it">'+esc(r.it)+'</span>':'')+
+          (r&&r.lad?'<span class="card-lad">'+esc(r.lad)+'</span>':'')+
+        '</p>'+
+        '<h3>'+esc(h.name)+'</h3>'+
+        '<p class="card-desc">'+esc(h.desc||"")+'</p>'+
+        '<div class="card-am">'+(h.amenities||[]).slice(0,3).map(function(a){
+          return '<span class="am">'+esc(a)+'</span>';}).join("")+'</div>'+
+        '<div class="card-foot">'+
+          '<span class="price">ab €&#8239;'+h.price+' <small>/ Nacht</small></span>'+
+          (h.rating>0?'<span class="rate">★ '+h.rating.toFixed(1).replace(".",",")+'</span>'
+                     :'<span class="rate is-new">Neu</span>')+
+        '</div>'+
+      '</div></article>';
+  }
+
+  function render(){
+    var list=filtered(),g=$("grid");
+    $("count").innerHTML=list.length===HOTELS.length
+      ? '<strong>'+list.length+'</strong> Häuser in Südtirol'
+      : '<strong>'+list.length+'</strong> von '+HOTELS.length+' Häusern';
+    var n=activeCount();
+    $("filterN").hidden=!n; $("filterN").textContent=n;
+    $("ctx").innerHTML=state.cats.map(function(k){
+      var c=catByKey(k);
+      return c?'<button class="ctxchip" type="button" data-uncat="'+k+'">'+
+        esc(c.label)+'<span aria-hidden="true">×</span>'+
+        '<span class="sr-only">Filter entfernen</span></button>':"";
+    }).join("");
+
+    g.innerHTML=list.length
+      ? list.map(cardHTML).join("")
+      : '<div class="empty"><h3>Keine passenden Häuser</h3>'+
+        '<p>Versuch es mit einer weiteren Preisspanne oder weniger Filtern.</p>'+
+        '<button class="btn" type="button" id="emptyReset">Filter zurücksetzen</button></div>';
+    var er=$("emptyReset");
+    if(er)er.addEventListener("click",function(){ $("resetAll").click(); });
+    drawPins(list);
+    if(typeof syncURL==="function")syncURL();
+  }
+
+  /* ---- Favourites ------------------------------------------ */
+  document.addEventListener("click",function(e){
+    var b=e.target.closest&&e.target.closest("[data-fav]");
+    if(!b)return;
+    e.stopPropagation();
+    var id=b.getAttribute("data-fav"),i=favs.indexOf(id);
+    if(i===-1)favs.push(id); else favs.splice(i,1);
+    b.setAttribute("aria-pressed",i===-1?"true":"false");
+    b.textContent=i===-1?"♥":"♡";
+    try{ localStorage.setItem("staylo_favorites",JSON.stringify(favs.map(function(x){return {id:x};}))); }catch(err){}
+    if(markers[id]) markers[id].getElement().querySelector(".pin").classList.toggle("is-fav",i===-1);
+  });
+
+  /* ---- Map ------------------------------------------------- */
+  var map=null,layer=null,markers={};
+  function initMap(){
+    if(map||typeof L==="undefined")return;
+    map=L.map("map",{scrollWheelZoom:false,zoomControl:true}).setView([46.62,11.42],9);
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",{
+      attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      subdomains:"abcd",maxZoom:19
+    }).addTo(map);
+    layer=L.layerGroup().addTo(map);
+    render();
+    /* The column is flex-sized, so Leaflet's first measurement is
+       stale. Re-measure after layout, and on every resize. */
+    setTimeout(function(){ map.invalidateSize(); },80);
+    window.addEventListener("resize",function(){ map.invalidateSize(); });
+  }
+  function drawPins(list){
+    if(!map||!layer)return;
+    layer.clearLayers(); markers={};
+    var pts=[];
+    list.forEach(function(h){
+      if(typeof h.lat!=="number"||typeof h.lng!=="number")return;
+      var icon=L.divIcon({className:"pinwrap",iconSize:null,
+        html:'<span class="pin'+(favs.indexOf(h.id)!==-1?" is-fav":"")+'" data-pin="'+esc(h.id)+'">€&#8239;'+h.price+'</span>'});
+      var m=L.marker([h.lat,h.lng],{icon:icon,title:h.name}).addTo(layer);
+      m.bindPopup('<span class="pop"><strong>'+esc(h.name)+'</strong>'+
+        '<span>'+esc(h.loc||"")+' · ab €&#8239;'+h.price+'</span>'+
+        '<button type="button" data-open="'+esc(h.id)+'">Details ansehen</button></span>');
+      markers[h.id]=m; pts.push([h.lat,h.lng]);
+    });
+    if(pts.length)map.fitBounds(pts,{padding:[48,48],maxZoom:11});
+  }
+
+  /* The link between list and map, in both directions. */
+  function link(id,on){
+    var c=document.querySelector('.card[data-id="'+CSS.escape(id)+'"]');
+    if(c)c.classList.toggle("is-linked",on);
+    var m=markers[id],el=m&&m.getElement&&m.getElement();
+    var p=el&&el.querySelector(".pin");
+    if(p)p.classList.toggle("is-linked",on);
+  }
+  document.addEventListener("mouseover",function(e){
+    var c=e.target.closest&&e.target.closest(".card[data-id]");
+    if(c)link(c.getAttribute("data-id"),true);
+    var p=e.target.closest&&e.target.closest("[data-pin]");
+    if(p)link(p.getAttribute("data-pin"),true);
+  });
+  document.addEventListener("mouseout",function(e){
+    var c=e.target.closest&&e.target.closest(".card[data-id]");
+    if(c)link(c.getAttribute("data-id"),false);
+    var p=e.target.closest&&e.target.closest("[data-pin]");
+    if(p)link(p.getAttribute("data-pin"),false);
+  });
+  /* Clicking a pin brings its card to you rather than making
+     you hunt for it in the list. */
+  document.addEventListener("click",function(e){
+    var p=e.target.closest&&e.target.closest("[data-pin]");
+    if(!p)return;
+    var id=p.getAttribute("data-pin");
+    var c=document.querySelector('.card[data-id="'+CSS.escape(id)+'"]');
+    if(c&&window.innerWidth>980)c.scrollIntoView({behavior:"smooth",block:"center"});
+  });
+
+  /* ---- Detail sheet ---------------------------------------- */
+  var lastFocus=null;
+  function openSheet(id){
+    var h=HOTELS.filter(function(x){return x.id===id;})[0];
+    if(!h)return;
+    var r=regionOf(h.location);
+    lastFocus=document.activeElement;
+    $("sheetInner").innerHTML=
+      '<img class="sheet-photo" src="'+esc(h.img)+'" alt="'+esc(h.name)+'">'+
+      '<div class="sheet-body">'+
+        '<p class="card-loc"><span>'+esc(h.loc||"")+'</span>'+
+          (r?'<span class="it">'+esc(r.it)+'</span>':'')+
+          (r&&r.lad?'<span class="card-lad">'+esc(r.lad)+'</span>':'')+'</p>'+
+        '<h2 id="sheetTitle">'+esc(h.name)+'</h2>'+
+        '<div class="sheet-facts">'+
+          '<div class="fact"><span>Ab</span><strong>€ '+h.price+'</strong></div>'+
+          '<div class="fact"><span>Bewertung</span><strong>'+(h.rating>0?h.rating.toFixed(1).replace(".",","):"neu")+'</strong></div>'+
+          '<div class="fact"><span>Sterne</span><strong>'+(h.stars||"—")+'</strong></div>'+
+          '<div class="fact"><span>Art</span><strong>'+esc(h.type)+'</strong></div>'+
+        '</div>'+
+        '<p>'+esc(h.long||h.desc||"")+'</p>'+
+        '<div class="sheet-am">'+(h.amenities||[]).map(function(a){
+          return '<span class="am">'+esc(a)+'</span>';}).join("")+'</div>'+
+        '<div class="sheet-cta">'+
+          '<a class="btn" href="mailto:info@staylo.it?subject='+
+            encodeURIComponent("Anfrage: "+h.name)+'">Unverbindlich anfragen</a>'+
+          '<a class="btn ghost" href="#hotel-'+esc(h.id)+'">Alle Details ansehen</a>'+
+        '</div>'+
+      '</div>';
+    $("sheet").classList.add("open");
+    $("sheet").setAttribute("aria-hidden","false");
+    $("scrim").classList.add("open");
+    $("sheetClose").focus();
+  }
+  function closeSheet(){
+    $("sheet").classList.remove("open");
+    $("sheet").setAttribute("aria-hidden","true");
+    $("scrim").classList.remove("open");
+    if(lastFocus&&lastFocus.focus)lastFocus.focus();
+  }
+  $("sheetClose").addEventListener("click",closeSheet);
+  $("scrim").addEventListener("click",closeSheet);
+  document.addEventListener("keydown",function(e){
+    if(e.key!=="Escape")return;
+    if($("sheet").classList.contains("open"))closeSheet();
+    else if($("rail").classList.contains("open"))$("rail").classList.remove("open");
+    else if($("mapcol").classList.contains("open"))setView("grid");
+  });
+  document.addEventListener("click",function(e){
+    var o=e.target.closest&&e.target.closest("[data-open]");
+    if(o){ openSheet(o.getAttribute("data-open")); return; }
+    var c=e.target.closest&&e.target.closest(".card[data-id]");
+    if(c&&!e.target.closest("[data-fav]")) openSheet(c.getAttribute("data-id"));
+  });
+
+  /* ---- View switching -------------------------------------- */
+  function setView(v){
+    $("vGrid").setAttribute("aria-pressed",String(v==="grid"));
+    $("vList").setAttribute("aria-pressed",String(v==="list"));
+    $("vMap").setAttribute("aria-pressed",String(v==="map"));
+    $("grid").classList.toggle("is-list",v==="list");
+    $("mapcol").classList.toggle("open",v==="map");
+    if(v==="map"&&map)setTimeout(function(){map.invalidateSize();},260);
+  }
+  $("vGrid").addEventListener("click",function(){setView("grid");});
+  $("vList").addEventListener("click",function(){setView("list");});
+  $("vMap").addEventListener("click",function(){setView("map");});
+  $("mapClose").addEventListener("click",function(){setView("grid");});
+  $("openFilters").addEventListener("click",function(){ $("rail").classList.toggle("open"); });
+
+  /* Press feedback is handled once, globally, by the main script,
+     so the copy that lived in explore.html was dropped here. */
+
+  /* ---- Handover from the landing page ----------------------
+     index.html sends its search across as query parameters, so
+     arriving here already shows the right result set — and the
+     URL stays shareable and survives the browser's back button. */
+  function applyParams(replace){
+    var p=new URLSearchParams(location.search);
+    state.q=(p.get("q")||"").trim();
+    state.regions=p.getAll("region");
+    state.types=p.getAll("type");
+    state.stars=p.getAll("stars");
+    state.amen=p.getAll("amen");
+    state.cats=p.getAll("cat");
+    state.price=Math.min(500,Math.max(50,+(p.get("maxPrice")||500)))||500;
+    state.sort=p.get("sort")||"rec";
+
+    $("q").value=state.q;
+    $("clearQ").hidden=!state.q;
+    $("fPrice").value=state.price;
+    $("priceOut").textContent="€ "+state.price+(state.price>=500?"+":"");
+    $("sort").value=state.sort;
+    document.querySelectorAll(".chip").forEach(function(c){
+      var on=state[c.getAttribute("data-k")].indexOf(c.getAttribute("data-v"))!==-1;
+      c.setAttribute("aria-pressed",String(on));
+    });
+    if(replace)render();
+  }
+
+  function syncURL(){
+    var p=new URLSearchParams();
+    if(state.q)p.set("q",state.q);
+    state.regions.forEach(function(v){p.append("region",v);});
+    state.types.forEach(function(v){p.append("type",v);});
+    state.stars.forEach(function(v){p.append("stars",v);});
+    state.amen.forEach(function(v){p.append("amen",v);});
+    state.cats.forEach(function(v){p.append("cat",v);});
+    if(state.price<500)p.set("maxPrice",state.price);
+    if(state.sort!=="rec")p.set("sort",state.sort);
+    var qs=p.toString();
+    history.replaceState(null,"",(qs?"?"+qs:location.pathname)+"#suche");
+  }
+  window.addEventListener("popstate",function(){ if(started)applyParams(true); });
+
+  /* Nothing renders until the visitor actually opens #suche —
+     no map tiles or images are fetched for a view they never see. */
+  var started=false;
+  window.STAYLO_EXPLORE={
+    show:function(){
+      /* Filters are read from the query string; the hash only says
+         which view is open. Keeping them apart means neither can
+         overwrite the other. */
+      applyParams(false);
+      if(!started){ started=true; render(); initMap(); }
+      else { render(); if(map)setTimeout(function(){map.invalidateSize();},60); }
+    },
+    refresh:function(){ if(started)render(); }
+  };
+  /* Loaded after the main script, so a direct visit to …#suche
+     has already had showPage() run and only needs the content. */
+  if((location.hash||"").indexOf("#suche")===0)window.STAYLO_EXPLORE.show();
 })();
 </script>
 </body>
