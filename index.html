@@ -3374,7 +3374,7 @@ footer{padding:64px 0 36px}
 <a href="#page-about" data-page="about">Über uns</a>
 <a href="#page-hoteliers" data-page="hoteliers">Für Hoteliers</a>
 <div class="drawer-divider"></div>
-<a href="#">Anmelden</a>
+<a href="#" id="drawerLoginBtn">Anmelden</a>
 <a href="#page-hoteliers" class="drawer-cta" data-page="hoteliers">Für Hoteliers →</a>
 </nav>
 <div class="site-main" id="siteMain">
@@ -3601,6 +3601,27 @@ footer{padding:64px 0 36px}
 
 <div class="page-view" id="page-hotel"><div id="hotelDetailRoot"></div></div>
 
+<div class="auth-overlay" id="authOverlay" hidden>
+  <div class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+    <button type="button" class="auth-close" id="authClose" aria-label="Schließen">×</button>
+    <h2 id="authTitle">Anmelden</h2>
+    <p class="auth-sub">Melde dich an, um Favoriten geräteübergreifend zu speichern und Anfragen zu verwalten.</p>
+    <form id="authForm" class="auth-form">
+      <label class="auth-label">E-Mail
+        <input type="email" id="authEmail" required placeholder="name@beispiel.it" autocomplete="email">
+      </label>
+      <label class="auth-label">Passwort
+        <input type="password" id="authPassword" required placeholder="••••••••" autocomplete="current-password" minlength="6">
+      </label>
+      <button type="submit" class="cta-btn auth-submit">Anmelden</button>
+    </form>
+    <p class="auth-hint">Noch kein Konto? <button type="button" class="auth-link" id="authRegisterToggle">Registrieren</button></p>
+    <p class="auth-note">Demo: Die Anmeldung speichert deine Session lokal im Browser. Ein echtes Konto-System folgt später.</p>
+  </div>
+</div>
+
+<div class="staylo-toast" id="stayloToast" role="status" aria-live="polite"></div>
+
 <script>
 (function(){
   "use strict";
@@ -3633,7 +3654,7 @@ footer{padding:64px 0 36px}
     ]
   },
   {
-    id:"palazzo-verde",name:"Palazzo Verde",website:"",type:"Design",loc:"Brixen · Eisacktal",price:132,rating:4.7,stars:5,reviews:156,pets:false,location:"Bozen",lat:46.498,lng:11.354,region:"Bozen",img:"https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=1200&q=85",desc:"Historisches Gebäude trifft modernes Design.",long:"Im Zentrum von Brixen: historische Substanz, zeitgemäßes Interieur, kurze Wege zur Altstadt.",amenities:["Design","Altstadtnähe","WLAN","Frühstück"],rooms:[{
+    id:"palazzo-verde",name:"Palazzo Verde",website:"",type:"Design",loc:"Bozen",price:132,rating:4.7,stars:5,reviews:156,pets:false,location:"Bozen",lat:46.498,lng:11.354,region:"Bozen",img:"https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=1200&q=85",desc:"Historisches Gebäude trifft modernes Design.",long:"Im Zentrum von Bozen: historische Substanz, zeitgemäßes Interieur, kurze Wege zur Altstadt.",amenities:["Design","Altstadtnähe","WLAN","Frühstück"],rooms:[{
       name:"Design Room",desc:"18 m² · Stadtblick",price:132,img:"https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=400&q=80"
     },
     {
@@ -3660,7 +3681,7 @@ footer{padding:64px 0 36px}
     ]
   },
   {
-    id:"alpine-spa",name:"Alpine Spa Resort",website:"",type:"Wellness",loc:"Vinschgau",price:189,rating:4.8,stars:5,reviews:167,pets:true,location:"Meran",lat:46.668,lng:11.164,region:"Burggrafenamt",img:"https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1200&q=85",desc:"Ruhe, Wellness und Natur im Herzen der Berge.",long:"Im Vinschgau: Spa mit Bergblick, ruhige Zimmer, regionale Küche.",amenities:["Spa","Sauna","Restaurant","Parkplatz"],rooms:[{
+    id:"alpine-spa",name:"Alpine Spa Resort",website:"",type:"Wellness",loc:"Meran · Burggrafenamt",price:189,rating:4.8,stars:5,reviews:167,pets:true,location:"Meran",lat:46.668,lng:11.164,region:"Burggrafenamt",img:"https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1200&q=85",desc:"Ruhe, Wellness und Natur im Herzen der Berge.",long:"Bei Meran: Spa mit Bergblick, ruhige Zimmer, regionale Küche.",amenities:["Spa","Sauna","Restaurant","Parkplatz"],rooms:[{
       name:"Mountain Room",desc:"24 m² · Talblick",price:189,img:"https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=400&q=80"
     },
     {
@@ -3678,7 +3699,7 @@ footer{padding:64px 0 36px}
     ]
   },
   {
-    id:"casa-montagna",name:"Casa di Montagna",website:"",type:"Luxus",loc:"Meran · Südtirol",price:285,rating:4.9,stars:4,reviews:121,pets:true,location:"Vinschgau",lat:46.63,lng:10.77,region:"Vinschgau",img:"https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=85",desc:"Panoramische Ruhe mit exklusivem Spa.",long:"Exklusives Haus bei Meran mit Spa, Gourmet-Küche und weitem Talblick.",amenities:["Spa","Fine Dining","Pool","Concierge"],rooms:[{
+    id:"casa-montagna",name:"Casa di Montagna",website:"",type:"Luxus",loc:"Vinschgau",price:285,rating:4.9,stars:4,reviews:121,pets:true,location:"Vinschgau",lat:46.63,lng:10.77,region:"Vinschgau",img:"https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=85",desc:"Panoramische Ruhe mit exklusivem Spa.",long:"Exklusives Haus im Vinschgau mit Spa, Gourmet-Küche und weitem Talblick.",amenities:["Spa","Fine Dining","Pool","Concierge"],rooms:[{
       name:"Panorama Room",desc:"32 m² · Talblick",price:285,img:"https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=400&q=80"
     },
     {
@@ -3687,7 +3708,7 @@ footer{padding:64px 0 36px}
     ]
   },
   {
-    id:"sonnenhof",name:"Sonnenhof Retreat",website:"",type:"Wellness",loc:"Seiser Alm",price:229,rating:4.8,stars:4,reviews:143,pets:false,location:"Kaltern",lat:46.413,lng:11.246,region:"Überetsch-Unterland",img:"https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=1200&q=85",desc:"Moderne Wellness-Oase mit Bergenblick.",long:"Auf der Seiser Alm: heller Spa, ruhige Zimmer, Fokus auf Erholung.",amenities:["Spa","Yoga","Restaurant","Parkplatz"],rooms:[{
+    id:"sonnenhof",name:"Sonnenhof Retreat",website:"",type:"Wellness",loc:"Kaltern · Überetsch-Unterland",price:229,rating:4.8,stars:4,reviews:143,pets:false,location:"Kaltern",lat:46.413,lng:11.246,region:"Überetsch-Unterland",img:"https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=1200&q=85",desc:"Moderne Wellness-Oase mit Bergenblick.",long:"In Kaltern: heller Spa, ruhige Zimmer, Fokus auf Erholung.",amenities:["Spa","Yoga","Restaurant","Parkplatz"],rooms:[{
       name:"Retreat Room",desc:"26 m² · Alm-Blick",price:229,img:"https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=400&q=80"
     },
     {
@@ -3696,7 +3717,7 @@ footer{padding:64px 0 36px}
     ]
   },
   {
-    id:"studio-altura",name:"Studio Altura",website:"",type:"Design",loc:"Bozen · Stadtzentrum",price:174,rating:4.7,stars:3,reviews:68,pets:true,location:"Brixen",lat:46.716,lng:11.656,region:"Eisacktal",img:"https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1200&q=85",desc:"Städtischer Stil, hochwertige Details.",long:"Design-Hotel im Zentrum von Bozen – klare Formen, ruhige Zimmer.",amenities:["Design","Zentrale Lage","WLAN","Frühstück"],rooms:[{
+    id:"studio-altura",name:"Studio Altura",website:"",type:"Design",loc:"Brixen · Eisacktal",price:174,rating:4.7,stars:3,reviews:68,pets:true,location:"Brixen",lat:46.716,lng:11.656,region:"Eisacktal",img:"https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1200&q=85",desc:"Städtischer Stil, hochwertige Details.",long:"Design-Hotel im Zentrum von Brixen – klare Formen, ruhige Zimmer.",amenities:["Design","Zentrale Lage","WLAN","Frühstück"],rooms:[{
       name:"Studio",desc:"22 m² · Stadtblick",price:174,img:"https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=400&q=80"
     },
     {
@@ -3705,7 +3726,7 @@ footer{padding:64px 0 36px}
     ]
   },
   {
-    id:"alpenrose",name:"Alpenrose Lodge",website:"",type:"Berghotel",loc:"Pustertal",price:198,rating:4.8,stars:4,reviews:112,pets:true,location:"Sterzing",lat:46.896,lng:11.432,region:"Wipptal",img:"https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=85",desc:"Charmantes Berghotel für aktive Tage.",long:"Charmantes Berghotel im Pustertal – gemütlich, gute Küche, Nähe zu Pisten.",amenities:["Restaurant","Skiraum","Sauna","WLAN"],rooms:[{
+    id:"alpenrose",name:"Alpenrose Lodge",website:"",type:"Berghotel",loc:"Sterzing · Wipptal",price:198,rating:4.8,stars:4,reviews:112,pets:true,location:"Sterzing",lat:46.896,lng:11.432,region:"Wipptal",img:"https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=85",desc:"Charmantes Berghotel für aktive Tage.",long:"Charmantes Berghotel im Wipptal bei Sterzing – gemütlich, gute Küche, Nähe zu Pisten.",amenities:["Restaurant","Skiraum","Sauna","WLAN"],rooms:[{
       name:"Alpen Room",desc:"22 m² · Bergblick",price:198,img:"https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=400&q=80"
     },
     {
@@ -5024,15 +5045,18 @@ footer{padding:64px 0 36px}
   }
   function refreshAuthUI(){
     var user = getAuthUser();
+    var drawerBtn = document.getElementById("drawerLoginBtn");
     if(!loginBtn) return;
     if(user && user.email){
       loginBtn.textContent = user.email.split("@")[0];
       loginBtn.classList.add("is-logged");
       loginBtn.title = "Abmelden";
+      if(drawerBtn) drawerBtn.textContent = "Abmelden (" + user.email.split("@")[0] + ")";
     }else{
       loginBtn.textContent = "Anmelden";
       loginBtn.classList.remove("is-logged");
       loginBtn.title = "Anmelden";
+      if(drawerBtn) drawerBtn.textContent = "Anmelden";
     }
   }
   function openAuth(mode){
@@ -5061,6 +5085,21 @@ footer{padding:64px 0 36px}
   if(loginBtn){
     loginBtn.addEventListener("click", function(e){
       e.stopPropagation();
+      var user = getAuthUser();
+      if(user && user.email){
+        setAuthUser(null);
+        refreshAuthUI();
+        showToast("Du wurdest abgemeldet.");
+        return;
+      }
+      openAuth("login");
+    });
+  }
+  var drawerLoginBtn = document.getElementById("drawerLoginBtn");
+  if(drawerLoginBtn){
+    drawerLoginBtn.addEventListener("click", function(e){
+      e.preventDefault();
+      closeMobile();
       var user = getAuthUser();
       if(user && user.email){
         setAuthUser(null);
@@ -5127,26 +5166,5 @@ footer{padding:64px 0 36px}
   routeFromHash();
 })();
 </script>
-
-<div class="auth-overlay" id="authOverlay" hidden>
-  <div class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
-    <button type="button" class="auth-close" id="authClose" aria-label="Schließen">×</button>
-    <h2 id="authTitle">Anmelden</h2>
-    <p class="auth-sub">Melde dich an, um Favoriten geräteübergreifend zu speichern und Anfragen zu verwalten.</p>
-    <form id="authForm" class="auth-form">
-      <label class="auth-label">E-Mail
-        <input type="email" id="authEmail" required placeholder="name@beispiel.it" autocomplete="email">
-      </label>
-      <label class="auth-label">Passwort
-        <input type="password" id="authPassword" required placeholder="••••••••" autocomplete="current-password" minlength="6">
-      </label>
-      <button type="submit" class="cta-btn auth-submit">Anmelden</button>
-    </form>
-    <p class="auth-hint">Noch kein Konto? <button type="button" class="auth-link" id="authRegisterToggle">Registrieren</button></p>
-    <p class="auth-note">Demo: Die Anmeldung speichert deine Session lokal im Browser. Ein echtes Konto-System folgt später.</p>
-  </div>
-</div>
-
-<div class="staylo-toast" id="stayloToast" role="status" aria-live="polite"></div>
 </body>
 </html>
