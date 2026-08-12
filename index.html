@@ -3316,6 +3316,99 @@ footer{padding:64px 0 36px}
   .hero-slide:first-child{opacity:1;transform:none}
 }
 
+/* Klickbare Kategorie-/Regionen-Karten */
+.page-card.is-clickable{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  text-align:left;
+  width:100%;
+  cursor:pointer;
+  font:inherit;
+  color:inherit;
+  transition:transform .25s var(--ease),box-shadow .25s var(--ease),border-color .25s var(--ease)
+}
+.page-card.is-clickable:hover{
+  transform:translateY(-3px);
+  box-shadow:var(--shadow-md);
+  border-color:rgba(33,75,61,.2)
+}
+.page-card-count{
+  margin-top:14px;
+  font-size:13px;
+  font-weight:700;
+  color:var(--green);
+  display:inline-flex;
+  align-items:center;
+  gap:4px
+}
+.page-card.is-clickable:hover .page-card-count{color:var(--green-dark)}
+
+/* Karten-Aktionen + Gesamtpreis + Bild-Fallback */
+.hotel-actions{display:flex;gap:8px;margin-top:10px}
+.hotel-actions .hotel-cta-mini{margin-top:0;flex:1;justify-content:center}
+.hotel-cta-inquiry{
+  flex:1;display:inline-flex;align-items:center;justify-content:center;
+  min-height:36px;padding:8px 14px;border-radius:999px;
+  background:var(--green);color:#fff;font-size:12.5px;font-weight:700;
+  border:none;cursor:pointer;transition:background .2s,transform .15s
+}
+.hotel-cta-inquiry:hover{background:var(--green-dark);transform:translateY(-1px)}
+.hotel-total{
+  font-size:12px;font-weight:600;color:var(--green);margin-top:3px;white-space:nowrap
+}
+.hotel-image.img-failed{
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#e8ebe6,#dfe5df)
+}
+.hotel-image.img-failed::after{
+  content:"🏔️";font-size:34px;opacity:.45
+}
+
+/* Anfrage-Modal */
+.inquiry-overlay{align-items:flex-start;overflow-y:auto;padding:24px 20px}
+.inquiry-modal{width:min(520px,100%);margin:auto;padding:28px 26px 22px}
+.inquiry-hotel{
+  display:flex;align-items:center;gap:12px;
+  padding:12px;margin-bottom:18px;
+  background:#f4f7f4;border:1px solid var(--border);border-radius:14px
+}
+.inquiry-hotel img{
+  width:64px;height:52px;border-radius:10px;object-fit:cover;flex-shrink:0;background:#e4e8e4
+}
+.inquiry-hotel strong{display:block;font-size:14.5px;font-weight:700;color:var(--black);line-height:1.25}
+.inquiry-hotel span{display:block;font-size:12.5px;color:var(--grey);margin-top:2px}
+.inquiry-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.auth-optional{
+  font-size:10.5px;font-weight:600;color:var(--grey);
+  text-transform:none;letter-spacing:0;margin-left:4px
+}
+.auth-label textarea{
+  padding:12px 14px;border-radius:12px;border:1px solid var(--border);
+  font-family:inherit;font-size:15px;font-weight:500;
+  text-transform:none;letter-spacing:0;color:var(--black);resize:vertical
+}
+.auth-label textarea:focus{outline:none;border-color:var(--green);box-shadow:var(--focus)}
+.auth-label input.has-error,.auth-label textarea.has-error{border-color:#dc2626;background:#fef7f7}
+.inquiry-error{
+  padding:11px 13px;border-radius:12px;
+  background:#fef2f2;border:1px solid #fecaca;
+  color:#b91c1c;font-size:13px;font-weight:600;line-height:1.45
+}
+.inquiry-success{text-align:center;padding:18px 6px 8px}
+.inquiry-success-icon{
+  width:56px;height:56px;margin:0 auto 16px;
+  border-radius:50%;background:var(--green-soft);color:var(--green);
+  display:flex;align-items:center;justify-content:center;
+  font-size:28px;font-weight:700
+}
+.inquiry-success h2{font-family:"Playfair Display",serif;font-size:24px;margin-bottom:10px}
+.inquiry-success p{font-size:14.5px;color:var(--grey);line-height:1.6;margin-bottom:20px}
+@media(max-width:520px){
+  .inquiry-row{grid-template-columns:1fr}
+  .inquiry-modal{padding:24px 18px 18px}
+}
+
 </style>
 </head>
 <body>
@@ -3328,29 +3421,29 @@ footer{padding:64px 0 36px}
 <div class="nav-item has-menu"><span>Kategorien</span>
 <div class="dropdown"><div class="dropdown-title">Finde deine Kategorie</div><div class="dropdown-subtitle">Von Luxus bis Natur.</div>
 <div class="dropdown-grid">
-<a class="dropdown-link" href="#page-categories" data-page="categories">Luxushotels</a>
-<a class="dropdown-link" href="#page-categories" data-page="categories">Wellnesshotels</a>
-<a class="dropdown-link" href="#page-categories" data-page="categories">Berghotels</a>
-<a class="dropdown-link" href="#page-categories" data-page="categories">Boutique Hotels</a>
-<a class="dropdown-link" href="#page-categories" data-page="categories">Design Hotels</a>
-<a class="dropdown-link" href="#page-categories" data-page="categories">Familienhotels</a>
-<a class="dropdown-link" href="#page-categories" data-page="categories">Adults Only</a>
-<a class="dropdown-link" href="#page-categories" data-page="categories">Nachhaltig</a>
+<a class="dropdown-link" href="#hotels" data-category="luxus">Luxushotels</a>
+<a class="dropdown-link" href="#hotels" data-category="wellness">Wellnesshotels</a>
+<a class="dropdown-link" href="#hotels" data-category="berg">Berghotels</a>
+<a class="dropdown-link" href="#hotels" data-category="boutique">Boutique Hotels</a>
+<a class="dropdown-link" href="#hotels" data-category="design">Design Hotels</a>
+<a class="dropdown-link" href="#hotels" data-category="familie">Familienhotels</a>
+<a class="dropdown-link" href="#hotels" data-category="adults-only">Adults Only</a>
+<a class="dropdown-link" href="#hotels" data-category="nachhaltig">Nachhaltig</a>
 </div>
-<a class="dropdown-cta" href="#page-categories" data-page="categories">Finde deine Kategorie →</a></div></div>
+<a class="dropdown-cta" href="#page-categories" data-page="categories">Alle Kategorien ansehen →</a></div></div>
 <div class="nav-item has-menu"><span>Regionen</span>
 <div class="dropdown regions-dd"><div class="dropdown-title">Südtirol entdecken</div><div class="dropdown-subtitle">Beliebte Regionen</div>
 <div class="dropdown-grid">
-<a class="dropdown-link" href="#page-regions" data-page="regions">Meran <small>Therme · Wein</small></a>
-<a class="dropdown-link" href="#page-regions" data-page="regions">Bozen <small>Stadt · Kultur</small></a>
-<a class="dropdown-link" href="#page-regions" data-page="regions">Dolomiten <small>UNESCO</small></a>
-<a class="dropdown-link" href="#page-regions" data-page="regions">Gröden <small>Ski</small></a>
-<a class="dropdown-link" href="#page-regions" data-page="regions">Seiser Alm <small>Alm</small></a>
-<a class="dropdown-link" href="#page-regions" data-page="regions">Pustertal <small>Kronplatz</small></a>
-<a class="dropdown-link" href="#page-regions" data-page="regions">Eisacktal <small>Brixen</small></a>
-<a class="dropdown-link" href="#page-regions" data-page="regions">Vinschgau <small>Obst · Burgen</small></a>
+<a class="dropdown-link" href="#hotels" data-region="Meran">Meran <small>Therme · Wein</small></a>
+<a class="dropdown-link" href="#hotels" data-region="Bozen">Bozen <small>Stadt · Kultur</small></a>
+<a class="dropdown-link" href="#hotels" data-region="Dolomiten">Dolomiten <small>UNESCO</small></a>
+<a class="dropdown-link" href="#hotels" data-region="Gröden">Gröden <small>Ski</small></a>
+<a class="dropdown-link" href="#hotels" data-region="Seiser Alm">Seiser Alm <small>Alm</small></a>
+<a class="dropdown-link" href="#hotels" data-region="Pustertal">Pustertal <small>Kronplatz</small></a>
+<a class="dropdown-link" href="#hotels" data-region="Eisacktal">Eisacktal <small>Brixen</small></a>
+<a class="dropdown-link" href="#hotels" data-region="Vinschgau">Vinschgau <small>Obst · Burgen</small></a>
 </div>
-<a class="dropdown-cta" href="#page-regions" data-page="regions">Alle Regionen →</a></div></div>
+<a class="dropdown-cta" href="#page-regions" data-page="regions">Alle Regionen ansehen →</a></div></div>
 <a href="#page-about" class="nav-item" data-page="about">Über uns</a>
 <a href="#page-hoteliers" class="nav-item" data-page="hoteliers">Für Hoteliers</a>
 </nav>
@@ -3518,30 +3611,12 @@ footer{padding:64px 0 36px}
 </div></footer>
 </div>
 <div class="page-view" id="page-categories"><div class="page-hero"><div class="container"><a href="#" class="page-back" data-nav="home">← Zurück</a><h1>Finde deine Kategorie</h1><p>Jeder Aufenthalt hat seinen eigenen Charakter.</p></div></div>
-<div class="page-body"><div class="container"><div class="page-grid">
-<article class="page-card"><span class="tag">Luxus</span><h3>Luxushotels</h3><p>Fünf-Sterne-Häuser mit persönlichem Service und Fine Dining.</p><ul><li>Suiten</li><li>Fine Dining</li><li>Concierge</li></ul></article>
-<article class="page-card"><span class="tag">Wellness</span><h3>Wellnesshotels</h3><p>Spa, Sauna, Pools und Behandlungen im Mittelpunkt.</p><ul><li>Spa</li><li>Behandlungen</li><li>Ruhe</li></ul></article>
-<article class="page-card"><span class="tag">Berg</span><h3>Berghotels</h3><p>Direkt an den Hängen oder mit Dolomitenblick.</p><ul><li>Pisten &amp; Wanderwege</li><li>Alpiner Charakter</li></ul></article>
-<article class="page-card"><span class="tag">Boutique</span><h3>Boutique Hotels</h3><p>Kleine, individuell geführte Häuser mit Charakter.</p><ul><li>Persönliche Gastgeber</li><li>Einzigartiges Design</li></ul></article>
-<article class="page-card"><span class="tag">Design</span><h3>Design Hotels</h3><p>Architektur und Interieur als Teil des Erlebnisses.</p><ul><li>Auffällige Architektur</li><li>Hochwertige Materialien</li></ul></article>
-<article class="page-card"><span class="tag">Familie</span><h3>Familienhotels</h3><p>Zimmer und Angebote für Kinder und Eltern.</p><ul><li>Familienzimmer</li><li>Spielbereiche</li></ul></article>
-<article class="page-card"><span class="tag">Adults Only</span><h3>Adults Only</h3><p>Nur für Erwachsene – ruhiger, oft mit Wellness und Fine Dining.</p><ul><li>Ruhe</li><li>Romantik</li></ul></article>
-<article class="page-card"><span class="tag">Nachhaltig</span><h3>Nachhaltige Hotels</h3><p>Regionale Küche und ressourcenschonender Betrieb.</p><ul><li>Regionale Produkte</li><li>Kurze Wege</li></ul></article>
-</div>
-<div style="text-align:center;margin-top:36px"><a href="#hotels" class="cta-btn" data-nav="home">Hotels entdecken →</a></div>
+<div class="page-body"><div class="container"><div class="page-grid" id="categoryGrid"></div>
+<div style="text-align:center;margin-top:36px"><a href="#hotels" class="cta-btn" data-nav="home">Alle Hotels entdecken →</a></div>
 </div></div></div>
 <div class="page-view" id="page-regions"><div class="page-hero"><div class="container"><a href="#" class="page-back" data-nav="home">← Zurück</a><h1>Südtirol entdecken</h1><p>Jede Region hat ihren eigenen Rhythmus.</p></div></div>
-<div class="page-body"><div class="container"><div class="page-grid">
-<article class="page-card"><span class="tag">01</span><h3>Meran</h3><p>Kurort mit Therme, Weinbergen und mediterranem Flair.</p></article>
-<article class="page-card"><span class="tag">02</span><h3>Bozen</h3><p>Landeshauptstadt, Kultur, Gastronomie, Ausgangspunkt.</p></article>
-<article class="page-card"><span class="tag">03</span><h3>Dolomiten</h3><p>UNESCO-Weltnaturerbe, Gipfel, Wandern.</p></article>
-<article class="page-card"><span class="tag">04</span><h3>Gröden</h3><p>Ski, ladinische Kultur, Bergdörfer.</p></article>
-<article class="page-card"><span class="tag">05</span><h3>Seiser Alm</h3><p>Europas größte Hochalm, Panorama.</p></article>
-<article class="page-card"><span class="tag">06</span><h3>Pustertal</h3><p>Kronplatz, familienfreundlich.</p></article>
-<article class="page-card"><span class="tag">07</span><h3>Eisacktal</h3><p>Brixen, Klöster, Wein.</p></article>
-<article class="page-card"><span class="tag">08</span><h3>Vinschgau</h3><p>Obst, Burgen, Reschensee.</p></article>
-</div>
-<div style="text-align:center;margin-top:36px"><a href="#hotels" class="cta-btn" data-nav="home">Hotels in diesen Regionen →</a></div>
+<div class="page-body"><div class="container"><div class="page-grid" id="regionGrid"></div>
+<div style="text-align:center;margin-top:36px"><a href="#hotels" class="cta-btn" data-nav="home">Alle Hotels entdecken →</a></div>
 </div></div></div>
 <div class="page-view" id="page-hoteliers"><div class="page-hero"><div class="container"><a href="#" class="page-back" data-nav="home">← Zurück</a><h1>Dein Hotel auf Staylo</h1><p>Kostenlos starten. Professionell präsentieren.</p></div></div>
 <div class="page-body"><div class="container">
@@ -3617,6 +3692,53 @@ footer{padding:64px 0 36px}
     </form>
     <p class="auth-hint">Noch kein Konto? <button type="button" class="auth-link" id="authRegisterToggle">Registrieren</button></p>
     <p class="auth-note">Demo: Die Anmeldung speichert deine Session lokal im Browser. Ein echtes Konto-System folgt später.</p>
+  </div>
+</div>
+
+<div class="auth-overlay inquiry-overlay" id="inquiryOverlay" hidden>
+  <div class="auth-modal inquiry-modal" role="dialog" aria-modal="true" aria-labelledby="inquiryTitle">
+    <button type="button" class="auth-close" id="inquiryClose" aria-label="Schließen">×</button>
+    <div id="inquiryBody">
+      <h2 id="inquiryTitle">Anfrage senden</h2>
+      <p class="auth-sub" id="inquirySub">Unverbindlich und kostenlos. Das Hotel meldet sich direkt bei dir.</p>
+      <div class="inquiry-hotel" id="inquiryHotel"></div>
+      <form id="inquiryForm" class="auth-form" novalidate>
+        <div class="inquiry-row">
+          <label class="auth-label">Anreise
+            <input type="date" id="inqFrom" required>
+          </label>
+          <label class="auth-label">Abreise
+            <input type="date" id="inqTo" required>
+          </label>
+        </div>
+        <div class="inquiry-row">
+          <label class="auth-label">Erwachsene
+            <input type="number" id="inqAdults" min="1" max="12" value="2" required>
+          </label>
+          <label class="auth-label">Kinder
+            <input type="number" id="inqChildren" min="0" max="12" value="0">
+          </label>
+        </div>
+        <label class="auth-label">Name
+          <input type="text" id="inqName" required placeholder="Vor- und Nachname" autocomplete="name">
+        </label>
+        <label class="auth-label">E-Mail
+          <input type="email" id="inqEmail" required placeholder="name@beispiel.it" autocomplete="email">
+        </label>
+        <label class="auth-label">Nachricht <span class="auth-optional">optional</span>
+          <textarea id="inqMessage" rows="3" placeholder="Besondere Wünsche, Fragen zur Anreise …"></textarea>
+        </label>
+        <div class="inquiry-error" id="inquiryError" role="alert" hidden></div>
+        <button type="submit" class="cta-btn auth-submit" id="inquirySubmit">Anfrage senden</button>
+      </form>
+      <p class="auth-note">Staylo vermittelt die Anfrage direkt an das Hotel. Es entstehen keine Kosten und keine Buchungsverpflichtung.</p>
+    </div>
+    <div id="inquirySuccess" hidden class="inquiry-success">
+      <div class="inquiry-success-icon">✓</div>
+      <h2>Anfrage bereit zum Senden</h2>
+      <p id="inquirySuccessText">Dein E-Mail-Programm wurde mit der fertigen Anfrage geöffnet. Prüfe kurz und schick sie ab.</p>
+      <button type="button" class="cta-btn" id="inquiryDone">Alles klar</button>
+    </div>
   </div>
 </div>
 
@@ -3735,10 +3857,48 @@ footer{padding:64px 0 36px}
     ]
   }
   ];
+  /* Zusatz-Eigenschaften je Hotel (Kategorien, die sich nicht aus "type" ergeben) */
+  var HOTEL_TAGS={
+    "haus-weinberg":["nachhaltig"],
+    "alpenblick":["nachhaltig"],
+    "quellenhof":["adults-only","nachhaltig"],
+    "palazzo-verde":["adults-only"],
+    "alpine-grand":["adults-only"],
+    "urban-bozen":[],
+    "alpine-spa":["adults-only"],
+    "mountain-lodge":["nachhaltig"],
+    "casa-montagna":["adults-only"],
+    "sonnenhof":["adults-only","nachhaltig"],
+    "studio-altura":[],
+    "alpenrose":["nachhaltig"]
+  };
+  HOTELS.forEach(function(h){ h.tags=HOTEL_TAGS[h.id]||[]; });
+
+  /* Kategorien – jede muss echte Treffer liefern */
+  var CATEGORIES=[
+    {key:"luxus",label:"Luxushotels",desc:"Fünf-Sterne-Häuser mit persönlichem Service und Fine Dining.",match:function(h){return h.type==="Luxus";}},
+    {key:"wellness",label:"Wellnesshotels",desc:"Spa, Sauna, Pools und Behandlungen im Mittelpunkt.",match:function(h){return h.type==="Wellness";}},
+    {key:"berg",label:"Berghotels",desc:"Direkt an den Hängen oder mit Dolomitenblick.",match:function(h){return h.type==="Berghotel";}},
+    {key:"boutique",label:"Boutique Hotels",desc:"Kleine, individuell geführte Häuser mit Charakter.",match:function(h){return h.type==="Boutique";}},
+    {key:"design",label:"Design Hotels",desc:"Architektur und Interieur als Teil des Erlebnisses.",match:function(h){return h.type==="Design";}},
+    {key:"familie",label:"Familienhotels",desc:"Zimmer und Angebote für Kinder und Eltern.",match:function(h){return h.type==="Familie"||(h.amenities||[]).indexOf("Familienzimmer")!==-1;}},
+    {key:"adults-only",label:"Adults Only",desc:"Nur für Erwachsene – ruhiger, oft mit Wellness und Fine Dining.",match:function(h){return (h.tags||[]).indexOf("adults-only")!==-1;}},
+    {key:"nachhaltig",label:"Nachhaltige Hotels",desc:"Regionale Küche und ressourcenschonender Betrieb.",match:function(h){return (h.tags||[]).indexOf("nachhaltig")!==-1;}}
+  ];
+  function getCategory(key){
+    for(var i=0;i<CATEGORIES.length;i++){ if(CATEGORIES[i].key===key) return CATEGORIES[i]; }
+    return null;
+  }
+  function countCategory(key){
+    var c=getCategory(key);
+    if(!c) return 0;
+    return HOTELS.filter(c.match).length;
+  }
+
   var visibleCount=6,checkIn=null,checkOut=null,calCursor=new Date(),occ={
     adults:2,children:0,rooms:1,pets:false
   };
-  var activeFilters={dest:null,maxPrice:500,sort:"recommended",minRating:0,stars:[],amenities:[]};
+  var activeFilters={dest:null,category:null,maxPrice:500,sort:"recommended",minRating:0,stars:[],amenities:[]};
   function loadFavorites(){
     try{
       var raw=localStorage.getItem("staylo_favorites");
@@ -3828,7 +3988,105 @@ footer{padding:64px 0 36px}
     }
   }
   window.addEventListener("hashchange",routeFromHash);
+  var REGION_INFO=[
+    {name:"Meran",desc:"Kurort mit Therme, Weinbergen und mediterranem Flair.",tag:"Therme · Wein"},
+    {name:"Bozen",desc:"Landeshauptstadt: Kultur, Gastronomie und idealer Ausgangspunkt.",tag:"Stadt · Kultur"},
+    {name:"Dolomiten",desc:"UNESCO-Weltnaturerbe mit markanten Gipfeln und Wanderwegen.",tag:"UNESCO"},
+    {name:"Gröden",desc:"Ski, ladinische Kultur und traditionsreiche Bergdörfer.",tag:"Ski"},
+    {name:"Seiser Alm",desc:"Europas größte Hochalm mit weitem Panorama.",tag:"Alm"},
+    {name:"Pustertal",desc:"Kronplatz, familienfreundlich, viel Platz zum Wandern.",tag:"Kronplatz"},
+    {name:"Eisacktal",desc:"Brixen, Klöster und bekannte Weißweine.",tag:"Brixen"},
+    {name:"Vinschgau",desc:"Obstgärten, Burgen und der Reschensee.",tag:"Obst · Burgen"}
+  ];
+  function countRegion(name){
+    var prev=activeFilters.dest;
+    activeFilters.dest=findExactDest(name)||{name:name,province:"Südtirol"};
+    var n=getFilteredHotelsIgnoringPrice().length;
+    activeFilters.dest=prev;
+    return n;
+  }
+  function getFilteredHotelsIgnoringPrice(){
+    var saved={price:activeFilters.maxPrice,cat:activeFilters.category,rating:activeFilters.minRating,stars:activeFilters.stars,am:activeFilters.amenities,pets:occ.pets};
+    activeFilters.maxPrice=500;activeFilters.category=null;activeFilters.minRating=0;
+    activeFilters.stars=[];activeFilters.amenities=[];occ.pets=false;
+    var res=getFilteredHotels();
+    activeFilters.maxPrice=saved.price;activeFilters.category=saved.cat;activeFilters.minRating=saved.rating;
+    activeFilters.stars=saved.stars;activeFilters.amenities=saved.am;occ.pets=saved.pets;
+    return res;
+  }
+  function renderCategoryPage(){
+    var el=document.getElementById("categoryGrid");
+    if(!el)return;
+    el.innerHTML=CATEGORIES.map(function(c){
+      var n=countCategory(c.key);
+      return '<button type="button" class="page-card is-clickable" data-category="'+c.key+'">'+
+        '<span class="tag">'+c.label+'</span>'+
+        '<h3>'+c.label+'</h3>'+
+        '<p>'+c.desc+'</p>'+
+        '<span class="page-card-count">'+n+' Hotel'+(n===1?'':'s')+' ansehen →</span>'+
+      '</button>';
+    }).join("");
+  }
+  function renderRegionPage(){
+    var el=document.getElementById("regionGrid");
+    if(!el)return;
+    el.innerHTML=REGION_INFO.map(function(r,i){
+      var n=countRegion(r.name);
+      return '<button type="button" class="page-card is-clickable" data-region="'+r.name+'">'+
+        '<span class="tag">'+r.tag+'</span>'+
+        '<h3>'+r.name+'</h3>'+
+        '<p>'+r.desc+'</p>'+
+        '<span class="page-card-count">'+n+' Hotel'+(n===1?'':'s')+' ansehen →</span>'+
+      '</button>';
+    }).join("");
+  }
+  function scrollToHotels(){
+    setTimeout(function(){
+      var el=document.getElementById("hotels");
+      if(el)el.scrollIntoView({behavior:"smooth"});
+    },80);
+  }
+  function applyCategoryFilter(key){
+    var c=getCategory(key);
+    if(!c)return;
+    resetResultFilters();
+    activeFilters.category=key;
+    location.hash="";
+    showHome();
+    renderHotels();
+    updateSummary();
+    scrollToHotels();
+    var n=getFilteredHotels().length;
+    showToast(c.label+": "+n+" Hotel"+(n===1?"":"s")+" gefunden.");
+  }
+  function applyRegionFilter(name){
+    var d=findExactDest(name)||{name:name,province:"Südtirol"};
+    resetResultFilters();
+    selectedDest=d;
+    activeFilters.dest=d;
+    var di=document.getElementById("destInput");
+    if(di)di.value=formatDest(d);
+    location.hash="";
+    showHome();
+    renderHotels();
+    updateSummary();
+    scrollToHotels();
+    var n=getFilteredHotels().length;
+    showToast(d.name+": "+n+" Hotel"+(n===1?"":"s")+" gefunden.");
+  }
   document.addEventListener("click",function(e){
+    var cat=e.target.closest("[data-category]");
+    if(cat){
+      e.preventDefault();
+      applyCategoryFilter(cat.getAttribute("data-category"));
+      return;
+    }
+    var reg=e.target.closest("[data-region]");
+    if(reg){
+      e.preventDefault();
+      applyRegionFilter(reg.getAttribute("data-region"));
+      return;
+    }
     var pl=e.target.closest("[data-page]");
     if(pl){
       e.preventDefault();
@@ -3868,6 +4126,10 @@ footer{padding:64px 0 36px}
     var chips = [];
     if(activeFilters.dest && activeFilters.dest.name && activeFilters.dest.name !== "Ganz Südtirol"){
       chips.push({key:"dest", label: activeFilters.dest.name + ", Südtirol"});
+    }
+    if(activeFilters.category){
+      var catObj = getCategory(activeFilters.category);
+      if(catObj) chips.push({key:"category", label: catObj.label});
     }
     if(activeFilters.maxPrice && activeFilters.maxPrice < 500){
       chips.push({key:"price", label: "bis € " + activeFilters.maxPrice});
@@ -3911,6 +4173,10 @@ footer{padding:64px 0 36px}
         if(activeFilters.dest.district && loc.indexOf(activeFilters.dest.district.toLowerCase()) !== -1) return true;
         return false;
       });
+    }
+    if(activeFilters.category){
+      var cat = getCategory(activeFilters.category);
+      if(cat) list = list.filter(cat.match);
     }
     if(activeFilters.minRating && activeFilters.minRating > 0){
       list = list.filter(function(h){ return h.rating >= activeFilters.minRating; });
@@ -3962,9 +4228,13 @@ footer{padding:64px 0 36px}
       var stars = h.stars ? "★".repeat(h.stars) + "☆".repeat(Math.max(0, 5 - h.stars)) : "";
       var reviews = h.reviews ? " (" + h.reviews + ")" : "";
       var petsBadge = h.pets ? '<span class="hotel-badge hotel-badge-pets">Haustiere</span>' : "";
+      var nights = nightsBetween(checkIn, checkOut);
+      var totalLine = nights
+        ? '<div class="hotel-total">€ '+(h.price*nights)+' gesamt · '+nights+(nights===1?' Nacht':' Nächte')+'</div>'
+        : '';
       return '<article class="hotel-card" data-id="'+h.id+'" role="article">'+
         '<div class="hotel-image">'+
-          '<img src="'+h.img+'" alt="'+(h.name||"Hotel")+' – '+(h.type||"Hotel")+' in '+(h.location||"Südtirol")+'" loading="lazy" decoding="async" width="600" height="400">'+
+          '<img src="'+h.img+'" alt="'+(h.name||"Hotel")+' – '+(h.type||"Hotel")+' in '+(h.location||"Südtirol")+'" loading="lazy" decoding="async" width="600" height="400" onerror="this.closest(\'.hotel-image\').classList.add(\'img-failed\');this.remove()">'+
           '<span class="hotel-badge">'+h.type+'</span>'+petsBadge+
           '<button class="favorite'+(fav?" is-active":"")+'" type="button" data-fav="'+h.id+'" aria-label="'+(fav?"Aus Favoriten entfernen":"Zu Favoriten hinzufügen")+'" aria-pressed="'+(fav?"true":"false")+'">'+(fav?"♥":"♡")+'</button>'+
         '</div>'+
@@ -3975,20 +4245,30 @@ footer{padding:64px 0 36px}
           '<p class="hotel-description">'+h.desc+'</p>'+
           ((h.amenities&&h.amenities.length)?'<div class="hotel-amenities">'+(h.amenities.slice(0,4).map(function(a){return '<span class="hotel-amenity-pill">'+a+'</span>';}).join(""))+'</div>':'')+
           '<div class="hotel-bottom">'+
-            '<div class="hotel-price">ab € '+h.price+' <span>/ Nacht</span></div>'+
+            '<div><div class="hotel-price">ab € '+h.price+' <span>/ Nacht</span></div>'+totalLine+'</div>'+
             '<div class="hotel-rating" aria-label="Bewertung '+h.rating.toFixed(1)+' von 5'+reviews+'">★ '+h.rating.toFixed(1)+'<span class="hotel-reviews">'+reviews+'</span></div>'+
           '</div>'+
-          '<button type="button" class="hotel-cta-mini" data-open-hotel="'+h.id+'" aria-label="'+h.name+' ansehen">Details ansehen</button>'+
+          '<div class="hotel-actions">'+
+            '<button type="button" class="hotel-cta-mini" data-open-hotel="'+h.id+'" aria-label="'+h.name+' ansehen">Details ansehen</button>'+
+            '<button type="button" class="hotel-cta-inquiry" data-inquiry="'+h.id+'" aria-label="'+h.name+' anfragen">Anfragen</button>'+
+          '</div>'+
         '</div></article>';
     }).join("");
     if(lb) lb.style.display = visibleCount >= filtered.length ? "none" : "";
     renderFilterChips();
   }
   document.getElementById("loadMoreButton").addEventListener("click",function(){
-    visibleCount=Math.min(visibleCount+4,HOTELS.length);
-    renderHotels();
-  }
-  );
+    var btn=this;
+    var total=getFilteredHotels().length;
+    btn.classList.add("is-loading");
+    btn.textContent="Wird geladen …";
+    setTimeout(function(){
+      visibleCount=Math.min(visibleCount+4,total);
+      renderHotels();
+      btn.classList.remove("is-loading");
+      btn.textContent="Weitere laden";
+    },260);
+  });
   document.getElementById("hotelGrid").addEventListener("click",function(e){
     var fb=e.target.closest("[data-fav]");
     if(fb){
@@ -4055,7 +4335,7 @@ footer{padding:64px 0 36px}
         '</div>'+
         '<div class="room-side">'+
           '<div class="room-price">ab € '+r.price+'<span>/ Nacht</span></div>'+
-          '<button type="button" class="room-cta">Anfragen</button>'+
+          '<button type="button" class="room-cta" data-inquiry="'+h.id+'" data-room="'+String(r.name).replace(/"/g,"&quot;")+'">Anfragen</button>'+
         '</div>'+
       '</div>';
     }).join("");
@@ -4112,7 +4392,7 @@ footer{padding:64px 0 36px}
                 '<div><span>Kategorie</span><strong>'+h.type+'</strong></div>'+
                 '<div><span>Bewertung</span><strong>'+h.rating.toFixed(1)+' / 5</strong></div>'+
               '</div>'+
-              '<button class="cta-btn" type="button">Verfügbarkeit prüfen</button>'+
+              '<button class="cta-btn" type="button" data-inquiry="'+h.id+'">Verfügbarkeit anfragen</button>'+
               '<button class="cta-btn secondary" type="button" data-fav-detail="'+h.id+'">'+(isFav ? "♥ In Favoriten" : "♡ Zu Favoriten")+'</button>'+
               (h.website
                 ? '<a class="hd-website-btn" href="'+h.website+'" target="_blank" rel="noopener noreferrer">Zur Website des Hotels ↗</a>'
@@ -4828,18 +5108,47 @@ footer{padding:64px 0 36px}
   });
 
   
-  function resetFilters(){
+  /* Setzt nur die Ergebnisfilter zurück – Datum und Gäste bleiben erhalten.
+     Wird bei Navigation über das Hauptmenü genutzt (frischer Sucheinstieg). */
+  function resetResultFilters(){
     selectedDest = null;
     activeFilters.dest = null;
+    activeFilters.category = null;
     activeFilters.maxPrice = 500;
     activeFilters.sort = "recommended";
     activeFilters.minRating = 0;
     activeFilters.stars = [];
     activeFilters.amenities = [];
+    occ.pets = false;
+    visibleCount = 6;
+    var di0 = document.getElementById("destInput");
+    if(di0) di0.value = "";
+    var ps0 = document.getElementById("priceSlider");
+    if(ps0) ps0.value = 500;
+    var pv0 = document.getElementById("priceValue");
+    if(pv0) pv0.textContent = "€ 500";
+    var ss0 = document.getElementById("sortSelect");
+    if(ss0) ss0.value = "recommended";
+    var pc0 = document.getElementById("petsCheck");
+    if(pc0) pc0.checked = false;
+    document.querySelectorAll("#ratingFilters input").forEach(function(inp){
+      inp.checked = (inp.value === "all");
+    });
+    document.querySelectorAll("#starFilters input, #amenityFilters input").forEach(function(inp){
+      inp.checked = false;
+    });
+    document.querySelectorAll(".chip-check").forEach(function(lab){
+      var inp = lab.querySelector("input");
+      lab.classList.toggle("is-on", !!(inp && inp.checked));
+    });
+    if(destError) destError.classList.remove("show");
+  }
+
+  function resetFilters(){
+    resetResultFilters();
     checkIn = null;
     checkOut = null;
     occ = { adults:2, children:0, rooms:1, pets:false };
-    visibleCount = 6;
     var di = document.getElementById("destInput");
     if(di) di.value = "";
     var ps = document.getElementById("priceSlider");
@@ -4871,9 +5180,16 @@ footer{padding:64px 0 36px}
 
   var mapInitialized=false;
   function initMap(){
-    if(mapInitialized||typeof L==="undefined")return;
+    if(mapInitialized)return;
     var el=document.getElementById("stayloMap");
     if(!el)return;
+    if(typeof L==="undefined"){
+      el.innerHTML='<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:8px;color:#6b716c;font-size:14px;text-align:center;padding:20px">'+
+        '<span style="font-size:26px;opacity:.5">🗺️</span>'+
+        '<strong style="color:#3d433e">Karte konnte nicht geladen werden</strong>'+
+        '<span>Prüfe deine Internetverbindung und lade die Seite neu.</span></div>';
+      return;
+    }
     mapInitialized=true;
     var map=L.map("stayloMap",{
       scrollWheelZoom: true,
@@ -4915,6 +5231,7 @@ footer{padding:64px 0 36px}
     e.stopPropagation();
     var key = chipBtn.getAttribute("data-clear-chip");
     if(key === "dest"){ selectedDest = null; activeFilters.dest = null; var di=document.getElementById("destInput"); if(di) di.value=""; }
+    if(key === "category"){ activeFilters.category = null; }
     if(key === "price"){ activeFilters.maxPrice = 500; var ps=document.getElementById("priceSlider"); if(ps){ ps.value=500; } var pv=document.getElementById("priceValue"); if(pv) pv.textContent="€ 500"; }
     if(key === "pets"){ occ.pets = false; var pc=document.getElementById("petsCheck"); if(pc) pc.checked=false; updateOccDisplay(); }
     if(key === "sort"){ activeFilters.sort = "recommended"; var ss=document.getElementById("sortSelect"); if(ss) ss.value="recommended"; }
@@ -5146,6 +5463,167 @@ footer{padding:64px 0 36px}
   refreshAuthUI();
 
 
+  /* ===== Anfrage-Modal ===== */
+  var inquiryOverlay=document.getElementById("inquiryOverlay");
+  var inquiryHotelId=null,inquiryRoomName=null;
+
+  function openInquiry(hotelId,roomName){
+    var h=HOTELS.find(function(x){ return x.id===hotelId; });
+    if(!h||!inquiryOverlay)return;
+    inquiryHotelId=hotelId;
+    inquiryRoomName=roomName||null;
+
+    var box=document.getElementById("inquiryHotel");
+    if(box){
+      box.innerHTML='<img src="'+h.img+'" alt="" onerror="this.style.visibility=\'hidden\'">'+
+        '<div><strong>'+h.name+'</strong><span>'+h.loc+
+        (roomName?' · '+roomName:'')+' · ab € '+h.price+' / Nacht</span></div>';
+    }
+    var sub=document.getElementById("inquirySub");
+    if(sub){
+      sub.textContent=roomName
+        ? 'Anfrage für „'+roomName+'“ – unverbindlich und kostenlos.'
+        : 'Unverbindlich und kostenlos. Das Hotel meldet sich direkt bei dir.';
+    }
+
+    /* Aus der Suche vorbefüllen */
+    var from=document.getElementById("inqFrom"),to=document.getElementById("inqTo");
+    var today=new Date(); today.setHours(0,0,0,0);
+    if(from){
+      from.min=ymd(today);
+      from.value=checkIn?ymd(checkIn):"";
+    }
+    if(to){
+      to.min=ymd(today);
+      to.value=checkOut?ymd(checkOut):"";
+    }
+    var ad=document.getElementById("inqAdults"),ch=document.getElementById("inqChildren");
+    if(ad)ad.value=occ.adults;
+    if(ch)ch.value=occ.children;
+
+    /* Bei angemeldetem Nutzer E-Mail vorbefüllen */
+    var user=getAuthUser();
+    var em=document.getElementById("inqEmail");
+    if(em&&user&&user.email&&!em.value)em.value=user.email;
+
+    var err=document.getElementById("inquiryError");
+    if(err){ err.hidden=true; err.textContent=""; }
+    document.querySelectorAll("#inquiryForm .has-error").forEach(function(el){ el.classList.remove("has-error"); });
+    var body=document.getElementById("inquiryBody"),succ=document.getElementById("inquirySuccess");
+    if(body)body.hidden=false;
+    if(succ)succ.hidden=true;
+
+    inquiryOverlay.hidden=false;
+    document.body.style.overflow="hidden";
+    setTimeout(function(){
+      var n=document.getElementById("inqName");
+      if(n)n.focus();
+    },60);
+  }
+  function closeInquiry(){
+    if(inquiryOverlay)inquiryOverlay.hidden=true;
+    document.body.style.overflow="";
+  }
+
+  function validateInquiry(){
+    var err=document.getElementById("inquiryError");
+    document.querySelectorAll("#inquiryForm .has-error").forEach(function(el){ el.classList.remove("has-error"); });
+    function fail(msg,el){
+      if(err){ err.textContent=msg; err.hidden=false; }
+      if(el){ el.classList.add("has-error"); el.focus(); }
+      return null;
+    }
+    var name=(document.getElementById("inqName").value||"").trim();
+    var mail=(document.getElementById("inqEmail").value||"").trim();
+    var from=document.getElementById("inqFrom").value;
+    var to=document.getElementById("inqTo").value;
+    var adults=parseInt(document.getElementById("inqAdults").value,10);
+    var children=parseInt(document.getElementById("inqChildren").value,10)||0;
+    var msg=(document.getElementById("inqMessage").value||"").trim();
+
+    if(name.length<2)return fail("Bitte gib deinen Namen an.",document.getElementById("inqName"));
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mail))return fail("Bitte gib eine gültige E-Mail-Adresse an.",document.getElementById("inqEmail"));
+    if(!from)return fail("Bitte wähle ein Anreisedatum.",document.getElementById("inqFrom"));
+    if(!to)return fail("Bitte wähle ein Abreisedatum.",document.getElementById("inqTo"));
+    if(parseYmd(to)<=parseYmd(from))return fail("Die Abreise muss nach der Anreise liegen.",document.getElementById("inqTo"));
+    if(!adults||adults<1)return fail("Mindestens eine erwachsene Person.",document.getElementById("inqAdults"));
+    if(err)err.hidden=true;
+    return {name:name,mail:mail,from:from,to:to,adults:adults,children:children,msg:msg};
+  }
+
+  var inquiryForm=document.getElementById("inquiryForm");
+  if(inquiryForm){
+    inquiryForm.addEventListener("submit",function(e){
+      e.preventDefault();
+      var data=validateInquiry();
+      if(!data)return;
+      var h=HOTELS.find(function(x){ return x.id===inquiryHotelId; });
+      if(!h){ closeInquiry(); return; }
+
+      var btn=document.getElementById("inquirySubmit");
+      if(btn){ btn.disabled=true; btn.textContent="Wird vorbereitet …"; }
+
+      var nights=nightsBetween(parseYmd(data.from),parseYmd(data.to));
+      var subject="Anfrage: "+h.name+(inquiryRoomName?" – "+inquiryRoomName:"");
+      var lines=[
+        "Hallo,",
+        "",
+        "ich möchte über Staylo eine unverbindliche Anfrage stellen.",
+        "",
+        "Hotel: "+h.name+" ("+h.loc+")",
+        inquiryRoomName?("Zimmer: "+inquiryRoomName):"",
+        "Anreise: "+formatDE(parseYmd(data.from)),
+        "Abreise: "+formatDE(parseYmd(data.to)),
+        "Nächte: "+nights,
+        "Gäste: "+data.adults+" Erwachsene"+(data.children?", "+data.children+" Kinder":""),
+        "Richtpreis: ab € "+h.price+" / Nacht"+(nights?" (ca. € "+(h.price*nights)+" gesamt)":""),
+        "",
+        data.msg?("Nachricht:\n"+data.msg+"\n"):"",
+        "Name: "+data.name,
+        "E-Mail: "+data.mail,
+        "",
+        "Vielen Dank!"
+      ].filter(function(l){ return l!==""; });
+
+      var href="mailto:info@staylo.it?subject="+encodeURIComponent(subject)+
+               "&body="+encodeURIComponent(lines.join("\n"));
+
+      setTimeout(function(){
+        window.location.href=href;
+        var body=document.getElementById("inquiryBody"),succ=document.getElementById("inquirySuccess");
+        var st=document.getElementById("inquirySuccessText");
+        if(st)st.textContent="Deine Anfrage für „"+h.name+"“ ist fertig. Dein E-Mail-Programm wurde geöffnet – bitte kurz prüfen und abschicken.";
+        if(body)body.hidden=true;
+        if(succ)succ.hidden=false;
+        if(btn){ btn.disabled=false; btn.textContent="Anfrage senden"; }
+        inquiryForm.reset();
+      },250);
+    });
+  }
+  var inqClose=document.getElementById("inquiryClose");
+  if(inqClose)inqClose.addEventListener("click",closeInquiry);
+  var inqDone=document.getElementById("inquiryDone");
+  if(inqDone)inqDone.addEventListener("click",function(){
+    closeInquiry();
+    showToast("Danke! Deine Anfrage ist unterwegs.");
+  });
+  if(inquiryOverlay){
+    inquiryOverlay.addEventListener("click",function(e){
+      if(e.target===inquiryOverlay)closeInquiry();
+    });
+  }
+  document.addEventListener("keydown",function(e){
+    if(e.key==="Escape"&&inquiryOverlay&&!inquiryOverlay.hidden)closeInquiry();
+  });
+  /* Öffner: Detailseite + Zimmerkarten */
+  document.addEventListener("click",function(e){
+    var t=e.target.closest("[data-inquiry]");
+    if(!t)return;
+    e.preventDefault();
+    e.stopPropagation();
+    openInquiry(t.getAttribute("data-inquiry"),t.getAttribute("data-room")||null);
+  });
+
   function updateNavActive(){
     var h = (location.hash||"").replace("#","");
     document.querySelectorAll(".nav-item[data-page], .nav-item[data-nav]").forEach(function(el){
@@ -5161,6 +5639,8 @@ footer{padding:64px 0 36px}
 
   renderHotels();
   renderFavorites();
+  renderCategoryPage();
+  renderRegionPage();
   updateOccDisplay();
   updateDatesDisplay();
   routeFromHash();
