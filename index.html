@@ -367,7 +367,7 @@ img{
   top:54px;
   right:0;
   border-radius:18px;
-  background:rgba(255,255,255,.98);
+  background:#fff;
   color:var(--black);
   border:1px solid rgba(0,0,0,.07);
   box-shadow:0 20px 50px rgba(0,0,0,.18);
@@ -2054,7 +2054,8 @@ body.is-subpage{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:12px
+  gap:12px;
+  flex-wrap:wrap
 }
 
 .hd-topbar .page-back{
@@ -2066,6 +2067,26 @@ body.is-subpage{
 }
 .hd-topbar .page-back:hover{
   background:rgba(42,74,62,.14)
+}
+.hd-back-results{
+  display:inline-flex;align-items:center;gap:6px;
+  min-height:38px;padding:0 14px;border-radius:999px;
+  border:1px solid rgba(42,74,62,.14);
+  background:rgba(42,74,62,.08);
+  color:var(--green-dark);font-weight:600;font-size:13.5px;
+  transition:background .18s ease
+}
+.hd-back-results:hover{background:rgba(42,74,62,.14)}
+.hd-breadcrumb{
+  display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+  font-size:13px;color:#6b716c
+}
+.hd-breadcrumb a{color:#6b716c;font-weight:500}
+.hd-breadcrumb a:hover{color:var(--green-dark);text-decoration:underline}
+.hd-breadcrumb span[aria-current]{color:var(--green-dark);font-weight:600}
+@media (max-width:640px){
+.hd-breadcrumb{width:100%;order:2}
+.hd-back-results{order:1}
 }
 
 .hd-title-row{
@@ -2152,6 +2173,29 @@ body.is-subpage{
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
   gap:10px
+}
+
+.hd-review-score{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.hd-review-box{
+  display:flex;align-items:center;justify-content:center;
+  min-width:52px;height:52px;padding:0 8px;border-radius:14px;
+  background:var(--green,#1d4034);color:#fff;
+  font-size:19px;font-weight:700;font-variant-numeric:tabular-nums
+}
+.hd-review-score.is-new .hd-review-box{background:#c9a227}
+.hd-review-score div strong{display:block;font-size:15px}
+.hd-review-score div span{font-size:13px;color:#6b716c}
+.hd-highlights-sub{font-size:14px;color:#6b716c;margin-bottom:8px}
+.hd-highlights-list{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:8px 14px;list-style:none;padding:0;margin:0
+}
+.hd-highlights-list li{
+  font-size:13.5px;color:var(--ink,#14201b);
+  padding-left:18px;position:relative
+}
+.hd-highlights-list li::before{
+  content:"✓";position:absolute;left:0;color:var(--green,#1d4034);font-weight:700
 }
 
 .hd-amenity-item{
@@ -4109,6 +4153,35 @@ select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{
 }
 #page-suche .clearq[hidden]{display:none}
 #page-suche .bar-right{display:flex;align-items:center;gap:8px;margin-left:auto;flex:0 0 auto}
+/* ---------- Recap: the search you just ran, restated -------- */
+#page-suche .suche-recap{
+  position:sticky;top:calc(var(--header-h) + var(--bar-h));z-index:55;
+  background:var(--white);
+  border-bottom:1px solid var(--border)
+}
+#page-suche .suche-recap-inner{
+  display:flex;align-items:center;flex-wrap:wrap;gap:16px;
+  max-width:1400px;margin:0 auto;
+  padding:12px 20px
+}
+#page-suche .recap-item{display:flex;flex-direction:column;gap:2px;font-size:13px}
+#page-suche .recap-item span{color:var(--grey-light);font-size:11px;letter-spacing:.04em;text-transform:uppercase}
+#page-suche .recap-item strong{font-size:14px;font-weight:600;color:var(--ink)}
+#page-suche .recap-sep{width:1px;height:26px;background:var(--border)}
+#page-suche .recap-edit{
+  margin-left:auto;
+  min-height:38px;padding:0 16px;border-radius:999px;
+  display:inline-flex;align-items:center;
+  border:1.5px solid var(--border);
+  font-size:13.5px;font-weight:600;color:var(--green-dark);
+  transition:background var(--t-fast) var(--spring),border-color var(--t-fast) var(--spring)
+}
+#page-suche .recap-edit:hover{background:var(--green-soft);border-color:var(--green)}
+@media (max-width:640px){
+#page-suche .suche-recap-inner{padding:10px 14px;gap:10px}
+#page-suche .recap-sep{display:none}
+#page-suche .recap-edit{width:100%;justify-content:center;order:10}
+}
 #page-suche .seg{
   display:flex;gap:2px;padding:3px;
   background:rgba(20,32,27,.06);border-radius:999px
@@ -4192,8 +4265,11 @@ select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{
   border:1.5px solid var(--border);border-radius:10px;
   background:var(--white);font-size:14px
 }
-#page-suche .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:16px}
+#page-suche .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
 #page-suche .grid.is-list{grid-template-columns:1fr}
+@media (max-width:1320px){#page-suche .grid{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:980px){#page-suche .grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:640px){#page-suche .grid{grid-template-columns:1fr}}
 #page-suche .card{
   display:flex;flex-direction:column;
   background:var(--white);
@@ -4265,12 +4341,23 @@ select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{
 #page-suche .btn:hover{background:var(--green-dark)}
 #page-suche .btn.ghost{background:var(--white);color:var(--green-dark);border:1.5px solid var(--border)}
 #page-suche .btn.ghost:hover{background:var(--green-soft);border-color:var(--green)}
-/* ---------- Map: always there, never a separate page -------- */
+/* ---------- Map: an on-demand overlay, not a permanent side card --- */
 #page-suche .mapcol{
-  flex:0 0 var(--map-w);
-  position:sticky;top:calc(var(--header-h) + var(--bar-h));
-  height:calc(100vh - var(--header-h) - var(--bar-h));
+  display:none;
+  flex:none;
+}
+#page-suche .mapcol.open{
+  display:block;
+  position:fixed;inset:calc(var(--header-h) + var(--bar-h)) 0 0 0;
+  z-index:70;width:100%;height:auto;
   border-left:1px solid var(--border)
+}
+#page-suche .mapclose{
+  display:inline-flex;align-items:center;gap:7px;
+  position:absolute;top:12px;right:12px;z-index:600;
+  min-height:42px;padding:0 16px;border-radius:999px;
+  background:var(--white);color:var(--green-dark);
+  font-size:14px;font-weight:600;box-shadow:var(--lift-2)
 }
 #page-suche #map{width:100%;height:100%;background:var(--green-soft)}
 #page-suche .mapnote{
@@ -4348,11 +4435,6 @@ select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{
 #page-suche .sheet-am{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:20px}
 #page-suche .sheet-cta{display:flex;gap:10px;flex-wrap:wrap}
 /* ---------- Mobile: filters and map become overlays --------- */
-#page-suche .mapclose{display:none}
-@media (max-width:1180px){
-#page-suche{--map-w:36%}
-#page-suche .grid{grid-template-columns:1fr}
-}
 @media (max-width:980px){
 #page-suche .filterbtn{display:inline-flex}
 #page-suche .rail{
@@ -4371,23 +4453,8 @@ select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{
     content:"";position:absolute;top:10px;left:50%;transform:translateX(-50%);
     width:40px;height:4px;border-radius:99px;background:var(--border)
   }
-#page-suche .mapcol{
-    position:fixed;inset:calc(var(--header-h) + var(--bar-h)) 0 0 0;z-index:70;
-    flex:none;width:100%;height:auto;
-    border-left:0;
-    opacity:0;visibility:hidden;
-    transition:opacity var(--t-base) var(--spring),visibility var(--t-base) var(--spring)
-  }
-#page-suche .mapcol.open{opacity:1;visibility:visible}
-#page-suche .mapclose{
-    display:inline-flex;align-items:center;gap:7px;
-    position:absolute;top:12px;right:12px;z-index:600;
-    min-height:42px;padding:0 16px;border-radius:999px;
-    background:var(--white);color:var(--green-dark);
-    font-size:14px;font-weight:600;box-shadow:var(--lift-2)
-  }
+#page-suche .mapcol{border-left:0}
 #page-suche .results{padding:16px 16px 40px}
-#page-suche .grid{grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
 #page-suche .brand-name{display:none}
 }
 @media (max-width:560px){
@@ -5614,6 +5681,10 @@ body.view-map .map-shell-sticky .map-canvas{
   left:8px !important;
   top:8px !important
 }
+.hotel-list-mode .hotel-badge-pets{
+  top:auto !important;
+  bottom:8px !important;
+}
 .hotel-list-mode .favorite{
   width:32px !important;
   height:32px !important;
@@ -6312,6 +6383,7 @@ body.view-map .map-shell-sticky .map-canvas{
 
 <div class="page-view" id="page-suche">
 <div class="bar">
+  <a href="#" class="page-back homebtn" data-nav="home"><span aria-hidden="true">←</span><span class="homebtn-label">Zurück zur Startseite</span></a>
   <div class="searchwrap">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
     <label class="sr-only" for="q">Hotel oder Ort suchen</label>
@@ -6328,6 +6400,17 @@ body.view-map .map-shell-sticky .map-canvas{
       <button id="vList" type="button" aria-pressed="false">Liste</button>
       <button id="vMap"  type="button" aria-pressed="false">Karte</button>
     </div>
+  </div>
+</div>
+
+<div class="suche-recap" id="sucheRecap">
+  <div class="suche-recap-inner">
+    <div class="recap-item"><span>Ort</span><strong id="recapDest">Ganz Südtirol</strong></div>
+    <div class="recap-sep" aria-hidden="true"></div>
+    <div class="recap-item"><span>Datum</span><strong id="recapDates">Daten flexibel</strong></div>
+    <div class="recap-sep" aria-hidden="true"></div>
+    <div class="recap-item"><span>Gäste</span><strong id="recapGuests">2 Erwachsene · 1 Zimmer</strong></div>
+    <a href="#" class="recap-edit page-back" data-nav="home">Suche ändern</a>
   </div>
 </div>
 
@@ -6526,6 +6609,17 @@ body.view-map .map-shell-sticky .map-canvas{
     if(price&&+price.value<500)p.set("maxPrice",price.value);
     document.querySelectorAll("#starFilters input:checked").forEach(function(i){p.append("stars",i.value);});
     document.querySelectorAll("#amenityFilters input:checked").forEach(function(i){p.append("amen",i.value);});
+    /* Carried across for the results-page recap bar only — dates/guests
+       aren't used to filter hotels anywhere in this app, on the
+       homepage either, so this is display-only, same depth as before. */
+    try{
+      var datesEl=document.getElementById("datesDisplay"),occEl=document.getElementById("occDisplay");
+      sessionStorage.setItem("staylo_search_recap",JSON.stringify({
+        dest:dest&&dest.value.trim()?dest.value.trim():"",
+        dates:datesEl?datesEl.textContent.trim():"",
+        guests:occEl?occEl.textContent.trim():""
+      }));
+    }catch(e){}
     return p;
   }
 
@@ -6744,6 +6838,13 @@ body.view-map .map-shell-sticky .map-canvas{
     try{localStorage.setItem("staylo_favorites",JSON.stringify(favorites));}catch(e){}
   }
   var favorites=loadFavorites();
+  /* Shared favourites API: the #page-suche results view uses the same
+     store instead of keeping its own copy, so a heart toggled in
+     either place is instantly correct in both. */
+  window.STAYLO_FAV={
+    has:function(id){ return favorites.some(function(f){ return f.id===id; }); },
+    toggle:function(id){ toggleFav(id); }
+  };
   var toastTimer=null;
   function showToast(msg){
     var el=document.getElementById("stayloToast");
@@ -6811,6 +6912,7 @@ body.view-map .map-shell-sticky .map-canvas{
     if(h.indexOf("suche")===0){
       showPage("suche");
       if(window.STAYLO_EXPLORE)window.STAYLO_EXPLORE.show();
+      try{ sessionStorage.setItem("staylo_last_results",location.search+location.hash); }catch(e){}
       return;
     }
     if(h.indexOf("hotel-")===0)openHotel(h.replace("hotel-",""),true);
@@ -7259,7 +7361,14 @@ body.view-map .map-shell-sticky .map-canvas{
       '<div class="hotel-detail">'+
         '<div class="container">'+
           '<div class="hd-topbar">'+
-            '<nav aria-label="Brotkrumen"><a href="#hotels" class="page-back" data-nav="home">← Hotels</a> <span style="opacity:.5;margin:0 6px">/</span> <span style="font-size:13px;font-weight:600;color:var(--green-dark)">'+h.name+'</span></nav>'+
+            '<button type="button" class="hd-back-results" data-hd-back="1">← Zurück zu den Ergebnissen</button>'+
+            '<nav class="hd-breadcrumb" aria-label="Brotkrumen">'+
+              '<a href="#hotels" class="page-back" data-nav="home">Startseite</a>'+
+              '<span aria-hidden="true">›</span>'+
+              '<a href="#suche">Hotels</a>'+
+              '<span aria-hidden="true">›</span>'+
+              '<span aria-current="page">'+h.name+'</span>'+
+            '</nav>'+
           '</div>'+
           '<div class="hd-gallery'+(galleryImgs.length<2?' is-single':'')+'">'+
             '<button type="button" class="hd-gal-main" data-lightbox="0" aria-label="Foto 1 von '+galleryImgs.length+' vergrößern">'+
@@ -7294,6 +7403,7 @@ body.view-map .map-shell-sticky .map-canvas{
               '<p class="hd-about">'+(h.long||h.desc)+'</p>'+
               (am ? '<div class="hd-section"><h2>Ausstattung</h2><div class="hd-amenity-grid">'+am+'</div></div>' : '')+
               (rooms ? '<div class="hd-section"><h2>Zimmerkategorien</h2>'+rooms+'</div>' : '')+
+              buildHighlights(h)+
             '</div>'+
             '<aside class="hd-side">'+
               '<div class="hd-price">ab € '+h.price+' <span>/ Nacht</span></div>'+
@@ -7324,6 +7434,23 @@ body.view-map .map-shell-sticky .map-canvas{
     showPage("hotel");
     window.scrollTo(0,0);
     initHotelDetailMap(h);
+  }
+
+  function buildHighlights(h){
+    var scoreLabel = h.rating>=4.5?"Außergewöhnlich":h.rating>=4?"Sehr gut":h.rating>=3.5?"Gut":h.rating>0?"Befriedigend":"";
+    var head = h.rating>0
+      ? '<div class="hd-review-score"><span class="hd-review-box">'+h.rating.toFixed(1)+'</span>'+
+        '<div><strong>'+scoreLabel+'</strong><span>'+(h.reviews?h.reviews.toLocaleString("de-DE")+" Bewertungen":"")+'</span></div></div>'
+      : '<div class="hd-review-score is-new"><span class="hd-review-box">Neu</span>'+
+        '<div><strong>Neu bei Staylo</strong><span>Noch keine Bewertungen</span></div></div>';
+    var perks = (h.amenities||[]).slice(0,4).map(function(a){
+      return '<li>'+a+'</li>';
+    }).join("");
+    return '<div class="hd-section hd-highlights">'+
+      '<h2>Bewertungen &amp; Highlights</h2>'+
+      head+
+      (perks ? '<p class="hd-highlights-sub">Gäste heben besonders hervor:</p><ul class="hd-highlights-list">'+perks+'</ul>' : '')+
+    '</div>';
   }
 
   function buildSimilarHotels(current){
@@ -7473,6 +7600,18 @@ body.view-map .map-shell-sticky .map-canvas{
     });
   })();
 
+  /* "Zurück zu den Ergebnissen": returns to the exact search/filter
+     state the visitor came from, not just a bare #suche — a shared
+     hotel link with no prior search still lands on all hotels. */
+  document.addEventListener("click",function(e){
+    var bk=e.target.closest("[data-hd-back]");
+    if(!bk)return;
+    e.preventDefault();
+    var last=null;
+    try{ last=sessionStorage.getItem("staylo_last_results"); }catch(err){}
+    location.href=location.pathname+(last||"#suche");
+  });
+
   /* Galerie-Klicks auf der Hotelseite */
   document.addEventListener("click",function(e){
     var g=e.target.closest("[data-lightbox]");
@@ -7586,6 +7725,7 @@ body.view-map .map-shell-sticky .map-canvas{
     saveFavorites();
     renderFavorites();
     renderHotels();
+    if(window.STAYLO_EXPLORE&&window.STAYLO_EXPLORE.refresh)window.STAYLO_EXPLORE.refresh();
     var det=document.querySelector('[data-fav-detail="'+id+'"]');
     if(det)det.textContent=favorites.some(function(f){
       return f.id===id;
@@ -9194,8 +9334,21 @@ body.view-map .map-shell-sticky .map-canvas{
     return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});};
 
   var state={q:"",regions:[],types:[],stars:[],amen:[],cats:[],price:500,sort:"rec"};
-  var favs=[];
-  try{ favs=JSON.parse(localStorage.getItem("staylo_favorites")||"[]").map(function(f){return f.id||f;}); }catch(e){}
+  /* Favourites live in the shared window.STAYLO_FAV store (defined in
+     the main script, loaded earlier) — no separate copy here, so
+     toggling a heart here or in the header stays in sync everywhere. */
+  function isFav(id){ return !!(window.STAYLO_FAV&&window.STAYLO_FAV.has(id)); }
+
+  /* ---- Recap bar: restate what was searched, prefilled --------- */
+  function renderRecap(){
+    var dest=$("recapDest"),dates=$("recapDates"),guests=$("recapGuests");
+    if(!dest)return;
+    var meta={};
+    try{ meta=JSON.parse(sessionStorage.getItem("staylo_search_recap")||"{}"); }catch(e){}
+    dest.textContent=(meta.dest||state.q)||"Ganz Südtirol";
+    dates.textContent=(meta.dates&&meta.dates.indexOf("auswählen")===-1)?meta.dates:"Daten flexibel";
+    guests.textContent=meta.guests||"2 Erwachsene · 1 Zimmer";
+  }
 
   function catByKey(k){
     for(var i=0;i<CATEGORIES.length;i++) if(CATEGORIES[i].key===k) return CATEGORIES[i];
@@ -9320,7 +9473,7 @@ body.view-map .map-shell-sticky .map-canvas{
 
   /* ---- Cards ----------------------------------------------- */
   function cardHTML(h){
-    var r=regionOf(h.location),fav=favs.indexOf(h.id)!==-1;
+    var r=regionOf(h.location),fav=isFav(h.id);
     var stars=h.stars?'<span class="stars">'+"★".repeat(h.stars)+'</span>':"";
     return '<article class="card" data-id="'+esc(h.id)+'">'+
       '<div class="card-photo">'+
@@ -9376,12 +9529,12 @@ body.view-map .map-shell-sticky .map-canvas{
     var b=e.target.closest&&e.target.closest("[data-fav]");
     if(!b)return;
     e.stopPropagation();
-    var id=b.getAttribute("data-fav"),i=favs.indexOf(id);
-    if(i===-1)favs.push(id); else favs.splice(i,1);
-    b.setAttribute("aria-pressed",i===-1?"true":"false");
-    b.textContent=i===-1?"♥":"♡";
-    try{ localStorage.setItem("staylo_favorites",JSON.stringify(favs.map(function(x){return {id:x};}))); }catch(err){}
-    if(markers[id]) markers[id].getElement().querySelector(".pin").classList.toggle("is-fav",i===-1);
+    var id=b.getAttribute("data-fav");
+    if(window.STAYLO_FAV)window.STAYLO_FAV.toggle(id);
+    var on=isFav(id);
+    b.setAttribute("aria-pressed",on?"true":"false");
+    b.textContent=on?"♥":"♡";
+    if(markers[id]) markers[id].getElement().querySelector(".pin").classList.toggle("is-fav",on);
   });
 
   /* ---- Map ------------------------------------------------- */
@@ -9407,7 +9560,7 @@ body.view-map .map-shell-sticky .map-canvas{
     list.forEach(function(h){
       if(typeof h.lat!=="number"||typeof h.lng!=="number")return;
       var icon=L.divIcon({className:"pinwrap",iconSize:null,
-        html:'<span class="pin'+(favs.indexOf(h.id)!==-1?" is-fav":"")+'" data-pin="'+esc(h.id)+'">€&#8239;'+h.price+'</span>'});
+        html:'<span class="pin'+(isFav(h.id)?" is-fav":"")+'" data-pin="'+esc(h.id)+'">€&#8239;'+h.price+'</span>'});
       var m=L.marker([h.lat,h.lng],{icon:icon,title:h.name}).addTo(layer);
       m.bindPopup('<span class="pop"><strong>'+esc(h.name)+'</strong>'+
         '<span>'+esc(h.loc||"")+' · ab €&#8239;'+h.price+'</span>'+
@@ -9495,11 +9648,12 @@ body.view-map .map-shell-sticky .map-canvas{
     else if($("rail").classList.contains("open"))$("rail").classList.remove("open");
     else if($("mapcol").classList.contains("open"))setView("grid");
   });
+  /* A hotel opens its own real page — never a re-run of the search. */
   document.addEventListener("click",function(e){
     var o=e.target.closest&&e.target.closest("[data-open]");
-    if(o){ openSheet(o.getAttribute("data-open")); return; }
+    if(o){ location.hash="hotel-"+o.getAttribute("data-open"); return; }
     var c=e.target.closest&&e.target.closest(".card[data-id]");
-    if(c&&!e.target.closest("[data-fav]")) openSheet(c.getAttribute("data-id"));
+    if(c&&!e.target.closest("[data-fav]")) location.hash="hotel-"+c.getAttribute("data-id");
   });
 
   /* ---- View switching -------------------------------------- */
@@ -9571,6 +9725,7 @@ body.view-map .map-shell-sticky .map-canvas{
          which view is open. Keeping them apart means neither can
          overwrite the other. */
       applyParams(false);
+      renderRecap();
       if(!started){ started=true; render(); initMap(); }
       else { render(); if(map)setTimeout(function(){map.invalidateSize();},60); }
     },
