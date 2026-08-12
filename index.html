@@ -42,22 +42,28 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
 :root{
-  --green:#214b3d;
-  --green-dark:#17372e;
-  --green-soft:#dfeae4;
-  --green-mid:#2a5c4a;
-  --cream:#f4f4f0;
-  --cream-warm:#f7f5f0;
+  /* Loden — the deep green of South Tyrolean wool cloth */
+  --green:#1d4034;
+  --green-dark:#132c24;
+  --green-soft:#dde8e1;
+  --green-mid:#2c5e4c;
+  /* Enrosadira — the rose alpenglow on Dolomite limestone at dusk */
+  --glow:#c2616e;
+  --glow-dark:#a34c58;
+  --glow-soft:#f7e6e8;
+  /* Dolomite stone — cool pale ground, not warm cream */
+  --cream:#edf0ec;
+  --cream-warm:#f4f6f2;
   --white:#fff;
-  --black:#141816;
-  --grey:#6b716c;
-  --grey-light:#8a918a;
-  --border:#e3e6e1;
+  --black:#14201b;
+  --grey:#5b665f;
+  --grey-light:#78837b;
+  --border:#dde3dd;
   --border-soft:rgba(0,0,0,.06);
   --max:1200px;
   --max-wide:1440px;
@@ -95,7 +101,7 @@ html{
 }
 
 body{
-  font-family:"DM Sans",sans-serif;
+  font-family:'Lexend',system-ui,sans-serif;
   background:var(--cream);
   color:var(--black);
   -webkit-font-smoothing:antialiased;
@@ -183,7 +189,7 @@ img{
   display:flex;
   align-items:center;
   justify-content:center;
-  font-family:"Playfair Display",serif;
+  font-family:'Fraunces',Georgia,serif;
   font-weight:600
 }
 
@@ -601,7 +607,7 @@ body.drawer-open{
 }
 
 .hero-slide:nth-child(4){
-  background-image:url("https://images.unsplash.com/photo-1521295121783-8a321d551ad2?auto=format&fit=crop&w=2400&q=90");
+  background-image:url("https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=2400&q=90");
   animation-delay:24s
 }
 
@@ -669,7 +675,7 @@ body.drawer-open{
 }
 
 .hero h1{
-  font-family:"Playfair Display",serif;
+  font-family:'Fraunces',Georgia,serif;
   font-size:clamp(36px,5.2vw,68px);
   line-height:1.06;
   letter-spacing:-.04em;
@@ -1293,7 +1299,7 @@ body.drawer-open{
 }
 
 .section-title{
-  font-family:"Playfair Display",serif;
+  font-family:'Fraunces',Georgia,serif;
   font-size:34px;
   letter-spacing:-.035em;
   line-height:1.1
@@ -1424,7 +1430,7 @@ section[id]{
 }
 
 .hotel-name{
-  font-family:"Playfair Display",serif;
+  font-family:'Fraunces',Georgia,serif;
   font-size:21px;
   letter-spacing:-.012em;
   line-height:1.15;
@@ -1514,7 +1520,7 @@ section[id]{
 }
 
 .feature-content h2{
-  font-family:"Playfair Display",serif;
+  font-family:'Fraunces',Georgia,serif;
   font-size:40px;
   line-height:1.08;
   letter-spacing:-.025em;
@@ -1554,7 +1560,7 @@ section[id]{
 }
 
 .hotelier-box h2{
-  font-family:"Playfair Display",serif;
+  font-family:'Fraunces',Georgia,serif;
   font-size:34px;
   letter-spacing:-.022em;
   line-height:1.12
@@ -1681,7 +1687,7 @@ footer{
 }
 
 .dropdown-title{
-  font-family:"Playfair Display",serif;
+  font-family:'Fraunces',Georgia,serif;
   font-size:18px;
   margin-bottom:4px
 }
@@ -1787,7 +1793,7 @@ body.is-subpage{
 }
 
 .page-hero h1{
-  font-family:"Playfair Display",serif;
+  font-family:'Fraunces',Georgia,serif;
   font-size:clamp(30px,4.5vw,46px);
   letter-spacing:-.03em;
   line-height:1.12;
@@ -1838,7 +1844,7 @@ body.is-subpage{
 }
 
 .page-card h3{
-  font-family:"Playfair Display",serif;
+  font-family:'Fraunces',Georgia,serif;
   font-size:22px;
   margin-bottom:8px
 }
@@ -1863,7 +1869,7 @@ body.is-subpage{
 }
 
 .page-intro h2{
-  font-family:"Playfair Display",serif;
+  font-family:'Fraunces',Georgia,serif;
   font-size:26px;
   margin-bottom:10px
 }
@@ -1975,7 +1981,7 @@ body.is-subpage{
 }
 
 .hd-title-row h1{
-  font-family:"Playfair Display",serif;
+  font-family:'Fraunces',Georgia,serif;
   font-size:clamp(26px,3.4vw,36px);
   letter-spacing:-.03em;
   line-height:1.15;
@@ -2023,7 +2029,7 @@ body.is-subpage{
 }
 
 .hd-main h2{
-  font-family:"Playfair Display",serif;
+  font-family:'Fraunces',Georgia,serif;
   font-size:24px;
   letter-spacing:-.02em;
   margin:0 0 12px;
@@ -2590,7 +2596,7 @@ img{max-width:100%;height:auto}
   background:#fff;border:1px solid var(--border);
   border-radius:var(--radius-lg);margin-bottom:20px
 }
-.empty-state h3{font-family:"Playfair Display",serif;font-size:22px;margin-bottom:8px;color:var(--black);font-weight:600}
+.empty-state h3{font-family:'Fraunces',Georgia,serif;font-size:22px;margin-bottom:8px;color:var(--black);font-weight:600}
 .empty-state p{color:var(--grey);margin-bottom:20px;font-size:14.5px;line-height:1.55;max-width:360px;margin-left:auto;margin-right:auto}
 
 /* CTA primary stronger */
@@ -2749,7 +2755,7 @@ img{max-width:100%;height:auto}
   border-top:1px solid var(--border)
 }
 .hd-map-section h2{
-  font-family:"Playfair Display",serif;
+  font-family:'Fraunces',Georgia,serif;
   font-size:24px;
   margin-bottom:8px;
   color:var(--black)
@@ -2907,7 +2913,7 @@ img{max-width:100%;height:auto}
   background:#f2f4f1;font-size:22px;line-height:1;color:#444
 }
 .auth-close:hover{background:#e8ebe6}
-.auth-modal h2{font-family:"Playfair Display",serif;font-size:26px;margin-bottom:8px}
+.auth-modal h2{font-family:'Fraunces',Georgia,serif;font-size:26px;margin-bottom:8px}
 .auth-sub{font-size:14px;color:var(--grey);line-height:1.55;margin-bottom:20px}
 .auth-form{display:flex;flex-direction:column;gap:14px}
 .auth-label{display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.04em}
@@ -3427,7 +3433,7 @@ footer{padding:64px 0 36px}
   margin-bottom:10px
 }
 .room-modal-body h2{
-  font-family:"Playfair Display",serif;
+  font-family:'Fraunces',Georgia,serif;
   font-size:26px;
   letter-spacing:-.02em;
   margin-bottom:8px
@@ -3563,11 +3569,379 @@ footer{padding:64px 0 36px}
   display:flex;align-items:center;justify-content:center;
   font-size:28px;font-weight:700
 }
-.inquiry-success h2{font-family:"Playfair Display",serif;font-size:24px;margin-bottom:10px}
+.inquiry-success h2{font-family:'Fraunces',Georgia,serif;font-size:24px;margin-bottom:10px}
 .inquiry-success p{font-size:14.5px;color:var(--grey);line-height:1.6;margin-bottom:20px}
 @media(max-width:520px){
   .inquiry-row{grid-template-columns:1fr}
   .inquiry-modal{padding:24px 18px 18px}
+}
+
+/* ============================================================
+   REFINEMENT LAYER
+   Type: Fraunces (display, optical sizing) + Lexend (UI/body,
+   drawn for reading proficiency — chosen for all-age legibility).
+   Signature: Südtirol's real trilingual place names.
+   ============================================================ */
+
+/* --- Fraunces needs tighter tracking than Playfair did ------ */
+h1,h2,h3,.section-title,.logo-text,.footer-logo,.page-hero h1{
+  font-variation-settings:"opsz" 96,"SOFT" 20,"WONK" 1;
+  letter-spacing:-.018em
+}
+.hero h1{letter-spacing:-.028em;font-weight:600}
+.section-title{font-weight:600}
+
+/* --- All ages: bigger base text, generous leading, contrast --- */
+body{font-size:17px;line-height:1.6;letter-spacing:-.005em}
+p,li{line-height:1.68}
+
+/* Prices, ratings and altitudes line up in columns */
+.price,.hotel-price,.occ-num,.price-value,.alt-m,.rating,.hotel-rating{
+  font-variant-numeric:tabular-nums
+}
+
+/* --- Signature: trilingual place names ---------------------- */
+.name-alt{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:baseline;
+  gap:8px;
+  margin:-2px 0 10px;
+  font-size:.86rem;
+  line-height:1.3;
+  color:var(--grey-light)
+}
+.name-alt [lang="it"]{font-style:italic;letter-spacing:.01em}
+.name-alt [lang="it"]::before{
+  content:"";
+  display:inline-block;
+  width:14px;
+  height:1px;
+  margin-right:8px;
+  vertical-align:.28em;
+  background:currentColor;
+  opacity:.5
+}
+/* Ladin — South Tyrol's third official language, spoken in the
+   Dolomite valleys. Given the glow accent because it is the
+   rarest and most local of the three names. */
+.name-lad{
+  font-size:.76rem;
+  font-weight:500;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  color:var(--glow-dark);
+  background:var(--glow-soft);
+  border-radius:999px;
+  padding:2px 9px
+}
+
+.page-card{display:flex;flex-direction:column}
+
+/* Region cards carry a photo of the actual place */
+.page-grid .page-card.has-photo{padding:0;overflow:hidden;text-align:left}
+.page-card-photo{flex:0 0 auto}
+.page-card-photo{
+  display:block;
+  position:relative;
+  aspect-ratio:3/2;
+  overflow:hidden;
+  background:var(--green-soft)
+}
+.page-card-photo img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  transition:transform .7s var(--ease-out)
+}
+.page-card-photo::after{
+  content:"";
+  position:absolute;
+  inset:auto 0 0 0;
+  height:45%;
+  background:linear-gradient(180deg,transparent,rgba(19,44,36,.28))
+}
+.page-card.has-photo:hover .page-card-photo img,
+.page-card.has-photo:focus-visible .page-card-photo img{transform:scale(1.06)}
+.page-card-body{
+  display:flex;
+  flex-direction:column;
+  flex:1;
+  padding:20px 22px 22px
+}
+@media (prefers-reduced-motion:reduce){
+  .page-card-photo img{transition:none}
+  .page-card.has-photo:hover .page-card-photo img{transform:none}
+}
+.page-card-meta{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:auto;
+  padding-top:14px
+}
+.alt-m{
+  font-size:.78rem;
+  font-weight:500;
+  letter-spacing:.06em;
+  color:var(--grey-light);
+  white-space:nowrap
+}
+.alt-m.no-mark::before{content:none}
+.alt-m::before{
+  content:"▲";
+  font-size:.62em;
+  margin-right:5px;
+  vertical-align:.12em;
+  color:var(--green-mid);
+  opacity:.65
+}
+
+/* --- Hotelier: how it works + self-listing form -------------- */
+.hotelier-steps{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+  gap:16px;
+  margin-bottom:32px
+}
+.hstep{
+  display:flex;
+  gap:14px;
+  padding:20px;
+  background:var(--white);
+  border:1px solid var(--border);
+  border-radius:var(--radius)
+}
+.hstep-n{
+  flex:0 0 auto;
+  width:30px;height:30px;
+  display:grid;place-items:center;
+  border-radius:50%;
+  background:var(--green);color:#fff;
+  font-size:14px;font-weight:600
+}
+.hstep strong{display:block;margin-bottom:4px}
+.hstep p{font-size:.92rem;color:var(--grey);line-height:1.55}
+
+.listing-panel{
+  background:var(--white);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  padding:30px;
+  box-shadow:var(--shadow-sm)
+}
+.listing-head{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  gap:16px;flex-wrap:wrap;margin-bottom:22px
+}
+.listing-head h2{font-family:'Fraunces',Georgia,serif;font-size:26px}
+.listing-sub{color:var(--grey);font-size:.94rem;margin-top:4px}
+.listing-count{
+  background:var(--green-soft);color:var(--green-dark);
+  border-radius:999px;padding:7px 14px;
+  font-size:.84rem;font-weight:600;white-space:nowrap
+}
+.ls-group{border:0;padding:0;margin:0 0 26px}
+.ls-group legend{
+  font-size:.76rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--grey-light);padding:0 0 12px
+}
+.ls-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:14px
+}
+.ls-wide{grid-column:1/-1}
+.listing-form .auth-label{display:block;margin-bottom:14px;font-size:.9rem;font-weight:500}
+.listing-form input[type=text],.listing-form input[type=email],
+.listing-form input[type=url],.listing-form input[type=number],
+.listing-form select,.listing-form textarea{
+  width:100%;
+  margin-top:6px;
+  padding:12px 14px;
+  min-height:48px;
+  font-size:16px;                 /* 16px keeps iOS from zooming on focus */
+  font-family:inherit;
+  color:var(--black);
+  background:var(--white);
+  border:1.5px solid var(--border);
+  border-radius:var(--radius-sm)
+}
+.listing-form textarea{min-height:88px;resize:vertical;line-height:1.6}
+.listing-form input:focus,.listing-form select:focus,.listing-form textarea:focus{
+  border-color:var(--green);outline:none
+}
+.req{color:var(--glow-dark);font-weight:700}
+.ls-help{
+  display:block;margin-top:6px;
+  font-size:.82rem;font-weight:400;color:var(--grey-light);line-height:1.5
+}
+.ls-preview[hidden]{display:none}
+.ls-preview{
+  display:flex;align-items:center;gap:12px;
+  padding:10px;border:1px solid var(--border);border-radius:var(--radius-sm);
+  font-size:.86rem;color:var(--grey)
+}
+.ls-preview img{width:84px;height:56px;object-fit:cover;border-radius:8px;flex:0 0 auto}
+.ls-preview.is-bad{border-color:var(--glow);background:var(--glow-soft);color:var(--glow-dark)}
+.ls-actions{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+
+.my-listings{margin-top:30px;padding-top:26px;border-top:1px solid var(--border)}
+.my-listings h3{font-family:'Fraunces',Georgia,serif;font-size:20px;margin-bottom:14px}
+.my-listing{
+  display:flex;gap:14px;align-items:center;flex-wrap:wrap;
+  padding:14px;margin-bottom:12px;
+  border:1px solid var(--border);border-radius:var(--radius-sm);
+  background:var(--cream-warm)
+}
+.my-listing img{width:92px;height:66px;object-fit:cover;border-radius:8px;flex:0 0 auto}
+.my-listing-body{flex:1 1 200px;display:flex;flex-direction:column;gap:3px}
+.my-listing-body strong{font-size:1.02rem}
+.my-listing-meta{font-size:.86rem;color:var(--grey);font-variant-numeric:tabular-nums}
+.my-listing-status{font-size:.8rem;color:var(--glow-dark)}
+.my-listing-actions{display:flex;gap:8px;flex-wrap:wrap}
+.mini-btn{
+  min-height:40px;padding:9px 14px;
+  border-radius:999px;border:1.5px solid var(--border);
+  background:var(--white);color:var(--green-dark);
+  font-size:.85rem;font-weight:600
+}
+.mini-btn:hover{border-color:var(--green);background:var(--green-soft)}
+.mini-btn.is-danger{color:var(--glow-dark)}
+.mini-btn.is-danger:hover{border-color:var(--glow);background:var(--glow-soft)}
+
+/* A hotelier's own entry is marked until it has been reviewed */
+.hotel-badge-new{background:var(--glow-soft);color:var(--glow-dark)}
+
+@media (max-width:640px){
+  .listing-panel{padding:20px 16px}
+  .my-listing-actions{width:100%}
+  .mini-btn{flex:1 1 auto}
+}
+
+/* The region's three official names, as the hero's opening line */
+.hero-label{
+  display:inline-flex;
+  align-items:center;
+  gap:9px;
+  flex-wrap:wrap;
+  justify-content:center;
+  letter-spacing:.07em
+}
+.hero-label i{opacity:.5;font-style:normal}
+.hero-label [lang="it"],.hero-label [lang="lld"]{opacity:.82}
+
+.story-sub{
+  font-family:'Fraunces',Georgia,serif;
+  font-size:19px;
+  margin:26px 0 10px
+}
+.story-block p{margin-bottom:14px}
+.story-note{
+  margin-top:22px;
+  padding-top:16px;
+  border-top:1px solid var(--border);
+  font-size:.9rem;
+  color:var(--grey-light)
+}
+.hotel-rating.is-new,.hd-rating.is-new{color:var(--glow-dark);font-weight:600}
+.hd-rating-pill.is-new{background:var(--glow-soft);color:var(--glow-dark)}
+
+/* --- Map: price bubbles instead of generic teardrop pins ---- */
+.staylo-pin-wrap{background:none;border:0}
+.staylo-pin{
+  display:inline-block;
+  transform:translate(-50%,-50%);
+  padding:7px 12px;
+  border-radius:999px;
+  background:var(--white);
+  color:var(--green-dark);
+  border:1.5px solid var(--green);
+  font-family:'Lexend',system-ui,sans-serif;
+  font-size:13px;
+  font-weight:600;
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+  box-shadow:0 3px 12px rgba(15,35,26,.24);
+  cursor:pointer;
+  transition:background .2s var(--ease),color .2s var(--ease),transform .2s var(--ease)
+}
+.staylo-pin:hover,.staylo-pin:focus-visible,
+.leaflet-marker-icon:focus .staylo-pin{
+  background:var(--green);
+  color:#fff;
+  transform:translate(-50%,-50%) scale(1.09)
+}
+.leaflet-popup-content-wrapper{
+  border-radius:14px;
+  box-shadow:var(--shadow-lg);
+  font-family:'Lexend',system-ui,sans-serif
+}
+.leaflet-popup-content{margin:14px 16px;min-width:186px}
+.map-pop{display:flex;flex-direction:column;gap:3px}
+.map-pop strong{font-family:'Fraunces',Georgia,serif;font-size:16px;line-height:1.25}
+.map-pop-loc{font-size:12px;color:var(--grey-light)}
+.map-pop-meta{font-size:13px;color:var(--grey);font-variant-numeric:tabular-nums;margin-bottom:6px}
+.map-pop-btn{
+  align-self:flex-start;
+  background:var(--green);
+  color:#fff;
+  border-radius:999px;
+  padding:8px 14px;
+  font-size:13px;
+  font-weight:600;
+  min-height:38px
+}
+.map-pop-btn:hover{background:var(--green-dark)}
+.map-shell{position:relative}
+.map-empty{
+  position:absolute;
+  inset:0;
+  z-index:500;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  text-align:center;
+  padding:24px;
+  background:rgba(237,240,236,.93);
+  color:var(--grey);
+  font-size:15px
+}
+.map-empty[hidden]{display:none}
+.map-empty strong{color:var(--black);font-family:'Fraunces',Georgia,serif;font-size:18px}
+.map-hint{font-size:12.5px;color:var(--grey-light)}
+
+/* --- Enrosadira accent, used sparingly ---------------------- */
+.hero-dot{background:var(--glow);box-shadow:0 0 0 4px rgba(194,97,110,.28)}
+.nav-badge{background:var(--glow-dark)}
+
+/* --- Focus: one visible, consistent ring everywhere --------- */
+a:focus-visible,button:focus-visible,input:focus-visible,
+select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{
+  outline:3px solid var(--glow);
+  outline-offset:2px;
+  border-radius:6px
+}
+
+/* --- Cards: clearer edge, quieter hover -------------------- */
+.hotel-card{border:1px solid var(--border)}
+.hotel-card:hover{border-color:#c4d0c6}
+
+/* --- Touch targets: nothing below 44px --------------------- */
+.chip-check,.dest-pill,.reset-btn,.lang-option{
+  min-height:44px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center
+}
+
+@media (max-width:768px){
+  body{font-size:16.5px}
+  .name-alt{font-size:.82rem}
 }
 
 </style>
@@ -3635,9 +4009,9 @@ footer{padding:64px 0 36px}
 <section class="hero">
 <div class="hero-media"><div class="hero-slide"></div><div class="hero-slide"></div><div class="hero-slide"></div><div class="hero-slide"></div><div class="hero-bg"></div></div>
 <div class="container hero-content">
-<div class="hero-label"><span class="hero-dot"></span>Hotels in Südtirol</div>
+<div class="hero-label"><span class="hero-dot"></span><span>Südtirol</span><i>·</i><span lang="it">Alto Adige</span><i>·</i><span lang="lld">Sudtirol</span></div>
 <h1>Dein Aufenthalt<br>in <em>Südtirol.</em></h1>
-<p class="hero-subtitle">Finde besondere Hotels, Resorts und Unterkünfte für deine nächste Auszeit in Südtirol.</p>
+<p class="hero-subtitle">Hotels von Meran bis ins Pustertal – ausgesucht, unabhängig und ohne Provision. Anfragen gehen direkt an das Haus.</p>
 <div class="hero-ctas">
   <a href="#hotels" class="hero-cta-primary" data-nav="home">Hotels entdecken</a>
   <a href="#page-regions" class="hero-cta-secondary" data-page="regions">Regionen erkunden</a>
@@ -3737,8 +4111,9 @@ footer{padding:64px 0 36px}
 </div></section>
 <section class="section" id="karte"><div class="container">
 <div class="section-header"><div><div class="section-title">Hotels auf der Karte</div><div class="section-subtitle">Überblick über ausgewählte Unterkünfte</div></div><a href="#hotels" class="view-all">Zu den Hotels →</a></div>
-<div class="map-shell"><div id="stayloMap" class="map-canvas" role="img" aria-label="Karte mit Hotels in Südtirol"></div>
-<div class="map-legend"><span><i></i> Hotelstandorte</span><span>OpenStreetMap · Demo-Marker</span></div></div>
+<div class="map-shell"><div id="stayloMap" class="map-canvas" aria-label="Karte mit Hotels in Südtirol"></div>
+<div class="map-empty" id="mapEmpty" hidden><strong>Keine Hotels in dieser Auswahl</strong><span>Setze die Filter zurück, um wieder alle Häuser zu sehen.</span></div>
+<div class="map-legend"><span><i></i> Preis pro Nacht — die Karte zeigt genau deine gefilterte Auswahl</span><span class="map-hint">Zum Zoomen Strg + Mausrad</span></div></div>
 </div></section>
 <section class="feature"><div class="container"><div class="feature-box"><div class="feature-content">
 <small>Staylo · Südtirol</small><h2>Mehr als nur<br>ein Hotel.</h2>
@@ -3781,22 +4156,132 @@ footer{padding:64px 0 36px}
 </div></div></div>
 <div class="page-view" id="page-hoteliers"><div class="page-hero"><div class="container"><a href="#" class="page-back" data-nav="home">← Zurück</a><h1>Dein Hotel auf Staylo</h1><p>Kostenlos starten. Professionell präsentieren.</p></div></div>
 <div class="page-body"><div class="container">
-<div class="page-intro"><h2>Warum Staylo für Hoteliers?</h2><p>Wir starten bewusst <strong>kostenlos</strong>. Du kannst dein Haus eintragen ohne Einstiegsgebühr. Optional: Marketing-Videos für unsere Social-Media-Kanäle – ebenfalls kostenlos.</p></div>
-<div class="story-block" style="margin-bottom:32px">
-<h2 style="font-family:'Playfair Display',serif;font-size:24px;margin-bottom:14px">Anforderungen</h2>
+<div class="page-intro"><h2>Kostenlos, ohne Provision</h2><p>Trage dein Haus selbst ein – in etwa fünf Minuten. Keine Einstiegsgebühr, keine Provision pro Buchung. Gästeanfragen kommen direkt bei dir an, nicht über uns.</p></div>
+
+<div class="hotelier-steps">
+  <div class="hstep"><span class="hstep-n">1</span><div><strong>Eintragen</strong><p>Du füllst das Formular unten aus. Deine Angaben bleiben auf diesem Gerät gespeichert und bleiben änderbar.</p></div></div>
+  <div class="hstep"><span class="hstep-n">2</span><div><strong>Prüfen</strong><p>Wir schauen uns Fotos und Angaben an und melden uns per E-Mail, wenn etwas fehlt.</p></div></div>
+  <div class="hstep"><span class="hstep-n">3</span><div><strong>Online</strong><p>Dein Haus erscheint in Suche, Karte und Kategorien – und Gäste fragen direkt bei dir an.</p></div></div>
+</div>
+
+<div class="listing-panel">
+  <div class="listing-head">
+    <div>
+      <h2 id="listingFormTitle">Haus eintragen</h2>
+      <p class="listing-sub">Pflichtfelder sind mit <span aria-hidden="true">*</span> markiert. Alles Weitere kannst du später ergänzen.</p>
+    </div>
+    <div class="listing-count" id="listingCount" hidden></div>
+  </div>
+
+  <form id="listingForm" class="listing-form" novalidate>
+    <input type="hidden" id="lsEditId" value="">
+
+    <fieldset class="ls-group">
+      <legend>Das Haus</legend>
+      <div class="ls-grid">
+        <label class="auth-label ls-wide">Name des Hauses <span class="req" aria-hidden="true">*</span>
+          <input type="text" id="lsName" required maxlength="60" placeholder="z. B. Hotel Sonnenhof" autocomplete="organization">
+        </label>
+        <label class="auth-label">Kategorie <span class="req" aria-hidden="true">*</span>
+          <select id="lsType" required>
+            <option value="">Bitte wählen</option>
+            <option>Boutique</option><option>Wellness</option><option>Berghotel</option>
+            <option>Luxus</option><option>Design</option><option>Familie</option>
+          </select>
+        </label>
+        <label class="auth-label">Region <span class="req" aria-hidden="true">*</span>
+          <select id="lsRegion" required></select>
+        </label>
+        <label class="auth-label">Sterne
+          <select id="lsStars"><option value="0">keine Angabe</option><option value="3">3 Sterne</option><option value="4" selected>4 Sterne</option><option value="5">5 Sterne</option></select>
+        </label>
+        <label class="auth-label">Preis ab (€ / Nacht) <span class="req" aria-hidden="true">*</span>
+          <input type="number" id="lsPrice" required min="30" max="2000" step="5" inputmode="numeric" placeholder="145">
+        </label>
+      </div>
+    </fieldset>
+
+    <fieldset class="ls-group">
+      <legend>Beschreibung &amp; Bild</legend>
+      <label class="auth-label">Kurzbeschreibung <span class="req" aria-hidden="true">*</span>
+        <input type="text" id="lsDesc" required maxlength="120" placeholder="Ein Satz, der dein Haus beschreibt.">
+        <span class="ls-help">Erscheint auf der Hotelkarte. Max. 120 Zeichen.</span>
+      </label>
+      <label class="auth-label">Ausführlicher Text
+        <textarea id="lsLong" rows="3" maxlength="600" placeholder="Lage, Geschichte des Hauses, was den Aufenthalt besonders macht …"></textarea>
+      </label>
+      <label class="auth-label">Bild-Adresse (URL)
+        <input type="url" id="lsImg" placeholder="https://…/mein-hotel.jpg" inputmode="url">
+        <span class="ls-help">Direkter Link zu einem hellen, hochauflösenden Foto. Ohne Bild nutzen wir vorerst ein Platzhalterbild.</span>
+      </label>
+      <div class="ls-preview" id="lsPreview" hidden><img id="lsPreviewImg" src="" alt=""><span id="lsPreviewNote"></span></div>
+    </fieldset>
+
+    <fieldset class="ls-group">
+      <legend>Ausstattung</legend>
+      <div class="chip-group" id="lsAmenities">
+        <label class="chip-check"><input type="checkbox" value="WLAN"> WLAN</label>
+        <label class="chip-check"><input type="checkbox" value="Frühstück"> Frühstück</label>
+        <label class="chip-check"><input type="checkbox" value="Parkplatz"> Parkplatz</label>
+        <label class="chip-check"><input type="checkbox" value="Spa"> Spa</label>
+        <label class="chip-check"><input type="checkbox" value="Sauna"> Sauna</label>
+        <label class="chip-check"><input type="checkbox" value="Pool"> Pool</label>
+        <label class="chip-check"><input type="checkbox" value="Restaurant"> Restaurant</label>
+        <label class="chip-check"><input type="checkbox" value="Skiraum"> Skiraum</label>
+        <label class="chip-check"><input type="checkbox" value="Garten"> Garten</label>
+        <label class="chip-check"><input type="checkbox" value="Halbpension"> Halbpension</label>
+        <label class="chip-check"><input type="checkbox" value="Familienzimmer"> Familienzimmer</label>
+        <label class="chip-check"><input type="checkbox" value="Yoga"> Yoga</label>
+      </div>
+      <label class="pets-row"><input type="checkbox" id="lsPets"><span>Haustiere sind willkommen</span></label>
+    </fieldset>
+
+    <fieldset class="ls-group">
+      <legend>Kontakt</legend>
+      <div class="ls-grid">
+        <label class="auth-label">E-Mail für Anfragen <span class="req" aria-hidden="true">*</span>
+          <input type="email" id="lsEmail" required placeholder="info@mein-hotel.it" autocomplete="email">
+        </label>
+        <label class="auth-label">Website
+          <input type="url" id="lsWebsite" placeholder="https://www.mein-hotel.it" inputmode="url">
+        </label>
+      </div>
+    </fieldset>
+
+    <div class="inquiry-error" id="lsError" role="alert" hidden></div>
+    <div class="ls-actions">
+      <button type="submit" class="cta-btn" id="lsSubmit">Haus eintragen</button>
+      <button type="button" class="cta-btn secondary" id="lsCancel" hidden>Bearbeitung abbrechen</button>
+    </div>
+    <p class="auth-note">Deine Angaben werden auf diesem Gerät gespeichert, damit du sie jederzeit ändern kannst. Zum Freischalten schickst du sie im letzten Schritt per E-Mail an uns – ein echtes Hotelier-Konto mit zentraler Datenbank kommt als Nächstes.</p>
+  </form>
+
+  <div class="my-listings" id="myListings" hidden>
+    <h3>Meine eingetragenen Häuser</h3>
+    <div id="myListingsList"></div>
+  </div>
+</div>
+
+<div class="story-block" style="margin-top:34px">
+<h2 style="font-family:'Fraunces',Georgia,serif;font-size:24px;margin-bottom:14px">Was wir uns von dir wünschen</h2>
 <ul class="req-list">
-<li><span class="req-icon">1</span><div><strong>High-Quality Bilder</strong><br>Professionelle, klare, helle Fotos von Zimmern, Außenansicht und Umgebung.</div></li>
-<li><span class="req-icon">2</span><div><strong>Vollständige Angaben</strong><br>Name, Adresse, Region, Kategorie, Beschreibung, Preise, Ausstattung.</div></li>
-<li><span class="req-icon">3</span><div><strong>Passendes Profil</strong><br>Boutique, Wellness, Berg, Design, Familie und vergleichbare Häuser in Südtirol.</div></li>
+<li><span class="req-icon">1</span><div><strong>Gute Fotos</strong><br>Hell, scharf, aufgeräumt – Zimmer, Außenansicht und Umgebung. Fotos sind der Grund, warum Gäste klicken.</div></li>
+<li><span class="req-icon">2</span><div><strong>Ehrliche Angaben</strong><br>Preise und Ausstattung so, wie Gäste sie wirklich vorfinden.</div></li>
+<li><span class="req-icon">3</span><div><strong>Ein Haus aus Südtirol</strong><br>Wir bleiben bewusst regional – Meran bis Pustertal, Boutique bis Berghotel.</div></li>
 </ul></div>
-<div style="text-align:center"><a href="mailto:info@staylo.it?subject=Hotel%20anmelden" class="cta-btn">Hotel anmelden · info@staylo.it</a></div>
 </div></div></div>
 <div class="page-view" id="page-about"><div class="page-hero"><div class="container"><a href="#" class="page-back" data-nav="home">← Zurück</a><h1>Über Staylo</h1><p>Warum wir diese Plattform gebaut haben.</p></div></div>
 <div class="page-body"><div class="container">
 <div class="story-block">
-<h2 style="font-family:'Playfair Display',serif;font-size:26px;margin-bottom:16px">Die Idee hinter Staylo</h2>
-<p>Staylo entstand, weil wir selbst nach einem besonderen Hotel in Südtirol suchten – und keine klare, auf die Region zugeschnittene Plattform fanden.</p>
-<p>Einer von uns studiert Bauwesen und bringt den Blick für Räume und Atmosphäre mit. Staylo soll Orte mit Charakter sichtbar machen – und Hoteliers eine faire, kostenlose Möglichkeit geben, Gäste zu erreichen. Start: Lana, Südtirol.</p>
+<h2 style="font-family:'Fraunces',Georgia,serif;font-size:26px;margin-bottom:16px">Die Idee hinter Staylo</h2>
+<p>Staylo ist kein Unternehmen. Es ist das Projekt eines Schülers aus Lana, der findet, dass Südtirol eine bessere Art verdient hat, ein Hotel zu finden.</p>
+<p>Wer heute ein Haus in Meran oder im Pustertal sucht, landet auf internationalen Portalen, die überall gleich aussehen – und die von jeder Buchung einen Anteil einbehalten. Südtirol ist aber kein beliebiges Reiseziel: eine Region mit drei Sprachen, mit Häusern, die oft seit Generationen in Familienhand sind. Das wollten wir sichtbar machen.</p>
+<p>Deshalb steht auf jeder Region hier ihr deutscher <em>und</em> ihr italienischer Name – in den ladinischen Tälern auch der ladinische. Nicht als Dekoration, sondern weil das Südtirol ist.</p>
+<h3 class="story-sub">Warum kostenlos?</h3>
+<p>Ganz ehrlich: weil ich noch nicht volljährig bin und deshalb gar nichts abrechnen darf. Daraus ist aber die bessere Idee geworden – Hoteliers tragen ihr Haus kostenlos ein und zahlen keine Provision. Wer möchte, dreht mit uns ein kurzes Video für unsere Social-Media-Kanäle. Das ist der ganze Deal.</p>
+<h3 class="story-sub">Wohin das gehen soll</h3>
+<p>Zuerst Südtirol, richtig gut. Später vielleicht Nordtirol, Österreich und die Schweiz. Aber erst, wenn die Häuser hier zufrieden sind.</p>
+<p class="story-note">Staylo ist im Aufbau. Anfragen laufen direkt an die Häuser, es wird hier nichts verbindlich gebucht.</p>
 </div>
 <div style="text-align:center;margin-top:36px">
 <a href="#hotels" class="cta-btn" data-nav="home">Hotels entdecken →</a>
@@ -3938,16 +4423,16 @@ footer{padding:64px 0 36px}
   "use strict";
   var HOTELS=[
   {
-    id:"haus-weinberg",name:"Haus am Weinberg",website:"",type:"Boutique",loc:"Meran · Burggrafenamt",price:145,rating:4.8,stars:4,reviews:186,pets:true,location:"Meran",lat:46.668,lng:11.164,region:"Burggrafenamt",img:"https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85",desc:"Ruhiges Boutique-Hotel zwischen Weinbergen und Meran.",long:"Das Haus am Weinberg liegt leicht oberhalb von Meran und bietet einen ruhigen Rückzugsort mit Blick auf die Weinlagen. Zimmer bewusst reduziert und warm gestaltet.",amenities:["Frühstück","Garten","WLAN","Parkplatz"],rooms:[{
+    id:"haus-weinberg",name:"Haus am Weinberg",website:"",type:"Boutique",loc:"Meran · Burggrafenamt",price:145,rating:4.8,stars:4,reviews:186,pets:true,location:"Meran",lat:46.668,lng:11.164,region:"Burggrafenamt",img:"https://images.unsplash.com/photo-1518602164578-cd0074062767?auto=format&fit=crop&w=1200&q=85",desc:"Ruhiges Boutique-Hotel zwischen Weinbergen und Meran.",long:"Das Haus am Weinberg liegt leicht oberhalb von Meran und bietet einen ruhigen Rückzugsort mit Blick auf die Weinlagen. Zimmer bewusst reduziert und warm gestaltet.",amenities:["Frühstück","Garten","WLAN","Parkplatz"],rooms:[{
       name:"Classic Room",desc:"20 m² · Bergblick",price:145,img:"https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=400&q=80"
     },
     {
-      name:"Superior Suite",desc:"35 m² · Balkon",price:195,img:"https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=400&q=80"
+      name:"Superior Suite",desc:"35 m² · Balkon",price:195,img:"https://images.unsplash.com/photo-1595576508898-0ad5c879a061?auto=format&fit=crop&w=400&q=80"
     }
     ]
   },
   {
-    id:"alpenblick",name:"Alpenblick Lodge",website:"",type:"Berghotel",loc:"Gröden · Dolomiten",price:168,rating:4.9,stars:4,reviews:242,pets:false,location:"Gröden",lat:46.555,lng:11.715,region:"Dolomiten",img:"https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=1200&q=85",desc:"Modernes Design mit Dolomitenblick und alpiner Ruhe.",long:"Die Alpenblick Lodge verbindet klare Architektur mit dem Panorama der Dolomiten. Skiraum, Sauna und regionales Restaurant.",amenities:["Sauna","Skiraum","Restaurant","WLAN"],rooms:[{
+    id:"alpenblick",name:"Alpenblick Lodge",website:"",type:"Berghotel",loc:"Gröden · Dolomiten",price:168,rating:4.9,stars:4,reviews:242,pets:false,location:"Gröden",lat:46.555,lng:11.715,region:"Dolomiten",img:"https://images.unsplash.com/photo-1601918774946-25832a4be0d6?auto=format&fit=crop&w=1200&q=85",desc:"Modernes Design mit Dolomitenblick und alpiner Ruhe.",long:"Die Alpenblick Lodge verbindet klare Architektur mit dem Panorama der Dolomiten. Skiraum, Sauna und regionales Restaurant.",amenities:["Sauna","Skiraum","Restaurant","WLAN"],rooms:[{
       name:"Alpine Room",desc:"22 m² · Dolomitenblick",price:168,img:"https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=400&q=80"
     },
     {
@@ -3974,8 +4459,8 @@ footer{padding:64px 0 36px}
     ]
   },
   {
-    id:"alpine-grand",name:"Alpine Grand Hotel",website:"",type:"Luxus",loc:"Seiser Alm",price:245,rating:4.9,stars:5,reviews:289,pets:false,location:"Seiser Alm",lat:46.54,lng:11.64,region:"Dolomiten",img:"https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=1200&q=85",desc:"Exklusiver Rückzugsort mit Blick auf die Dolomiten.",long:"Auf der Seiser Alm: großzügige Suiten, Fine Dining und Spa mit Alm-Blick.",amenities:["Fine Dining","Spa","Pool","Concierge"],rooms:[{
-      name:"Grand Room",desc:"30 m² · Alm-Blick",price:245,img:"https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=400&q=80"
+    id:"alpine-grand",name:"Alpine Grand Hotel",website:"",type:"Luxus",loc:"Seiser Alm",price:245,rating:4.9,stars:5,reviews:289,pets:false,location:"Seiser Alm",lat:46.54,lng:11.64,region:"Dolomiten",img:"https://images.unsplash.com/photo-1445019980597-93fa8acb246c?auto=format&fit=crop&w=1200&q=85",desc:"Exklusiver Rückzugsort mit Blick auf die Dolomiten.",long:"Auf der Seiser Alm: großzügige Suiten, Fine Dining und Spa mit Alm-Blick.",amenities:["Fine Dining","Spa","Pool","Concierge"],rooms:[{
+      name:"Grand Room",desc:"30 m² · Alm-Blick",price:245,img:"https://images.unsplash.com/photo-1595576508898-0ad5c879a061?auto=format&fit=crop&w=400&q=80"
     },
     {
       name:"Dolomiten Suite",desc:"55 m² · Whirlpool",price:380,img:"https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=400&q=80"
@@ -3983,7 +4468,7 @@ footer{padding:64px 0 36px}
     ]
   },
   {
-    id:"urban-bozen",name:"Urban Stay Bozen",website:"",type:"Familie",loc:"Bozen",price:119,rating:4.6,stars:4,reviews:201,pets:false,location:"Bozen",lat:46.498,lng:11.354,region:"Bozen",img:"https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1200&q=85",desc:"Modernes Hotel für Familien und Städtereisen.",long:"Zentral in Bozen, familienfreundlich. Größere Zimmer und guter Startpunkt für Ausflüge.",amenities:["Familienzimmer","Zentrale Lage","WLAN","Frühstück"],rooms:[{
+    id:"urban-bozen",name:"Urban Stay Bozen",website:"",type:"Familie",loc:"Bozen",price:119,rating:4.6,stars:4,reviews:201,pets:false,location:"Bozen",lat:46.498,lng:11.354,region:"Bozen",img:"https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=85",desc:"Modernes Hotel für Familien und Städtereisen.",long:"Zentral in Bozen, familienfreundlich. Größere Zimmer und guter Startpunkt für Ausflüge.",amenities:["Familienzimmer","Zentrale Lage","WLAN","Frühstück"],rooms:[{
       name:"Family Room",desc:"28 m² · extra Bett möglich",price:119,img:"https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=400&q=80"
     },
     {
@@ -4011,7 +4496,7 @@ footer{padding:64px 0 36px}
   },
   {
     id:"casa-montagna",name:"Casa di Montagna",website:"",type:"Luxus",loc:"Vinschgau",price:285,rating:4.9,stars:4,reviews:121,pets:true,location:"Vinschgau",lat:46.63,lng:10.77,region:"Vinschgau",img:"https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=85",desc:"Panoramische Ruhe mit exklusivem Spa.",long:"Exklusives Haus im Vinschgau mit Spa, Gourmet-Küche und weitem Talblick.",amenities:["Spa","Fine Dining","Pool","Concierge"],rooms:[{
-      name:"Panorama Room",desc:"32 m² · Talblick",price:285,img:"https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=400&q=80"
+      name:"Panorama Room",desc:"32 m² · Talblick",price:285,img:"https://images.unsplash.com/photo-1595576508898-0ad5c879a061?auto=format&fit=crop&w=400&q=80"
     },
     {
       name:"Signature Suite",desc:"60 m² · Whirlpool",price:420,img:"https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=400&q=80"
@@ -4041,7 +4526,7 @@ footer{padding:64px 0 36px}
       name:"Alpen Room",desc:"22 m² · Bergblick",price:198,img:"https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=400&q=80"
     },
     {
-      name:"Rose Suite",desc:"38 m² · Balkon",price:265,img:"https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=400&q=80"
+      name:"Rose Suite",desc:"38 m² · Balkon",price:265,img:"https://images.unsplash.com/photo-1595576508898-0ad5c879a061?auto=format&fit=crop&w=400&q=80"
     }
     ]
   }
@@ -4177,16 +4662,22 @@ footer{padding:64px 0 36px}
     }
   }
   window.addEventListener("hashchange",routeFromHash);
+  /* Südtirol ist dreisprachig: Deutsch, Italienisch und – in den ladinischen
+     Tälern – Ladinisch. Jede Region trägt hier ihre echten Namen. */
   var REGION_INFO=[
-    {name:"Meran",desc:"Kurort mit Therme, Weinbergen und mediterranem Flair.",tag:"Therme · Wein"},
-    {name:"Bozen",desc:"Landeshauptstadt: Kultur, Gastronomie und idealer Ausgangspunkt.",tag:"Stadt · Kultur"},
-    {name:"Dolomiten",desc:"UNESCO-Weltnaturerbe mit markanten Gipfeln und Wanderwegen.",tag:"UNESCO"},
-    {name:"Gröden",desc:"Ski, ladinische Kultur und traditionsreiche Bergdörfer.",tag:"Ski"},
-    {name:"Seiser Alm",desc:"Europas größte Hochalm mit weitem Panorama.",tag:"Alm"},
-    {name:"Pustertal",desc:"Kronplatz, familienfreundlich, viel Platz zum Wandern.",tag:"Kronplatz"},
-    {name:"Eisacktal",desc:"Brixen, Klöster und bekannte Weißweine.",tag:"Brixen"},
-    {name:"Vinschgau",desc:"Obstgärten, Burgen und der Reschensee.",tag:"Obst · Burgen"}
+    {name:"Meran",img:"https://images.unsplash.com/photo-1502472584811-0a2f2feb8968?auto=format&fit=crop&w=800&q=80",it:"Merano",alt:325,desc:"Kurort mit Therme, Weinbergen und mediterranem Flair.",tag:"Therme · Wein"},
+    {name:"Bozen",img:"https://images.unsplash.com/photo-1595867818082-083862f3d630?auto=format&fit=crop&w=800&q=80",it:"Bolzano",alt:262,desc:"Landeshauptstadt: Kultur, Gastronomie und idealer Ausgangspunkt.",tag:"Stadt · Kultur"},
+    {name:"Dolomiten",img:"https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=800&q=80",it:"Dolomiti",alt:2000,desc:"UNESCO-Weltnaturerbe mit markanten Gipfeln und Wanderwegen.",tag:"UNESCO"},
+    {name:"Gröden",img:"https://images.unsplash.com/photo-1454496522488-7a8e488e8606?auto=format&fit=crop&w=800&q=80",it:"Val Gardena",lad:"Gherdëina",alt:1236,desc:"Ski, ladinische Kultur und traditionsreiche Bergdörfer.",tag:"Ski"},
+    {name:"Seiser Alm",img:"https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=800&q=80",it:"Alpe di Siusi",lad:"Mont Sëuc",alt:1800,desc:"Europas größte Hochalm mit weitem Panorama.",tag:"Alm"},
+    {name:"Pustertal",img:"https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80",it:"Val Pusteria",alt:1200,desc:"Kronplatz, familienfreundlich, viel Platz zum Wandern.",tag:"Kronplatz"},
+    {name:"Eisacktal",img:"https://images.unsplash.com/photo-1444927714506-8492d94b4e3d?auto=format&fit=crop&w=800&q=80",it:"Valle Isarco",alt:560,desc:"Brixen, Klöster und bekannte Weißweine.",tag:"Brixen"},
+    {name:"Vinschgau",img:"https://images.unsplash.com/photo-1465056836041-7f43ac27dcb5?auto=format&fit=crop&w=800&q=80",it:"Val Venosta",alt:900,desc:"Obstgärten, Burgen und der Reschensee.",tag:"Obst · Burgen"}
   ];
+  function regionByName(n){
+    for(var i=0;i<REGION_INFO.length;i++){ if(REGION_INFO[i].name===n) return REGION_INFO[i]; }
+    return null;
+  }
   function countRegion(name){
     var prev=activeFilters.dest;
     activeFilters.dest=findExactDest(name)||{name:name,province:"Südtirol"};
@@ -4207,12 +4698,21 @@ footer{padding:64px 0 36px}
     var el=document.getElementById("categoryGrid");
     if(!el)return;
     el.innerHTML=CATEGORIES.map(function(c){
-      var n=countCategory(c.key);
-      return '<button type="button" class="page-card is-clickable" data-category="'+c.key+'">'+
-        '<span class="tag">'+c.label+'</span>'+
+      /* Each category is illustrated by a real hotel from that category,
+         so the page stays truthful as new houses are added. */
+      var inCat=HOTELS.filter(c.match),n=inCat.length;
+      var cover=inCat.length?inCat[0].img:"";
+      var from=inCat.length?Math.min.apply(null,inCat.map(function(h){return h.price;})):0;
+      return '<button type="button" class="page-card is-clickable has-photo" data-category="'+c.key+'">'+
+        (cover?'<span class="page-card-photo"><img src="'+cover+'" alt="" loading="lazy" width="800" height="533"></span>':'')+
+        '<span class="page-card-body">'+
         '<h3>'+c.label+'</h3>'+
         '<p>'+c.desc+'</p>'+
-        '<span class="page-card-count">'+n+' Hotel'+(n===1?'':'s')+' ansehen →</span>'+
+        '<span class="page-card-meta">'+
+          (from?'<span class="alt-m no-mark">ab €&#8239;'+from+' / Nacht</span>':'')+
+          '<span class="page-card-count">'+n+' Hotel'+(n===1?'':'s')+' ansehen →</span>'+
+        '</span>'+
+        '</span>'+
       '</button>';
     }).join("");
   }
@@ -4221,11 +4721,17 @@ footer{padding:64px 0 36px}
     if(!el)return;
     el.innerHTML=REGION_INFO.map(function(r,i){
       var n=countRegion(r.name);
-      return '<button type="button" class="page-card is-clickable" data-region="'+r.name+'">'+
+      return '<button type="button" class="page-card is-clickable has-photo" data-region="'+r.name+'">'+
+        '<span class="page-card-photo"><img src="'+r.img+'" alt="Landschaft in '+r.name+'" loading="lazy" width="800" height="500"></span>'+
+        '<span class="page-card-body">'+
         '<span class="tag">'+r.tag+'</span>'+
         '<h3>'+r.name+'</h3>'+
+        '<span class="name-alt"><span lang="it">'+r.it+'</span>'+
+          (r.lad?'<span class="name-lad" lang="lld">'+r.lad+'</span>':'')+'</span>'+
         '<p>'+r.desc+'</p>'+
-        '<span class="page-card-count">'+n+' Hotel'+(n===1?'':'s')+' ansehen →</span>'+
+        '<span class="page-card-meta"><span class="alt-m">'+r.alt.toLocaleString("de-DE")+'&#8239;m</span>'+
+          '<span class="page-card-count">'+n+' Hotel'+(n===1?'':'s')+' ansehen →</span></span>'+
+        '</span>'+
       '</button>';
     }).join("");
   }
@@ -4405,6 +4911,7 @@ footer{padding:64px 0 36px}
     }
     if(empty) empty.hidden = filtered.length > 0;
     if(grid) grid.style.display = filtered.length ? "" : "none";
+    renderMapMarkers();   /* keep the map showing the same set as the list */
     var lb = document.getElementById("loadMoreButton");
     if(!filtered.length){
       if(grid) grid.innerHTML = "";
@@ -4435,7 +4942,9 @@ footer{padding:64px 0 36px}
           ((h.amenities&&h.amenities.length)?'<div class="hotel-amenities">'+(h.amenities.slice(0,4).map(function(a){return '<span class="hotel-amenity-pill">'+a+'</span>';}).join(""))+'</div>':'')+
           '<div class="hotel-bottom">'+
             '<div><div class="hotel-price">ab € '+h.price+' <span>/ Nacht</span></div>'+totalLine+'</div>'+
-            '<div class="hotel-rating" aria-label="Bewertung '+h.rating.toFixed(1)+' von 5'+reviews+'">★ '+h.rating.toFixed(1)+'<span class="hotel-reviews">'+reviews+'</span></div>'+
+            (h.rating>0
+              ? '<div class="hotel-rating" aria-label="Bewertung '+h.rating.toFixed(1)+' von 5'+reviews+'">★ '+h.rating.toFixed(1)+'<span class="hotel-reviews">'+reviews+'</span></div>'
+              : '<div class="hotel-rating is-new">Neu bei Staylo</div>')+
           '</div>'+
           '<div class="hotel-actions">'+
             '<button type="button" class="hotel-cta-mini" data-open-hotel="'+h.id+'" aria-label="'+h.name+' ansehen">Details ansehen</button>'+
@@ -4564,7 +5073,7 @@ footer{padding:64px 0 36px}
               '<div class="hd-title-meta">'+
                 '<span class="hd-type">'+h.type+'</span>'+
                 '<span>'+h.loc+'</span>'+
-                '<span class="hd-rating-pill">★ '+h.rating.toFixed(1)+'</span>'+
+                (h.rating>0?'<span class="hd-rating-pill">★ '+h.rating.toFixed(1)+'</span>':'<span class="hd-rating-pill is-new">Neu</span>')+
               '</div>'+
             '</div>'+
           '</div>'+
@@ -4577,13 +5086,13 @@ footer{padding:64px 0 36px}
             '</div>'+
             '<aside class="hd-side">'+
               '<div class="hd-price">ab € '+h.price+' <span>/ Nacht</span></div>'+
-              '<div class="hd-rating">★ '+h.rating.toFixed(1)+' · Sehr gut</div>'+
+              (h.rating>0?'<div class="hd-rating">★ '+h.rating.toFixed(1)+' · Sehr gut</div>':'<div class="hd-rating is-new">Noch keine Bewertungen</div>')+
               '<p class="hd-note">Preis pro Nacht, zzgl. lokaler Abgaben. Endpreis nach Datumsauswahl.</p>'+
               '<div class="hd-divider"></div>'+
               '<div class="hd-quick">'+
                 '<div><span>Lage</span><strong>'+h.loc.split("·")[0].trim()+'</strong></div>'+
                 '<div><span>Kategorie</span><strong>'+h.type+'</strong></div>'+
-                '<div><span>Bewertung</span><strong>'+h.rating.toFixed(1)+' / 5</strong></div>'+
+                '<div><span>Bewertung</span><strong>'+(h.rating>0?h.rating.toFixed(1)+' / 5':'—')+'</strong></div>'+
               '</div>'+
               '<button class="cta-btn" type="button" data-inquiry="'+h.id+'">Verfügbarkeit anfragen</button>'+
               '<button class="cta-btn secondary" type="button" data-fav-detail="'+h.id+'">'+(isFav ? "♥ In Favoriten" : "♡ Zu Favoriten")+'</button>'+
@@ -4633,7 +5142,7 @@ footer{padding:64px 0 36px}
           touchZoom: true,
           zoomControl: true
         }).setView([lat, lng], 13);
-        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {subdomains:"abcd",
           attribution: "&copy; OpenStreetMap",
           maxZoom: 18
         }).addTo(hotelDetailMapInstance);
@@ -5507,7 +6016,61 @@ footer{padding:64px 0 36px}
     renderHotels();
   }
 
-  var mapInitialized=false;
+  /* ==========================================================
+     HOTELIER SELF-LISTING
+     A hotelier fills in the form on "Für Hoteliers" and their
+     house goes live in search, map and categories immediately.
+     Storage is this browser's localStorage — enough for one
+     hotelier to manage their own entry and edit it later. A
+     shared database is the next step; until then the final
+     submit hands the data to Staylo by e-mail.
+     ========================================================== */
+  var LISTING_KEY="staylo_listings";
+
+  /* Rough centre of each region, so a new house lands in the
+     right place on the map without asking for coordinates. */
+  var REGION_COORDS={
+    "Meran":[46.669,11.159],"Bozen":[46.498,11.354],"Dolomiten":[46.545,11.870],
+    "Gröden":[46.566,11.679],"Seiser Alm":[46.545,11.610],"Pustertal":[46.783,12.038],
+    "Eisacktal":[46.715,11.656],"Vinschgau":[46.617,10.855]
+  };
+  var PLACEHOLDER_IMG="https://images.unsplash.com/photo-1601918774946-25832a4be0d6?auto=format&fit=crop&w=1200&q=85";
+
+  function loadListings(){
+    try{
+      var raw=JSON.parse(localStorage.getItem(LISTING_KEY)||"[]");
+      return Array.isArray(raw)?raw:[];
+    }catch(e){ return []; }
+  }
+  function saveListings(list){
+    try{ localStorage.setItem(LISTING_KEY,JSON.stringify(list)); return true; }
+    catch(e){ return false; }
+  }
+
+  /* Turn a stored submission into the same shape as the built-in
+     hotels, so every existing feature works on it unchanged. */
+  function listingToHotel(l){
+    var c=REGION_COORDS[l.region]||[46.62,11.42];
+    return {
+      id:l.id,name:l.name,website:l.website||"",type:l.type,
+      loc:l.region,price:Number(l.price)||0,rating:0,stars:Number(l.stars)||0,
+      reviews:0,pets:!!l.pets,location:l.region,
+      lat:c[0]+(l.jitter||0),lng:c[1]+(l.jitter2||0),
+      region:(regionByName(l.region)||{}).it||"",img:l.img||PLACEHOLDER_IMG,
+      desc:l.desc,long:l.long||l.desc,
+      amenities:l.amenities||[],rooms:[],gallery:[],tags:[],
+      isOwn:true,email:l.email||""
+    };
+  }
+
+  /* Replace any previously injected listings, then re-add. Keeps
+     HOTELS as the single source every renderer already reads. */
+  function syncListingsIntoHotels(){
+    for(var i=HOTELS.length-1;i>=0;i--){ if(HOTELS[i].isOwn) HOTELS.splice(i,1); }
+    loadListings().forEach(function(l){ HOTELS.push(listingToHotel(l)); });
+  }
+
+  var mapInitialized=false,stayloMapInstance=null,mapMarkerLayer=null,mapMarkers={};
   function initMap(){
     if(mapInitialized)return;
     var el=document.getElementById("stayloMap");
@@ -5520,37 +6083,251 @@ footer{padding:64px 0 36px}
       return;
     }
     mapInitialized=true;
-    var map=L.map("stayloMap",{
-      scrollWheelZoom: true,
-      dragging: true,
-      doubleClickZoom: true,
-      boxZoom: true,
-      keyboard: true,
-      touchZoom: true,
-      zoomControl: true
-    }
-    ).setView([46.65,11.35],9);
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{
-      attribution:"&copy; OpenStreetMap",maxZoom:18
-    }
-    ).addTo(map);
-    // Alle Hotels auf der Karte
-    HOTELS.forEach(function(h){
-      if(typeof h.lat !== "number" || typeof h.lng !== "number") return;
-      var marker = L.marker([h.lat, h.lng]).addTo(map);
-      marker.bindPopup(
-        "<strong>"+h.name+"</strong><br>"+
-        (h.location||"")+(h.region?", "+h.region:"")+"<br>"+
-        "ab € "+h.price+" / Nacht<br>"+
-        '<a href="#hotel-'+h.id+'" style="color:#214b3d;font-weight:700">Details ansehen →</a>'
-      );
-    });
-    setTimeout(function(){
-      map.invalidateSize();
-    },
-    250);
+    stayloMapInstance=L.map("stayloMap",{
+      scrollWheelZoom:false,   /* page scroll must not be hijacked; ctrl+wheel zooms */
+      dragging:true,
+      doubleClickZoom:true,
+      boxZoom:true,
+      keyboard:true,
+      touchZoom:true,
+      zoomControl:true
+    }).setView([46.62,11.42],9);
+    var map=stayloMapInstance;
+
+    /* Muted cartography so the hotel pins are the only saturated thing
+       on the map. CARTO Positron, same free/no-key terms as plain OSM. */
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",{
+      attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      subdomains:"abcd",maxZoom:19
+    }).addTo(map);
+
+    mapMarkerLayer=L.layerGroup().addTo(map);
+    renderMapMarkers();
+
+    setTimeout(function(){ map.invalidateSize(); },250);
   }
+
+  /* Price-bubble pins, redrawn whenever the filters change, so the map
+     always shows exactly the hotels in the list above it. */
+  function renderMapMarkers(){
+    if(!stayloMapInstance||!mapMarkerLayer)return;
+    var list=getFilteredHotels();
+    mapMarkerLayer.clearLayers();
+    mapMarkers={};
+    var pts=[];
+    list.forEach(function(h){
+      if(typeof h.lat!=="number"||typeof h.lng!=="number")return;
+      var icon=L.divIcon({
+        className:"staylo-pin-wrap",
+        html:'<span class="staylo-pin" tabindex="0" role="button" aria-label="'+
+             escapeAttr(h.name)+', ab '+h.price+' Euro pro Nacht">€&#8239;'+h.price+'</span>',
+        iconSize:null
+      });
+      var m=L.marker([h.lat,h.lng],{icon:icon,keyboard:true,title:h.name}).addTo(mapMarkerLayer);
+      m.bindPopup(
+        '<span class="map-pop">'+
+        '<strong>'+escapeHtml(h.name)+'</strong>'+
+        '<span class="map-pop-loc">'+escapeHtml(h.loc||h.location||"")+'</span>'+
+        '<span class="map-pop-meta">★ '+String(h.rating).replace(".",",")+
+          ' · ab €&#8239;'+h.price+' / Nacht</span>'+
+        '<button type="button" class="map-pop-btn" data-map-hotel="'+escapeAttr(h.id)+'">Details ansehen →</button>'+
+        '</span>'
+      );
+      mapMarkers[h.id]=m;
+      pts.push([h.lat,h.lng]);
+    });
+    var empty=document.getElementById("mapEmpty");
+    if(empty)empty.hidden=pts.length>0;
+    if(pts.length)stayloMapInstance.fitBounds(pts,{padding:[46,46],maxZoom:11});
+  }
+
+  /* Popups are rebuilt as HTML strings, so anything user-entered
+     (a hotelier's own hotel name) has to be escaped on the way in. */
+  function escapeHtml(v){
+    return String(v==null?"":v).replace(/[&<>"']/g,function(ch){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch];
+    });
+  }
+  function escapeAttr(v){ return escapeHtml(v); }
+
+  document.addEventListener("click",function(e){
+    var b=e.target.closest&&e.target.closest("[data-map-hotel]");
+    if(b)openHotel(b.getAttribute("data-map-hotel"));
+  });
+
   window.addEventListener("load",initMap);
+
+  /* ---- Listing form wiring -------------------------------- */
+  (function initListingForm(){
+    var form=document.getElementById("listingForm");
+    if(!form)return;
+    var $=function(id){ return document.getElementById(id); };
+    var regionSel=$("lsRegion"),err=$("lsError"),editId=$("lsEditId"),
+        cancelBtn=$("lsCancel"),title=$("listingFormTitle"),
+        imgInput=$("lsImg"),prev=$("lsPreview"),prevImg=$("lsPreviewImg"),prevNote=$("lsPreviewNote");
+
+    REGION_INFO.forEach(function(r){
+      var o=document.createElement("option");
+      o.value=r.name; o.textContent=r.name+" / "+r.it;
+      regionSel.appendChild(o);
+    });
+
+    /* Live photo check — a broken image URL is the most common
+       mistake, so say so before the form is submitted. */
+    var previewTimer;
+    imgInput.addEventListener("input",function(){
+      clearTimeout(previewTimer);
+      var url=imgInput.value.trim();
+      if(!url){ prev.hidden=true; return; }
+      previewTimer=setTimeout(function(){
+        prev.hidden=false;
+        prevNote.textContent="Bild wird geladen …";
+        prev.classList.remove("is-bad");
+        prevImg.onload=function(){ prevNote.textContent="Bild gefunden."; prev.classList.remove("is-bad"); };
+        prevImg.onerror=function(){
+          prevNote.textContent="Unter dieser Adresse liegt kein Bild. Prüfe den Link.";
+          prev.classList.add("is-bad");
+        };
+        prevImg.src=url;
+      },500);
+    });
+
+    function showError(msg,focusEl){
+      err.textContent=msg; err.hidden=false;
+      if(focusEl)focusEl.focus();
+      err.scrollIntoView({block:"center",behavior:"smooth"});
+    }
+
+    function readForm(){
+      var amen=[].slice.call(document.querySelectorAll("#lsAmenities input:checked"))
+                 .map(function(c){ return c.value; });
+      return {
+        id:editId.value||("own-"+Date.now().toString(36)),
+        name:$("lsName").value.trim(), type:$("lsType").value,
+        region:regionSel.value, stars:$("lsStars").value,
+        price:$("lsPrice").value, desc:$("lsDesc").value.trim(),
+        long:$("lsLong").value.trim(), img:imgInput.value.trim(),
+        amenities:amen, pets:$("lsPets").checked,
+        email:$("lsEmail").value.trim(), website:$("lsWebsite").value.trim(),
+        jitter:(Math.random()-0.5)*0.05, jitter2:(Math.random()-0.5)*0.07,
+        created:Date.now()
+      };
+    }
+
+    function resetForm(){
+      form.reset(); editId.value=""; err.hidden=true; prev.hidden=true;
+      [].forEach.call(document.querySelectorAll("#lsAmenities .chip-check"),function(c){ c.classList.remove("is-on"); });
+      title.textContent="Haus eintragen";
+      $("lsSubmit").textContent="Haus eintragen";
+      cancelBtn.hidden=true;
+    }
+    cancelBtn.addEventListener("click",resetForm);
+
+    form.addEventListener("submit",function(e){
+      e.preventDefault();
+      err.hidden=true;
+      var d=readForm();
+      if(d.name.length<2)      return showError("Bitte gib den Namen deines Hauses an.",$("lsName"));
+      if(!d.type)              return showError("Bitte wähle eine Kategorie.",$("lsType"));
+      if(!d.region)            return showError("Bitte wähle die Region deines Hauses.",regionSel);
+      if(!d.price||Number(d.price)<30) return showError("Bitte gib einen Preis ab 30 € pro Nacht an.",$("lsPrice"));
+      if(d.desc.length<10)     return showError("Bitte beschreibe dein Haus in einem kurzen Satz.",$("lsDesc"));
+      if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.email)) return showError("Bitte gib eine gültige E-Mail-Adresse für Anfragen an.",$("lsEmail"));
+
+      var list=loadListings(),i=-1;
+      list.forEach(function(x,ix){ if(x.id===d.id)i=ix; });
+      if(i>=0)list[i]=d; else list.push(d);
+      if(!saveListings(list))return showError("Speichern nicht möglich – dein Browser blockiert lokalen Speicher (z. B. im privaten Modus).");
+
+      syncListingsIntoHotels();
+      renderHotels(); renderCategoryPage(); renderRegionPage(); renderMyListings();
+      showToast(i>=0?"Änderungen gespeichert.":"Dein Haus ist eingetragen.");
+      resetForm();
+      document.getElementById("myListings").scrollIntoView({behavior:"smooth",block:"start"});
+    });
+
+    function fillForm(l){
+      editId.value=l.id;
+      $("lsName").value=l.name; $("lsType").value=l.type; regionSel.value=l.region;
+      $("lsStars").value=l.stars; $("lsPrice").value=l.price; $("lsDesc").value=l.desc;
+      $("lsLong").value=l.long||""; imgInput.value=l.img||"";
+      $("lsEmail").value=l.email||""; $("lsWebsite").value=l.website||"";
+      $("lsPets").checked=!!l.pets;
+      [].forEach.call(document.querySelectorAll("#lsAmenities input"),function(c){
+        c.checked=(l.amenities||[]).indexOf(c.value)!==-1;
+        c.closest(".chip-check").classList.toggle("is-on",c.checked);
+      });
+      title.textContent="Haus bearbeiten";
+      $("lsSubmit").textContent="Änderungen speichern";
+      cancelBtn.hidden=false;
+      form.scrollIntoView({behavior:"smooth",block:"start"});
+      $("lsName").focus();
+    }
+
+    function renderMyListings(){
+      var wrap=document.getElementById("myListings"),
+          el=document.getElementById("myListingsList"),
+          countEl=document.getElementById("listingCount"),
+          list=loadListings();
+      wrap.hidden=!list.length;
+      countEl.hidden=!list.length;
+      countEl.textContent=list.length+(list.length===1?" Haus eingetragen":" Häuser eingetragen");
+      el.innerHTML=list.map(function(l){
+        return '<div class="my-listing">'+
+          '<img src="'+escapeAttr(l.img||PLACEHOLDER_IMG)+'" alt="" loading="lazy">'+
+          '<div class="my-listing-body">'+
+            '<strong>'+escapeHtml(l.name)+'</strong>'+
+            '<span class="my-listing-meta">'+escapeHtml(l.type)+' · '+escapeHtml(l.region)+
+              ' · ab €&#8239;'+escapeHtml(l.price)+' / Nacht</span>'+
+            '<span class="my-listing-status">Gespeichert – noch nicht an Staylo geschickt</span>'+
+          '</div>'+
+          '<div class="my-listing-actions">'+
+            '<button type="button" class="mini-btn" data-ls-edit="'+escapeAttr(l.id)+'">Bearbeiten</button>'+
+            '<button type="button" class="mini-btn" data-ls-send="'+escapeAttr(l.id)+'">An Staylo senden</button>'+
+            '<button type="button" class="mini-btn is-danger" data-ls-del="'+escapeAttr(l.id)+'">Löschen</button>'+
+          '</div></div>';
+      }).join("");
+    }
+
+    document.addEventListener("click",function(e){
+      var t=e.target;
+      if(!t.closest)return;
+      var ed=t.closest("[data-ls-edit]"),dl=t.closest("[data-ls-del]"),sd=t.closest("[data-ls-send]");
+      if(ed){
+        loadListings().forEach(function(l){ if(l.id===ed.getAttribute("data-ls-edit"))fillForm(l); });
+      }
+      if(dl){
+        var id=dl.getAttribute("data-ls-del");
+        var one=loadListings().filter(function(l){ return l.id===id; })[0];
+        if(!one)return;
+        if(!confirm('"'+one.name+'" wirklich löschen? Das lässt sich nicht rückgängig machen.'))return;
+        saveListings(loadListings().filter(function(l){ return l.id!==id; }));
+        syncListingsIntoHotels();
+        renderHotels(); renderCategoryPage(); renderRegionPage(); renderMyListings();
+        showToast("Eintrag gelöscht.");
+      }
+      if(sd){
+        var sid=sd.getAttribute("data-ls-send");
+        var l2=loadListings().filter(function(l){ return l.id===sid; })[0];
+        if(!l2)return;
+        var body="Neues Haus für Staylo\n\n"+
+          "Name: "+l2.name+"\nKategorie: "+l2.type+"\nRegion: "+l2.region+
+          "\nSterne: "+(l2.stars||"—")+"\nPreis ab: "+l2.price+" EUR/Nacht"+
+          "\nAusstattung: "+((l2.amenities||[]).join(", ")||"—")+
+          "\nHaustiere: "+(l2.pets?"ja":"nein")+
+          "\nE-Mail: "+l2.email+"\nWebsite: "+(l2.website||"—")+
+          "\nBild: "+(l2.img||"—")+
+          "\n\nKurzbeschreibung:\n"+l2.desc+
+          "\n\nBeschreibung:\n"+(l2.long||"—")+"\n";
+        window.location.href="mailto:info@staylo.it?subject="+
+          encodeURIComponent("Hotel anmelden: "+l2.name)+"&body="+encodeURIComponent(body);
+      }
+    });
+
+    syncListingsIntoHotels();
+    renderMyListings();
+    renderHotels(); renderCategoryPage(); renderRegionPage();
+  })();
   
   
   document.addEventListener("click", function(e){
