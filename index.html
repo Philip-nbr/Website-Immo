@@ -3944,6 +3944,268 @@ select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{
   .name-alt{font-size:.82rem}
 }
 
+/* ============================================================
+   MATERIAL & MOTION LAYER
+   Translucent surfaces as a floating functional layer, with a
+   weight hierarchy: heavier materials separate structure
+   (header, drawer), lighter ones carry interactive content
+   (menus, sheets). Never light glass stacked on light glass.
+   Motion is critically damped by default — bounce is reserved
+   for moments that carried real momentum.
+   ============================================================ */
+:root{
+  /* Material scale — thin → regular → thick */
+  --mat-thin:blur(14px) saturate(170%);
+  --mat-regular:blur(28px) saturate(180%);
+  --mat-thick:blur(40px) saturate(190%);
+
+  /* Light glass, for panels that float over page content */
+  --glass-light:rgba(252,253,251,.74);
+  --glass-light-solid:rgba(252,253,251,.94);
+  --glass-edge:rgba(255,255,255,.72);      /* top edge = light catching the material */
+  --glass-hairline:rgba(20,32,27,.08);
+
+  /* Dark glass, for structural chrome */
+  --glass-dark:rgba(21,44,36,.72);
+  --glass-dark-edge:rgba(255,255,255,.14);
+
+  /* Depth. Bigger surfaces read as thicker. */
+  --lift-chip:0 2px 10px rgba(15,35,26,.10);
+  --lift-panel:0 18px 44px -12px rgba(15,35,26,.26),0 2px 8px rgba(15,35,26,.06);
+  --lift-modal:0 44px 90px -20px rgba(10,26,20,.44),0 6px 18px rgba(10,26,20,.10);
+
+  /* Critically damped by default; the bounce curve overshoots once. */
+  --spring:cubic-bezier(.32,.72,0,1);
+  --spring-bounce:cubic-bezier(.16,1.24,.3,1);
+  --t-fast:180ms;
+  --t-base:320ms;
+  --t-exit:220ms;              /* exits run ~70% of enter */
+}
+
+/* ---- Structural chrome: header + drawer -------------------- */
+.header{
+  background:var(--glass-dark);
+  -webkit-backdrop-filter:var(--mat-thick);
+  backdrop-filter:var(--mat-thick);
+  border-bottom:1px solid transparent;
+  box-shadow:none;
+  transition:height var(--t-base) var(--spring),
+             background var(--t-base) var(--spring),
+             border-color var(--t-base) var(--spring)
+}
+/* Over the hero the chrome is dark glass; once content scrolls
+   under it, it turns to light glass so the page reads through.
+   The boundary is a soft scroll edge, never a hard 1px rule. */
+.header.is-scrolled{
+  background:rgba(247,248,245,.72);
+  -webkit-backdrop-filter:var(--mat-thick);
+  backdrop-filter:var(--mat-thick);
+  border-bottom-color:var(--glass-hairline);
+  box-shadow:inset 0 1px 0 var(--glass-edge)
+}
+.header::after{
+  content:"";
+  position:absolute;
+  left:0;right:0;top:100%;
+  height:24px;
+  pointer-events:none;
+  opacity:0;
+  background:linear-gradient(180deg,rgba(20,32,27,.07),transparent);
+  transition:opacity var(--t-base) var(--spring)
+}
+.header.is-scrolled::after{opacity:1}
+.header.is-scrolled .nav-glass{
+  -webkit-backdrop-filter:var(--mat-thin);
+  backdrop-filter:var(--mat-thin);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.5)
+}
+
+.mobile-drawer{
+  background:var(--glass-dark);
+  -webkit-backdrop-filter:var(--mat-thick);
+  backdrop-filter:var(--mat-thick);
+  border-left:1px solid var(--glass-dark-edge)
+}
+.mobile-scrim{
+  -webkit-backdrop-filter:blur(3px);
+  backdrop-filter:blur(3px)
+}
+
+/* Vibrancy: text over glass needs weight and a touch of
+   tracking, never flat mid-grey. */
+.nav-item,.mobile-drawer a{letter-spacing:.005em}
+
+/* ---- Interactive glass: pills, menus, panels --------------- */
+.nav-glass{
+  background:rgba(255,255,255,.14);
+  -webkit-backdrop-filter:var(--mat-thin);
+  backdrop-filter:var(--mat-thin);
+  border:1px solid rgba(255,255,255,.20);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22)
+}
+.nav-glass:hover{
+  background:rgba(255,255,255,.24);
+  border-color:rgba(255,255,255,.32)
+}
+
+.dropdown,.favorites-panel,.lang-menu,.dest-dropdown,.search-panel{
+  background:var(--glass-light);
+  -webkit-backdrop-filter:var(--mat-regular);
+  backdrop-filter:var(--mat-regular);
+  border:1px solid var(--glass-hairline);
+  box-shadow:var(--lift-panel),inset 0 1px 0 var(--glass-edge)
+}
+
+/* Menus materialise from their trigger rather than fading in
+   from nowhere: blur and scale arrive together. */
+.dropdown,.lang-menu,.favorites-panel,.search-panel,.dest-dropdown{
+  transform-origin:top center;
+  transition:opacity var(--t-fast) var(--spring),
+             transform var(--t-base) var(--spring),
+             visibility var(--t-base) var(--spring)
+}
+.nav-item.has-menu .dropdown{transform:translateX(-50%) scale(.97) translateY(-6px)}
+.nav-item.has-menu:hover .dropdown,
+.nav-item.has-menu:focus-within .dropdown{transform:translateX(-50%) scale(1) translateY(0)}
+.lang-menu,.favorites-panel{transform:scale(.97) translateY(-6px);transform-origin:top right}
+.lang-menu.open,.favorites-panel.open{transform:scale(1) translateY(0)}
+
+/* ---- The search box is the page's primary surface ---------- */
+.search-box{
+  background:var(--glass-light-solid);
+  -webkit-backdrop-filter:var(--mat-regular);
+  backdrop-filter:var(--mat-regular);
+  border:1px solid var(--glass-hairline);
+  box-shadow:var(--lift-panel),inset 0 1px 0 var(--glass-edge)
+}
+.dest-pill{
+  -webkit-backdrop-filter:var(--mat-thin);
+  backdrop-filter:var(--mat-thin)
+}
+
+/* ---- Cards ------------------------------------------------- */
+.hotel-card{
+  background:var(--glass-light-solid);
+  border:1px solid var(--glass-hairline);
+  box-shadow:var(--lift-chip);
+  transition:transform var(--t-base) var(--spring),
+             box-shadow var(--t-base) var(--spring),
+             border-color var(--t-base) var(--spring)
+}
+.hotel-card:hover{
+  transform:translateY(-3px);
+  box-shadow:var(--lift-panel);
+  border-color:rgba(20,32,27,.14)
+}
+/* Badges sit on photos, so they get their own thin material */
+.hotel-badge,.tag{
+  -webkit-backdrop-filter:var(--mat-thin);
+  backdrop-filter:var(--mat-thin)
+}
+
+/* ---- Modals: dim to focus, push the background back -------- */
+.auth-overlay{
+  background:rgba(9,20,16,.42);
+  -webkit-backdrop-filter:blur(18px) saturate(120%);
+  backdrop-filter:blur(18px) saturate(120%);
+  animation:scrimIn var(--t-base) var(--spring)
+}
+@keyframes scrimIn{from{opacity:0}to{opacity:1}}
+.auth-modal{
+  background:var(--glass-light-solid);
+  -webkit-backdrop-filter:var(--mat-thick);
+  backdrop-filter:var(--mat-thick);
+  border:1px solid var(--glass-hairline);
+  border-radius:26px;
+  box-shadow:var(--lift-modal),inset 0 1px 0 var(--glass-edge);
+  animation:sheetIn var(--t-base) var(--spring)
+}
+@keyframes sheetIn{
+  from{opacity:0;transform:scale(.94) translateY(12px)}
+  to{opacity:1;transform:scale(1) translateY(0)}
+}
+.auth-close{
+  background:rgba(20,32,27,.06);
+  -webkit-backdrop-filter:var(--mat-thin);
+  backdrop-filter:var(--mat-thin);
+  color:var(--green-dark)
+}
+.auth-close:hover{background:rgba(20,32,27,.12)}
+
+/* ---- Toast ------------------------------------------------- */
+.staylo-toast{
+  background:rgba(20,38,31,.82);
+  -webkit-backdrop-filter:var(--mat-thick);
+  backdrop-filter:var(--mat-thick);
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:var(--lift-panel),inset 0 1px 0 rgba(255,255,255,.14);
+  transition:opacity var(--t-fast) var(--spring),transform var(--t-base) var(--spring-bounce)
+}
+
+/* ---- Lightbox --------------------------------------------- */
+.lightbox{
+  -webkit-backdrop-filter:blur(24px) saturate(120%);
+  backdrop-filter:blur(24px) saturate(120%)
+}
+.lightbox-nav,.lightbox-close{
+  -webkit-backdrop-filter:var(--mat-thin);
+  backdrop-filter:var(--mat-thin)
+}
+
+/* ---- Press feedback: instant, on pointer-down -------------- */
+button,.hotel-card,.page-card,.dest-pill,.chip-check,.dropdown-link,.mini-btn{
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation           /* removes the legacy 300ms tap delay */
+}
+.is-pressed{
+  transform:scale(.975);
+  transition:transform 90ms ease-out
+}
+.hotel-card.is-pressed,.page-card.is-pressed{transform:scale(.99)}
+/* The old global :active rule fought the pressed state */
+button:active,.favorite:active,.cta-btn:active{transform:none}
+
+/* ---- Typography: tracking is size-specific ----------------- */
+.hero h1{letter-spacing:-.03em;line-height:1.04}
+.page-hero h1{letter-spacing:-.024em;line-height:1.08}
+.section-title,.listing-head h2{letter-spacing:-.018em;line-height:1.16}
+.story-sub,.my-listings h3{letter-spacing:-.012em}
+p,li,.hero-subtitle{letter-spacing:0}
+.hero-label,.ls-group legend,.alt-m,.name-lad{letter-spacing:.08em}  /* small text opens up */
+
+/* The hero dot was pulsing on an endless 2.4s loop. It marks
+   nothing live, so it was motion without meaning — now static. */
+.hero-dot{animation:none}
+
+/* ---- Accessibility: three independent signals -------------- */
+@media (prefers-reduced-transparency:reduce){
+  .header,.mobile-drawer{background:#152c24;backdrop-filter:none;-webkit-backdrop-filter:none}
+  .dropdown,.favorites-panel,.lang-menu,.dest-dropdown,.search-panel,
+  .search-box,.auth-modal,.hotel-card{
+    background:#fff;backdrop-filter:none;-webkit-backdrop-filter:none
+  }
+  .auth-overlay{background:rgba(9,20,16,.72);backdrop-filter:none;-webkit-backdrop-filter:none}
+  .staylo-toast{background:#152c24;backdrop-filter:none;-webkit-backdrop-filter:none}
+  .nav-glass{background:rgba(255,255,255,.22);backdrop-filter:none;-webkit-backdrop-filter:none}
+}
+@media (prefers-contrast:more){
+  :root{--grey:#3f4a44;--grey-light:#55605a;--border:#b9c4bb}
+  .dropdown,.auth-modal,.search-box,.hotel-card,.staylo-toast{border-width:2px}
+  .hotel-card{border-color:#8d9a90}
+}
+@media (prefers-reduced-motion:reduce){
+  /* Not "no feedback" — a gentler, non-vestibular equivalent. */
+  *,*::before,*::after{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.12s !important;
+    scroll-behavior:auto !important
+  }
+  .auth-modal{animation:none}
+  .hotel-card:hover,.is-pressed{transform:none}
+  .page-card-photo img{transform:none !important}
+}
+
 </style>
 </head>
 <body>
@@ -4274,14 +4536,14 @@ select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{
 <div class="page-body"><div class="container">
 <div class="story-block">
 <h2 style="font-family:'Fraunces',Georgia,serif;font-size:26px;margin-bottom:16px">Die Idee hinter Staylo</h2>
-<p>Staylo ist kein Unternehmen. Es ist das Projekt eines Schülers aus Lana, der findet, dass Südtirol eine bessere Art verdient hat, ein Hotel zu finden.</p>
-<p>Wer heute ein Haus in Meran oder im Pustertal sucht, landet auf internationalen Portalen, die überall gleich aussehen – und die von jeder Buchung einen Anteil einbehalten. Südtirol ist aber kein beliebiges Reiseziel: eine Region mit drei Sprachen, mit Häusern, die oft seit Generationen in Familienhand sind. Das wollten wir sichtbar machen.</p>
-<p>Deshalb steht auf jeder Region hier ihr deutscher <em>und</em> ihr italienischer Name – in den ladinischen Tälern auch der ladinische. Nicht als Dekoration, sondern weil das Südtirol ist.</p>
-<h3 class="story-sub">Warum kostenlos?</h3>
-<p>Ganz ehrlich: weil ich noch nicht volljährig bin und deshalb gar nichts abrechnen darf. Daraus ist aber die bessere Idee geworden – Hoteliers tragen ihr Haus kostenlos ein und zahlen keine Provision. Wer möchte, dreht mit uns ein kurzes Video für unsere Social-Media-Kanäle. Das ist der ganze Deal.</p>
+<p>Staylo ist eine unabhängige Plattform für Hotels in Südtirol – bewusst regional, bewusst übersichtlich.</p>
+<p>Wer heute ein Haus in Meran oder im Pustertal sucht, landet auf internationalen Portalen, die überall gleich aussehen – und die von jeder Buchung einen Anteil einbehalten. Südtirol ist aber kein beliebiges Reiseziel: eine Region mit drei Sprachen, mit Häusern, die oft seit Generationen in Familienhand sind. Das wollen wir sichtbar machen.</p>
+<p>Deshalb steht bei jeder Region hier ihr deutscher <em>und</em> ihr italienischer Name – in den ladinischen Tälern auch der ladinische. Nicht als Dekoration, sondern weil das Südtirol ist.</p>
+<h3 class="story-sub">Kostenlos und ohne Provision</h3>
+<p>Hoteliers tragen ihr Haus kostenlos ein und zahlen keine Provision pro Buchung. Anfragen gehen direkt an das Haus – wir stehen nicht dazwischen. Wer möchte, bekommt von uns zusätzlich ein kurzes Video für unsere Social-Media-Kanäle.</p>
 <h3 class="story-sub">Wohin das gehen soll</h3>
-<p>Zuerst Südtirol, richtig gut. Später vielleicht Nordtirol, Österreich und die Schweiz. Aber erst, wenn die Häuser hier zufrieden sind.</p>
-<p class="story-note">Staylo ist im Aufbau. Anfragen laufen direkt an die Häuser, es wird hier nichts verbindlich gebucht.</p>
+<p>Zuerst Südtirol, richtig gut. Später vielleicht Nordtirol, Österreich und die Schweiz – aber erst, wenn die Häuser hier zufrieden sind.</p>
+<p class="story-note">Staylo befindet sich im Aufbau. Anfragen laufen direkt an die Häuser; es wird hier nichts verbindlich gebucht.</p>
 </div>
 <div style="text-align:center;margin-top:36px">
 <a href="#hotels" class="cta-btn" data-nav="home">Hotels entdecken →</a>
@@ -6156,6 +6418,41 @@ select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{
   });
 
   window.addEventListener("load",initMap);
+
+  /* ==========================================================
+     PRESS FEEDBACK
+     The moment a press registers is the moment it should be
+     visible — waiting for click feels dead. Pointer capture
+     keeps the state correct when the finger slides off, and
+     dragging away cancels the press like a native control.
+     ========================================================== */
+  (function initPressFeedback(){
+    var SEL="button,.hotel-card,.page-card,.dest-pill,.chip-check,.dropdown-link,.mini-btn,.cta-btn",
+        active=null,startX=0,startY=0,SLOP=12;
+
+    function clear(){
+      if(active){ active.classList.remove("is-pressed"); active=null; }
+    }
+    document.addEventListener("pointerdown",function(e){
+      if(e.button!==undefined&&e.button!==0)return;
+      var el=e.target.closest&&e.target.closest(SEL);
+      if(!el||el.disabled)return;
+      active=el; startX=e.clientX; startY=e.clientY;
+      el.classList.add("is-pressed");
+    },{passive:true});
+
+    /* Slide more than a few pixels away and the press is off —
+       slide back and it does not resume, matching platform feel. */
+    document.addEventListener("pointermove",function(e){
+      if(!active)return;
+      if(Math.abs(e.clientX-startX)>SLOP||Math.abs(e.clientY-startY)>SLOP)clear();
+    },{passive:true});
+
+    ["pointerup","pointercancel","pointerleave","blur"].forEach(function(t){
+      document.addEventListener(t,clear,{passive:true});
+    });
+    window.addEventListener("scroll",clear,{passive:true});
+  })();
 
   /* ---- Listing form wiring -------------------------------- */
   (function initListingForm(){
