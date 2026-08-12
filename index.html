@@ -47,47 +47,49 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
 :root{
-  /* Loden — the deep green of South Tyrolean wool cloth */
-  --green:#1d4034;
-  --green-dark:#132c24;
-  --green-soft:#dde8e1;
-  --green-mid:#2c5e4c;
-  /* Enrosadira — the rose alpenglow on Dolomite limestone at dusk */
-  --glow:#c2616e;
-  --glow-dark:#a34c58;
-  --glow-soft:#f7e6e8;
-  /* Dolomite stone — cool pale ground, not warm cream */
-  --cream:#edf0ec;
-  --cream-warm:#f4f6f2;
-  --white:#fff;
-  --black:#14201b;
-  --grey:#5b665f;
-  --grey-light:#78837b;
-  --border:#dde3dd;
-  --border-soft:rgba(0,0,0,.06);
-  --max:1200px;
-  --max-wide:1440px;
+  /* Neutral South Tyrol — soft stone, muted loden, cool light */
+  --green:#2a4a3e;
+  --green-dark:#1a3229;
+  --green-soft:#e6eee9;
+  --green-mid:#3d6554;
+  --glow:#9a6b72;
+  --glow-dark:#7d555c;
+  --glow-soft:#f5eef0;
+  --cream:#f2f3f1;
+  --cream-warm:#f7f7f5;
+  --white:#ffffff;
+  --black:#1a1f1c;
+  --grey:#5e6661;
+  --grey-light:#8a928c;
+  --border:rgba(0,0,0,.07);
+  --border-soft:rgba(0,0,0,.045);
+  --max:1180px;
+  --max-wide:1400px;
   --ease:cubic-bezier(.22,1,.36,1);
   --ease-out:cubic-bezier(.16,1,.3,1);
-  --header-h:68px;
-  --header-h-scrolled:58px;
-  --radius:16px;
-  --radius-sm:12px;
-  --radius-lg:22px;
+  --header-h:64px;
+  --header-h-scrolled:56px;
+  --radius:18px;
+  --radius-sm:14px;
+  --radius-lg:24px;
   --radius-xl:28px;
-  --shadow-sm:0 4px 16px rgba(15,25,20,.05);
-  --shadow-md:0 12px 32px rgba(15,25,20,.08);
-  --shadow-lg:0 20px 48px rgba(15,25,20,.12);
-  --shadow-xl:0 28px 64px rgba(15,25,20,.16);
+  --shadow-sm:0 2px 12px rgba(20,30,25,.04);
+  --shadow-md:0 8px 28px rgba(20,30,25,.07);
+  --shadow-lg:0 16px 48px rgba(20,30,25,.1);
+  --shadow-xl:0 24px 64px rgba(20,30,25,.14);
   --space:20px;
   --space-xs:8px;
   --space-sm:12px;
   --space-md:20px;
   --space-lg:32px;
   --space-xl:48px;
-  --focus:0 0 0 3px rgba(33,75,61,.28);
+  --focus:0 0 0 3px rgba(42,74,62,.22);
   --touch-min:44px;
-  --transition:background .25s var(--ease),box-shadow .3s var(--ease),transform .25s var(--ease),border-color .25s var(--ease),color .2s var(--ease),opacity .25s var(--ease)
+  --glass:rgba(255,255,255,.55);
+  --glass-strong:rgba(255,255,255,.72);
+  --glass-border:rgba(255,255,255,.45);
+  --glass-dark:rgba(20,32,28,.55);
+  --transition:background .28s var(--ease),box-shadow .3s var(--ease),transform .25s var(--ease),border-color .25s var(--ease),color .2s var(--ease),opacity .25s var(--ease)
 }
 
 *{
@@ -150,16 +152,17 @@ img{
   z-index:100;
   color:#fff;
   height:var(--header-h);
-  background:rgba(23,42,35,.88);
-  backdrop-filter:blur(20px) saturate(160%);
-  -webkit-backdrop-filter:blur(20px) saturate(160%);
-  box-shadow:0 1px 0 rgba(255,255,255,.08),0 8px 28px rgba(0,0,0,.14);
-  transition:height .32s var(--ease),background .28s var(--ease),box-shadow .28s var(--ease),backdrop-filter .28s var(--ease);
+  background:rgba(18,32,28,.42);
+  backdrop-filter:blur(28px) saturate(180%);
+  -webkit-backdrop-filter:blur(28px) saturate(180%);
+  border-bottom:1px solid rgba(255,255,255,.12);
+  box-shadow:0 1px 0 rgba(255,255,255,.06),0 8px 32px rgba(0,0,0,.08);
+  transition:height .32s var(--ease),background .28s var(--ease),box-shadow .28s var(--ease),backdrop-filter .28s var(--ease),color .25s;
   will-change:height,background
 }
 
 .nav{
-  height:var(--header-h);
+  height:100%;
   display:flex;
   align-items:center;
   justify-content:space-between;
@@ -615,7 +618,7 @@ body.drawer-open{
   position:absolute;
   inset:0;
   z-index:1;
-  background:linear-gradient(180deg,rgba(10,24,20,.55) 0%,rgba(13,29,24,.32) 42%,rgba(10,22,18,.62) 100%)
+  background:linear-gradient(180deg,rgba(14,22,20,.48) 0%,rgba(16,26,22,.28) 45%,rgba(12,20,18,.58) 100%)
 }
 
 @keyframes heroFade{
@@ -1216,7 +1219,7 @@ body.drawer-open{
 
 .details-grid{
   display:grid;
-  grid-template-columns:repeat(4,1fr);
+  grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
   gap:12px
 }
 
@@ -1662,21 +1665,37 @@ footer{
 
 .dropdown{
   position:absolute;
-  top:calc(100% + 10px);
+  top:100%;
   left:50%;
   width:min(560px,calc(100vw - 32px));
-  background:#fff;
+  background:#ffffff;
   color:var(--black);
   border-radius:16px;
-  padding:18px;
-  border:1px solid rgba(0,0,0,.06);
-  box-shadow:0 20px 50px rgba(15,25,20,.18);
+  padding:14px 16px 16px;
+  padding-top:18px;
+  border:1px solid rgba(0,0,0,.08);
+  box-shadow:0 16px 48px rgba(15,25,20,.16);
   opacity:0;
   visibility:hidden;
   pointer-events:none;
-  transform:translateX(-50%) translateY(6px) scale(.97);
-  transition:.32s var(--ease);
+  transform:translateX(-50%) translateY(4px) scale(.98);
+  transition:opacity .2s var(--ease),transform .22s var(--ease),visibility .2s;
   z-index:200
+}
+/* Invisible hover bridge so cursor can reach the panel without closing */
+.dropdown::before{
+  content:"";
+  position:absolute;
+  left:0;right:0;
+  top:-14px;
+  height:16px;
+  background:transparent
+}
+.nav-item.has-menu{
+  padding-bottom:0
+}
+.nav-item.has-menu .dropdown{
+  margin-top:0
 }
 
 .nav-item:hover .dropdown,.nav-item:focus-within .dropdown{
@@ -1706,11 +1725,29 @@ footer{
 
 .dropdown-link{
   display:block;
-  padding:10px 12px;
+  padding:11px 12px;
   border-radius:10px;
-  color:#3d433e;
-  font-size:13px;
-  font-weight:500
+  color:#2a322e;
+  font-size:13.5px;
+  font-weight:500;
+  background:transparent;
+  transition:background .15s,color .15s
+}
+.dropdown-link:hover,.dropdown-link:focus{
+  background:#eef3ef;
+  color:var(--green-dark)
+}
+.dropdown-title{
+  color:var(--black) !important;
+  font-weight:600
+}
+.dropdown-subtitle{
+  color:var(--grey) !important
+}
+.dropdown-cta{
+  background:var(--green) !important;
+  color:#fff !important;
+  opacity:1 !important
 }
 
 .dropdown-link:hover{
@@ -4206,6 +4243,1233 @@ p,li,.hero-subtitle{letter-spacing:0}
   .page-card-photo img{transform:none !important}
 }
 
+
+
+/* ===== Liquid glass / neutral polish ===== */
+.header.is-scrolled{
+  height:var(--header-h-scrolled) !important;
+  background:rgba(247,247,245,.78) !important;
+  backdrop-filter:blur(32px) saturate(160%) !important;
+  -webkit-backdrop-filter:blur(32px) saturate(160%) !important;
+  border-bottom:1px solid rgba(0,0,0,.06) !important;
+  box-shadow:0 4px 24px rgba(20,30,25,.06) !important;
+  color:var(--black) !important
+}
+.header.is-scrolled .nav-item{color:rgba(26,31,28,.82)}
+.header.is-scrolled .nav-item:hover,
+.header.is-scrolled .nav-item:focus-within{
+  background:rgba(42,74,62,.08);
+  color:var(--green-dark)
+}
+.header.is-scrolled .nav-item.has-menu>span::after{border-top-color:rgba(26,31,28,.45)}
+.header.is-scrolled .logo-text span:first-child{color:var(--black)}
+.header.is-scrolled .logo-text span:last-child{color:var(--green-mid)}
+.header.is-scrolled .nav-glass{
+  color:var(--green-dark);
+  background:rgba(255,255,255,.55);
+  border-color:rgba(0,0,0,.08);
+  backdrop-filter:blur(16px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.7)
+}
+.header.is-scrolled .nav-glass:hover{
+  background:rgba(255,255,255,.75)
+}
+.header.is-scrolled .mobile-menu{
+  background:rgba(0,0,0,.05);
+  border-color:rgba(0,0,0,.08);
+  color:var(--green-dark)
+}
+.header.is-scrolled .mobile-menu .bar{background:var(--green-dark)}
+.header.is-scrolled .logo-mark{border-color:rgba(42,74,62,.2)}
+.nav .nav-item.is-active{background:rgba(255,255,255,.16);color:#fff}
+.header.is-scrolled .nav-item.is-active{
+  background:rgba(42,74,62,.1);
+  color:var(--green-dark)
+}
+
+/* Search: connected pill + box, bright glass */
+.search-wrapper{
+  margin-top:-64px !important
+}
+.dest-pills{
+  margin:0 0 0 20px !important;
+  gap:0 !important
+}
+.dest-pill{
+  padding:10px 20px 11px !important;
+  border-radius:16px 16px 0 0 !important;
+  font-size:12.5px !important;
+  font-weight:600 !important;
+  background:rgba(255,255,255,.92) !important;
+  color:var(--green-dark) !important;
+  border:1px solid rgba(255,255,255,.7) !important;
+  border-bottom:none !important;
+  box-shadow:0 -4px 20px rgba(20,30,25,.04);
+  letter-spacing:.01em !important;
+  backdrop-filter:blur(12px)
+}
+.search-box{
+  background:rgba(255,255,255,.94) !important;
+  border:1px solid rgba(255,255,255,.65) !important;
+  border-radius:22px !important;
+  padding:10px !important;
+  box-shadow:
+    0 4px 6px rgba(20,30,25,.02),
+    0 16px 48px rgba(20,30,25,.1),
+    inset 0 1px 0 rgba(255,255,255,.9) !important;
+  backdrop-filter:blur(24px) saturate(140%);
+  -webkit-backdrop-filter:blur(24px) saturate(140%);
+  transition:box-shadow .3s var(--ease),background .25s
+}
+.search-box:focus-within{
+  background:rgba(255,255,255,.98) !important;
+  box-shadow:
+    0 4px 6px rgba(20,30,25,.03),
+    0 20px 56px rgba(20,30,25,.12),
+    0 0 0 1.5px rgba(42,74,62,.12),
+    inset 0 1px 0 #fff !important
+}
+.search-main{
+  border:1px solid rgba(0,0,0,.05) !important;
+  border-radius:16px !important;
+  background:rgba(255,255,255,.5) !important;
+  overflow:hidden
+}
+.search-field{
+  min-height:70px !important;
+  background:transparent !important
+}
+.search-field:hover{
+  background:rgba(42,74,62,.03) !important
+}
+.search-field.is-open,.search-field:focus-within{
+  background:rgba(42,74,62,.05) !important;
+  box-shadow:none !important
+}
+.search-button{
+  background:var(--green) !important;
+  border-radius:14px !important;
+  box-shadow:0 6px 20px rgba(42,74,62,.25) !important
+}
+.search-button:hover{
+  background:var(--green-dark) !important;
+  box-shadow:0 10px 28px rgba(42,74,62,.32) !important
+}
+
+/* Glass panels globally */
+.lang-menu,.favorites-panel,.search-panel,.dest-dropdown{
+  background:rgba(255,255,255,.92) !important;
+  backdrop-filter:blur(28px) saturate(160%) !important;
+  -webkit-backdrop-filter:blur(28px) saturate(160%) !important;
+  border:1px solid rgba(255,255,255,.55) !important;
+  box-shadow:0 20px 50px rgba(15,25,20,.12),inset 0 1px 0 rgba(255,255,255,.7) !important
+}
+/* Nav dropdowns: solid, readable, stable hover */
+.dropdown{
+  background:#ffffff !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  border:1px solid rgba(0,0,0,.08) !important;
+  box-shadow:0 16px 48px rgba(15,25,20,.16) !important;
+  color:var(--black) !important;
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none
+}
+.hotel-card{
+  background:rgba(255,255,255,.88) !important;
+  border:1px solid rgba(255,255,255,.7) !important;
+  box-shadow:0 8px 28px rgba(20,30,25,.05) !important;
+  backdrop-filter:blur(8px);
+  border-radius:20px !important
+}
+.hotel-card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 20px 48px rgba(20,30,25,.1) !important;
+  border-color:rgba(255,255,255,.9) !important
+}
+.hd-side{
+  background:rgba(255,255,255,.9) !important;
+  backdrop-filter:blur(20px) !important;
+  border:1px solid rgba(0,0,0,.05) !important;
+  box-shadow:0 16px 48px rgba(20,30,25,.08) !important
+}
+.map-shell{
+  border-radius:22px !important;
+  border:1px solid rgba(0,0,0,.05) !important;
+  box-shadow:var(--shadow-md) !important;
+  overflow:hidden
+}
+.nav-glass{
+  background:rgba(255,255,255,.14) !important;
+  border:1px solid rgba(255,255,255,.28) !important;
+  backdrop-filter:blur(20px) saturate(160%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.25)
+}
+.hero-label{
+  background:rgba(255,255,255,.1) !important;
+  border:1px solid rgba(255,255,255,.18) !important;
+  backdrop-filter:blur(20px)
+}
+.hero-cta-primary{
+  background:rgba(255,255,255,.95) !important;
+  backdrop-filter:blur(12px);
+  box-shadow:0 8px 32px rgba(0,0,0,.14) !important
+}
+.hero-cta-secondary{
+  background:rgba(255,255,255,.1) !important;
+  border:1px solid rgba(255,255,255,.28) !important;
+  backdrop-filter:blur(16px)
+}
+body{
+  background:var(--cream) !important
+}
+.section-title,.page-hero h1,.hotel-name,.hd-title-row h1{
+  letter-spacing:-.03em
+}
+.page-card,.story-block,.empty-state{
+  background:rgba(255,255,255,.85) !important;
+  border:1px solid rgba(0,0,0,.05) !important;
+  backdrop-filter:blur(12px);
+  box-shadow:var(--shadow-sm) !important
+}
+.auth-modal,.inquiry-modal,.listing-card{
+  background:rgba(255,255,255,.92) !important;
+  backdrop-filter:blur(40px) saturate(150%) !important;
+  border:1px solid rgba(255,255,255,.6) !important;
+  box-shadow:0 24px 64px rgba(0,0,0,.18) !important
+}
+.hotelier-box{
+  background:linear-gradient(145deg,var(--green-dark),var(--green)) !important;
+  border-radius:24px !important
+}
+footer{
+  background:#121a16 !important
+}
+/* Smoother curves on connected search */
+.search-stack{
+  filter:drop-shadow(0 12px 36px rgba(12,28,24,.08)) !important
+}
+.dest-pill.is-active{
+  background:rgba(255,255,255,.96) !important;
+  position:relative;
+  z-index:4
+}
+/* Bright search fields */
+.search-label{color:var(--grey-light) !important;font-weight:600 !important}
+.search-value,.search-input-dest{color:var(--black) !important}
+.search-input-dest::placeholder,.search-value .placeholder{
+  color:#9aa39c !important
+}
+
+@media(max-width:750px){
+  .search-box{border-radius:18px !important;padding:8px !important}
+  .dest-pill{border-radius:14px 14px 0 0 !important;margin-left:4px}
+  .header{height:var(--header-h)}
+}
+
+
+
+/* ===== Phase A–C: compact categories/regions, sticky search, nav polish ===== */
+.page-grid{
+  display:grid !important;
+  grid-template-columns:repeat(auto-fill,minmax(240px,1fr)) !important;
+  gap:14px !important
+}
+.page-card.is-clickable.has-photo{
+  padding:0 !important;
+  overflow:hidden;
+  text-align:left;
+  border-radius:16px !important;
+  border:1px solid rgba(0,0,0,.06) !important;
+  background:#fff !important;
+  box-shadow:0 4px 16px rgba(20,30,25,.04) !important;
+  transition:transform .22s var(--ease),box-shadow .25s,border-color .2s !important;
+  cursor:pointer;
+  display:flex;
+  flex-direction:column;
+  min-height:0
+}
+.page-card.is-clickable.has-photo:hover{
+  transform:translateY(-3px);
+  box-shadow:0 12px 32px rgba(20,30,25,.1) !important;
+  border-color:rgba(42,74,62,.15) !important
+}
+.page-card.is-clickable.has-photo:focus-visible{
+  outline:none;
+  box-shadow:var(--focus),0 12px 32px rgba(20,30,25,.1) !important
+}
+.page-card.is-clickable.has-photo.is-active{
+  border-color:var(--green) !important;
+  box-shadow:0 0 0 2px rgba(42,74,62,.2),0 8px 24px rgba(20,30,25,.08) !important
+}
+.page-card-photo{
+  display:block !important;
+  position:relative !important;
+  aspect-ratio:16/9 !important;
+  max-height:120px !important;
+  overflow:hidden !important;
+  background:var(--green-soft) !important;
+  flex:0 0 auto !important
+}
+.page-card-photo img{
+  width:100% !important;
+  height:100% !important;
+  object-fit:cover !important;
+  transition:transform .4s var(--ease) !important
+}
+.page-card.has-photo:hover .page-card-photo img{
+  transform:scale(1.04) !important
+}
+.page-card-body{
+  padding:12px 14px 14px !important;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  flex:1
+}
+.page-card-body h3{
+  font-family:'Fraunces',Georgia,serif !important;
+  font-size:16px !important;
+  font-weight:600 !important;
+  margin:0 !important;
+  letter-spacing:-.02em !important;
+  line-height:1.25 !important
+}
+.page-card-body p{
+  font-size:12.5px !important;
+  line-height:1.45 !important;
+  color:var(--grey) !important;
+  margin:0 !important;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden
+}
+.page-card .tag{
+  font-size:10px !important;
+  padding:3px 8px !important;
+  margin-bottom:2px !important
+}
+.page-card-meta{
+  display:flex !important;
+  flex-wrap:wrap;
+  gap:6px 10px;
+  align-items:center;
+  margin-top:6px !important;
+  font-size:11.5px !important;
+  color:var(--grey-light) !important
+}
+.page-card-count{
+  font-weight:700;
+  color:var(--green-dark) !important
+}
+.page-card .name-alt{
+  font-size:11px !important;
+  color:var(--grey-light) !important
+}
+.page-hero{
+  padding:36px 0 28px !important
+}
+.page-hero h1{
+  font-size:clamp(26px,3.5vw,36px) !important;
+  margin-bottom:6px !important
+}
+.page-hero p{
+  font-size:14.5px !important
+}
+.page-body{
+  padding:28px 0 56px !important
+}
+
+/* Sticky search active */
+.search-wrapper.is-sticky .search-box{
+  position:sticky !important;
+  top:calc(var(--header-h-scrolled) + 10px) !important;
+  z-index:50 !important;
+  box-shadow:0 12px 40px rgba(20,30,25,.12) !important
+}
+
+/* Body padding tracks header */
+body{
+  padding-top:var(--header-h) !important;
+  transition:padding-top .32s var(--ease)
+}
+body.header-compact{
+  padding-top:var(--header-h-scrolled) !important
+}
+
+/* Filter chip for category */
+.filter-chip[data-clear-chip="category"]{
+  background:var(--green-soft);
+  border-color:rgba(42,74,62,.15)
+}
+
+@media(max-width:600px){
+  .page-grid{
+    grid-template-columns:1fr 1fr !important;
+    gap:10px !important
+  }
+  .page-card-photo{max-height:88px !important;aspect-ratio:3/2 !important}
+  .page-card-body{padding:10px 11px 12px !important}
+  .page-card-body h3{font-size:14px !important}
+  .page-card-body p{font-size:11.5px !important;-webkit-line-clamp:2}
+}
+@media(max-width:380px){
+  .page-grid{grid-template-columns:1fr !important}
+}
+
+
+.hd-similar{
+  margin-top:40px;
+  padding-top:28px;
+  border-top:1px solid var(--border)
+}
+.hd-similar h2{
+  font-family:'Fraunces',Georgia,serif;
+  font-size:22px;
+  margin-bottom:16px;
+  letter-spacing:-.02em
+}
+.similar-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px
+}
+.similar-card{
+  display:flex;
+  flex-direction:column;
+  text-align:left;
+  background:#fff;
+  border:1px solid rgba(0,0,0,.06);
+  border-radius:16px;
+  overflow:hidden;
+  cursor:pointer;
+  padding:0;
+  box-shadow:0 4px 16px rgba(20,30,25,.04);
+  transition:transform .22s var(--ease),box-shadow .25s
+}
+.similar-card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 12px 32px rgba(20,30,25,.1)
+}
+.similar-card img{
+  width:100%;
+  aspect-ratio:16/10;
+  object-fit:cover;
+  background:#e8ebe6
+}
+.similar-body{
+  padding:12px 14px 14px;
+  display:flex;
+  flex-direction:column;
+  gap:4px
+}
+.similar-body strong{
+  font-size:14.5px;
+  font-weight:700;
+  color:var(--black);
+  line-height:1.25
+}
+.similar-meta{
+  font-size:11.5px;
+  color:var(--grey)
+}
+.similar-price{
+  font-size:13.5px;
+  font-weight:700;
+  color:var(--green-dark);
+  margin-top:4px
+}
+.similar-price span{font-weight:500;font-size:11px;color:var(--grey)}
+@media(max-width:750px){
+  .similar-grid{grid-template-columns:1fr;gap:12px}
+}
+@media(min-width:751px) and (max-width:1000px){
+  .similar-grid{grid-template-columns:repeat(3,1fr)}
+}
+
+
+/* Nav menus stay open while hovering item OR panel; solid background */
+.nav-item.has-menu:hover > .dropdown,
+.nav-item.has-menu:focus-within > .dropdown,
+.nav-item.has-menu .dropdown:hover{
+  opacity:1 !important;
+  visibility:visible !important;
+  pointer-events:auto !important;
+  transform:translateX(-50%) translateY(0) scale(1) !important;
+  background:#ffffff !important
+}
+.dropdown.regions-dd{
+  width:min(420px,calc(100vw - 24px)) !important
+}
+.dropdown .dropdown-grid{
+  gap:2px !important
+}
+
+
+
+/* ===== Phase D–F: listings, filters, detail mobile bar ===== */
+.hotel-grid{
+  display:grid !important;
+  grid-template-columns:repeat(4, minmax(0, 1fr)) !important;
+  gap:18px !important
+}
+.hotel-card{
+  display:flex !important;
+  flex-direction:column !important;
+  height:100% !important;
+  background:#fff !important;
+  border:1px solid rgba(0,0,0,.06) !important;
+  border-radius:18px !important;
+  overflow:hidden !important;
+  box-shadow:0 6px 22px rgba(20,30,25,.05) !important;
+  transition:transform .25s var(--ease),box-shadow .28s var(--ease),border-color .2s !important;
+  backdrop-filter:none !important
+}
+.hotel-card:hover{
+  transform:translateY(-4px) !important;
+  box-shadow:0 16px 40px rgba(20,30,25,.1) !important;
+  border-color:rgba(42,74,62,.12) !important
+}
+.hotel-image{
+  aspect-ratio:3/2 !important;
+  max-height:none !important
+}
+.hotel-body{
+  display:flex !important;
+  flex-direction:column !important;
+  flex:1 !important;
+  padding:14px 16px 16px !important;
+  gap:5px !important
+}
+.hotel-name{
+  font-size:17px !important;
+  line-height:1.25 !important;
+  font-weight:600 !important;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden
+}
+.hotel-description{
+  font-size:13px !important;
+  line-height:1.45 !important;
+  -webkit-line-clamp:2;
+  flex:1
+}
+.hotel-bottom{
+  margin-top:auto !important;
+  padding-top:12px !important;
+  border-top:1px solid rgba(0,0,0,.06) !important;
+  align-items:flex-end !important
+}
+.hotel-price{
+  font-size:16px !important;
+  font-weight:700 !important;
+  letter-spacing:-.02em !important;
+  color:var(--black) !important
+}
+.hotel-price span{
+  font-size:11px !important;
+  font-weight:500 !important;
+  color:var(--grey) !important
+}
+.hotel-actions{
+  display:flex !important;
+  gap:8px !important;
+  margin-top:10px !important
+}
+.hotel-cta-mini{
+  margin-top:0 !important;
+  flex:1;
+  display:inline-flex !important;
+  align-items:center;
+  justify-content:center;
+  min-height:40px;
+  border-radius:999px !important;
+  background:var(--green-soft) !important;
+  color:var(--green-dark) !important;
+  font-size:12.5px !important;
+  font-weight:700 !important;
+  border:none;
+  cursor:pointer;
+  transition:background .2s,color .2s,transform .15s;
+  padding:8px 12px
+}
+.hotel-cta-mini:hover{
+  background:var(--green) !important;
+  color:#fff !important
+}
+.hotel-cta-inquiry{
+  flex:1;
+  display:inline-flex !important;
+  align-items:center;
+  justify-content:center;
+  min-height:40px;
+  padding:8px 12px;
+  border-radius:999px !important;
+  background:var(--green) !important;
+  color:#fff !important;
+  font-size:12.5px !important;
+  font-weight:700 !important;
+  border:none;
+  cursor:pointer
+}
+.hotel-cta-inquiry:hover{
+  background:var(--green-dark) !important
+}
+.hotels-toolbar{
+  gap:14px !important;
+  margin-bottom:16px !important
+}
+.hotels-toolbar select,
+.reset-btn{
+  min-height:44px !important;
+  border-radius:12px !important;
+  border:1px solid rgba(0,0,0,.08) !important;
+  background:#fff !important;
+  font-size:13px !important;
+  font-weight:600 !important;
+  padding:0 14px !important
+}
+.reset-btn:hover{
+  border-color:var(--green) !important;
+  background:#f4f7f4 !important
+}
+.filter-chips{
+  gap:8px !important;
+  margin-bottom:14px !important
+}
+.filter-chip{
+  background:#eef3ef !important;
+  border:1px solid rgba(42,74,62,.1) !important;
+  color:var(--green-dark) !important;
+  font-size:12.5px !important;
+  padding:7px 12px !important
+}
+.empty-state{
+  border-radius:18px !important;
+  padding:48px 24px !important;
+  background:#fff !important;
+  border:1px solid rgba(0,0,0,.06) !important
+}
+
+/* Detail: mobile fixed booking bar */
+@media(max-width:900px){
+  .hotel-detail{
+    padding-bottom:100px !important
+  }
+  .hd-side{
+    position:fixed !important;
+    left:0 !important;
+    right:0 !important;
+    bottom:0 !important;
+    top:auto !important;
+    z-index:90 !important;
+    margin:0 !important;
+    border-radius:18px 18px 0 0 !important;
+    padding:12px 16px calc(12px + env(safe-area-inset-bottom)) !important;
+    box-shadow:0 -8px 32px rgba(0,0,0,.12) !important;
+    background:rgba(255,255,255,.97) !important;
+    backdrop-filter:blur(16px) !important;
+    border:1px solid rgba(0,0,0,.06) !important;
+    border-bottom:none !important;
+    display:grid !important;
+    grid-template-columns:1fr auto !important;
+    gap:8px 12px !important;
+    align-items:center !important;
+    order:unset !important
+  }
+  .hd-side .hd-price{
+    font-size:18px !important;
+    margin:0 !important;
+    grid-column:1
+  }
+  .hd-side .hd-rating,
+  .hd-side .hd-note,
+  .hd-side .hd-divider,
+  .hd-side .hd-quick,
+  .hd-side .hd-trust,
+  .hd-side .hd-website-btn,
+  .hd-side .cta-btn.secondary{
+    display:none !important
+  }
+  .hd-side .cta-btn:not(.secondary){
+    grid-column:2;
+    grid-row:1 / span 2;
+    margin:0 !important;
+    width:auto !important;
+    min-width:140px;
+    padding:12px 18px !important;
+    align-self:center
+  }
+  .hotel-grid{
+    grid-template-columns:1fr 1fr !important;
+    gap:12px !important
+  }
+}
+@media(max-width:560px){
+  .hotel-grid{
+    grid-template-columns:1fr !important
+  }
+}
+@media(min-width:901px) and (max-width:1100px){
+  .hotel-grid{
+    grid-template-columns:repeat(3, minmax(0, 1fr)) !important
+  }
+}
+@media(min-width:901px){
+  .hd-side{
+    position:sticky !important;
+    top:calc(var(--header-h-scrolled) + 16px) !important;
+    display:block !important
+  }
+}
+
+
+.listing-gate{
+  margin:24px 0 40px
+}
+.listing-gate-card{
+  max-width:480px;
+  margin:0 auto;
+  padding:32px 28px;
+  background:#fff;
+  border:1px solid rgba(0,0,0,.07);
+  border-radius:20px;
+  box-shadow:0 12px 40px rgba(20,30,25,.08);
+  text-align:center
+}
+.listing-gate-card h2{
+  font-family:"Fraunces",Georgia,serif;
+  font-size:24px;
+  margin-bottom:10px
+}
+.listing-gate-card p{
+  color:var(--grey);
+  font-size:14.5px;
+  line-height:1.6;
+  margin-bottom:18px
+}
+.listing-preview-body{
+  background:#f7f8f5;
+  border-radius:14px;
+  padding:16px;
+  border:1px solid var(--border)
+}
+.listing-preview-body img{
+  width:100%;
+  aspect-ratio:16/10;
+  object-fit:cover;
+  border-radius:12px;
+  margin-bottom:12px;
+  background:#e8ebe6
+}
+.listing-preview-body strong{display:block;font-size:18px;margin-bottom:4px}
+.listing-preview-body .lp-meta{font-size:13px;color:var(--grey);margin-bottom:8px}
+.listing-preview-body .lp-price{font-weight:700;color:var(--green-dark);font-size:16px}
+.listing-preview-body .lp-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.listing-preview-body .lp-chips span{
+  font-size:11px;font-weight:600;padding:4px 8px;border-radius:999px;
+  background:#eef3ef;color:var(--green-dark)
+}
+#lsTypes .chip-check{cursor:pointer}
+
+
+
+/* ===== HolidayCheck-inspired results: list + map ===== */
+.results-section{padding-top:28px}
+.results-header{
+  align-items:flex-end;
+  gap:16px;
+  flex-wrap:wrap
+}
+.view-toggle{
+  display:inline-flex;
+  background:#fff;
+  border:1px solid rgba(0,0,0,.08);
+  border-radius:999px;
+  padding:4px;
+  gap:2px
+}
+.view-toggle-btn{
+  border:none;
+  background:transparent;
+  padding:8px 14px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:600;
+  color:var(--grey);
+  cursor:pointer;
+  min-height:36px
+}
+.view-toggle-btn.is-active{
+  background:var(--green);
+  color:#fff
+}
+.results-split{
+  display:grid;
+  grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);
+  gap:18px;
+  align-items:start;
+  margin-top:8px
+}
+.results-list{min-width:0}
+.results-map{
+  position:sticky;
+  top:calc(var(--header-h-scrolled) + 12px);
+  align-self:start
+}
+.map-shell-sticky{
+  border-radius:18px;
+  overflow:hidden;
+  border:1px solid rgba(0,0,0,.07);
+  box-shadow:0 8px 28px rgba(20,30,25,.06);
+  background:#fff
+}
+.map-shell-sticky .map-canvas{
+  height:min(70vh,620px) !important;
+  border-radius:0 !important
+}
+/* List mode cards – horizontal like HolidayCheck */
+.hotel-grid.hotel-list-mode{
+  display:flex !important;
+  flex-direction:column !important;
+  gap:12px !important
+}
+.hotel-list-mode .hotel-card{
+  display:grid !important;
+  grid-template-columns:200px minmax(0,1fr) !important;
+  height:auto !important;
+  border-radius:14px !important
+}
+.hotel-list-mode .hotel-image{
+  aspect-ratio:auto !important;
+  height:100% !important;
+  min-height:150px !important;
+  max-height:180px !important
+}
+.hotel-list-mode .hotel-body{
+  padding:14px 16px !important
+}
+.hotel-list-mode .hotel-actions{
+  margin-top:8px !important
+}
+.hotel-list-mode .hotel-description{
+  -webkit-line-clamp:2
+}
+body.view-list .results-map{display:none}
+body.view-list .results-split{grid-template-columns:1fr}
+body.view-map .results-list{display:none}
+body.view-map .results-split{grid-template-columns:1fr}
+body.view-map .results-map{position:relative;top:0}
+body.view-map .map-shell-sticky .map-canvas{
+  height:min(75vh,700px) !important
+}
+@media(max-width:960px){
+  .results-split{
+    grid-template-columns:1fr
+  }
+  .results-map{
+    position:relative;
+    top:0;
+    order:-1
+  }
+  body.view-split .results-map .map-canvas{
+    height:280px !important
+  }
+  .hotel-list-mode .hotel-card{
+    grid-template-columns:120px minmax(0,1fr) !important
+  }
+  .hotel-list-mode .hotel-image{
+    min-height:120px !important;
+    max-height:140px !important
+  }
+  .view-toggle-btn{padding:8px 10px;font-size:12px}
+}
+@media(max-width:560px){
+  .hotel-list-mode .hotel-card{
+    grid-template-columns:1fr !important
+  }
+  .hotel-list-mode .hotel-image{
+    min-height:160px !important;
+    max-height:180px !important;
+    aspect-ratio:16/10 !important
+  }
+}
+
+
+
+/* ===== Compact Booking-style list + minimal map chrome ===== */
+.leaflet-control-attribution{
+  font-size:9px !important;
+  background:rgba(255,255,255,.75) !important;
+  color:#888 !important;
+  padding:1px 4px !important;
+  margin:0 !important;
+  border:none !important;
+  box-shadow:none !important;
+  max-width:120px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  opacity:.65
+}
+.leaflet-control-attribution a{color:#888 !important}
+.leaflet-bottom.leaflet-right{margin:0 2px 2px 0}
+.map-legend{
+  font-size:11px !important;
+  padding:6px 10px !important;
+  color:var(--grey) !important;
+  border-top:1px solid rgba(0,0,0,.05) !important;
+  background:#fafafa !important
+}
+.map-legend i{width:8px;height:8px}
+
+/* List cards – smaller, familiar row layout */
+.hotel-list-mode .hotel-card{
+  grid-template-columns:140px minmax(0,1fr) !important;
+  border-radius:12px !important;
+  box-shadow:0 1px 4px rgba(0,0,0,.06) !important;
+  border:1px solid #e6e6e6 !important;
+  min-height:0 !important
+}
+.hotel-list-mode .hotel-card:hover{
+  transform:none !important;
+  box-shadow:0 4px 14px rgba(0,0,0,.1) !important;
+  border-color:#ccc !important
+}
+.hotel-list-mode .hotel-image{
+  min-height:110px !important;
+  max-height:120px !important;
+  border-radius:0 !important
+}
+.hotel-list-mode .hotel-body{
+  padding:10px 12px !important;
+  gap:2px !important
+}
+.hotel-list-mode .hotel-name{
+  font-size:15px !important;
+  font-family:inherit !important;
+  font-weight:700 !important;
+  letter-spacing:0 !important;
+  -webkit-line-clamp:1 !important
+}
+.hotel-list-mode .hotel-description{
+  font-size:12px !important;
+  -webkit-line-clamp:1 !important;
+  margin:0 !important
+}
+.hotel-list-mode .hotel-location{
+  font-size:11px !important;
+  text-transform:none !important;
+  letter-spacing:0 !important;
+  color:#666 !important
+}
+.hotel-list-mode .hotel-stars{
+  font-size:11px !important;
+  margin:0 !important
+}
+.hotel-list-mode .hotel-amenities{
+  display:none !important
+}
+.hotel-list-mode .hotel-bottom{
+  margin-top:6px !important;
+  padding-top:6px !important;
+  border-top:1px solid #eee !important
+}
+.hotel-list-mode .hotel-price{
+  font-size:15px !important
+}
+.hotel-list-mode .hotel-price span{
+  font-size:11px !important
+}
+.hotel-list-mode .hotel-rating{
+  font-size:12px !important
+}
+.hotel-list-mode .hotel-actions{
+  margin-top:6px !important;
+  gap:6px !important
+}
+.hotel-list-mode .hotel-cta-mini,
+.hotel-list-mode .hotel-cta-inquiry{
+  min-height:32px !important;
+  font-size:12px !important;
+  padding:6px 10px !important
+}
+.hotel-list-mode .hotel-badge{
+  font-size:9px !important;
+  padding:4px 7px !important;
+  left:8px !important;
+  top:8px !important
+}
+.hotel-list-mode .favorite{
+  width:32px !important;
+  height:32px !important;
+  min-width:32px !important;
+  min-height:32px !important;
+  font-size:14px !important;
+  right:8px !important;
+  top:8px !important
+}
+.hotel-grid.hotel-list-mode{
+  gap:8px !important
+}
+.map-shell-sticky .map-canvas{
+  height:min(68vh,560px) !important
+}
+.results-split{
+  gap:14px !important
+}
+@media(max-width:960px){
+  .hotel-list-mode .hotel-card{
+    grid-template-columns:100px minmax(0,1fr) !important
+  }
+  .hotel-list-mode .hotel-image{
+    min-height:96px !important;
+    max-height:110px !important
+  }
+  .hotel-list-mode .hotel-actions{display:none !important}
+}
+
+
+
+/* ===== HolidayCheck-style hotel cards ===== */
+.hotel-grid{
+  display:grid !important;
+  grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)) !important;
+  gap:16px !important
+}
+.hotel-card.hc-card,
+.hotel-card{
+  display:flex !important;
+  flex-direction:column !important;
+  grid-template-columns:none !important;
+  height:100% !important;
+  background:#fff !important;
+  border:1px solid #e8eaed !important;
+  border-radius:16px !important;
+  overflow:hidden !important;
+  box-shadow:0 2px 10px rgba(20,30,40,.06) !important;
+  transition:box-shadow .2s ease !important;
+  transform:none !important
+}
+.hotel-card:hover{
+  box-shadow:0 8px 28px rgba(20,30,40,.12) !important;
+  transform:none !important;
+  border-color:#d0d5dd !important
+}
+.hotel-card .hotel-image{
+  aspect-ratio:16/10 !important;
+  min-height:0 !important;
+  max-height:none !important;
+  height:auto !important
+}
+.hotel-card .hotel-image img{
+  width:100%;height:100%;object-fit:cover
+}
+.hotel-card .hotel-badge{
+  left:12px;top:12px;
+  background:rgba(255,255,255,.92);
+  color:#1a1a1a;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  padding:5px 10px;
+  border-radius:8px;
+  box-shadow:0 1px 4px rgba(0,0,0,.08)
+}
+.hotel-card .favorite{
+  right:12px;top:12px;
+  width:40px;height:40px;min-width:40px;min-height:40px;
+  border-radius:50%;
+  background:rgba(255,255,255,.95);
+  border:none;
+  box-shadow:0 2px 8px rgba(0,0,0,.1);
+  font-size:16px
+}
+.hotel-card .hotel-body{
+  padding:14px 16px 16px !important;
+  gap:6px !important;
+  flex:1;
+  display:flex;
+  flex-direction:column
+}
+.hotel-card .hotel-name{
+  font-size:17px !important;
+  font-weight:700 !important;
+  line-height:1.25 !important;
+  color:#0f172a !important;
+  margin:0 !important;
+  font-family:inherit !important;
+  -webkit-line-clamp:2;
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  overflow:hidden
+}
+.hotel-card .hotel-stars{
+  font-size:12px;
+  letter-spacing:1px;
+  color:#0f172a;
+  margin:0
+}
+.hotel-card .hotel-location{
+  font-size:13px !important;
+  color:#64748b !important;
+  text-transform:none !important;
+  letter-spacing:0 !important;
+  font-weight:500;
+  display:flex;
+  align-items:center;
+  gap:4px
+}
+.loc-pin{font-size:12px;opacity:.8}
+.hc-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:12px;
+  margin-top:8px
+}
+.hc-score{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  min-width:0
+}
+.hc-score-box{
+  background:#2563eb;
+  color:#fff;
+  font-weight:800;
+  font-size:14px;
+  padding:6px 8px;
+  border-radius:8px;
+  line-height:1;
+  flex-shrink:0
+}
+.hc-score-box.hc-score-new{
+  background:#94a3b8;
+  font-size:12px
+}
+.hc-score-text{
+  display:flex;
+  flex-direction:column;
+  gap:1px;
+  min-width:0
+}
+.hc-score-text strong{
+  font-size:13px;
+  color:#0f172a
+}
+.hc-score-text .hotel-reviews{
+  font-size:12px;
+  color:#2563eb;
+  font-weight:500
+}
+.hc-price-block{
+  text-align:right;
+  flex-shrink:0
+}
+.hc-perk{
+  font-size:12px;
+  color:#15803d;
+  font-weight:600;
+  margin-bottom:2px
+}
+.hotel-card .hotel-price{
+  font-size:20px !important;
+  font-weight:800 !important;
+  color:#0f172a !important;
+  letter-spacing:-.02em
+}
+.hc-per-night{
+  font-size:11px;
+  color:#64748b
+}
+.hotel-card .hotel-total{
+  font-size:11px;
+  color:#64748b;
+  margin-top:2px
+}
+.hc-highlights{
+  list-style:none;
+  margin:10px 0 0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:3px
+}
+.hc-highlights li{
+  font-size:12.5px;
+  color:#334155;
+  padding-left:18px;
+  position:relative;
+  line-height:1.35
+}
+.hc-highlights li::before{
+  content:"✓";
+  position:absolute;
+  left:0;
+  color:#15803d;
+  font-weight:700;
+  font-size:12px
+}
+.hotel-card .hotel-actions{
+  margin-top:auto !important;
+  padding-top:12px;
+  display:flex;
+  gap:8px
+}
+.hotel-card .hotel-cta-mini{
+  flex:1;
+  background:#f1f5f9 !important;
+  color:#0f172a !important;
+  border-radius:10px !important;
+  font-weight:600 !important;
+  min-height:40px
+}
+.hotel-card .hotel-cta-mini:hover{
+  background:#e2e8f0 !important;
+  color:#0f172a !important
+}
+.hotel-card .hotel-cta-inquiry{
+  flex:1;
+  border-radius:10px !important;
+  min-height:40px
+}
+/* Override list-mode: stay vertical HC style even in split */
+.hotel-list-mode .hotel-card{
+  display:flex !important;
+  flex-direction:column !important;
+  grid-template-columns:none !important
+}
+.hotel-list-mode .hotel-image{
+  aspect-ratio:16/10 !important;
+  min-height:0 !important;
+  max-height:none !important
+}
+.hotel-list-mode .hotel-amenities{display:none !important}
+.hotel-list-mode .hotel-actions{display:flex !important}
+.hotel-grid.hotel-list-mode{
+  display:grid !important;
+  grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)) !important;
+  flex-direction:unset !important;
+  gap:14px !important
+}
+@media(max-width:960px){
+  .hotel-grid.hotel-list-mode{
+    grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)) !important
+  }
+}
+@media(max-width:560px){
+  .hotel-grid,
+  .hotel-grid.hotel-list-mode{
+    grid-template-columns:1fr !important
+  }
+}
+
 </style>
 </head>
 <body>
@@ -4328,6 +5592,16 @@ p,li,.hero-subtitle{letter-spacing:0}
 <label class="chip-check"><input type="checkbox" name="stars" value="4"> 4★</label>
 <label class="chip-check"><input type="checkbox" name="stars" value="5"> 5★</label>
 </div></div>
+<div class="detail-box"><label class="detail-title">Hoteltyp</label><div class="chip-group" id="typeFilters">
+<label class="chip-check"><input type="checkbox" value="Boutique"> Boutique</label>
+<label class="chip-check"><input type="checkbox" value="Wellness"> Wellness</label>
+<label class="chip-check"><input type="checkbox" value="Berghotel"> Berghotel</label>
+<label class="chip-check"><input type="checkbox" value="Luxus"> Luxus</label>
+<label class="chip-check"><input type="checkbox" value="Design"> Design</label>
+<label class="chip-check"><input type="checkbox" value="Familie"> Familie</label>
+<label class="chip-check"><input type="checkbox" value="Adults Only"> Adults Only</label>
+<label class="chip-check"><input type="checkbox" value="Nachhaltig"> Nachhaltig</label>
+</div></div>
 <div class="detail-box"><label class="detail-title">Ausstattung</label><div class="chip-group" id="amenityFilters">
 <label class="chip-check"><input type="checkbox" value="WLAN"> WLAN</label>
 <label class="chip-check"><input type="checkbox" value="Frühstück"> Frühstück</label>
@@ -4336,19 +5610,35 @@ p,li,.hero-subtitle{letter-spacing:0}
 <label class="chip-check"><input type="checkbox" value="Sauna"> Sauna</label>
 <label class="chip-check"><input type="checkbox" value="Pool"> Pool</label>
 <label class="chip-check"><input type="checkbox" value="Restaurant"> Restaurant</label>
+<label class="chip-check"><input type="checkbox" value="Fine Dining"> Fine Dining</label>
+<label class="chip-check"><input type="checkbox" value="Halbpension"> Halbpension</label>
 <label class="chip-check"><input type="checkbox" value="Skiraum"> Skiraum</label>
 <label class="chip-check"><input type="checkbox" value="Garten"> Garten</label>
-<label class="chip-check"><input type="checkbox" value="Halbpension"> Halbpension</label>
-<label class="chip-check"><input type="checkbox" value="Fine Dining"> Fine Dining</label>
-<label class="chip-check"><input type="checkbox" value="Familienzimmer"> Familienzimmer</label>
+<label class="chip-check"><input type="checkbox" value="Balkon"> Balkon</label>
+<label class="chip-check"><input type="checkbox" value="Whirlpool"> Whirlpool</label>
+<label class="chip-check"><input type="checkbox" value="Fitness"> Fitness</label>
 <label class="chip-check"><input type="checkbox" value="Yoga"> Yoga</label>
+<label class="chip-check"><input type="checkbox" value="Familienzimmer"> Familienzimmer</label>
+<label class="chip-check"><input type="checkbox" value="Barrierefrei"> Barrierefrei</label>
+<label class="chip-check"><input type="checkbox" value="E-Ladestation"> E-Ladestation</label>
+<label class="chip-check"><input type="checkbox" value="Klimaanlage"> Klimaanlage</label>
 <label class="chip-check"><input type="checkbox" value="pets"> Haustiere</label>
 </div></div>
 </div></div></div>
 </div></div></div>
 <main class="main-content" id="hotels">
-<section class="section"><div class="container">
-<div class="section-header"><div><h2 class="section-title">Ausgewählte Hotels für dich</h2><p class="section-subtitle">Besondere Unterkünfte aus ganz Südtirol.</p></div><a href="#hotels" class="view-all">Alle Hotels →</a></div>
+<section class="section results-section"><div class="container results-container">
+<div class="section-header results-header">
+  <div>
+    <h2 class="section-title">Hotels in Südtirol</h2>
+    <p class="section-subtitle">Liste und Karte – gefiltert nach deiner Suche.</p>
+  </div>
+  <div class="view-toggle" role="group" aria-label="Ansicht">
+    <button type="button" class="view-toggle-btn is-active" data-view="split" id="viewSplit">Liste + Karte</button>
+    <button type="button" class="view-toggle-btn" data-view="list" id="viewList">Nur Liste</button>
+    <button type="button" class="view-toggle-btn" data-view="map" id="viewMap">Nur Karte</button>
+  </div>
+</div>
 <div class="hotels-toolbar">
   <div class="hotels-toolbar-left">
     <label class="sr-only" for="sortSelect">Sortierung</label>
@@ -4363,19 +5653,24 @@ p,li,.hero-subtitle{letter-spacing:0}
   <div class="hotels-count" id="hotelsCount"></div>
 </div>
 <div class="filter-chips" id="filterChips"></div>
-<div class="empty-state" id="emptyState" hidden>
-  <h3>Keine passenden Hotels gefunden</h3>
-  <p>Versuche deine Suche etwas zu erweitern – anderen Ort wählen, Preis erhöhen oder Filter zurücksetzen.</p>
-  <button type="button" class="cta-btn" id="emptyResetBtn">Filter zurücksetzen</button>
+<div class="results-split" id="resultsSplit">
+  <div class="results-list" id="resultsList">
+    <div class="empty-state" id="emptyState" hidden>
+      <h3>Keine passenden Hotels gefunden</h3>
+      <p>Versuche deine Suche etwas zu erweitern – anderen Ort wählen, Preis erhöhen oder Filter zurücksetzen.</p>
+      <button type="button" class="cta-btn" id="emptyResetBtn">Filter zurücksetzen</button>
+    </div>
+    <div class="hotel-grid hotel-list-mode" id="hotelGrid"></div>
+    <div class="load-more-row"><button class="load-more" id="loadMoreButton" type="button">Weitere laden</button></div>
+  </div>
+  <aside class="results-map" id="karte">
+    <div class="map-shell map-shell-sticky">
+      <div id="stayloMap" class="map-canvas" aria-label="Karte mit Hotels in Südtirol"></div>
+      <div class="map-empty" id="mapEmpty" hidden><strong>Keine Hotels in dieser Auswahl</strong><span>Filter zurücksetzen, um alle Häuser zu sehen.</span></div>
+      <div class="map-legend"><span><i></i> Preis / Nacht · Karte folgt deinen Filtern</span></div>
+    </div>
+  </aside>
 </div>
-<div class="hotel-grid" id="hotelGrid"></div>
-<div class="load-more-row"><button class="load-more" id="loadMoreButton" type="button">Weitere laden</button></div>
-</div></section>
-<section class="section" id="karte"><div class="container">
-<div class="section-header"><div><div class="section-title">Hotels auf der Karte</div><div class="section-subtitle">Überblick über ausgewählte Unterkünfte</div></div><a href="#hotels" class="view-all">Zu den Hotels →</a></div>
-<div class="map-shell"><div id="stayloMap" class="map-canvas" aria-label="Karte mit Hotels in Südtirol"></div>
-<div class="map-empty" id="mapEmpty" hidden><strong>Keine Hotels in dieser Auswahl</strong><span>Setze die Filter zurück, um wieder alle Häuser zu sehen.</span></div>
-<div class="map-legend"><span><i></i> Preis pro Nacht — die Karte zeigt genau deine gefilterte Auswahl</span><span class="map-hint">Zum Zoomen Strg + Mausrad</span></div></div>
 </div></section>
 <section class="feature"><div class="container"><div class="feature-box"><div class="feature-content">
 <small>Staylo · Südtirol</small><h2>Mehr als nur<br>ein Hotel.</h2>
@@ -4426,11 +5721,20 @@ p,li,.hero-subtitle{letter-spacing:0}
   <div class="hstep"><span class="hstep-n">3</span><div><strong>Online</strong><p>Dein Haus erscheint in Suche, Karte und Kategorien – und Gäste fragen direkt bei dir an.</p></div></div>
 </div>
 
-<div class="listing-panel">
+<div class="listing-gate" id="listingGate">
+  <div class="listing-gate-card">
+    <h2>Anmeldung erforderlich</h2>
+    <p>Um ein Hotel einzutragen, melde dich bitte zuerst an. So können wir deine Einträge diesem Konto zuordnen und du kannst sie später bearbeiten.</p>
+    <button type="button" class="cta-btn" id="listingLoginBtn">Jetzt anmelden</button>
+    <p class="ls-help" style="margin-top:14px">Noch kein Konto? Im Anmelden-Fenster kannst du dich registrieren (Demo, lokal im Browser).</p>
+  </div>
+</div>
+
+<div class="listing-panel" id="listingPanel" hidden>
   <div class="listing-head">
     <div>
       <h2 id="listingFormTitle">Haus eintragen</h2>
-      <p class="listing-sub">Pflichtfelder sind mit <span aria-hidden="true">*</span> markiert. Alles Weitere kannst du später ergänzen.</p>
+      <p class="listing-sub">Pflichtfelder sind mit <span aria-hidden="true">*</span> markiert. Nach dem Ausfüllen siehst du eine Vorschau, bevor gespeichert wird.</p>
     </div>
     <div class="listing-count" id="listingCount" hidden></div>
   </div>
@@ -4444,13 +5748,20 @@ p,li,.hero-subtitle{letter-spacing:0}
         <label class="auth-label ls-wide">Name des Hauses <span class="req" aria-hidden="true">*</span>
           <input type="text" id="lsName" required maxlength="60" placeholder="z. B. Hotel Sonnenhof" autocomplete="organization">
         </label>
-        <label class="auth-label">Kategorie <span class="req" aria-hidden="true">*</span>
-          <select id="lsType" required>
-            <option value="">Bitte wählen</option>
-            <option>Boutique</option><option>Wellness</option><option>Berghotel</option>
-            <option>Luxus</option><option>Design</option><option>Familie</option>
-          </select>
-        </label>
+        <div class="auth-label ls-wide">Kategorien <span class="req" aria-hidden="true">*</span>
+          <span class="ls-help" style="margin-bottom:8px;display:block">Mehrfachauswahl möglich – z. B. Boutique und Wellness.</span>
+          <div class="chip-group" id="lsTypes">
+            <label class="chip-check"><input type="checkbox" name="lsType" value="Boutique"> Boutique</label>
+            <label class="chip-check"><input type="checkbox" name="lsType" value="Wellness"> Wellness</label>
+            <label class="chip-check"><input type="checkbox" name="lsType" value="Berghotel"> Berghotel</label>
+            <label class="chip-check"><input type="checkbox" name="lsType" value="Luxus"> Luxus</label>
+            <label class="chip-check"><input type="checkbox" name="lsType" value="Design"> Design</label>
+            <label class="chip-check"><input type="checkbox" name="lsType" value="Familie"> Familie</label>
+            <label class="chip-check"><input type="checkbox" name="lsType" value="Adults Only"> Adults Only</label>
+            <label class="chip-check"><input type="checkbox" name="lsType" value="Nachhaltig"> Nachhaltig</label>
+          </div>
+          <input type="hidden" id="lsType" value="">
+        </div>
         <label class="auth-label">Region <span class="req" aria-hidden="true">*</span>
           <select id="lsRegion" required></select>
         </label>
@@ -4489,11 +5800,18 @@ p,li,.hero-subtitle{letter-spacing:0}
         <label class="chip-check"><input type="checkbox" value="Sauna"> Sauna</label>
         <label class="chip-check"><input type="checkbox" value="Pool"> Pool</label>
         <label class="chip-check"><input type="checkbox" value="Restaurant"> Restaurant</label>
+        <label class="chip-check"><input type="checkbox" value="Fine Dining"> Fine Dining</label>
+        <label class="chip-check"><input type="checkbox" value="Halbpension"> Halbpension</label>
         <label class="chip-check"><input type="checkbox" value="Skiraum"> Skiraum</label>
         <label class="chip-check"><input type="checkbox" value="Garten"> Garten</label>
-        <label class="chip-check"><input type="checkbox" value="Halbpension"> Halbpension</label>
-        <label class="chip-check"><input type="checkbox" value="Familienzimmer"> Familienzimmer</label>
+        <label class="chip-check"><input type="checkbox" value="Balkon"> Balkon</label>
+        <label class="chip-check"><input type="checkbox" value="Whirlpool"> Whirlpool</label>
+        <label class="chip-check"><input type="checkbox" value="Fitness"> Fitness</label>
         <label class="chip-check"><input type="checkbox" value="Yoga"> Yoga</label>
+        <label class="chip-check"><input type="checkbox" value="Familienzimmer"> Familienzimmer</label>
+        <label class="chip-check"><input type="checkbox" value="Barrierefrei"> Barrierefrei</label>
+        <label class="chip-check"><input type="checkbox" value="E-Ladestation"> E-Ladestation</label>
+        <label class="chip-check"><input type="checkbox" value="Klimaanlage"> Klimaanlage</label>
       </div>
       <label class="pets-row"><input type="checkbox" id="lsPets"><span>Haustiere sind willkommen</span></label>
     </fieldset>
@@ -4678,6 +5996,20 @@ p,li,.hero-subtitle{letter-spacing:0}
   </div>
 </div>
 
+
+<div class="auth-overlay" id="listingPreviewOverlay" hidden>
+  <div class="auth-modal listing-preview-modal" role="dialog" aria-modal="true" aria-labelledby="lpTitle" style="width:min(480px,100%);max-height:90vh;overflow:auto">
+    <button type="button" class="auth-close" id="lpClose" aria-label="Schließen">×</button>
+    <h2 id="lpTitle">Vorschau deines Hotels</h2>
+    <p class="auth-sub">Prüfe die Angaben. Erst mit „Speichern“ wird der Eintrag auf diesem Gerät gesichert.</p>
+    <div id="lpBody" class="listing-preview-body"></div>
+    <div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap">
+      <button type="button" class="cta-btn secondary" id="lpEdit" style="flex:1">Angaben ändern</button>
+      <button type="button" class="cta-btn" id="lpConfirm" style="flex:1">Speichern</button>
+    </div>
+  </div>
+</div>
+
 <div class="staylo-toast" id="stayloToast" role="status" aria-live="polite"></div>
 
 <script>
@@ -4812,14 +6144,14 @@ p,li,.hero-subtitle{letter-spacing:0}
 
   /* Kategorien – jede muss echte Treffer liefern */
   var CATEGORIES=[
-    {key:"luxus",label:"Luxushotels",desc:"Fünf-Sterne-Häuser mit persönlichem Service und Fine Dining.",match:function(h){return h.type==="Luxus";}},
-    {key:"wellness",label:"Wellnesshotels",desc:"Spa, Sauna, Pools und Behandlungen im Mittelpunkt.",match:function(h){return h.type==="Wellness";}},
-    {key:"berg",label:"Berghotels",desc:"Direkt an den Hängen oder mit Dolomitenblick.",match:function(h){return h.type==="Berghotel";}},
-    {key:"boutique",label:"Boutique Hotels",desc:"Kleine, individuell geführte Häuser mit Charakter.",match:function(h){return h.type==="Boutique";}},
-    {key:"design",label:"Design Hotels",desc:"Architektur und Interieur als Teil des Erlebnisses.",match:function(h){return h.type==="Design";}},
+    {key:"luxus",label:"Luxushotels",desc:"Fünf-Sterne-Häuser mit persönlichem Service und Fine Dining.",match:function(h){return h.type==="Luxus"||(h.types||[]).indexOf("Luxus")!==-1;}},
+    {key:"wellness",label:"Wellnesshotels",desc:"Spa, Sauna, Pools und Behandlungen im Mittelpunkt.",match:function(h){return h.type==="Wellness"||(h.types||[]).indexOf("Wellness")!==-1;}},
+    {key:"berg",label:"Berghotels",desc:"Direkt an den Hängen oder mit Dolomitenblick.",match:function(h){return h.type==="Berghotel"||(h.types||[]).indexOf("Berghotel")!==-1;}},
+    {key:"boutique",label:"Boutique Hotels",desc:"Kleine, individuell geführte Häuser mit Charakter.",match:function(h){return h.type==="Boutique"||(h.types||[]).indexOf("Boutique")!==-1;}},
+    {key:"design",label:"Design Hotels",desc:"Architektur und Interieur als Teil des Erlebnisses.",match:function(h){return h.type==="Design"||(h.types||[]).indexOf("Design")!==-1;}},
     {key:"familie",label:"Familienhotels",desc:"Zimmer und Angebote für Kinder und Eltern.",match:function(h){return h.type==="Familie"||(h.amenities||[]).indexOf("Familienzimmer")!==-1;}},
-    {key:"adults-only",label:"Adults Only",desc:"Nur für Erwachsene – ruhiger, oft mit Wellness und Fine Dining.",match:function(h){return (h.tags||[]).indexOf("adults-only")!==-1;}},
-    {key:"nachhaltig",label:"Nachhaltige Hotels",desc:"Regionale Küche und ressourcenschonender Betrieb.",match:function(h){return (h.tags||[]).indexOf("nachhaltig")!==-1;}}
+    {key:"adults-only",label:"Adults Only",desc:"Nur für Erwachsene – ruhiger, oft mit Wellness und Fine Dining.",match:function(h){return (h.tags||[]).indexOf("adults-only")!==-1||((h.type==="Wellness"||h.type==="Luxus")&&h.type!=="Familie"&&(h.amenities||[]).indexOf("Familienzimmer")===-1);}},
+    {key:"nachhaltig",label:"Nachhaltige Hotels",desc:"Regionale Küche und ressourcenschonender Betrieb.",match:function(h){var a=(h.amenities||[]).map(function(x){return String(x).toLowerCase();});return (h.tags||[]).indexOf("nachhaltig")!==-1||a.indexOf("garten")!==-1||a.some(function(x){return x.indexOf("regional")!==-1;});}}
   ];
   function getCategory(key){
     for(var i=0;i<CATEGORIES.length;i++){ if(CATEGORIES[i].key===key) return CATEGORIES[i]; }
@@ -4834,7 +6166,7 @@ p,li,.hero-subtitle{letter-spacing:0}
   var visibleCount=6,checkIn=null,checkOut=null,calCursor=new Date(),occ={
     adults:2,children:0,rooms:1,pets:false
   };
-  var activeFilters={dest:null,category:null,maxPrice:500,sort:"recommended",minRating:0,stars:[],amenities:[]};
+  var activeFilters={dest:null,category:null,types:[],maxPrice:500,sort:"recommended",minRating:0,stars:[],amenities:[]};
   function loadFavorites(){
     try{
       var raw=localStorage.getItem("staylo_favorites");
@@ -4903,8 +6235,8 @@ p,li,.hero-subtitle{letter-spacing:0}
   function routeFromHash(){
     var h=(location.hash||"").replace("#","");
     if(h.indexOf("hotel-")===0)openHotel(h.replace("hotel-",""),true);
-    else if(h==="page-categories"||h==="categories")showPage("categories");
-    else if(h==="page-regions"||h==="regions")showPage("regions");
+    else if(h==="page-categories"||h==="categories"){showPage("categories");renderCategoryPage();}
+    else if(h==="page-regions"||h==="regions"){showPage("regions");renderRegionPage();}
     else if(h==="page-hoteliers"||h==="hoteliers")showPage("hoteliers");
     else if(h==="page-about"||h==="about")showPage("about");
     else if(h==="page-contact"||h==="contact")showPage("contact");
@@ -4965,14 +6297,15 @@ p,li,.hero-subtitle{letter-spacing:0}
       var inCat=HOTELS.filter(c.match),n=inCat.length;
       var cover=inCat.length?inCat[0].img:"";
       var from=inCat.length?Math.min.apply(null,inCat.map(function(h){return h.price;})):0;
-      return '<button type="button" class="page-card is-clickable has-photo" data-category="'+c.key+'">'+
-        (cover?'<span class="page-card-photo"><img src="'+cover+'" alt="" loading="lazy" width="800" height="533"></span>':'')+
+      var active = activeFilters.category === c.key;
+      return '<button type="button" class="page-card is-clickable has-photo'+(active?' is-active':'')+'" data-category="'+c.key+'" aria-pressed="'+(active?'true':'false')+'">'+
+        (cover?'<span class="page-card-photo"><img src="'+cover+'" alt="'+c.label+'" loading="lazy" width="800" height="450"></span>':'')+
         '<span class="page-card-body">'+
         '<h3>'+c.label+'</h3>'+
         '<p>'+c.desc+'</p>'+
         '<span class="page-card-meta">'+
-          (from?'<span class="alt-m no-mark">ab €&#8239;'+from+' / Nacht</span>':'')+
-          '<span class="page-card-count">'+n+' Hotel'+(n===1?'':'s')+' ansehen →</span>'+
+          (from?'<span class="alt-m no-mark">ab €&#8239;'+from+'</span>':'')+
+          '<span class="page-card-count">'+n+' Hotel'+(n===1?'':'s')+' →</span>'+
         '</span>'+
         '</span>'+
       '</button>';
@@ -4983,7 +6316,11 @@ p,li,.hero-subtitle{letter-spacing:0}
     if(!el)return;
     el.innerHTML=REGION_INFO.map(function(r,i){
       var n=countRegion(r.name);
-      return '<button type="button" class="page-card is-clickable has-photo" data-region="'+r.name+'">'+
+      var isOn = activeFilters.dest && (
+        (activeFilters.dest.name||"").toLowerCase() === r.name.toLowerCase() ||
+        (activeFilters.dest.name||"").toLowerCase().indexOf(r.name.toLowerCase()) !== -1
+      );
+      return '<button type="button" class="page-card is-clickable has-photo'+(isOn?' is-active':'')+'" data-region="'+r.name+'" aria-pressed="'+(isOn?'true':'false')+'">'+
         '<span class="page-card-photo"><img src="'+r.img+'" alt="Landschaft in '+r.name+'" loading="lazy" width="800" height="500"></span>'+
         '<span class="page-card-body">'+
         '<span class="tag">'+r.tag+'</span>'+
@@ -5097,6 +6434,9 @@ p,li,.hero-subtitle{letter-spacing:0}
     if(activeFilters.stars && activeFilters.stars.length){
       chips.push({key:"stars", label: activeFilters.stars.map(function(s){ return s + "★"; }).join(" ")});
     }
+    (activeFilters.types || []).forEach(function(t){
+      chips.push({key:"type-"+t, label: t});
+    });
     (activeFilters.amenities || []).forEach(function(a){
       if(a === "pets") chips.push({key:"amenity-pets", label: "Haustiere"});
       else chips.push({key:"amenity-"+a, label: a});
@@ -5134,6 +6474,16 @@ p,li,.hero-subtitle{letter-spacing:0}
     if(activeFilters.category){
       var cat = getCategory(activeFilters.category);
       if(cat) list = list.filter(cat.match);
+    }
+    if(activeFilters.types && activeFilters.types.length){
+      list = list.filter(function(h){
+        var tset = [h.type].concat(h.types || []);
+        return activeFilters.types.some(function(t){
+          if(t === "Adults Only") return (h.tags||[]).indexOf("adults-only")!==-1 || ((h.type==="Wellness"||h.type==="Luxus")&&(h.amenities||[]).indexOf("Familienzimmer")===-1);
+          if(t === "Nachhaltig"){ var a=(h.amenities||[]).map(function(x){return String(x).toLowerCase();}); return (h.tags||[]).indexOf("nachhaltig")!==-1||a.indexOf("garten")!==-1; }
+          return tset.indexOf(t) !== -1;
+        });
+      });
     }
     if(activeFilters.minRating && activeFilters.minRating > 0){
       list = list.filter(function(h){ return h.rating >= activeFilters.minRating; });
@@ -5190,26 +6540,34 @@ p,li,.hero-subtitle{letter-spacing:0}
       var totalLine = nights
         ? '<div class="hotel-total">€ '+(h.price*nights)+' gesamt · '+nights+(nights===1?' Nacht':' Nächte')+'</div>'
         : '';
-      return '<article class="hotel-card" data-id="'+h.id+'" role="article">'+
+      return '<article class="hotel-card hc-card" data-id="'+h.id+'" role="article">'+
         '<div class="hotel-image">'+
           '<img src="'+h.img+'" alt="'+(h.name||"Hotel")+' – '+(h.type||"Hotel")+' in '+(h.location||"Südtirol")+'" loading="lazy" decoding="async" width="600" height="400" onerror="this.closest(\'.hotel-image\').classList.add(\'img-failed\');this.remove()">'+
-          '<span class="hotel-badge">'+h.type+'</span>'+petsBadge+
+          '<span class="hotel-badge">'+(h.type||"Hotel")+'</span>'+petsBadge+
           '<button class="favorite'+(fav?" is-active":"")+'" type="button" data-fav="'+h.id+'" aria-label="'+(fav?"Aus Favoriten entfernen":"Zu Favoriten hinzufügen")+'" aria-pressed="'+(fav?"true":"false")+'">'+(fav?"♥":"♡")+'</button>'+
         '</div>'+
         '<div class="hotel-body">'+
-          (stars ? '<div class="hotel-stars" aria-label="'+h.stars+' von 5 Sternen">'+stars+'</div>' : '')+
-          '<div class="hotel-location">'+(h.location || h.loc || "")+(h.region ? " · "+h.region : "")+'</div>'+
           '<h3 class="hotel-name">'+h.name+'</h3>'+
-          '<p class="hotel-description">'+h.desc+'</p>'+
-          ((h.amenities&&h.amenities.length)?'<div class="hotel-amenities">'+(h.amenities.slice(0,4).map(function(a){return '<span class="hotel-amenity-pill">'+a+'</span>';}).join(""))+'</div>':'')+
-          '<div class="hotel-bottom">'+
-            '<div><div class="hotel-price">ab € '+h.price+' <span>/ Nacht</span></div>'+totalLine+'</div>'+
-            (h.rating>0
-              ? '<div class="hotel-rating" aria-label="Bewertung '+h.rating.toFixed(1)+' von 5'+reviews+'">★ '+h.rating.toFixed(1)+'<span class="hotel-reviews">'+reviews+'</span></div>'
-              : '<div class="hotel-rating is-new">Neu bei Staylo</div>')+
+          (stars ? '<div class="hotel-stars" aria-label="'+h.stars+' von 5 Sternen">'+stars+'</div>' : '')+
+          '<div class="hotel-location"><span class="loc-pin" aria-hidden="true">📍</span> '+(h.location || h.loc || "")+(h.region ? " · "+h.region : "")+'</div>'+
+          '<div class="hc-row">'+
+            '<div class="hc-score">'+(
+              h.rating>0
+                ? '<span class="hc-score-box">'+(Math.round(h.rating/5*100))+'%</span>'+
+                  '<div class="hc-score-text"><strong>'+(h.rating>=4.5?"Sehr gut":h.rating>=4?"Gut":h.rating>=3.5?"Befriedigend":"Ok")+'</strong>'+
+                  '<span class="hotel-reviews">'+(h.reviews?h.reviews.toLocaleString("de-DE")+" Bewertungen":"Neu")+'</span></div>'
+                : '<span class="hc-score-box hc-score-new">Neu</span><div class="hc-score-text"><strong>Neu bei Staylo</strong><span class="hotel-reviews">Noch keine Bewertungen</span></div>'
+            )+'</div>'+
+            '<div class="hc-price-block">'+
+              ((h.amenities&&h.amenities.length)?'<div class="hc-perk">'+(h.amenities[0])+'</div>':'')+
+              '<div class="hotel-price">ab '+h.price+' €</div>'+
+              '<div class="hc-per-night">pro Nacht</div>'+
+              totalLine+
+            '</div>'+
           '</div>'+
+          ((h.amenities&&h.amenities.length)?'<ul class="hc-highlights">'+(h.amenities.slice(0,3).map(function(a){return "<li>"+a+"</li>";}).join(""))+"</ul>":"")+
           '<div class="hotel-actions">'+
-            '<button type="button" class="hotel-cta-mini" data-open-hotel="'+h.id+'" aria-label="'+h.name+' ansehen">Details ansehen</button>'+
+            '<button type="button" class="hotel-cta-mini" data-open-hotel="'+h.id+'" aria-label="'+h.name+' ansehen">Details</button>'+
             '<button type="button" class="hotel-cta-inquiry" data-inquiry="'+h.id+'" aria-label="'+h.name+' anfragen">Anfragen</button>'+
           '</div>'+
         '</div></article>';
@@ -5369,11 +6727,40 @@ p,li,.hero-subtitle{letter-spacing:0}
             '<p class="hd-map-sub">'+(h.location||h.loc||"Südtirol")+(h.region ? " · "+h.region : "")+' – entdecke die Umgebung auf der Karte</p>'+
             '<div class="hd-map" id="hotelDetailMap" role="img" aria-label="Karte von '+h.name+'"></div>'+
           '</div>'+
+          buildSimilarHotels(h)+
         '</div>'+
       '</div>';
     showPage("hotel");
     window.scrollTo(0,0);
     initHotelDetailMap(h);
+  }
+
+  function buildSimilarHotels(current){
+    var list = HOTELS.filter(function(x){
+      if(x.id === current.id) return false;
+      if(current.type && x.type === current.type) return true;
+      if(current.region && x.region === current.region) return true;
+      var loc = (current.location||"").toLowerCase();
+      if(loc && ((x.location||"").toLowerCase().indexOf(loc)!==-1 || (x.loc||"").toLowerCase().indexOf(loc)!==-1)) return true;
+      return false;
+    }).slice(0, 3);
+    if(!list.length){
+      list = HOTELS.filter(function(x){ return x.id !== current.id; })
+        .sort(function(a,b){ return b.rating - a.rating; }).slice(0, 3);
+    }
+    if(!list.length) return "";
+    var cards = list.map(function(s){
+      return '<button type="button" class="similar-card" data-id="'+s.id+'">'+
+        '<img src="'+s.img+'" alt="" loading="lazy" width="320" height="200">'+
+        '<span class="similar-body">'+
+          '<strong>'+s.name+'</strong>'+
+          '<span class="similar-meta">'+s.type+' · '+(s.location||s.loc||"")+'</span>'+
+          '<span class="similar-price">ab € '+s.price+' <span>/ Nacht</span></span>'+
+        '</span></button>';
+    }).join("");
+    return '<div class="hd-similar">'+
+      '<h2>Ähnliche Unterkünfte</h2>'+
+      '<div class="similar-grid">'+cards+'</div></div>';
   }
 
   var hotelDetailMapInstance = null;
@@ -5404,8 +6791,9 @@ p,li,.hero-subtitle{letter-spacing:0}
           touchZoom: true,
           zoomControl: true
         }).setView([lat, lng], 13);
+        if(hotelDetailMapInstance.attributionControl){ hotelDetailMapInstance.attributionControl.setPrefix(""); }
         L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {subdomains:"abcd",
-          attribution: "&copy; OpenStreetMap",
+          attribution: "© OSM",
           maxZoom: 18
         }).addTo(hotelDetailMapInstance);
         var marker = L.marker([lat, lng]).addTo(hotelDetailMapInstance);
@@ -6219,6 +7607,7 @@ p,li,.hero-subtitle{letter-spacing:0}
     activeFilters.minRating = 0;
     activeFilters.stars = [];
     activeFilters.amenities = [];
+    activeFilters.types = [];
     occ.pets = false;
     visibleCount = 6;
     var di0 = document.getElementById("destInput");
@@ -6234,7 +7623,7 @@ p,li,.hero-subtitle{letter-spacing:0}
     document.querySelectorAll("#ratingFilters input").forEach(function(inp){
       inp.checked = (inp.value === "all");
     });
-    document.querySelectorAll("#starFilters input, #amenityFilters input").forEach(function(inp){
+    document.querySelectorAll("#starFilters input, #amenityFilters input, #typeFilters input").forEach(function(inp){
       inp.checked = false;
     });
     document.querySelectorAll(".chip-check").forEach(function(lab){
@@ -6264,7 +7653,7 @@ p,li,.hero-subtitle{letter-spacing:0}
     document.querySelectorAll("#ratingFilters input").forEach(function(inp){
       inp.checked = (inp.value === "all");
     });
-    document.querySelectorAll("#starFilters input, #amenityFilters input").forEach(function(inp){
+    document.querySelectorAll("#starFilters input, #amenityFilters input, #typeFilters input").forEach(function(inp){
       inp.checked = false;
     });
     document.querySelectorAll(".chip-check").forEach(function(lab){
@@ -6313,14 +7702,19 @@ p,li,.hero-subtitle{letter-spacing:0}
      hotels, so every existing feature works on it unchanged. */
   function listingToHotel(l){
     var c=REGION_COORDS[l.region]||[46.62,11.42];
+    var types = (l.types && l.types.length) ? l.types.slice() : (l.type ? [l.type] : []);
+    var tags = [];
+    if(types.indexOf("Adults Only")!==-1) tags.push("adults-only");
+    if(types.indexOf("Nachhaltig")!==-1) tags.push("nachhaltig");
     return {
-      id:l.id,name:l.name,website:l.website||"",type:l.type,
+      id:l.id,name:l.name,website:l.website||"",type:types[0]||l.type||"",
+      types:types,
       loc:l.region,price:Number(l.price)||0,rating:0,stars:Number(l.stars)||0,
       reviews:0,pets:!!l.pets,location:l.region,
       lat:c[0]+(l.jitter||0),lng:c[1]+(l.jitter2||0),
       region:(regionByName(l.region)||{}).it||"",img:l.img||PLACEHOLDER_IMG,
       desc:l.desc,long:l.long||l.desc,
-      amenities:l.amenities||[],rooms:[],gallery:[],tags:[],
+      amenities:l.amenities||[],rooms:[],gallery:[],tags:tags,
       isOwn:true,email:l.email||""
     };
   }
@@ -6355,6 +7749,7 @@ p,li,.hero-subtitle{letter-spacing:0}
       zoomControl:true
     }).setView([46.62,11.42],9);
     var map=stayloMapInstance;
+    if(map.attributionControl){ map.attributionControl.setPrefix(""); }
 
     /* Muted cartography so the hotel pins are the only saturated thing
        on the map. CARTO Positron, same free/no-key terms as plain OSM. */
@@ -6498,9 +7893,13 @@ p,li,.hero-subtitle{letter-spacing:0}
     function readForm(){
       var amen=[].slice.call(document.querySelectorAll("#lsAmenities input:checked"))
                  .map(function(c){ return c.value; });
+      var types=[].slice.call(document.querySelectorAll("#lsTypes input:checked"))
+                 .map(function(c){ return c.value; });
+      var primary=types[0]||"";
+      if($("lsType")) $("lsType").value=primary;
       return {
         id:editId.value||("own-"+Date.now().toString(36)),
-        name:$("lsName").value.trim(), type:$("lsType").value,
+        name:$("lsName").value.trim(), type:primary, types:types,
         region:regionSel.value, stars:$("lsStars").value,
         price:$("lsPrice").value, desc:$("lsDesc").value.trim(),
         long:$("lsLong").value.trim(), img:imgInput.value.trim(),
@@ -6525,27 +7924,39 @@ p,li,.hero-subtitle{letter-spacing:0}
       err.hidden=true;
       var d=readForm();
       if(d.name.length<2)      return showError("Bitte gib den Namen deines Hauses an.",$("lsName"));
-      if(!d.type)              return showError("Bitte wähle eine Kategorie.",$("lsType"));
+      if(!d.types||!d.types.length) return showError("Bitte wähle mindestens eine Kategorie.",document.querySelector("#lsTypes"));
       if(!d.region)            return showError("Bitte wähle die Region deines Hauses.",regionSel);
       if(!d.price||Number(d.price)<30) return showError("Bitte gib einen Preis ab 30 € pro Nacht an.",$("lsPrice"));
       if(d.desc.length<10)     return showError("Bitte beschreibe dein Haus in einem kurzen Satz.",$("lsDesc"));
       if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.email)) return showError("Bitte gib eine gültige E-Mail-Adresse für Anfragen an.",$("lsEmail"));
 
-      var list=loadListings(),i=-1;
-      list.forEach(function(x,ix){ if(x.id===d.id)i=ix; });
-      if(i>=0)list[i]=d; else list.push(d);
-      if(!saveListings(list))return showError("Speichern nicht möglich – dein Browser blockiert lokalen Speicher (z. B. im privaten Modus).");
-
-      syncListingsIntoHotels();
-      renderHotels(); renderCategoryPage(); renderRegionPage(); renderMyListings();
-      showToast(i>=0?"Änderungen gespeichert.":"Dein Haus ist eingetragen.");
-      resetForm();
-      document.getElementById("myListings").scrollIntoView({behavior:"smooth",block:"start"});
+      /* Preview modal instead of immediate save */
+      window.__pendingListing = d;
+      var ov = document.getElementById("listingPreviewOverlay");
+      var body = document.getElementById("lpBody");
+      if(body){
+        var img = d.img || "";
+        body.innerHTML =
+          (img ? '<img src="'+img.replace(/"/g,"")+'" alt="" onerror="this.style.display=\'none\'">' : '')+
+          "<strong>"+d.name.replace(/</g,"")+"</strong>"+
+          '<div class="lp-meta">'+(d.types||[]).join(" · ")+' · '+d.region+(d.stars&&d.stars!=="0"?" · "+d.stars+"★":"")+'</div>'+
+          '<div class="lp-price">ab € '+d.price+' / Nacht</div>'+
+          '<p style="font-size:13.5px;color:var(--grey);margin-top:8px;line-height:1.5">'+d.desc.replace(/</g,"")+'</p>'+
+          ((d.amenities&&d.amenities.length)?'<div class="lp-chips">'+d.amenities.map(function(a){return "<span>"+a+"</span>";}).join("")+"</div>":"");
+      }
+      if(ov){ ov.hidden=false; document.body.style.overflow="hidden"; }
     });
 
     function fillForm(l){
       editId.value=l.id;
-      $("lsName").value=l.name; $("lsType").value=l.type; regionSel.value=l.region;
+      $("lsName").value=l.name; regionSel.value=l.region;
+      var tset = (l.types && l.types.length) ? l.types : (l.type ? [l.type] : []);
+      document.querySelectorAll("#lsTypes input").forEach(function(c){
+        c.checked = tset.indexOf(c.value) !== -1;
+        var lab = c.closest(".chip-check");
+        if(lab) lab.classList.toggle("is-on", c.checked);
+      });
+      if($("lsType")) $("lsType").value = tset[0] || "";
       $("lsStars").value=l.stars; $("lsPrice").value=l.price; $("lsDesc").value=l.desc;
       $("lsLong").value=l.long||""; imgInput.value=l.img||"";
       $("lsEmail").value=l.email||""; $("lsWebsite").value=l.website||"";
@@ -6646,6 +8057,13 @@ p,li,.hero-subtitle{letter-spacing:0}
       activeFilters.stars = [];
       document.querySelectorAll("#starFilters input").forEach(function(inp){ inp.checked = false; });
     }
+    if(key.indexOf("type-") === 0){
+      var tv = key.replace("type-", "");
+      activeFilters.types = (activeFilters.types || []).filter(function(t){ return t !== tv; });
+      document.querySelectorAll("#typeFilters input").forEach(function(inp){
+        if(inp.value === tv) inp.checked = false;
+      });
+    }
     if(key.indexOf("amenity-") === 0){
       var am = key.replace("amenity-", "");
       activeFilters.amenities = (activeFilters.amenities || []).filter(function(a){ return a !== am && a.toLowerCase() !== am.toLowerCase(); });
@@ -6675,6 +8093,10 @@ p,li,.hero-subtitle{letter-spacing:0}
       document.querySelectorAll('#amenityFilters input:checked'),
       function(el){ return el.value; }
     );
+    activeFilters.types = Array.prototype.map.call(
+      document.querySelectorAll('#typeFilters input:checked'),
+      function(el){ return el.value; }
+    );
     // sync pets checkbox with amenity pets
     if(activeFilters.amenities.indexOf("pets") !== -1){
       occ.pets = true;
@@ -6694,7 +8116,7 @@ p,li,.hero-subtitle{letter-spacing:0}
     updateSummary();
     renderHotels();
   }
-  document.querySelectorAll("#ratingFilters input, #starFilters input, #amenityFilters input").forEach(function(inp){
+  document.querySelectorAll("#ratingFilters input, #starFilters input, #amenityFilters input, #typeFilters input").forEach(function(inp){
     inp.addEventListener("change", onDetailFilterChange);
   });
 
@@ -6743,7 +8165,9 @@ p,li,.hero-subtitle{letter-spacing:0}
     var header = document.getElementById("siteHeader");
     if(!header) return;
     var onScroll = function(){
-      header.classList.toggle("is-scrolled", window.scrollY > 12);
+      var scrolled = window.scrollY > 12;
+      header.classList.toggle("is-scrolled", scrolled);
+      document.body.classList.toggle("header-compact", scrolled);
     };
     window.addEventListener("scroll", onScroll, {passive:true});
     onScroll();
@@ -6765,6 +8189,7 @@ p,li,.hero-subtitle{letter-spacing:0}
   }
   function refreshAuthUI(){
     var user = getAuthUser();
+    if(typeof window.refreshListingGate==="function") window.refreshListingGate();
     var drawerBtn = document.getElementById("drawerLoginBtn");
     if(!loginBtn) return;
     if(user && user.email){
@@ -7040,12 +8465,122 @@ p,li,.hero-subtitle{letter-spacing:0}
   window.addEventListener("hashchange", updateNavActive);
   updateNavActive();
 
+
+  /* Sticky search bar when search leaves viewport top */
+  (function initStickySearch(){
+    var wrap = document.querySelector(".search-wrapper");
+    if(!wrap || !("IntersectionObserver" in window)) return;
+    var sentinel = document.createElement("div");
+    sentinel.setAttribute("aria-hidden","true");
+    sentinel.style.cssText = "height:1px;width:1px;pointer-events:none;position:relative;top:-8px;";
+    wrap.parentNode.insertBefore(sentinel, wrap);
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        wrap.classList.toggle("is-sticky", !en.isIntersecting && window.scrollY > 120);
+      });
+    }, {rootMargin: "0px", threshold: 0});
+    io.observe(sentinel);
+  })();
+
+
+  document.addEventListener("click", function(e){
+    var sim = e.target.closest(".similar-card");
+    if(!sim) return;
+    e.preventDefault();
+    var id = sim.getAttribute("data-id");
+    if(!id) return;
+    if(location.hash === "#hotel-" + id) openHotel(id, true);
+    else location.hash = "hotel-" + id;
+  });
+
+
+  /* Listing: login gate + preview confirm */
+  (function(){
+    function refreshListingGate(){
+      var user = (function(){ try{ return JSON.parse(localStorage.getItem("staylo_user")||"null"); }catch(e){ return null; } })();
+      var gate = document.getElementById("listingGate");
+      var panel = document.getElementById("listingPanel");
+      if(!gate || !panel) return;
+      var ok = !!(user && user.email);
+      gate.hidden = ok;
+      panel.hidden = !ok;
+    }
+    var lb = document.getElementById("listingLoginBtn");
+    if(lb) lb.addEventListener("click", function(){
+      var btn = document.getElementById("loginBtn");
+      if(btn) btn.click();
+    });
+    var lpClose = document.getElementById("lpClose");
+    var lpEdit = document.getElementById("lpEdit");
+    var lpConfirm = document.getElementById("lpConfirm");
+    var ov = document.getElementById("listingPreviewOverlay");
+    function closeLp(){ if(ov) ov.hidden=true; document.body.style.overflow=""; }
+    if(lpClose) lpClose.addEventListener("click", closeLp);
+    if(lpEdit) lpEdit.addEventListener("click", closeLp);
+    if(ov) ov.addEventListener("click", function(e){ if(e.target===ov) closeLp(); });
+    if(lpConfirm) lpConfirm.addEventListener("click", function(){
+      var d = window.__pendingListing;
+      if(!d){ closeLp(); return; }
+      try{
+        var raw = localStorage.getItem("staylo_listings");
+        var list = raw ? JSON.parse(raw) : [];
+        if(!Array.isArray(list)) list = [];
+        var i = -1;
+        list.forEach(function(x,ix){ if(x.id===d.id) i=ix; });
+        if(i>=0) list[i]=d; else list.push(d);
+        localStorage.setItem("staylo_listings", JSON.stringify(list));
+      }catch(err){
+        showToast("Speichern nicht möglich.");
+        return;
+      }
+      if(typeof syncListingsIntoHotels === "function") syncListingsIntoHotels();
+      renderHotels();
+      if(typeof renderCategoryPage==="function") renderCategoryPage();
+      if(typeof renderRegionPage==="function") renderRegionPage();
+      if(typeof renderMyListings==="function") renderMyListings();
+      showToast("Dein Haus ist eingetragen.");
+      closeLp();
+      window.__pendingListing = null;
+      var form = document.getElementById("listingForm");
+      if(form) form.reset();
+      document.querySelectorAll("#lsTypes .chip-check, #lsAmenities .chip-check").forEach(function(c){ c.classList.remove("is-on"); });
+      var ml = document.getElementById("myListings");
+      if(ml) ml.scrollIntoView({behavior:"smooth",block:"start"});
+    });
+    refreshListingGate();
+    window.refreshListingGate = refreshListingGate;
+    /* after auth success */
+    var _set = window.setAuthUser;
+  })();
+
   renderHotels();
   renderFavorites();
   renderCategoryPage();
   renderRegionPage();
   updateOccDisplay();
   updateDatesDisplay();
+
+  (function initViewToggle(){
+    var btns = document.querySelectorAll(".view-toggle-btn");
+    if(!btns.length) return;
+    function setView(v){
+      document.body.classList.remove("view-list","view-map","view-split");
+      document.body.classList.add("view-" + v);
+      btns.forEach(function(b){
+        b.classList.toggle("is-active", b.getAttribute("data-view") === v);
+      });
+      setTimeout(function(){
+        if(typeof stayloMapInstance !== "undefined" && stayloMapInstance){
+          try{ stayloMapInstance.invalidateSize(); }catch(e){}
+        }
+      }, 80);
+    }
+    btns.forEach(function(b){
+      b.addEventListener("click", function(){ setView(b.getAttribute("data-view")); });
+    });
+    setView("split");
+  })();
+
   routeFromHash();
 })();
 </script>
