@@ -152,13 +152,53 @@ img{
   z-index:100;
   color:#fff;
   height:var(--header-h);
-  background:rgba(18,32,28,.42);
-  backdrop-filter:blur(28px) saturate(180%);
-  -webkit-backdrop-filter:blur(28px) saturate(180%);
-  border-bottom:1px solid rgba(255,255,255,.12);
+  background:rgba(20,36,31,.46);
+  backdrop-filter:blur(30px) saturate(180%);
+  -webkit-backdrop-filter:blur(30px) saturate(180%);
+  border-bottom:1px solid rgba(255,255,255,.14);
   box-shadow:0 1px 0 rgba(255,255,255,.06),0 8px 32px rgba(0,0,0,.08);
-  transition:height .32s var(--ease),background .28s var(--ease),box-shadow .28s var(--ease),backdrop-filter .28s var(--ease),color .25s;
+  transition:height .32s var(--ease),background .28s var(--ease),box-shadow .28s var(--ease),backdrop-filter .28s var(--ease),border-color .28s var(--ease),color .25s;
   will-change:height,background
+}
+.header.is-scrolled{
+  height:var(--header-h-scrolled);
+  background:rgba(247,247,245,.86);
+  backdrop-filter:blur(32px) saturate(160%);
+  -webkit-backdrop-filter:blur(32px) saturate(160%);
+  border-bottom:1px solid rgba(0,0,0,.06);
+  box-shadow:0 4px 24px rgba(20,30,25,.06);
+  color:var(--black)
+}
+.header.is-scrolled .nav-item{color:rgba(26,31,28,.82)}
+.header.is-scrolled .nav-item:hover,
+.header.is-scrolled .nav-item:focus-within{
+  background:rgba(42,74,62,.08);
+  color:var(--green-dark)
+}
+.header.is-scrolled .nav-item.has-menu>span::after{border-top-color:rgba(26,31,28,.45)}
+.header.is-scrolled .logo-text span:first-child{color:var(--black)}
+.header.is-scrolled .logo-text span:last-child{color:var(--green-mid)}
+.header.is-scrolled .nav-glass{
+  color:var(--green-dark);
+  background:rgba(255,255,255,.55);
+  border-color:rgba(0,0,0,.08);
+  backdrop-filter:blur(16px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.7)
+}
+.header.is-scrolled .nav-glass:hover{
+  background:rgba(255,255,255,.75)
+}
+.header.is-scrolled .mobile-menu{
+  background:rgba(0,0,0,.05);
+  border-color:rgba(0,0,0,.08);
+  color:var(--green-dark)
+}
+.header.is-scrolled .mobile-menu .bar{background:var(--green-dark)}
+.header.is-scrolled .logo-mark{border-color:rgba(42,74,62,.2)}
+.nav .nav-item.is-active{background:rgba(255,255,255,.16);color:#fff}
+.header.is-scrolled .nav-item.is-active{
+  background:rgba(42,74,62,.1);
+  color:var(--green-dark)
 }
 
 .nav{
@@ -254,7 +294,13 @@ img{
 .nav-item.has-menu>span{
   display:inline-flex;
   align-items:center;
-  gap:5px
+  gap:5px;
+  cursor:pointer
+}
+.nav-item.has-menu>span:focus-visible{
+  outline:none;
+  box-shadow:var(--focus);
+  border-radius:8px
 }
 
 .nav-item.has-menu>span::after{
@@ -566,7 +612,7 @@ body.drawer-open{
 }
 
 .hero{
-  min-height:min(88vh,720px);
+  min-height:min(84vh,640px);
   position:relative;
   display:flex;
   align-items:center;
@@ -574,7 +620,7 @@ body.drawer-open{
   color:#fff;
   margin-top:calc(-1 * var(--header-h));
   padding-top:var(--header-h);
-  padding-bottom:88px
+  padding-bottom:56px
 }
 
 .hero-media{
@@ -661,18 +707,18 @@ body.drawer-open{
   width:8px;
   height:8px;
   border-radius:50%;
-  background:#5fef9a;
-  box-shadow:0 0 0 2px rgba(95,239,154,.25),0 0 10px 2px rgba(95,239,154,.55),0 0 18px 4px rgba(95,239,154,.28);
+  background:#e2585a;
+  box-shadow:0 0 0 2px rgba(226,88,90,.25),0 0 10px 2px rgba(226,88,90,.55),0 0 18px 4px rgba(226,88,90,.28);
   animation:dotPulse 2.4s ease-in-out infinite
 }
 
 @keyframes dotPulse{
   0%,100%{
-    box-shadow:0 0 0 2px rgba(95,239,154,.25),0 0 10px 2px rgba(95,239,154,.55),0 0 18px 4px rgba(95,239,154,.28)
+    box-shadow:0 0 0 2px rgba(226,88,90,.25),0 0 10px 2px rgba(226,88,90,.55),0 0 18px 4px rgba(226,88,90,.28)
   }
 
   50%{
-    box-shadow:0 0 0 2px rgba(95,239,154,.35),0 0 14px 3px rgba(95,239,154,.7),0 0 24px 6px rgba(95,239,154,.35)
+    box-shadow:0 0 0 2px rgba(226,88,90,.35),0 0 14px 3px rgba(226,88,90,.7),0 0 24px 6px rgba(226,88,90,.35)
   }
 
 }
@@ -704,7 +750,7 @@ body.drawer-open{
   flex-wrap:wrap;
   gap:12px;
   justify-content:center;
-  margin-top:28px
+  margin-top:22px
 }
 .hero-cta-primary{
   display:inline-flex;
@@ -747,7 +793,7 @@ body.drawer-open{
 .search-wrapper{
   position:relative;
   z-index:20;
-  margin-top:-72px
+  margin-top:-40px
 }
 .search-wrapper.is-sticky .search-box{
   position:sticky;
@@ -1819,14 +1865,23 @@ body.is-subpage{
 
 .page-back{
   display:inline-flex;
+  align-items:center;
+  gap:6px;
   font-size:13px;
   font-weight:600;
-  color:rgba(255,255,255,.75);
-  margin-bottom:18px
+  color:#fff;
+  background:rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.28);
+  padding:9px 16px;
+  border-radius:999px;
+  backdrop-filter:blur(12px);
+  margin-bottom:18px;
+  transition:background .2s,transform .2s
 }
 
 .page-back:hover{
-  color:#fff
+  background:rgba(255,255,255,.24);
+  transform:translateX(-2px)
 }
 
 .page-hero h1{
@@ -2005,7 +2060,12 @@ body.is-subpage{
 .hd-topbar .page-back{
   color:var(--green-dark);
   font-weight:600;
-  font-size:13.5px
+  font-size:13.5px;
+  background:rgba(42,74,62,.08);
+  border-color:rgba(42,74,62,.14)
+}
+.hd-topbar .page-back:hover{
+  background:rgba(42,74,62,.14)
 }
 
 .hd-title-row{
@@ -2474,47 +2534,6 @@ img{max-width:100%;height:auto}
     transition-duration:.01ms!important;
     scroll-behavior:auto!important
   }
-}
-
-/* Header refined */
-.header{
-  backdrop-filter:blur(16px) saturate(1.2);
-  -webkit-backdrop-filter:blur(16px) saturate(1.2);
-  border-bottom:1px solid transparent;
-  transition:background .25s var(--ease),box-shadow .25s var(--ease),border-color .25s var(--ease)
-}
-.header.is-scrolled{
-  height:var(--header-h-scrolled);
-  background:rgba(245,245,241,.94);
-  backdrop-filter:blur(24px) saturate(140%);
-  -webkit-backdrop-filter:blur(24px) saturate(140%);
-  border-bottom:1px solid rgba(0,0,0,.06);
-  box-shadow:0 4px 24px rgba(15,25,20,.08);
-  color:var(--black)
-}
-.header.is-scrolled .nav-item{color:rgba(20,24,22,.88)}
-.header.is-scrolled .nav-item:hover,.header.is-scrolled .nav-item:focus-within{background:rgba(33,75,61,.1);color:var(--green-dark)}
-.header.is-scrolled .nav-item.has-menu>span::after{border-top-color:rgba(20,24,22,.55)}
-.header.is-scrolled .logo-text span:first-child{color:var(--black)}
-.header.is-scrolled .logo-text span:last-child{color:var(--green)}
-.header.is-scrolled .nav-glass{
-  color:var(--green-dark);
-  background:linear-gradient(135deg,rgba(33,75,61,.08),rgba(33,75,61,.04));
-  border-color:rgba(33,75,61,.18)
-}
-.header.is-scrolled .nav-glass:hover{
-  background:linear-gradient(135deg,rgba(33,75,61,.14),rgba(33,75,61,.08))
-}
-.header.is-scrolled .mobile-menu{background:rgba(33,75,61,.1);border-color:rgba(33,75,61,.2);color:var(--green-dark)}
-.header.is-scrolled .mobile-menu .bar{background:var(--green-dark)}
-.header.is-scrolled .logo-mark{border-color:rgba(33,75,61,.25)}
-.nav .nav-item.is-active{
-  background:rgba(255,255,255,.18);
-  color:#fff
-}
-.header.is-scrolled .nav-item.is-active{
-  background:rgba(33,75,61,.12);
-  color:var(--green-dark)
 }
 
 /* Hotel cards – consistent height & hierarchy */
@@ -4463,26 +4482,9 @@ body.view-suche .site-main{display:none}
 }
 
 /* ---- Structural chrome: header + drawer -------------------- */
-.header{
-  background:var(--glass-dark);
-  -webkit-backdrop-filter:var(--mat-thick);
-  backdrop-filter:var(--mat-thick);
-  border-bottom:1px solid transparent;
-  box-shadow:none;
-  transition:height var(--t-base) var(--spring),
-             background var(--t-base) var(--spring),
-             border-color var(--t-base) var(--spring)
-}
 /* Over the hero the chrome is dark glass; once content scrolls
    under it, it turns to light glass so the page reads through.
    The boundary is a soft scroll edge, never a hard 1px rule. */
-.header.is-scrolled{
-  background:rgba(247,248,245,.72);
-  -webkit-backdrop-filter:var(--mat-thick);
-  backdrop-filter:var(--mat-thick);
-  border-bottom-color:var(--glass-hairline);
-  box-shadow:inset 0 1px 0 var(--glass-edge)
-}
 .header::after{
   content:"";
   position:absolute;
@@ -4688,68 +4690,31 @@ p,li,.hero-subtitle{letter-spacing:0}
 
 
 
-/* ===== Liquid glass / neutral polish ===== */
-.header.is-scrolled{
-  height:var(--header-h-scrolled) !important;
-  background:rgba(247,247,245,.78) !important;
-  backdrop-filter:blur(32px) saturate(160%) !important;
-  -webkit-backdrop-filter:blur(32px) saturate(160%) !important;
-  border-bottom:1px solid rgba(0,0,0,.06) !important;
-  box-shadow:0 4px 24px rgba(20,30,25,.06) !important;
-  color:var(--black) !important
-}
-.header.is-scrolled .nav-item{color:rgba(26,31,28,.82)}
-.header.is-scrolled .nav-item:hover,
-.header.is-scrolled .nav-item:focus-within{
-  background:rgba(42,74,62,.08);
-  color:var(--green-dark)
-}
-.header.is-scrolled .nav-item.has-menu>span::after{border-top-color:rgba(26,31,28,.45)}
-.header.is-scrolled .logo-text span:first-child{color:var(--black)}
-.header.is-scrolled .logo-text span:last-child{color:var(--green-mid)}
-.header.is-scrolled .nav-glass{
-  color:var(--green-dark);
-  background:rgba(255,255,255,.55);
-  border-color:rgba(0,0,0,.08);
-  backdrop-filter:blur(16px);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.7)
-}
-.header.is-scrolled .nav-glass:hover{
-  background:rgba(255,255,255,.75)
-}
-.header.is-scrolled .mobile-menu{
-  background:rgba(0,0,0,.05);
-  border-color:rgba(0,0,0,.08);
-  color:var(--green-dark)
-}
-.header.is-scrolled .mobile-menu .bar{background:var(--green-dark)}
-.header.is-scrolled .logo-mark{border-color:rgba(42,74,62,.2)}
-.nav .nav-item.is-active{background:rgba(255,255,255,.16);color:#fff}
-.header.is-scrolled .nav-item.is-active{
-  background:rgba(42,74,62,.1);
-  color:var(--green-dark)
-}
-
 /* Search: connected pill + box, bright glass */
 .search-wrapper{
-  margin-top:-64px !important
+  margin-top:-40px !important
 }
 .dest-pills{
-  margin:0 0 0 20px !important;
-  gap:0 !important
+  margin:0 0 12px !important;
+  gap:0 !important;
+  justify-content:center !important
 }
 .dest-pill{
-  padding:10px 20px 11px !important;
-  border-radius:16px 16px 0 0 !important;
-  font-size:12.5px !important;
-  font-weight:600 !important;
-  background:rgba(255,255,255,.92) !important;
+  padding:12px 28px !important;
+  border-radius:999px !important;
+  font-size:13px !important;
+  font-weight:700 !important;
+  background:rgba(255,255,255,.94) !important;
   color:var(--green-dark) !important;
-  border:1px solid rgba(255,255,255,.7) !important;
-  border-bottom:none !important;
-  box-shadow:0 -4px 20px rgba(20,30,25,.04);
-  letter-spacing:.01em !important;
-  backdrop-filter:blur(12px)
+  border:1px solid rgba(255,255,255,.75) !important;
+  box-shadow:0 10px 28px rgba(20,30,25,.12),inset 0 1px 0 rgba(255,255,255,.9) !important;
+  letter-spacing:.02em !important;
+  backdrop-filter:blur(16px);
+  transition:transform .2s var(--ease),box-shadow .25s var(--ease)
+}
+.dest-pill:hover{
+  transform:translateY(-1px);
+  box-shadow:0 14px 34px rgba(20,30,25,.16),inset 0 1px 0 rgba(255,255,255,.9) !important
 }
 .search-box{
   background:rgba(255,255,255,.94) !important;
@@ -4775,8 +4740,7 @@ p,li,.hero-subtitle{letter-spacing:0}
 .search-main{
   border:1px solid rgba(0,0,0,.05) !important;
   border-radius:16px !important;
-  background:rgba(255,255,255,.5) !important;
-  overflow:hidden
+  background:rgba(255,255,255,.5) !important
 }
 .search-field{
   min-height:70px !important;
@@ -4850,10 +4814,13 @@ p,li,.hero-subtitle{letter-spacing:0}
   box-shadow:inset 0 1px 0 rgba(255,255,255,.25)
 }
 .hero-label{
-  background:rgba(255,255,255,.1) !important;
-  border:1px solid rgba(255,255,255,.18) !important;
-  backdrop-filter:blur(20px)
+  background:rgba(255,255,255,.13) !important;
+  border:1px solid rgba(255,255,255,.24) !important;
+  backdrop-filter:blur(20px);
+  box-shadow:0 4px 18px rgba(0,0,0,.08)
 }
+.hero-label i{opacity:.4}
+.hero-label [lang="it"],.hero-label [lang="lld"]{font-weight:500}
 .hero-cta-primary{
   background:rgba(255,255,255,.95) !important;
   backdrop-filter:blur(12px);
@@ -4916,8 +4883,8 @@ footer{
 /* ===== Phase A–C: compact categories/regions, sticky search, nav polish ===== */
 .page-grid{
   display:grid !important;
-  grid-template-columns:repeat(auto-fill,minmax(240px,1fr)) !important;
-  gap:14px !important
+  grid-template-columns:repeat(auto-fill,minmax(272px,1fr)) !important;
+  gap:24px !important
 }
 .page-card.is-clickable.has-photo{
   padding:0 !important;
@@ -4934,9 +4901,9 @@ footer{
   min-height:0
 }
 .page-card.is-clickable.has-photo:hover{
-  transform:translateY(-3px);
-  box-shadow:0 12px 32px rgba(20,30,25,.1) !important;
-  border-color:rgba(42,74,62,.15) !important
+  transform:translateY(-6px);
+  box-shadow:0 18px 40px rgba(20,30,25,.14) !important;
+  border-color:rgba(42,74,62,.18) !important
 }
 .page-card.is-clickable.has-photo:focus-visible{
   outline:none;
@@ -4949,8 +4916,8 @@ footer{
 .page-card-photo{
   display:block !important;
   position:relative !important;
-  aspect-ratio:16/9 !important;
-  max-height:120px !important;
+  aspect-ratio:16/10 !important;
+  max-height:160px !important;
   overflow:hidden !important;
   background:var(--green-soft) !important;
   flex:0 0 auto !important
@@ -4959,10 +4926,10 @@ footer{
   width:100% !important;
   height:100% !important;
   object-fit:cover !important;
-  transition:transform .4s var(--ease) !important
+  transition:transform .45s var(--ease) !important
 }
 .page-card.has-photo:hover .page-card-photo img{
-  transform:scale(1.04) !important
+  transform:scale(1.06) !important
 }
 .page-card-body{
   padding:12px 14px 14px !important;
@@ -5922,7 +5889,7 @@ body.view-map .map-shell-sticky .map-canvas{
 <a href="#" class="logo" id="logoHome"><span class="logo-mark"><img class="logo-image" src="./YtDCk.jpg" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><span class="logo-fallback" style="display:none">S</span></span><div class="logo-text"><span>Stay</span><span>lo</span></div></a>
 <nav class="nav-center">
 <a href="#hotels" class="nav-item" data-nav="home">Hotels</a>
-<div class="nav-item has-menu"><span>Kategorien</span>
+<div class="nav-item has-menu"><span data-page="categories" role="link" tabindex="0">Kategorien</span>
 <div class="dropdown"><div class="dropdown-title">Finde deine Kategorie</div><div class="dropdown-subtitle">Von Luxus bis Natur.</div>
 <div class="dropdown-grid">
 <a class="dropdown-link" href="#hotels" data-category="luxus">Luxushotels</a>
@@ -5935,7 +5902,7 @@ body.view-map .map-shell-sticky .map-canvas{
 <a class="dropdown-link" href="#hotels" data-category="nachhaltig">Nachhaltig</a>
 </div>
 <a class="dropdown-cta" href="#page-categories" data-page="categories">Alle Kategorien ansehen →</a></div></div>
-<div class="nav-item has-menu"><span>Regionen</span>
+<div class="nav-item has-menu"><span data-page="regions" role="link" tabindex="0">Regionen</span>
 <div class="dropdown regions-dd"><div class="dropdown-title">Südtirol entdecken</div><div class="dropdown-subtitle">Beliebte Regionen</div>
 <div class="dropdown-grid">
 <a class="dropdown-link" href="#hotels" data-region="Meran">Meran <small>Therme · Wein</small></a>
@@ -6146,15 +6113,15 @@ body.view-map .map-shell-sticky .map-canvas{
 <div class="footer-bottom"><span>© 2026 Staylo · Hotels in Südtirol</span><span>Made in South Tyrol · Italy</span></div>
 </div></footer>
 </div>
-<div class="page-view" id="page-categories"><div class="page-hero"><div class="container"><a href="#" class="page-back" data-nav="home">← Zurück</a><h1>Finde deine Kategorie</h1><p>Jeder Aufenthalt hat seinen eigenen Charakter.</p></div></div>
+<div class="page-view" id="page-categories"><div class="page-hero"><div class="container"><a href="#" class="page-back" data-nav="home">← Zurück zur Startseite</a><h1>Finde deine Kategorie</h1><p>Jeder Aufenthalt hat seinen eigenen Charakter.</p></div></div>
 <div class="page-body"><div class="container"><div class="page-grid" id="categoryGrid"></div>
 <div style="text-align:center;margin-top:36px"><a href="#hotels" class="cta-btn" data-nav="home">Alle Hotels entdecken →</a></div>
 </div></div></div>
-<div class="page-view" id="page-regions"><div class="page-hero"><div class="container"><a href="#" class="page-back" data-nav="home">← Zurück</a><h1>Südtirol entdecken</h1><p>Jede Region hat ihren eigenen Rhythmus.</p></div></div>
+<div class="page-view" id="page-regions"><div class="page-hero"><div class="container"><a href="#" class="page-back" data-nav="home">← Zurück zur Startseite</a><h1>Südtirol entdecken</h1><p>Jede Region hat ihren eigenen Rhythmus.</p></div></div>
 <div class="page-body"><div class="container"><div class="page-grid" id="regionGrid"></div>
 <div style="text-align:center;margin-top:36px"><a href="#hotels" class="cta-btn" data-nav="home">Alle Hotels entdecken →</a></div>
 </div></div></div>
-<div class="page-view" id="page-hoteliers"><div class="page-hero"><div class="container"><a href="#" class="page-back" data-nav="home">← Zurück</a><h1>Dein Hotel auf Staylo</h1><p>Kostenlos starten. Professionell präsentieren.</p></div></div>
+<div class="page-view" id="page-hoteliers"><div class="page-hero"><div class="container"><a href="#" class="page-back" data-nav="home">← Zurück zur Startseite</a><h1>Dein Hotel auf Staylo</h1><p>Kostenlos starten. Professionell präsentieren.</p></div></div>
 <div class="page-body"><div class="container">
 <div class="page-intro"><h2>Kostenlos, ohne Provision</h2><p>Trage dein Haus selbst ein – in etwa fünf Minuten. Keine Einstiegsgebühr, keine Provision pro Buchung. Gästeanfragen kommen direkt bei dir an, nicht über uns.</p></div>
 
@@ -6293,7 +6260,7 @@ body.view-map .map-shell-sticky .map-canvas{
 <li><span class="req-icon">3</span><div><strong>Ein Haus aus Südtirol</strong><br>Wir bleiben bewusst regional – Meran bis Pustertal, Boutique bis Berghotel.</div></li>
 </ul></div>
 </div></div></div>
-<div class="page-view" id="page-about"><div class="page-hero"><div class="container"><a href="#" class="page-back" data-nav="home">← Zurück</a><h1>Über Staylo</h1><p>Warum wir diese Plattform gebaut haben.</p></div></div>
+<div class="page-view" id="page-about"><div class="page-hero"><div class="container"><a href="#" class="page-back" data-nav="home">← Zurück zur Startseite</a><h1>Über Staylo</h1><p>Warum wir diese Plattform gebaut haben.</p></div></div>
 <div class="page-body"><div class="container">
 <div class="story-block">
 <h2 style="font-family:'Fraunces',Georgia,serif;font-size:26px;margin-bottom:16px">Die Idee hinter Staylo</h2>
@@ -6314,7 +6281,7 @@ body.view-map .map-shell-sticky .map-canvas{
 
 <div class="page-view" id="page-contact">
   <div class="page-hero"><div class="container">
-    <a href="#" class="page-back" data-nav="home">← Zurück</a>
+    <a href="#" class="page-back" data-nav="home">← Zurück zur Startseite</a>
     <h1>Kontakt</h1>
     <p>Wir freuen uns auf deine Nachricht.</p>
   </div></div>
@@ -6329,7 +6296,7 @@ body.view-map .map-shell-sticky .map-canvas{
 </div>
 <div class="page-view" id="page-impressum">
   <div class="page-hero"><div class="container">
-    <a href="#" class="page-back" data-nav="home">← Zurück</a>
+    <a href="#" class="page-back" data-nav="home">← Zurück zur Startseite</a>
     <h1>Impressum</h1>
     <p>Angaben gemäß den gesetzlichen Vorgaben.</p>
   </div></div>
@@ -6985,6 +6952,13 @@ body.view-map .map-shell-sticky .map-canvas{
     var n=getFilteredHotels().length;
     showToast(d.name+": "+n+" Hotel"+(n===1?"":"s")+" gefunden.");
   }
+  document.addEventListener("keydown",function(e){
+    if(e.key!=="Enter"&&e.key!==" ")return;
+    var t=e.target.closest('[role="link"][data-page]');
+    if(!t)return;
+    e.preventDefault();
+    t.click();
+  });
   document.addEventListener("click",function(e){
     var cat=e.target.closest("[data-category]");
     if(cat){
@@ -8021,7 +7995,8 @@ body.view-map .map-shell-sticky .map-canvas{
     { name: "Terenten", province: "Südtirol", district: "Pustertal", aliases: ["terento", "terento"] },
     { name: "Terlan", province: "Südtirol", district: "Überetsch-Unterland", aliases: ["terlano", "terlano"] },
     { name: "Tiers", province: "Südtirol", district: "Salten-Schlern", aliases: ["tires", "tires"] },
-    { name: "Tirol", province: "Südtirol", district: "Burggrafenamt", aliases: ["tirolo", "tirolo"] },
+    { name: "Tirol", province: "Südtirol", district: "Burggrafenamt", aliases: ["tirolo", "dorf tirol", "dorftirol"] },
+    { name: "Seis am Schlern", province: "Südtirol", district: "Salten-Schlern", aliases: ["siusi allo sciliar", "siusi", "seis"] },
     { name: "Tisens", province: "Südtirol", district: "Burggrafenamt", aliases: ["tesimo", "tesimo"] },
     { name: "Toblach", province: "Südtirol", district: "Pustertal", aliases: ["dobbiaco", "dobbiaco"] },
     { name: "Tramin an der Weinstraße", province: "Südtirol", district: "Überetsch-Unterland", aliases: ["termeno sulla strada del vino", "tramin", "tramin", "termeno sulla strada del vino"] },
