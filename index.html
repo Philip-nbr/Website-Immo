@@ -5548,12 +5548,23 @@ body.header-compact{
   margin-top:8px
 }
 .results-list{min-width:0}
+/* The map used to be a modest ~600px card inside a much taller
+   sticky container — it stuck early, then just floated over empty
+   page for another 1000px+ before the list finally caught up. Now
+   it fills the viewport like the list itself does, so it stays
+   genuinely docked the whole time you browse, the way a map/list
+   split view is supposed to work, and lets go right as the list
+   runs out instead of dangling over blank space. */
 .results-map{
   position:sticky;
   top:calc(var(--header-h-scrolled) + 12px);
+  height:calc(100vh - var(--header-h-scrolled) - 24px);
   align-self:start
 }
 .map-shell-sticky{
+  height:100%;
+  display:flex;
+  flex-direction:column;
   border-radius:18px;
   overflow:hidden;
   border:1px solid rgba(0,0,0,.07);
@@ -5561,9 +5572,12 @@ body.header-compact{
   background:#fff
 }
 .map-shell-sticky .map-canvas{
-  height:min(70vh,620px) !important;
+  flex:1 1 auto !important;
+  height:auto !important;
+  min-height:0 !important;
   border-radius:0 !important
 }
+.map-shell-sticky .map-legend{flex:none}
 /* List mode cards – horizontal like HolidayCheck */
 .hotel-grid.hotel-list-mode{
   display:flex !important;
@@ -5606,8 +5620,10 @@ body.view-map .map-shell-sticky .map-canvas{
   .results-map{
     position:relative;
     top:0;
+    height:auto;
     order:-1
   }
+  .map-shell-sticky{height:auto}
   body.view-split .results-map .map-canvas{
     height:280px !important
   }
@@ -5753,7 +5769,9 @@ body.view-map .map-shell-sticky .map-canvas{
   gap:8px !important
 }
 .map-shell-sticky .map-canvas{
-  height:min(68vh,560px) !important
+  flex:1 1 auto !important;
+  height:auto !important;
+  min-height:0 !important
 }
 .results-split{
   gap:14px !important
@@ -6209,30 +6227,37 @@ body{background:var(--cream);line-height:1.5}
 }
 .region-strip-head p{color:var(--grey);font-size:15.5px;line-height:1.68;max-width:520px}
 
-/* The line: a literal, compressed profile of the terrain these
-   four regions sit on. Each mark rises by its true share of the
-   325–2000m range — nothing here is arbitrary placement. */
+/* The ridge: a real (if hand-drawn) skyline built from the same
+   325–2000m the region cards below quote — the four dots sit
+   exactly on the line, at their true relative height, and the
+   terrain gets visibly more jagged toward the Dolomites because
+   that's what actually happens on the ground between these places. */
 .elevation{
-  display:grid;grid-template-columns:repeat(4,1fr);
-  column-gap:18px;align-items:end;height:58px;
-  margin-bottom:2px;padding:0 2px
+  position:relative;height:104px;margin-bottom:4px
 }
-.elevation::before{
-  content:"";grid-column:1/-1;grid-row:1;align-self:end;
-  height:1px;margin-bottom:1px;
-  background:linear-gradient(90deg,rgba(42,74,62,.1),rgba(42,74,62,.32) 50%,rgba(42,74,62,.1))
+.elevation-ridge{
+  position:absolute;inset:0;width:100%;height:100%;
+  overflow:visible
+}
+.elevation-fill{opacity:.9}
+.elevation-line{
+  stroke:rgba(42,74,62,.34);stroke-width:1.6;
+  stroke-linejoin:round;stroke-linecap:round;
+  vector-effect:non-scaling-stroke
 }
 .elevation-mark{
-  grid-row:1;display:flex;flex-direction:column;align-items:center;
-  gap:7px;transform:translateY(var(--rise,0px))
+  position:absolute;transform:translate(-50%,-50%);
+  display:flex;flex-direction:column;align-items:center;gap:7px
+}
+.elevation-mark span{
+  order:-1;font-size:10.5px;font-weight:700;color:var(--green-mid);
+  font-variant-numeric:tabular-nums;letter-spacing:.02em;white-space:nowrap;
+  transform:translateY(-2px)
 }
 .elevation-dot{
   width:7px;height:7px;border-radius:50%;
-  background:var(--green);box-shadow:0 0 0 4px var(--cream)
-}
-.elevation-mark span{
-  font-size:10.5px;font-weight:700;color:var(--green-mid);
-  font-variant-numeric:tabular-nums;letter-spacing:.02em;white-space:nowrap
+  background:var(--green);box-shadow:0 0 0 4px var(--cream);
+  font-style:normal
 }
 
 .region-strip-grid{
@@ -6255,9 +6280,9 @@ body{background:var(--cream);line-height:1.5}
 .region-strip-foot{display:flex;justify-content:center;margin-top:clamp(26px,4vw,38px)}
 
 @media(max-width:1000px){
-  .elevation{grid-template-columns:repeat(4,1fr);height:44px}
+  .elevation{height:76px}
   .region-strip-grid{grid-template-columns:repeat(2,1fr)}
-  .elevation-mark,.region-strip-card{transform:none !important}
+  .region-strip-card{transform:none !important}
 }
 @media(max-width:600px){
   .elevation{display:none}
@@ -6451,10 +6476,20 @@ body{background:var(--cream);line-height:1.5}
   <p>Meran liegt auf 325&nbsp;Metern zwischen Weinbergen, die Dolomiten auf fast 2000. Dazwischen: vier sehr unterschiedliche Arten, Südtirol zu erleben – jede mit ihrem deutschen, italienischen und, in den ladinischen Tälern, ladinischen Namen.</p>
 </div>
 <div class="elevation" aria-hidden="true">
-  <div class="elevation-mark" style="--rise:0px"><span>325&nbsp;m</span><span class="elevation-dot"></span></div>
-  <div class="elevation-mark" style="--rise:-13px"><span>900&nbsp;m</span><span class="elevation-dot"></span></div>
-  <div class="elevation-mark" style="--rise:-24px"><span>1236&nbsp;m</span><span class="elevation-dot"></span></div>
-  <div class="elevation-mark" style="--rise:-40px"><span>2000&nbsp;m</span><span class="elevation-dot"></span></div>
+  <svg class="elevation-ridge" viewBox="0 0 800 100" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="elevFill" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#2a4a3e" stop-opacity=".22"/>
+        <stop offset="100%" stop-color="#2a4a3e" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <path class="elevation-fill" d="M-20,98 40,88 70,93 100,90 130,80 160,86 190,72 220,78 260,68 300,66 330,74 360,60 390,66 420,54 460,58 500,52 530,44 560,50 590,36 620,42 650,28 680,24 700,20 730,32 760,44 790,54 820,62 820,105 -20,105 Z" fill="url(#elevFill)"/>
+    <polyline class="elevation-line" points="-20,98 40,88 70,93 100,90 130,80 160,86 190,72 220,78 260,68 300,66 330,74 360,60 390,66 420,54 460,58 500,52 530,44 560,50 590,36 620,42 650,28 680,24 700,20 730,32 760,44 790,54 820,62" fill="none"/>
+  </svg>
+  <div class="elevation-mark" style="left:12.5%;top:90%"><span>325&nbsp;m</span><i class="elevation-dot"></i></div>
+  <div class="elevation-mark" style="left:37.5%;top:66%"><span>900&nbsp;m</span><i class="elevation-dot"></i></div>
+  <div class="elevation-mark" style="left:62.5%;top:52%"><span>1236&nbsp;m</span><i class="elevation-dot"></i></div>
+  <div class="elevation-mark" style="left:87.5%;top:20%"><span>2000&nbsp;m</span><i class="elevation-dot"></i></div>
 </div>
 <div class="region-strip-grid">
   <a href="#hotels" class="page-card is-clickable has-photo region-strip-card" data-region="Meran" style="--rise-card:0px">
@@ -8925,6 +8960,33 @@ body{background:var(--cream);line-height:1.5}
      so a hotelier's new listing shows up in both places. */
   window.STAYLO_DATA={HOTELS:HOTELS,REGION_INFO:REGION_INFO,CATEGORIES:CATEGORIES};
 
+  /* South Tyrol's real administrative boundary — traced from
+     OpenStreetMap and simplified from ~31,000 points down to this
+     handful, so the map can outline how large (and how oddly
+     shaped, from the Reschenpass down to the narrow Salurner Klause)
+     the region actually is. Shared with the explore map below. */
+  window.SOUTH_TYROL_OUTLINE=[[46.6843,10.3818],[46.6368,10.4023],[46.6413,10.4461],[46.6154,10.4921],[46.5435,10.4723],[46.5307,10.4528],[46.5082,10.4566],[46.4923,10.5502],[46.4441,10.6336],[46.4612,10.7166],[46.4869,10.7588],[46.4428,10.8013],[46.4438,10.9125],[46.484,10.9793],[46.4413,11.073],[46.489,11.0614],[46.5139,11.0343],[46.5314,11.0829],[46.5018,11.0894],[46.4816,11.1297],[46.504,11.1966],[46.462,11.2204],[46.4268,11.2054],[46.3972,11.2147],[46.3593,11.1915],[46.3415,11.2031],[46.3026,11.1776],[46.2833,11.1388],[46.2561,11.2019],[46.2382,11.1723],[46.2198,11.2064],[46.2588,11.3056],[46.2832,11.3116],[46.2991,11.3381],[46.2655,11.3582],[46.2648,11.3976],[46.2996,11.3595],[46.3347,11.4545],[46.3642,11.4769],[46.345,11.5512],[46.3809,11.564],[46.3898,11.6017],[46.4711,11.6248],[46.4831,11.6503],[46.5024,11.6386],[46.506,11.7612],[46.533,11.8129],[46.5089,11.8283],[46.5448,11.9648],[46.5335,11.9983],[46.5838,12.0466],[46.6077,12.0446],[46.6434,12.0748],[46.675,12.07],[46.6221,12.194],[46.5944,12.1923],[46.6299,12.2608],[46.6174,12.2844],[46.6331,12.3378],[46.6226,12.3851],[46.6432,12.38],[46.6798,12.478],[46.7163,12.3841],[46.775,12.3574],[46.7831,12.2838],[46.8149,12.2829],[46.8412,12.3068],[46.8844,12.2737],[46.8909,12.2418],[46.874,12.2154],[46.9061,12.1904],[46.9138,12.1438],[46.9373,12.1687],[46.9623,12.1319],[46.982,12.1382],[47.007,12.1214],[47.0249,12.1474],[47.0269,12.2047],[47.0587,12.2166],[47.0692,12.2408],[47.0921,12.186],[47.0332,11.9167],[46.9689,11.747],[46.9932,11.7115],[46.9917,11.6647],[47.0133,11.6272],[46.9841,11.5385],[47.011,11.4788],[46.9648,11.4056],[46.9906,11.3587],[46.9924,11.3203],[46.9625,11.207],[46.9658,11.1644],[46.9399,11.1641],[46.9314,11.1149],[46.9119,11.096],[46.8896,11.1016],[46.8533,11.0714],[46.8223,11.0833],[46.805,11.0393],[46.7654,11.0223],[46.7753,10.9233],[46.7629,10.8827],[46.7818,10.8407],[46.7751,10.8141],[46.7963,10.7863],[46.7883,10.7303],[46.8235,10.7635],[46.8755,10.6674],[46.8373,10.5462],[46.85,10.5525],[46.8591,10.4787],[46.804,10.4506],[46.7882,10.4227],[46.7527,10.4422],[46.7338,10.4008],[46.709,10.416],[46.6843,10.3818]];
+
+  /* Small dots along that outline, drawn once per map instance —
+     purely a "this is how big the region is" backdrop, so they sit
+     under everything and never intercept clicks. */
+  function drawRegionOutline(map){
+    if(!map||typeof L==="undefined")return;
+    var line=L.polyline(window.SOUTH_TYROL_OUTLINE,{
+      color:"#2a4a3e",weight:1,opacity:.22,dashArray:"1,7",
+      lineCap:"round",interactive:false
+    }).addTo(map);
+    window.SOUTH_TYROL_OUTLINE.forEach(function(pt,i){
+      if(i%2)return; /* every other vertex — plenty dotted, not a solid ring */
+      L.circleMarker(pt,{
+        radius:2.2,color:"#2a4a3e",weight:0,fillColor:"#2a4a3e",fillOpacity:.4,
+        interactive:false
+      }).addTo(map);
+    });
+    return line;
+  }
+  window.stayloDrawRegionOutline=drawRegionOutline;
+
   var mapInitialized=false,stayloMapInstance=null,mapMarkerLayer=null,mapMarkers={};
   function initMap(){
     if(mapInitialized)return;
@@ -8956,11 +9018,16 @@ body{background:var(--cream);line-height:1.5}
       attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
       subdomains:"abcd",maxZoom:19
     }).addTo(map);
+    drawRegionOutline(map);
 
     mapMarkerLayer=L.layerGroup().addTo(map);
     renderMapMarkers();
 
     setTimeout(function(){ map.invalidateSize(); },250);
+    /* The map's height now tracks the viewport (it stays docked for
+       the full scroll, not just a fixed card height), so a resize
+       can change it — keep Leaflet's tiles in sync. */
+    window.addEventListener("resize",function(){ map.invalidateSize(); });
   }
 
   /* Price-bubble pins, redrawn whenever the filters change, so the map
@@ -10013,6 +10080,7 @@ body{background:var(--cream);line-height:1.5}
       attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
       subdomains:"abcd",maxZoom:19
     }).addTo(map);
+    if(window.stayloDrawRegionOutline)window.stayloDrawRegionOutline(map);
     layer=L.layerGroup().addTo(map);
     render();
     /* The column is flex-sized, so Leaflet's first measurement is
