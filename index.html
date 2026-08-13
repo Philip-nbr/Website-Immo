@@ -1466,7 +1466,7 @@ section[id]{
 }
 
 .favorite.is-active{
-  color:#d64545
+  color:#e01224
 }
 
 .hotel-body{
@@ -2672,7 +2672,7 @@ img{max-width:100%;height:auto}
   transition:transform .2s var(--ease),background .2s,color .2s
 }
 .favorite:hover{transform:scale(1.08)}
-.favorite.is-active{color:#c23b3b;background:#fff}
+.favorite.is-active{color:#e01224;background:#fff}
 
 /* Active filter chips */
 .filter-chips{
@@ -3039,12 +3039,6 @@ img{max-width:100%;height:auto}
   align-items:center;
   gap:5px
 }
-.hotel-location::before{
-  content:"📍";
-  font-size:11px;
-  opacity:.75;
-  flex-shrink:0
-}
 .hotel-stars{
   letter-spacing:1.5px !important;
   color:#c4a035 !important;
@@ -3110,7 +3104,7 @@ img{max-width:100%;height:auto}
   box-shadow:0 4px 14px rgba(0,0,0,.1)
 }
 .favorite.is-active{
-  color:#c23b3b !important;
+  color:#e01224 !important;
   background:#fff !important
 }
 .map-shell{
@@ -4307,7 +4301,7 @@ select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{
   -webkit-backdrop-filter:var(--mat-thin);backdrop-filter:var(--mat-thin);
   color:var(--grey)
 }
-#page-suche .fav[aria-pressed="true"]{color:var(--glow-dark)}
+#page-suche .fav[aria-pressed="true"]{color:#e01224}
 #page-suche .card-body{display:flex;flex-direction:column;flex:1;padding:14px 16px 16px;gap:5px}
 #page-suche .card-loc{
   display:flex;align-items:baseline;gap:7px;flex-wrap:wrap;
@@ -6176,9 +6170,9 @@ body.view-map .map-shell-sticky .map-canvas{
 <footer><div class="container"><div class="footer-grid">
 <div><div class="footer-logo">Stay<span>lo</span></div><p class="footer-about">Staylo ist eine unabhängige Plattform für besondere Hotels in Südtirol.</p><p class="footer-about">Lana · Südtirol · Italien<br><a href="mailto:info@staylo.it?subject=Anfrage%20über%20Staylo" class="footer-mail">info@staylo.it</a></p>
 <div class="footer-social" aria-label="Social Media">
-  <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">IG</a>
-  <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">FB</a>
-  <a href="mailto:info@staylo.it" aria-label="E-Mail">✉</a>
+  <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r="1.1" fill="currentColor" stroke="none"/></svg></a>
+  <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M14.5 21v-7.6h2.6l.4-3h-3v-1.9c0-.9.2-1.5 1.5-1.5h1.6V4.3c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H8.9v3h2.5V21h3.1z"/></svg></a>
+  <a href="mailto:info@staylo.it" aria-label="E-Mail"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M4 7l8 6 8-6"/></svg></a>
 </div></div>
 <div class="footer-column"><h4>Entdecken</h4><a href="#hotels" data-nav="home">Hotels</a><a href="#page-categories" data-page="categories">Kategorien</a><a href="#page-regions" data-page="regions">Regionen</a></div>
 <div class="footer-column"><h4>Regionen</h4><a href="#page-regions" data-page="regions">Meran</a><a href="#page-regions" data-page="regions">Bozen</a><a href="#page-regions" data-page="regions">Dolomiten</a></div>
@@ -6649,6 +6643,19 @@ body.view-map .map-shell-sticky .map-canvas{
     apply();
   }
 
+  /* Plain `location.hash = "…"` is unreliable once the document is
+     already on the #suche route — the browser can silently ignore
+     the assignment. history.pushState + a manually dispatched
+     hashchange always works, so every hash-based navigation in the
+     app goes through this instead. */
+  window.stayloSetHash=function(h){
+    h=h||"";
+    if(h&&h.charAt(0)!=="#")h="#"+h;
+    if(location.hash===h)return;
+    history.pushState(null,"",location.pathname+location.search+h);
+    window.dispatchEvent(new HashChangeEvent("hashchange"));
+  };
+
   document.addEventListener("click",function(e){
     if(!e.target.closest)return;
     var el=e.target.closest(
@@ -6911,11 +6918,17 @@ body.view-map .map-shell-sticky .map-canvas{
   }
   function routeFromHash(){
     var h=(location.hash||"").replace("#","");
+    /* "Zurück zu den Ergebnissen" on the hotel page needs to know
+       where the visitor actually came from — the homepage grid or
+       the explore/search results — so every non-detail route we
+       land on is remembered as the return point. */
+    if(h.indexOf("hotel-")!==0){
+      try{ sessionStorage.setItem("staylo_return_hash",location.search+(location.hash||"#hotels")); }catch(e){}
+    }
     document.body.classList.toggle("view-suche",h.indexOf("suche")===0);
     if(h.indexOf("suche")===0){
       showPage("suche");
       if(window.STAYLO_EXPLORE)window.STAYLO_EXPLORE.show();
-      try{ sessionStorage.setItem("staylo_last_results",location.search+location.hash); }catch(e){}
       return;
     }
     if(h.indexOf("hotel-")===0)openHotel(h.replace("hotel-",""),true);
@@ -7034,7 +7047,7 @@ body.view-map .map-shell-sticky .map-canvas{
     if(!c)return;
     resetResultFilters();
     activeFilters.category=key;
-    location.hash="";
+    window.stayloSetHash("");
     showHome();
     renderHotels();
     updateSummary();
@@ -7049,7 +7062,7 @@ body.view-map .map-shell-sticky .map-canvas{
     activeFilters.dest=d;
     var di=document.getElementById("destInput");
     if(di)di.value=formatDest(d);
-    location.hash="";
+    window.stayloSetHash("");
     showHome();
     renderHotels();
     updateSummary();
@@ -7082,7 +7095,7 @@ body.view-map .map-shell-sticky .map-canvas{
       e.preventDefault();
       var p=pl.getAttribute("data-page");
       if(pages[p]){
-        location.hash="page-"+p;
+        window.stayloSetHash("page-"+p);
         showPage(p);
       }
       return;
@@ -7090,7 +7103,7 @@ body.view-map .map-shell-sticky .map-canvas{
     var hl=e.target.closest("[data-nav=\"home\"]");
     if(hl){
       e.preventDefault();
-      location.hash="";
+      window.stayloSetHash("");
       showHome();
       if((hl.getAttribute("href")||"").indexOf("#hotels")!==-1)setTimeout(function(){
         var el=document.getElementById("hotels");
@@ -7104,7 +7117,7 @@ body.view-map .map-shell-sticky .map-canvas{
     }
     if(e.target.closest("#logoHome")){
       e.preventDefault();
-      location.hash="";
+      window.stayloSetHash("");
       showHome();
     }
   }
@@ -7298,7 +7311,7 @@ body.view-map .map-shell-sticky .map-canvas{
       var oid=openBtn.getAttribute("data-open-hotel");
       if(oid){
         if(location.hash==="#hotel-"+oid) openHotel(oid,true);
-        else location.hash="hotel-"+oid;
+        else window.stayloSetHash("hotel-"+oid);
       }
       return;
     }
@@ -7309,7 +7322,7 @@ body.view-map .map-shell-sticky .map-canvas{
       if(location.hash==="#hotel-"+id){
         openHotel(id,true);
       }else{
-        location.hash="hotel-"+id;
+        window.stayloSetHash("hotel-"+id);
       }
     }
   });
@@ -7322,7 +7335,7 @@ body.view-map .map-shell-sticky .map-canvas{
       if(location.hash==="#hotel-"+id){
         /* same hotel already open – fall through and re-render */
       }else{
-        location.hash="hotel-"+id;
+        window.stayloSetHash("hotel-"+id);
         return;
       }
     }
@@ -7611,8 +7624,8 @@ body.view-map .map-shell-sticky .map-canvas{
     if(!bk)return;
     e.preventDefault();
     var last=null;
-    try{ last=sessionStorage.getItem("staylo_last_results"); }catch(err){}
-    location.href=location.pathname+(last||"#suche");
+    try{ last=sessionStorage.getItem("staylo_return_hash"); }catch(err){}
+    location.href=location.pathname+(last||"#hotels");
   });
 
   /* Galerie-Klicks auf der Hotelseite */
@@ -9229,7 +9242,7 @@ body.view-map .map-shell-sticky .map-canvas{
     var id = sim.getAttribute("data-id");
     if(!id) return;
     if(location.hash === "#hotel-" + id) openHotel(id, true);
-    else location.hash = "hotel-" + id;
+    else window.stayloSetHash("hotel-" + id);
   });
 
 
@@ -9654,9 +9667,9 @@ body.view-map .map-shell-sticky .map-canvas{
   /* A hotel opens its own real page — never a re-run of the search. */
   document.addEventListener("click",function(e){
     var o=e.target.closest&&e.target.closest("[data-open]");
-    if(o){ location.hash="hotel-"+o.getAttribute("data-open"); return; }
+    if(o){ window.stayloSetHash("hotel-"+o.getAttribute("data-open")); return; }
     var c=e.target.closest&&e.target.closest(".card[data-id]");
-    if(c&&!e.target.closest("[data-fav]")) location.hash="hotel-"+c.getAttribute("data-id");
+    if(c&&!e.target.closest("[data-fav]"))window.stayloSetHash("hotel-"+c.getAttribute("data-id"));
   });
 
   /* ---- View switching -------------------------------------- */
