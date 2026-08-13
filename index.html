@@ -4502,30 +4502,67 @@ body.view-suche .site-main{display:none}
 
 /* Same-document view transitions are Baseline since late 2025;
    browsers without them simply cut, which is fine. */
+/* The page underneath swaps quickly: the old view leaves before the
+   new one arrives, so the two are never both half-visible at once.
+   Overlapping opacities are what make a cross-fade look muddy. */
 @media (prefers-reduced-motion:no-preference){
-  ::view-transition-old(root){animation:sxOut 160ms cubic-bezier(.4,0,1,1) both}
-  ::view-transition-new(root){animation:sxIn 260ms cubic-bezier(.32,.72,0,1) both}
+  ::view-transition-old(root){animation:sxOut 130ms cubic-bezier(.4,0,1,1) both}
+  ::view-transition-new(root){animation:sxIn 240ms cubic-bezier(.32,.72,0,1) 100ms both}
 }
 @keyframes sxOut{to{opacity:0}}
 @keyframes sxIn{from{opacity:0}}
 
-/* The search box itself is the one element that carries across the
-   hero → results transition: it doesn't cross-fade with the rest of
-   the page, it moves and resizes into the results page's top bar
-   (and back again, on the way home). Everything else still uses the
-   plain root fade above. */
+/* ---- The search bar travels between the two views -------------
+   It is the one element that does not fade with the rest of the
+   page: the hero's search box and the results page's search field
+   are the same object, so it moves and resizes from one to the
+   other (and back again, on the way home).
+
+   The container morphs for the full duration while its *contents*
+   swap almost instantly at the start — a slow cross-fade of two
+   different layouts is what reads as ghosting. */
 .search-box{view-transition-name:staylo-search-dock}
 #page-suche .searchwrap{view-transition-name:staylo-search-dock}
+
 @media (prefers-reduced-motion:no-preference){
   ::view-transition-group(staylo-search-dock){
-    animation-duration:.52s;
-    animation-timing-function:cubic-bezier(.22,1,.36,1)
+    animation-duration:.46s;
+    animation-timing-function:cubic-bezier(.32,.72,0,1);
+    z-index:20
   }
-  ::view-transition-old(staylo-search-dock),
+  /* Both snapshots keep their own aspect ratio (the UA default) —
+     forcing them to fill the box blows the smaller one up into
+     giant ghost text while the box is still at its old size.
+
+     The bar the visitor clicked stays solid for most of the flight
+     and only hands over at the end, so what reads is one surface
+     shrinking into place rather than two layouts dissolving. */
+  ::view-transition-old(staylo-search-dock){
+    animation:dockOut .46s cubic-bezier(.32,.72,0,1) both
+  }
   ::view-transition-new(staylo-search-dock){
-    animation-duration:.34s
+    animation:dockIn .2s cubic-bezier(.32,.72,0,1) .26s both
+  }
+
+  /* The filter rail is only ever on the results view, so it has an
+     entrance but no exit partner: it slides in from the edge it
+     lives on while the bar is still travelling. Below 980px the rail
+     is a bottom sheet instead of a column, so it stays out of this. */
+  @media (min-width:981px){
+    #page-suche .rail{view-transition-name:staylo-rail}
+    ::view-transition-group(staylo-rail){z-index:5}
+    ::view-transition-new(staylo-rail){
+      animation:railIn 380ms cubic-bezier(.32,.72,0,1) 110ms both
+    }
+    ::view-transition-old(staylo-rail){
+      animation:railOut 160ms cubic-bezier(.4,0,1,1) both
+    }
   }
 }
+@keyframes dockOut{0%,58%{opacity:1}100%{opacity:0}}
+@keyframes dockIn{from{opacity:0}to{opacity:1}}
+@keyframes railIn{from{opacity:0;transform:translateX(-22px)}}
+@keyframes railOut{to{opacity:0;transform:translateX(-22px)}}
 
 
 /* ============================================================
@@ -8824,6 +8861,10 @@ body.view-map .map-shell-sticky .map-canvas{
     syncListingsIntoHotels();
     renderMyListings();
     renderHotels(); renderCategoryPage(); renderRegionPage();
+    /* The preview modal that actually saves a listing lives in its
+       own closure further down, so it needs a way to refresh this
+       list — otherwise a hotelier saves and sees nothing happen. */
+    window.renderMyListings = renderMyListings;
   })();
   
   
@@ -9326,7 +9367,7 @@ body.view-map .map-shell-sticky .map-canvas{
       renderHotels();
       if(typeof renderCategoryPage==="function") renderCategoryPage();
       if(typeof renderRegionPage==="function") renderRegionPage();
-      if(typeof renderMyListings==="function") renderMyListings();
+      if(typeof window.renderMyListings==="function") window.renderMyListings();
       showToast("Dein Haus ist eingetragen.");
       closeLp();
       window.__pendingListing = null;
@@ -9755,6 +9796,12 @@ body.view-map .map-shell-sticky .map-canvas{
   }
 
   function syncURL(){
+    /* Only ever rewrite the address bar while the results view is
+       still the current route. A render can be triggered after the
+       visitor has already left — pressing Back, or favouriting a
+       hotel on the landing page — and without this guard that would
+       drag the URL back to #suche and strand them here. */
+    if((location.hash||"").indexOf("#suche")!==0)return;
     var p=new URLSearchParams();
     if(state.q)p.set("q",state.q);
     state.regions.forEach(function(v){p.append("region",v);});
@@ -9767,7 +9814,9 @@ body.view-map .map-shell-sticky .map-canvas{
     var qs=p.toString();
     history.replaceState(null,"",(qs?"?"+qs:location.pathname)+"#suche");
   }
-  window.addEventListener("popstate",function(){ if(started)applyParams(true); });
+  window.addEventListener("popstate",function(){
+    if(started&&(location.hash||"").indexOf("#suche")===0)applyParams(true);
+  });
 
   /* Nothing renders until the visitor actually opens #suche —
      no map tiles or images are fetched for a view they never see. */
