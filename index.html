@@ -4115,7 +4115,12 @@ select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{
    by the logo alone. */
 #page-suche .homebtn{
   display:inline-flex;align-items:center;gap:6px;flex:0 0 auto;
-  min-height:40px;padding:0 14px 0 11px;
+  /* Same 46px box as the search field beside it, so the two sit on
+     one line rather than looking stacked a few pixels apart. The
+     margin reset matters: this button also carries .page-back, whose
+     18px bottom margin was pulling it 9px above the field when the
+     flex row centred it. */
+  height:46px;min-height:46px;padding:0 16px 0 13px;margin:0;
   border:1.5px solid var(--border);border-radius:999px;
   background:var(--white);
   font-size:14px;font-weight:600;color:var(--green-dark);
@@ -4243,6 +4248,92 @@ select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{
   font-size:13.5px;font-weight:600;color:var(--green-dark);background:var(--white)
 }
 #page-suche .resetall:hover{border-color:var(--green);background:var(--green-soft)}
+
+/* ---------- Recap bar: the search itself, still editable -----
+   Leaving the results to change one date was the old behaviour and
+   it threw away the search. Each field opens its own small panel
+   in place instead, and writes straight back into the live filter
+   state, so the list updates underneath without a round trip. */
+#page-suche .recap-field{position:relative}
+#page-suche .recap-item{
+  display:flex;flex-direction:column;gap:2px;
+  padding:7px 12px;border-radius:12px;
+  border:1.5px solid transparent;background:none;
+  text-align:left;font-size:13px;cursor:pointer;
+  transition:background var(--t-fast) var(--spring),border-color var(--t-fast) var(--spring)
+}
+#page-suche .recap-item:hover{background:var(--green-soft)}
+#page-suche .recap-item[aria-expanded="true"]{
+  background:var(--white);border-color:var(--green);
+  box-shadow:0 0 0 4px rgba(29,64,52,.10)
+}
+#page-suche .recap-item span{
+  color:var(--grey-light);font-size:11px;letter-spacing:.04em;text-transform:uppercase
+}
+#page-suche .recap-item strong{
+  font-size:14px;font-weight:600;color:var(--ink);white-space:nowrap
+}
+#page-suche .recap-pop{
+  position:absolute;top:calc(100% + 8px);left:0;z-index:70;
+  min-width:250px;padding:16px;
+  background:var(--white);
+  border:1px solid var(--border);border-radius:var(--r-lg);
+  box-shadow:var(--lift-2);
+  opacity:0;visibility:hidden;transform:translateY(-6px) scale(.98);
+  transform-origin:top left;
+  transition:opacity var(--t-fast) var(--spring),transform var(--t-base) var(--spring),visibility var(--t-base)
+}
+#page-suche .recap-field.open .recap-pop{opacity:1;visibility:visible;transform:none}
+#page-suche .recap-pop-label{
+  display:block;font-size:11px;font-weight:600;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--grey-light);margin-bottom:7px
+}
+#page-suche .recap-pop input[type=text],
+#page-suche .recap-pop input[type=date]{
+  width:100%;height:42px;padding:0 12px;
+  border:1.5px solid var(--border);border-radius:10px;
+  background:var(--white);font-size:14px;color:var(--ink)
+}
+#page-suche .recap-pop input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(29,64,52,.10)}
+#page-suche .recap-pop-hint{margin-top:8px;font-size:12px;color:var(--grey-light)}
+#page-suche .recap-pop-row{display:flex;gap:10px}
+#page-suche .recap-pop-field{flex:1;min-width:0}
+#page-suche .recap-pop-clear{
+  margin-top:12px;width:100%;min-height:38px;
+  border:1.5px solid var(--border);border-radius:999px;background:var(--white);
+  font-size:13px;font-weight:600;color:var(--green-dark)
+}
+#page-suche .recap-pop-clear:hover{border-color:var(--green);background:var(--green-soft)}
+#page-suche .recap-step{
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+  padding:9px 0;border-bottom:1px solid var(--border)
+}
+#page-suche .recap-step:last-child{border-bottom:0}
+#page-suche .recap-step strong{display:block;font-size:14px;font-weight:600}
+#page-suche .recap-step span{font-size:12px;color:var(--grey-light);white-space:nowrap}
+#page-suche .recap-step-ctrl{display:flex;align-items:center;gap:10px}
+#page-suche .recap-step-ctrl button{
+  width:34px;height:34px;border-radius:50%;
+  border:1.5px solid var(--border);background:var(--white);
+  color:var(--green-dark);font-size:17px;line-height:1
+}
+#page-suche .recap-step-ctrl button:hover{border-color:var(--green);background:var(--green-soft)}
+#page-suche .recap-step-ctrl > span{
+  min-width:20px;text-align:center;font-weight:600;font-variant-numeric:tabular-nums
+}
+#page-suche .recap-chiprow{display:flex;gap:7px}
+#page-suche .recap-chip{
+  min-height:38px;padding:6px 15px;border-radius:999px;
+  border:1.5px solid var(--border);background:var(--white);
+  font-size:13.5px;font-weight:600;color:var(--ink)
+}
+#page-suche .recap-chip:hover{border-color:var(--green-mid)}
+#page-suche .recap-chip[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:#fff}
+@media (max-width:640px){
+  #page-suche .recap-pop{left:auto;right:0;transform-origin:top right}
+  #page-suche .recap-item strong{font-size:13.5px}
+}
+
 /* ---------- Results ---------------------------------------- */
 #page-suche .results{flex:1 1 auto;min-width:0;padding:20px 22px 60px}
 #page-suche .rhead{
@@ -4521,6 +4612,17 @@ body.view-suche .site-main{display:none}
    The container morphs for the full duration while its *contents*
    swap almost instantly at the start — a slow cross-fade of two
    different layouts is what reads as ghosting. */
+/* The travelling element is the field bar itself, not the whole
+   card around it. The card is ~200px tall and the results page's
+   search field is 46px — morphing one into the other squashed the
+   contents on the way. `.search-main` is a 72px bar, close enough
+   in shape that the move reads as one object changing size. The
+   card behind it simply fades with the rest of the page. */
+/* The whole search card travels as one object. Naming only the
+   inner bar was tried and is worse: a named element nested inside
+   another named element gets lifted out of its parent's snapshot,
+   which left an empty white card behind and threw the bar's start
+   position off. One name, one moving object. */
 .search-box{view-transition-name:staylo-search-dock}
 #page-suche .searchwrap{view-transition-name:staylo-search-dock}
 
@@ -4559,7 +4661,7 @@ body.view-suche .site-main{display:none}
     }
   }
 }
-@keyframes dockOut{0%,58%{opacity:1}100%{opacity:0}}
+@keyframes dockOut{0%,44%{opacity:1}100%{opacity:0}}
 @keyframes dockIn{from{opacity:0}to{opacity:1}}
 @keyframes railIn{from{opacity:0;transform:translateX(-22px)}}
 @keyframes railOut{to{opacity:0;transform:translateX(-22px)}}
@@ -5235,6 +5337,20 @@ body.header-compact{
 .dropdown.regions-dd{
   width:min(420px,calc(100vw - 24px)) !important
 }
+
+/* Two panels ~500px wide, each centred on its own trigger, sit side
+   by side in the nav — they necessarily overlap. Only one may ever
+   be on screen, so the moment one opens its sibling is cut outright
+   rather than fading out slowly underneath it. */
+.nav-center:has(.nav-item.has-menu:hover) .nav-item.has-menu:not(:hover) > .dropdown,
+.nav-center:has(.nav-item.has-menu:focus-within) .nav-item.has-menu:not(:focus-within) > .dropdown{
+  transition:none !important;
+  opacity:0 !important;
+  visibility:hidden !important;
+  pointer-events:none !important
+}
+.nav-item.has-menu:hover,
+.nav-item.has-menu:focus-within{z-index:5}
 .dropdown .dropdown-grid{
   gap:2px !important
 }
@@ -5559,7 +5675,14 @@ body.header-compact{
   position:sticky;
   top:calc(var(--header-h-scrolled) + 12px);
   height:calc(100vh - var(--header-h-scrolled) - 24px);
-  align-self:start
+  align-self:start;
+  /* Leaflet paints its own panes at z-index 400 and its controls at
+     1000. Without a stacking context of its own here, those numbers
+     compete directly with the header's 100 and the map slides over
+     the header on the way back up. Isolating keeps every Leaflet
+     layer inside this box, underneath the chrome. */
+  z-index:1;
+  isolation:isolate
 }
 .map-shell-sticky{
   height:100%;
@@ -6132,10 +6255,26 @@ body{background:var(--cream);line-height:1.5}
   .js-reveal{opacity:1;transform:none}
 }
 
-/* --- Compact detail filters -------------------------------- */
-.details-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+/* --- Compact detail filters --------------------------------
+   Price and rating are short controls; the house type is a long
+   wrapping chip list. Giving type+stars the remaining half of the
+   row fills it exactly, so the amenities box below sits right
+   under the controls instead of after a band of empty box. */
+.details-grid{
+  grid-template-columns:minmax(0,1fr) minmax(0,1.5fr);
+  grid-template-areas:
+    "price house"
+    "rating house"
+    "amen  amen";
+  gap:10px;
+  align-items:start
+}
 .detail-box{padding:15px;background:#f8faf8;border-color:rgba(23,56,43,.09);box-shadow:inset 0 1px 0 rgba(255,255,255,.8)}
-.detail-box.amenity-detail{grid-column:1/-1}
+.detail-box.price-detail{grid-area:price}
+.detail-box.rating-detail{grid-area:rating}
+.detail-box.house-detail{grid-area:house}
+.detail-box.amenity-detail{grid-area:amen}
+.detail-title-sub{margin-top:14px}
 .detail-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .detail-heading .detail-title{margin-bottom:0}
 .amenity-count{color:var(--green);font-size:11px;font-weight:700;white-space:nowrap}
@@ -6177,12 +6316,19 @@ body{background:var(--cream);line-height:1.5}
 .footer-social a:hover{transform:translateY(-3px);color:#cde4d4}
 
 @media(max-width:1100px){
-  .details-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .detail-box.amenity-detail{grid-column:1/-1}
+  .details-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    grid-template-areas:
+      "price  rating"
+      "house  house"
+      "amen   amen"
+  }
 }
 @media(max-width:600px){
-  .details-grid{grid-template-columns:1fr}
-  .detail-box.amenity-detail{grid-column:auto}
+  .details-grid{
+    grid-template-columns:1fr;
+    grid-template-areas:"price" "rating" "house" "amen"
+  }
   .amenity-options{max-height:160px}
   .search-feedback{font-size:11px}
 }
@@ -6315,6 +6461,329 @@ body{background:var(--cream);line-height:1.5}
   -webkit-backdrop-filter:blur(14px) saturate(140%)
 }
 
+/* ============================================================
+   LIQUID GLASS — the header controls
+   Real glass does three things at once: it blurs and saturates
+   what is behind it, it catches light along its top edge, and it
+   casts a soft shadow onto the page. Each control below gets all
+   three, tuned twice — once for the dark chrome over the hero and
+   once for the light chrome after scrolling — because a single
+   translucency cannot read on both.
+   ============================================================ */
+.nav-item,
+.nav-glass,
+.mobile-menu{
+  position:relative;
+  isolation:isolate;
+  border-radius:999px;
+  -webkit-backdrop-filter:blur(18px) saturate(180%);
+  backdrop-filter:blur(18px) saturate(180%);
+  transition:
+    background .3s var(--ease),
+    border-color .3s var(--ease),
+    box-shadow .3s var(--ease),
+    color .25s var(--ease),
+    transform .22s var(--ease)
+}
+
+/* The light along the top edge. A pseudo-element rather than an
+   inset shadow so it can curve with the pill and fade downward. */
+.nav-item::before,
+.nav-glass::before,
+.mobile-menu::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  pointer-events:none;
+  z-index:-1;
+  background:linear-gradient(180deg,rgba(255,255,255,.5),rgba(255,255,255,.06) 46%,transparent 70%);
+  opacity:.55;
+  transition:opacity .3s var(--ease)
+}
+.nav-item:hover::before,
+.nav-glass:hover::before,
+.mobile-menu:hover::before{opacity:.85}
+
+/* --- Over the hero: dark chrome, bright glass ---------------- */
+.nav-item{
+  background:rgba(255,255,255,.10);
+  border:1px solid rgba(255,255,255,.20);
+  box-shadow:0 2px 10px rgba(6,16,12,.16)
+}
+.nav-item:hover,
+.nav-item:focus-within{
+  background:rgba(255,255,255,.20);
+  border-color:rgba(255,255,255,.34);
+  box-shadow:0 6px 18px rgba(6,16,12,.22);
+  transform:translateY(-1px)
+}
+.nav .nav-item.is-active{
+  background:rgba(255,255,255,.24);
+  border-color:rgba(255,255,255,.40);
+  color:#fff
+}
+.nav-glass{
+  background:rgba(255,255,255,.13) !important;
+  border:1px solid rgba(255,255,255,.24) !important;
+  box-shadow:0 3px 14px rgba(6,16,12,.20)
+}
+.nav-glass:hover{
+  background:rgba(255,255,255,.24) !important;
+  border-color:rgba(255,255,255,.40) !important;
+  box-shadow:0 8px 22px rgba(6,16,12,.26);
+  transform:translateY(-1px)
+}
+.nav-glass:active{transform:translateY(0) scale(.98)}
+.mobile-menu{
+  background:rgba(255,255,255,.13);
+  border:1px solid rgba(255,255,255,.24);
+  box-shadow:0 3px 14px rgba(6,16,12,.20)
+}
+
+/* --- After scrolling: light chrome, the glass turns to frost -- */
+.header.is-scrolled .nav-item{
+  background:rgba(23,56,43,.05);
+  border-color:rgba(23,56,43,.09);
+  box-shadow:0 1px 6px rgba(23,56,43,.05)
+}
+.header.is-scrolled .nav-item::before,
+.header.is-scrolled .nav-glass::before,
+.header.is-scrolled .mobile-menu::before{
+  background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(255,255,255,.25) 48%,transparent 72%)
+}
+.header.is-scrolled .nav-item:hover,
+.header.is-scrolled .nav-item:focus-within{
+  background:rgba(23,56,43,.10);
+  border-color:rgba(23,56,43,.16);
+  box-shadow:0 5px 16px rgba(23,56,43,.10);
+  color:var(--green-dark)
+}
+.header.is-scrolled .nav-item.is-active{
+  background:rgba(23,56,43,.11);
+  border-color:rgba(23,56,43,.18);
+  color:var(--green-dark)
+}
+.header.is-scrolled .nav-glass{
+  background:rgba(255,255,255,.62) !important;
+  border-color:rgba(23,56,43,.12) !important;
+  box-shadow:0 2px 10px rgba(23,56,43,.08);
+  color:var(--green-dark)
+}
+.header.is-scrolled .nav-glass:hover{
+  background:rgba(255,255,255,.85) !important;
+  border-color:rgba(23,56,43,.20) !important;
+  box-shadow:0 7px 20px rgba(23,56,43,.12)
+}
+.header.is-scrolled .mobile-menu{
+  background:rgba(255,255,255,.62);
+  border-color:rgba(23,56,43,.12);
+  box-shadow:0 2px 10px rgba(23,56,43,.08)
+}
+
+/* The count badge sits on the glass, so it needs its own edge to
+   stay legible against whatever shows through. */
+.nav-badge{
+  border:2px solid rgba(255,255,255,.9);
+  box-shadow:0 2px 6px rgba(6,16,12,.28)
+}
+
+/* ============================================================
+   THE TWO CLOSING SECTIONS
+   Both used to be a headline, one line of copy and a button on a
+   photo — the shape every landing page ends with. They now carry
+   the things that actually distinguish this site: no commission,
+   one region, three languages; and for hoteliers, what the five
+   minutes of signing up actually consist of.
+   ============================================================ */
+.feature-content{max-width:600px}
+.feature-facts{
+  list-style:none;
+  margin:26px 0 30px;
+  padding:0;
+  display:grid;
+  gap:14px
+}
+.feature-facts li{
+  display:grid;
+  grid-template-columns:74px 1fr;
+  align-items:baseline;
+  gap:16px;
+  padding-top:13px;
+  border-top:1px solid rgba(255,255,255,.18)
+}
+.feature-facts strong{
+  font-family:'Fraunces',Georgia,serif;
+  font-size:29px;
+  font-weight:600;
+  letter-spacing:-.02em;
+  color:#fff;
+  font-variant-numeric:tabular-nums;
+  line-height:1
+}
+.feature-facts span{
+  font-size:14px;
+  line-height:1.5;
+  color:rgba(255,255,255,.8)
+}
+
+.hotelier-box{align-items:start}
+.hotelier-eyebrow{
+  display:inline-flex;
+  padding:6px 13px;
+  margin-bottom:14px;
+  border-radius:999px;
+  background:rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.2);
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.92)
+}
+.hotelier-steps-mini{
+  list-style:none;
+  margin:24px 0 26px;
+  padding:0;
+  display:grid;
+  gap:12px
+}
+.hotelier-steps-mini li{
+  display:flex;
+  align-items:flex-start;
+  gap:13px
+}
+.hotelier-steps-mini span{
+  flex:0 0 auto;
+  width:27px;height:27px;
+  display:grid;place-items:center;
+  border-radius:50%;
+  background:rgba(255,255,255,.16);
+  border:1px solid rgba(255,255,255,.24);
+  color:#fff;
+  font-size:13px;
+  font-weight:700;
+  font-variant-numeric:tabular-nums
+}
+.hotelier-steps-mini strong{
+  display:block;
+  color:#fff;
+  font-size:14.5px;
+  font-weight:600;
+  margin-bottom:1px
+}
+.hotelier-steps-mini div{
+  font-size:13.5px;
+  line-height:1.5;
+  color:rgba(255,255,255,.72)
+}
+.hotelier-info strong{font-size:14.5px;margin-bottom:12px}
+
+@media(max-width:760px){
+  .feature-facts li{grid-template-columns:60px 1fr;gap:13px}
+  .feature-facts strong{font-size:25px}
+  .hotelier-box{gap:24px}
+}
+
+/* Category and region tiles: one consistent 3:2 crop, filled edge
+   to edge. The old rule capped the photo at 190px while also
+   asking for a 16:10 box, so the two fought and the image sat in
+   a slightly different frame on every card. */
+.page-grid .page-card.has-photo .page-card-photo{
+  aspect-ratio:3/2 !important;
+  max-height:none !important;
+  height:auto !important;
+  width:100% !important;
+  overflow:hidden !important;
+  border-radius:0 !important
+}
+.page-grid .page-card.has-photo .page-card-photo img{
+  position:absolute !important;
+  inset:0 !important;
+  width:100% !important;
+  height:100% !important;
+  object-fit:cover !important;
+  object-position:center !important;
+  display:block !important
+}
+@media(max-width:600px){
+  .page-grid .page-card.has-photo .page-card-photo{aspect-ratio:16/10 !important}
+}
+
+/* ============================================================
+   TOPIC DIALOG — what a category or a region actually is
+   Clicking a tile used to jump straight into a filtered list, which
+   answered "show me these" but never "what is this". The dialog
+   explains first and filters second, on the same button.
+   ============================================================ */
+.topic-overlay{align-items:flex-start;overflow-y:auto;padding:24px 20px}
+.topic-modal{
+  width:min(560px,100%);
+  margin:auto;
+  padding:0;
+  overflow:hidden;
+  text-align:left
+}
+.topic-photo{position:relative;aspect-ratio:16/9;background:var(--green-soft)}
+.topic-photo img{width:100%;height:100%;object-fit:cover;display:block}
+.topic-photo::after{
+  content:"";position:absolute;inset:auto 0 0 0;height:55%;
+  background:linear-gradient(180deg,transparent,rgba(14,30,24,.5))
+}
+.topic-tag{
+  position:absolute;left:18px;bottom:16px;z-index:2;
+  padding:6px 12px;border-radius:999px;
+  background:rgba(255,255,255,.94);
+  color:var(--green-dark);
+  font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase
+}
+.topic-tag[hidden]{display:none}
+.topic-body{padding:24px 26px 26px}
+.topic-body h2{
+  font-family:'Fraunces',Georgia,serif;
+  font-size:29px;letter-spacing:-.025em;line-height:1.12;
+  margin:0 0 6px;color:var(--black)
+}
+.topic-alt{margin:0 0 14px !important;font-size:.86rem !important}
+.topic-alt[hidden]{display:none}
+.topic-long{
+  color:var(--grey);font-size:15px;line-height:1.7;margin-bottom:18px
+}
+.topic-points{list-style:none;padding:0;margin:0 0 22px;display:grid;gap:9px}
+.topic-points li{
+  position:relative;padding-left:26px;
+  font-size:14px;line-height:1.5;color:#2f3a34
+}
+.topic-points li::before{
+  content:"";position:absolute;left:0;top:.42em;
+  width:9px;height:9px;border-radius:50%;
+  background:var(--green-soft);
+  box-shadow:inset 0 0 0 2.5px var(--green)
+}
+.topic-foot{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:16px;flex-wrap:wrap;
+  padding-top:18px;border-top:1px solid var(--border)
+}
+.topic-count{font-size:13.5px;color:var(--grey);font-weight:500}
+.topic-count strong{color:var(--black);font-weight:700}
+.topic-foot .cta-btn{margin-top:0}
+@media(max-width:560px){
+  .topic-body{padding:20px 18px 22px}
+  .topic-body h2{font-size:25px}
+  .topic-foot .cta-btn{width:100%;justify-content:center}
+}
+
+/* Transparency is a preference, not a given. */
+@media (prefers-reduced-transparency:reduce){
+  .nav-item,.nav-glass,.mobile-menu{
+    -webkit-backdrop-filter:none;backdrop-filter:none
+  }
+  .nav-item::before,.nav-glass::before,.mobile-menu::before{display:none}
+  .nav-glass{background:rgba(255,255,255,.24) !important}
+  .header.is-scrolled .nav-glass{background:#fff !important}
+}
+
 </style>
 </head>
 <body>
@@ -6336,7 +6805,7 @@ body{background:var(--cream);line-height:1.5}
 <a class="dropdown-link" href="#hotels" data-category="adults-only">Adults Only</a>
 <a class="dropdown-link" href="#hotels" data-category="nachhaltig">Nachhaltig</a>
 </div>
-<a class="dropdown-cta" href="#page-categories" data-page="categories">Alle Kategorien ansehen →</a></div></div>
+<a class="dropdown-cta" href="#page-categories" data-page="categories">Finde deine Kategorie →</a></div></div>
 <div class="nav-item has-menu"><span data-page="regions" role="link" tabindex="0">Regionen</span>
 <div class="dropdown regions-dd"><div class="dropdown-title">Südtirol entdecken</div><div class="dropdown-subtitle">Beliebte Regionen</div>
 <div class="dropdown-grid">
@@ -6349,7 +6818,7 @@ body{background:var(--cream);line-height:1.5}
 <a class="dropdown-link" href="#hotels" data-region="Eisacktal">Eisacktal <small>Brixen</small></a>
 <a class="dropdown-link" href="#hotels" data-region="Vinschgau">Vinschgau <small>Obst · Burgen</small></a>
 </div>
-<a class="dropdown-cta" href="#page-regions" data-page="regions">Alle Regionen ansehen →</a></div></div>
+<a class="dropdown-cta" href="#page-regions" data-page="regions">Finde deine Traumregion →</a></div></div>
 <a href="#page-about" class="nav-item" data-page="about">Über uns</a>
 <a href="#page-hoteliers" class="nav-item" data-page="hoteliers">Für Hoteliers</a>
 </nav>
@@ -6423,19 +6892,15 @@ body{background:var(--cream);line-height:1.5}
 <div class="details-toggle"><button id="detailsButton" type="button">+ Detailsuche</button></div>
 <div class="details-search" id="detailsSearch"><div>
 <div class="details-grid">
-<div class="detail-box"><label class="detail-title">Preis pro Nacht</label><div class="price-row"><input type="range" id="priceSlider" min="50" max="500" value="500" step="10"><span class="price-value" id="priceValue">€ 500</span></div></div>
-<div class="detail-box"><label class="detail-title">Bewertung</label><div class="chip-group" id="ratingFilters">
+<div class="detail-box price-detail"><label class="detail-title">Preis pro Nacht</label><div class="price-row"><input type="range" id="priceSlider" min="50" max="500" value="500" step="10"><span class="price-value" id="priceValue">€ 500</span></div></div>
+<div class="detail-box rating-detail"><label class="detail-title">Bewertung</label><div class="chip-group" id="ratingFilters">
 <label class="chip-check is-on"><input type="radio" name="rating" value="all" checked> Alle</label>
 <label class="chip-check"><input type="radio" name="rating" value="4.0"> 4,0+</label>
 <label class="chip-check"><input type="radio" name="rating" value="4.5"> 4,5+</label>
 <label class="chip-check"><input type="radio" name="rating" value="4.8"> 4,8+</label>
 </div></div>
-<div class="detail-box"><label class="detail-title">Sterne</label><div class="chip-group" id="starFilters">
-<label class="chip-check"><input type="checkbox" name="stars" value="3"> 3★</label>
-<label class="chip-check"><input type="checkbox" name="stars" value="4"> 4★</label>
-<label class="chip-check"><input type="checkbox" name="stars" value="5"> 5★</label>
-</div></div>
-<div class="detail-box"><label class="detail-title">Hoteltyp</label><div class="chip-group" id="typeFilters">
+<div class="detail-box house-detail">
+<label class="detail-title">Art des Hauses</label><div class="chip-group" id="typeFilters">
 <label class="chip-check"><input type="checkbox" value="Boutique"> Boutique</label>
 <label class="chip-check"><input type="checkbox" value="Wellness"> Wellness</label>
 <label class="chip-check"><input type="checkbox" value="Berghotel"> Berghotel</label>
@@ -6444,6 +6909,11 @@ body{background:var(--cream);line-height:1.5}
 <label class="chip-check"><input type="checkbox" value="Familie"> Familie</label>
 <label class="chip-check"><input type="checkbox" value="Adults Only"> Adults Only</label>
 <label class="chip-check"><input type="checkbox" value="Nachhaltig"> Nachhaltig</label>
+</div>
+<label class="detail-title detail-title-sub">Sterne</label><div class="chip-group" id="starFilters">
+<label class="chip-check"><input type="checkbox" name="stars" value="3"> 3★</label>
+<label class="chip-check"><input type="checkbox" name="stars" value="4"> 4★</label>
+<label class="chip-check"><input type="checkbox" name="stars" value="5"> 5★</label>
 </div></div>
 <div class="detail-box amenity-detail"><div class="detail-heading"><label class="detail-title">Ausstattung</label><span class="amenity-count" id="amenityCount">0 ausgewählt</span></div><label class="amenity-search" for="amenitySearch"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg><input id="amenitySearch" type="search" placeholder="Ausstattung suchen …" autocomplete="off"></label><div class="chip-group amenity-options" id="amenityFilters">
 <label class="chip-check"><input type="checkbox" value="WLAN"> WLAN</label>
@@ -6482,9 +6952,26 @@ body{background:var(--cream);line-height:1.5}
         <stop offset="0%" stop-color="#2a4a3e" stop-opacity=".22"/>
         <stop offset="100%" stop-color="#2a4a3e" stop-opacity="0"/>
       </linearGradient>
+      <!-- The ridge is a fragment of a longer skyline, so both ends
+           dissolve instead of stopping at a visible cut. The mask
+           applies to the stroke as well as the fill — fading only
+           the fill left the line itself ending in mid-air. -->
+      <linearGradient id="elevEdge" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#000"/>
+        <stop offset="6%" stop-color="#fff"/>
+        <!-- Fade only starts past the 2000 m marker at 87.5%, so the
+             highest peak still sits on a solid line. -->
+        <stop offset="90%" stop-color="#fff"/>
+        <stop offset="100%" stop-color="#000"/>
+      </linearGradient>
+      <mask id="elevMask">
+        <rect x="-20" y="-10" width="860" height="130" fill="url(#elevEdge)"/>
+      </mask>
     </defs>
+    <g mask="url(#elevMask)">
     <path class="elevation-fill" d="M-20,98 40,88 70,93 100,90 130,80 160,86 190,72 220,78 260,68 300,66 330,74 360,60 390,66 420,54 460,58 500,52 530,44 560,50 590,36 620,42 650,28 680,24 700,20 730,32 760,44 790,54 820,62 820,105 -20,105 Z" fill="url(#elevFill)"/>
     <polyline class="elevation-line" points="-20,98 40,88 70,93 100,90 130,80 160,86 190,72 220,78 260,68 300,66 330,74 360,60 390,66 420,54 460,58 500,52 530,44 560,50 590,36 620,42 650,28 680,24 700,20 730,32 760,44 790,54 820,62" fill="none"/>
+    </g>
   </svg>
   <div class="elevation-mark" style="left:12.5%;top:90%"><span>325&nbsp;m</span><i class="elevation-dot"></i></div>
   <div class="elevation-mark" style="left:37.5%;top:66%"><span>900&nbsp;m</span><i class="elevation-dot"></i></div>
@@ -6533,7 +7020,7 @@ body{background:var(--cream);line-height:1.5}
     </span>
   </a>
 </div>
-<div class="region-strip-foot"><a href="#page-regions" class="cta-btn secondary" data-page="regions">Alle acht Regionen ansehen →</a></div>
+<div class="region-strip-foot"><a href="#page-regions" class="cta-btn secondary" data-page="regions">Finde deine Traumregion →</a></div>
 </div></section>
 <div class="section-divider" role="presentation"></div>
 <main class="main-content" id="hotels">
@@ -6545,8 +7032,8 @@ body{background:var(--cream);line-height:1.5}
     <p class="section-subtitle">Liste und Karte – gefiltert nach deiner Suche.</p>
   </div>
   <div class="view-toggle" role="group" aria-label="Ansicht">
-    <button type="button" class="view-toggle-btn is-active" data-view="split" id="viewSplit">Liste + Karte</button>
-    <button type="button" class="view-toggle-btn" data-view="list" id="viewList">Nur Liste</button>
+    <button type="button" class="view-toggle-btn" data-view="split" id="viewSplit">Liste + Karte</button>
+    <button type="button" class="view-toggle-btn is-active" data-view="list" id="viewList">Nur Liste</button>
     <button type="button" class="view-toggle-btn" data-view="map" id="viewMap">Nur Karte</button>
   </div>
 </div>
@@ -6585,18 +7072,32 @@ body{background:var(--cream);line-height:1.5}
 </div></section>
 <section class="feature"><div class="container"><div class="feature-box"><div class="feature-content">
 <small>Staylo · Südtirol</small><h2>Mehr als nur<br>ein Hotel.</h2>
-<p>Staylo wurde gegründet, um besondere Unterkünfte in Südtirol einfacher auffindbar zu machen.</p>
+<p>Wir sind keine internationale Plattform mit einer Südtirol-Seite. Wir sind nur Südtirol – und das dafür richtig.</p>
+<ul class="feature-facts">
+  <li><strong>0 %</strong><span>Provision. Deine Anfrage geht direkt an das Haus, nicht über uns.</span></li>
+  <li><strong>8</strong><span>Regionen, von Meran auf 325 m bis in die Dolomiten.</span></li>
+  <li><strong>3</strong><span>Sprachen: Deutsch, Italienisch und Ladinisch.</span></li>
+</ul>
 <a href="#page-about" class="feature-btn" data-page="about">Mehr über uns →</a>
 </div></div></div></section>
 <section class="hotelier"><div class="container"><div class="hotelier-box">
-<div><h2>Dein Hotel auf Staylo.</h2><p>Präsentiere dein Haus auf Staylo und erreiche neue Gäste – kostenlos zum Start.</p>
-<a href="#page-hoteliers" class="hotelier-button" data-page="hoteliers">Mehr für Hoteliers →</a></div>
-<div class="hotelier-info"><strong>Einfach. Modern. Kostenlos zum Start.</strong>
+<div class="hotelier-main">
+<span class="hotelier-eyebrow">Für Hoteliers</span>
+<h2>Dein Haus auf Staylo.</h2>
+<p>In etwa fünf Minuten eingetragen. Keine Einstiegsgebühr, keine Provision pro Buchung – und Gästeanfragen landen direkt in deinem Postfach.</p>
+<ol class="hotelier-steps-mini">
+  <li><span>1</span><div><strong>Eintragen</strong>Formular ausfüllen, Fotos verlinken.</div></li>
+  <li><span>2</span><div><strong>Prüfen</strong>Wir schauen drüber und melden uns.</div></li>
+  <li><span>3</span><div><strong>Online</strong>Dein Haus erscheint in Suche und Karte.</div></li>
+</ol>
+<a href="#page-hoteliers" class="hotelier-button" data-page="hoteliers">Jetzt kostenlos eintragen →</a>
+</div>
+<div class="hotelier-info"><strong>Was du bekommst</strong>
 <ul class="hotelier-benefits">
-  <li>Professionelle Präsentation deines Hauses</li>
-  <li>Mehr Sichtbarkeit bei Gästen aus DACH &amp; IT</li>
-  <li>Keine Einstiegsgebühr – kostenlos starten</li>
-  <li>Optional: Social-Media-Videos von uns</li>
+  <li>Eigene Hotelseite mit Zimmern, Karte und Galerie</li>
+  <li>Sichtbarkeit bei Gästen aus dem DACH-Raum und Italien</li>
+  <li>Anfragen ohne Umweg – direkt per E-Mail an dich</li>
+  <li>Auf Wunsch ein kurzes Video für unsere Kanäle</li>
 </ul></div>
 </div></div></section>
 </main>
@@ -6605,6 +7106,8 @@ body{background:var(--cream);line-height:1.5}
 <div class="footer-social" aria-label="Social Media">
   <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r="1.1" fill="currentColor" stroke="none"/></svg></a>
   <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M14.5 21v-7.6h2.6l.4-3h-3v-1.9c0-.9.2-1.5 1.5-1.5h1.6V4.3c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H8.9v3h2.5V21h3.1z"/></svg></a>
+  <a href="https://x.com/" target="_blank" rel="noopener noreferrer" aria-label="X"><svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor"><path d="M17.9 3h3.1l-6.8 7.8L22 21h-6.2l-4.9-6.4L5.3 21H2.2l7.3-8.3L2 3h6.4l4.4 5.8L17.9 3zm-1.1 16.2h1.7L7.3 4.7H5.5l11.3 14.5z"/></svg></a>
+  <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor"><path d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2 26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8zM10.2 14.9V9.1l5.1 2.9-5.1 2.9z"/></svg></a>
   <a href="mailto:info@staylo.it" aria-label="E-Mail"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M4 7l8 6 8-6"/></svg></a>
 </div></div>
 <div class="footer-column"><h4>Entdecken</h4><a href="#hotels" data-nav="home">Hotels</a><a href="#page-categories" data-page="categories">Kategorien</a><a href="#page-regions" data-page="regions">Regionen</a></div>
@@ -6835,12 +7338,79 @@ body{background:var(--cream);line-height:1.5}
 
 <div class="suche-recap" id="sucheRecap">
   <div class="suche-recap-inner">
-    <div class="recap-item"><span>Ort</span><strong id="recapDest">Ganz Südtirol</strong></div>
+
+    <div class="recap-field" data-recap="dest">
+      <button type="button" class="recap-item" aria-expanded="false" aria-haspopup="dialog">
+        <span>Ort</span><strong id="recapDest">Ganz Südtirol</strong>
+      </button>
+      <div class="recap-pop" role="dialog" aria-label="Ort ändern">
+        <label class="recap-pop-label" for="recapDestInput">Ort oder Region</label>
+        <input type="text" id="recapDestInput" placeholder="z. B. Meran" autocomplete="off" spellcheck="false">
+        <div class="recap-pop-hint">Leer lassen für ganz Südtirol.</div>
+      </div>
+    </div>
+
     <div class="recap-sep" aria-hidden="true"></div>
-    <div class="recap-item"><span>Datum</span><strong id="recapDates">Daten flexibel</strong></div>
+
+    <div class="recap-field" data-recap="dates">
+      <button type="button" class="recap-item" aria-expanded="false" aria-haspopup="dialog">
+        <span>Datum</span><strong id="recapDates">Daten flexibel</strong>
+      </button>
+      <div class="recap-pop" role="dialog" aria-label="Datum ändern">
+        <div class="recap-pop-row">
+          <label class="recap-pop-field"><span class="recap-pop-label">Anreise</span><input type="date" id="recapFrom"></label>
+          <label class="recap-pop-field"><span class="recap-pop-label">Abreise</span><input type="date" id="recapTo"></label>
+        </div>
+        <button type="button" class="recap-pop-clear" id="recapDatesClear">Daten zurücksetzen</button>
+      </div>
+    </div>
+
     <div class="recap-sep" aria-hidden="true"></div>
-    <div class="recap-item"><span>Gäste</span><strong id="recapGuests">2 Erwachsene · 1 Zimmer</strong></div>
-    <a href="#" class="recap-edit page-back" data-nav="home">Suche ändern</a>
+
+    <div class="recap-field" data-recap="guests">
+      <button type="button" class="recap-item" aria-expanded="false" aria-haspopup="dialog">
+        <span>Gäste</span><strong id="recapGuests">2 Erwachsene · 1 Zimmer</strong>
+      </button>
+      <div class="recap-pop" role="dialog" aria-label="Gäste ändern">
+        <div class="recap-step"><div><strong>Erwachsene</strong><span>Ab 18 Jahren</span></div>
+          <div class="recap-step-ctrl"><button type="button" data-rocc="adults" data-dir="-1" aria-label="weniger">−</button><span id="recapAdults">2</span><button type="button" data-rocc="adults" data-dir="1" aria-label="mehr">+</button></div></div>
+        <div class="recap-step"><div><strong>Kinder</strong><span>0–17 Jahre</span></div>
+          <div class="recap-step-ctrl"><button type="button" data-rocc="children" data-dir="-1" aria-label="weniger">−</button><span id="recapChildren">0</span><button type="button" data-rocc="children" data-dir="1" aria-label="mehr">+</button></div></div>
+        <div class="recap-step"><div><strong>Zimmer</strong><span>Anzahl der Räume</span></div>
+          <div class="recap-step-ctrl"><button type="button" data-rocc="rooms" data-dir="-1" aria-label="weniger">−</button><span id="recapRooms">1</span><button type="button" data-rocc="rooms" data-dir="1" aria-label="mehr">+</button></div></div>
+      </div>
+    </div>
+
+    <div class="recap-sep" aria-hidden="true"></div>
+
+    <div class="recap-field" data-recap="stars">
+      <button type="button" class="recap-item" aria-expanded="false" aria-haspopup="dialog">
+        <span>Sterne</span><strong id="recapStars">Alle</strong>
+      </button>
+      <div class="recap-pop" role="dialog" aria-label="Sterne ändern">
+        <div class="recap-pop-label">Mindestens</div>
+        <div class="recap-chiprow" id="recapStarRow">
+          <button type="button" class="recap-chip" data-rstar="3">3★</button>
+          <button type="button" class="recap-chip" data-rstar="4">4★</button>
+          <button type="button" class="recap-chip" data-rstar="5">5★</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="recap-sep" aria-hidden="true"></div>
+
+    <div class="recap-field" data-recap="price">
+      <button type="button" class="recap-item" aria-expanded="false" aria-haspopup="dialog">
+        <span>Preis</span><strong id="recapPrice">bis € 500+</strong>
+      </button>
+      <div class="recap-pop" role="dialog" aria-label="Preis ändern">
+        <div class="recap-pop-label">Höchstpreis pro Nacht</div>
+        <input type="range" id="recapPriceRange" min="50" max="500" step="10" value="500">
+        <div class="recap-pop-hint" id="recapPriceOut">bis € 500+</div>
+      </div>
+    </div>
+
+    <button type="button" class="recap-edit" id="recapReset">Zurücksetzen</button>
   </div>
 </div>
 
@@ -6865,8 +7435,20 @@ body{background:var(--cream);line-height:1.5}
       <div class="chips" id="fStars"></div>
     </div>
     <div class="fgroup">
+      <h2>Bewertung</h2>
+      <div class="chips" id="fRating"></div>
+    </div>
+    <div class="fgroup">
+      <h2>Kategorie</h2>
+      <div class="chips" id="fCats"></div>
+    </div>
+    <div class="fgroup">
       <h2>Ausstattung</h2>
       <div class="chips" id="fAmen"></div>
+    </div>
+    <div class="fgroup">
+      <h2>Sonstiges</h2>
+      <div class="chips" id="fPets"></div>
     </div>
     <div class="fgroup">
       <button class="resetall" id="resetAll" type="button">Alle Filter zurücksetzen</button>
@@ -7011,6 +7593,23 @@ body{background:var(--cream);line-height:1.5}
     <div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap">
       <button type="button" class="cta-btn secondary" id="lpEdit" style="flex:1">Angaben ändern</button>
       <button type="button" class="cta-btn" id="lpConfirm" style="flex:1">Speichern</button>
+    </div>
+  </div>
+</div>
+
+<div class="auth-overlay topic-overlay" id="topicOverlay" hidden>
+  <div class="auth-modal topic-modal" role="dialog" aria-modal="true" aria-labelledby="topicTitle">
+    <button type="button" class="auth-close" id="topicClose" aria-label="Schließen">×</button>
+    <div class="topic-photo"><img id="topicImg" src="" alt=""><span class="topic-tag" id="topicTag" hidden></span></div>
+    <div class="topic-body">
+      <h2 id="topicTitle"></h2>
+      <div class="name-alt topic-alt" id="topicAlt" hidden></div>
+      <p class="topic-long" id="topicLong"></p>
+      <ul class="topic-points" id="topicPoints"></ul>
+      <div class="topic-foot">
+        <div class="topic-count" id="topicCount"></div>
+        <button type="button" class="cta-btn" id="topicGo">Hotels ansehen →</button>
+      </div>
     </div>
   </div>
 </div>
@@ -7289,6 +7888,34 @@ body{background:var(--cream);line-height:1.5}
     {key:"adults-only",label:"Adults Only",desc:"Nur für Erwachsene – ruhiger, oft mit Wellness und Fine Dining.",match:function(h){return (h.tags||[]).indexOf("adults-only")!==-1||((h.type==="Wellness"||h.type==="Luxus")&&h.type!=="Familie"&&(h.amenities||[]).indexOf("Familienzimmer")===-1);}},
     {key:"nachhaltig",label:"Nachhaltige Hotels",desc:"Regionale Küche und ressourcenschonender Betrieb.",match:function(h){var a=(h.amenities||[]).map(function(x){return String(x).toLowerCase();});return (h.tags||[]).indexOf("nachhaltig")!==-1||a.indexOf("garten")!==-1||a.some(function(x){return x.indexOf("regional")!==-1;});}}
   ];
+
+  /* The long form of each category and region, kept beside the data
+     rather than inside it so the match functions above stay
+     readable. Shown in the detail dialog before anyone commits to a
+     filter — the point is to explain what the label actually means
+     in South Tyrol, not to repeat the one-liner. */
+  var CATEGORY_DETAIL={
+    "luxus":{long:"Fünf Sterne heißen in Südtirol selten Marmor und Lobby-Pianist. Die Häuser dieser Kategorie sind meist familiengeführt, oft seit drei Generationen, und setzen den Aufwand dorthin, wo man ihn spürt: in die Küche, in den Spa und in die Zahl der Mitarbeitenden pro Gast.",points:["Meist Halb- oder Vollpension mit eigener Handschrift","Spa-Bereiche mit Panorama statt Kellerlage","Persönlicher Service – man kennt deinen Namen"]},
+    "wellness":{long:"Wellness ist hier keine Zusatzausstattung, sondern der Grund für den Aufenthalt. Südtirol hat mit Thermalwasser in Meran, Latschenkiefer und Bergkräutern eine eigene Tradition – gute Häuser arbeiten damit, statt austauschbare Anwendungen anzubieten.",points:["Sauna-Landschaften, oft mit Außenbecken","Behandlungen mit regionalen Kräutern und Heu","Ruhezonen mit Blick, nicht ohne Fenster"]},
+    "berg":{long:"Direkt am Hang, am Ende des Tals oder auf der Alm: Häuser, bei denen der Weg zur Piste oder zum Wanderweg vor der Tür beginnt. Im Winter zählt der Skiraum, im Sommer die Wanderkarte an der Rezeption und jemand, der weiß, welche Hütte gerade offen hat.",points:["Ski- und Trockenraum, oft mit Depot","Wander- und Tourenberatung im Haus","Küche, die nach dem Berg satt macht"]},
+    "boutique":{long:"Kleine Häuser mit weniger als dreißig Zimmern, in denen jemand jeden Tag persönlich anwesend ist. Kein Konzept von der Stange – dafür Zimmer, die sich voneinander unterscheiden, und Gastgeber, die dir sagen, wo man wirklich essen geht.",points:["Wenige Zimmer, individuell eingerichtet","Gastgeber statt Rezeptionsschicht","Frühstück mit Produkten aus der Nachbarschaft"]},
+    "design":{long:"Architektur ist in Südtirol ein eigenes Thema: alte Bausubstanz trifft auf klare, zeitgenössische Eingriffe. Diese Häuser behandeln Material, Licht und Ausblick als Teil des Aufenthalts – Holz, Beton und Glas statt Dekoration.",points:["Zeitgenössische Architektur, oft preisgekrönt","Historische Substanz sichtbar belassen","Der Ausblick ist Teil des Grundrisses"]},
+    "familie":{long:"Platz ist das Entscheidende: Familienzimmer, Verbindungstüren und Betten, die man dazustellen kann. Dazu Häuser, die Kinder nicht nur dulden, sondern einplanen – mit Zeiten, Portionen und Wegen, die zu einem Familientag passen.",points:["Familienzimmer und verbundene Zimmer","Flexible Essenszeiten und Kinderportionen","Kurze Wege zu Bade- und Wandermöglichkeiten"]},
+    "adults-only":{long:"Häuser, die bewusst nur Erwachsene aufnehmen. Das Ergebnis ist vor allem eines: leise. Frühstück ohne Trubel, Spa ohne Wartezeit, Abende, die nicht um acht Uhr enden müssen – oft kombiniert mit Fine Dining und größeren Wellnessbereichen.",points:["Ruhe als ausdrücklicher Teil des Angebots","Meist größere Spa- und Rückzugsbereiche","Küche mit Zeit für lange Abende"]},
+    "nachhaltig":{long:"Nachhaltig heißt hier konkret: kurze Wege. Produkte von Höfen aus demselben Tal, Heizung aus Biomasse oder Fernwärme, eigener Garten. Südtirol ist klein genug, dass das keine Behauptung bleiben muss, sondern nachprüfbar ist.",points:["Regionale Küche mit Erzeugern aus der Umgebung","Eigener Garten oder Partnerhöfe im Tal","Ressourcenschonender Betrieb, oft zertifiziert"]}
+  };
+
+  var REGION_DETAIL={
+    "Meran":{long:"Meran liegt auf nur 325 Metern und ist damit der wärmste Ort der Liste – Palmen an der Kurpromenade, Weinberge an den Hängen, Apfelgärten im Talboden. Die Therme mitten in der Stadt und die Gärten von Schloss Trauttmansdorff machen die Stadt auch dann zum Ziel, wenn oben noch Schnee liegt.",points:["Therme Meran mitten im Zentrum","Weinberge und Apfelgärten rund um die Stadt","Milde Monate, wenn die Berge noch Winter haben"]},
+    "Bozen":{long:"Die Landeshauptstadt ist der Punkt, an dem Südtirol am italienischsten wird: Lauben, Espresso im Stehen, Obstmarkt am Vormittag. Gleichzeitig steht im Archäologiemuseum Ötzi, und in dreißig Minuten Seilbahn ist man auf einem Hochplateau mit Almwiesen.",points:["Altstadt mit Lauben und Obstmarkt","Ötzi im Südtiroler Archäologiemuseum","Seilbahnen aufs Ritten- und Salten-Plateau"]},
+    "Dolomiten":{long:"UNESCO-Weltnaturerbe und der Grund, warum viele überhaupt kommen. Der helle Dolomit lässt die Wände bei Sonnenuntergang rot aufleuchten – die Enrosadira, für die es im Ladinischen einen eigenen Namen gibt. Wandern, Klettersteige und im Winter die Sellaronda.",points:["UNESCO-Weltnaturerbe seit 2009","Enrosadira: das Alpenglühen der Dolomiten","Sellaronda und Klettersteige direkt vor der Tür"]},
+    "Gröden":{long:"Ein ladinisches Tal mit drei Orten – St. Ulrich, St. Christina, Wolkenstein – und einer Holzschnitzerei-Tradition, die bis ins 17. Jahrhundert zurückreicht. Im Winter Teil der Sellaronda, im Sommer Ausgangspunkt für die Seiser Alm und den Langkofel.",points:["Ladinisch als dritte Landessprache im Alltag","Holzschnitzerei mit jahrhundertealter Tradition","Direkter Zugang zu Sellaronda und Langkofel"]},
+    "Seiser Alm":{long:"Mit rund 56 Quadratkilometern die größte Hochalm Europas – eine leicht gewellte Wiesenfläche auf 1.800 Metern, hinter der die Zacken von Schlern und Langkofel stehen. Autofrei tagsüber, dafür Loipen, Almhütten und ein Panorama, das man sonst nur aus Prospekten kennt.",points:["Größte Hochalm Europas, rund 56 km²","Tagsüber weitgehend autofrei","Loipen und Almhütten mit Schlern-Blick"]},
+    "Pustertal":{long:"Das breite Tal im Osten läuft von Bruneck bis nach Innichen und ist die familienfreundlichste Ecke Südtirols: viel Platz, sanfte Hänge, der Kronplatz als Hausberg. Am Ende des Tals liegen die Drei Zinnen, das meistfotografierte Motiv der Alpen.",points:["Kronplatz als zentraler Ski- und Wanderberg","Drei Zinnen und Pragser Wildsee in Reichweite","Breite Täler, gut für Familien und Radfahrer"]},
+    "Eisacktal":{long:"Das Tal zwischen Brenner und Bozen ist die Route, über die schon die Römer kamen. Brixen ist die älteste Stadt Südtirols mit Dom und Hofburg, das Kloster Neustift keltert seit 1142 Wein – die Weißweine von hier, Sylvaner und Kerner, gelten als die besten des Landes.",points:["Brixen: älteste Stadt Südtirols","Kloster Neustift, Weinbau seit 1142","Sylvaner und Kerner – Weißweine mit Ruf"]},
+    "Vinschgau":{long:"Der trockenste Teil Südtirols, ein langes Tal Richtung Schweiz mit Bewässerungskanälen – den Waalwegen –, die seit dem Mittelalter das Wasser zu den Obstwiesen führen. Am oberen Ende steht der Kirchturm von Graun im Reschensee, das Wahrzeichen der Gegend.",points:["Waalwege: mittelalterliche Bewässerungspfade","Kirchturm im Reschensee bei Graun","Burgen und Klöster entlang des ganzen Tals"]}
+  };
+
   function getCategory(key){
     for(var i=0;i<CATEGORIES.length;i++){ if(CATEGORIES[i].key===key) return CATEGORIES[i]; }
     return null;
@@ -7478,7 +8105,10 @@ body{background:var(--cream);line-height:1.5}
       var cover=inCat.length?inCat[0].img:"";
       var from=inCat.length?Math.min.apply(null,inCat.map(function(h){return h.price;})):0;
       var active = activeFilters.category === c.key;
-      return '<button type="button" class="page-card is-clickable has-photo'+(active?' is-active':'')+'" data-category="'+c.key+'" aria-pressed="'+(active?'true':'false')+'">'+
+      /* data-topic-cat, not data-category: the tile opens the
+         explainer dialog, while the nav dropdown's data-category
+         links still jump straight into the filtered results. */
+      return '<button type="button" class="page-card is-clickable has-photo'+(active?' is-active':'')+'" data-topic-cat="'+c.key+'" aria-pressed="'+(active?'true':'false')+'">'+
         (cover?'<span class="page-card-photo"><img src="'+cover+'" alt="'+c.label+'" loading="lazy" width="800" height="450"></span>':'')+
         '<span class="page-card-body">'+
         '<h3>'+c.label+'</h3>'+
@@ -7500,7 +8130,7 @@ body{background:var(--cream);line-height:1.5}
         (activeFilters.dest.name||"").toLowerCase() === r.name.toLowerCase() ||
         (activeFilters.dest.name||"").toLowerCase().indexOf(r.name.toLowerCase()) !== -1
       );
-      return '<button type="button" class="page-card is-clickable has-photo'+(isOn?' is-active':'')+'" data-region="'+r.name+'" aria-pressed="'+(isOn?'true':'false')+'">'+
+      return '<button type="button" class="page-card is-clickable has-photo'+(isOn?' is-active':'')+'" data-topic-region="'+r.name+'" aria-pressed="'+(isOn?'true':'false')+'">'+
         '<span class="page-card-photo"><img src="'+r.img+'" alt="Landschaft in '+r.name+'" loading="lazy" width="800" height="500"></span>'+
         '<span class="page-card-body">'+
         '<span class="tag">'+r.tag+'</span>'+
@@ -7514,6 +8144,95 @@ body{background:var(--cream);line-height:1.5}
       '</button>';
     }).join("");
   }
+  /* ===== Topic dialog: explain first, filter second ============ */
+  (function initTopicDialog(){
+    var ov=document.getElementById("topicOverlay");
+    if(!ov)return;
+    var pending=null;   /* {param:"cat"|"region", value:"…"} */
+
+    function close(){
+      ov.hidden=true;
+      document.body.style.overflow="";
+      pending=null;
+    }
+    function open(kind,key){
+      var img,title,alt,tag,long,points,count,go;
+      if(kind==="cat"){
+        var c=getCategory(key);
+        if(!c)return;
+        var inCat=HOTELS.filter(c.match);
+        var d=CATEGORY_DETAIL[key]||{};
+        img=inCat.length?inCat[0].img:"";
+        title=c.label; alt=""; tag="Kategorie";
+        long=d.long||c.desc; points=d.points||[];
+        count=inCat.length;
+        go="Diese Kategorie ansehen →";
+        pending={param:"cat",value:key};
+      }else{
+        var r=regionByName(key);
+        if(!r)return;
+        var rd=REGION_DETAIL[key]||{};
+        img=r.img;
+        title=r.name;
+        alt='<span lang="it">'+escapeHtml(r.it)+'</span>'+
+            (r.lad?'<span class="name-lad" lang="lld">'+escapeHtml(r.lad)+'</span>':'');
+        tag=r.alt?r.alt.toLocaleString("de-DE")+" m":"";
+        long=rd.long||r.desc; points=rd.points||[];
+        count=countRegion(r.name);
+        go="Hotels in "+r.name+" →";
+        pending={param:"region",value:r.name};
+      }
+
+      var im=document.getElementById("topicImg");
+      im.src=img||""; im.alt=title;
+      document.getElementById("topicTitle").textContent=title;
+      var altEl=document.getElementById("topicAlt");
+      altEl.innerHTML=alt; altEl.hidden=!alt;
+      var tagEl=document.getElementById("topicTag");
+      tagEl.textContent=tag; tagEl.hidden=!tag;
+      document.getElementById("topicLong").textContent=long;
+      document.getElementById("topicPoints").innerHTML=
+        points.map(function(p){ return "<li>"+escapeHtml(p)+"</li>"; }).join("");
+      document.getElementById("topicCount").innerHTML=
+        "<strong>"+count+"</strong> "+(count===1?"Haus":"Häuser")+" verfügbar";
+      var goBtn=document.getElementById("topicGo");
+      goBtn.textContent=go;
+      goBtn.disabled=count===0;
+
+      ov.hidden=false;
+      document.body.style.overflow="hidden";
+      document.getElementById("topicClose").focus();
+    }
+
+    document.addEventListener("click",function(e){
+      if(!e.target.closest)return;
+      var c=e.target.closest("[data-topic-cat]");
+      if(c){ e.preventDefault(); open("cat",c.getAttribute("data-topic-cat")); return; }
+      var r=e.target.closest("[data-topic-region]");
+      if(r){ e.preventDefault(); open("region",r.getAttribute("data-topic-region")); return; }
+    });
+
+    document.getElementById("topicClose").addEventListener("click",close);
+    ov.addEventListener("click",function(e){ if(e.target===ov)close(); });
+    document.addEventListener("keydown",function(e){
+      if(e.key==="Escape"&&!ov.hidden)close();
+    });
+
+    /* The one button that turns the explanation into a search. */
+    document.getElementById("topicGo").addEventListener("click",function(){
+      if(!pending)return;
+      var p=new URLSearchParams();
+      p.append(pending.param,pending.value);
+      var url=location.pathname+"?"+p.toString()+"#suche";
+      close();
+      function apply(){
+        history.pushState(null,"",url);
+        window.dispatchEvent(new HashChangeEvent("hashchange"));
+      }
+      if(window.stayloTransition)window.stayloTransition(apply); else apply();
+    });
+  })();
+
   function scrollToHotels(){
     setTimeout(function(){
       var el=document.getElementById("hotels");
@@ -8972,20 +9691,48 @@ body{background:var(--cream);line-height:1.5}
      under everything and never intercept clicks. */
   function drawRegionOutline(map){
     if(!map||typeof L==="undefined")return;
-    var line=L.polyline(window.SOUTH_TYROL_OUTLINE,{
-      color:"#2a4a3e",weight:1,opacity:.22,dashArray:"1,7",
+    var pts=window.SOUTH_TYROL_OUTLINE;
+    var line=L.polyline(pts,{
+      color:"#1d4034",weight:1.2,opacity:.42,dashArray:"1,6",
       lineCap:"round",interactive:false
     }).addTo(map);
-    window.SOUTH_TYROL_OUTLINE.forEach(function(pt,i){
-      if(i%2)return; /* every other vertex — plenty dotted, not a solid ring */
+    /* A dot on every vertex, plus one at the midpoint of any long
+       run between two of them — the simplified border has sparse
+       stretches along the straight ridgelines, and without the
+       in-between dots the outline reads as a broken line there. */
+    var dots=[];
+    pts.forEach(function(pt,i){
+      dots.push(pt);
+      var next=pts[i+1];
+      if(!next)return;
+      var dLat=next[0]-pt[0],dLng=next[1]-pt[1];
+      var span=Math.sqrt(dLat*dLat+dLng*dLng);
+      var extra=Math.floor(span/0.022);
+      for(var k=1;k<=extra;k++){
+        dots.push([pt[0]+dLat*(k/(extra+1)),pt[1]+dLng*(k/(extra+1))]);
+      }
+    });
+    dots.forEach(function(pt){
       L.circleMarker(pt,{
-        radius:2.2,color:"#2a4a3e",weight:0,fillColor:"#2a4a3e",fillOpacity:.4,
+        radius:2.4,color:"#1d4034",weight:0,fillColor:"#1d4034",fillOpacity:.62,
         interactive:false
       }).addTo(map);
     });
     return line;
   }
   window.stayloDrawRegionOutline=drawRegionOutline;
+
+  /* Framing the whole province rather than just the pins: the
+     map-only view opens on all of South Tyrol, outline and all, and
+     the visitor zooms in from there instead of having to zoom out
+     twice to work out where they are. */
+  function fitSouthTyrol(map){
+    if(!map||typeof L==="undefined"||!window.SOUTH_TYROL_OUTLINE)return;
+    try{
+      map.fitBounds(L.latLngBounds(window.SOUTH_TYROL_OUTLINE),{padding:[28,28]});
+    }catch(e){}
+  }
+  window.stayloFitSouthTyrol=fitSouthTyrol;
 
   var mapInitialized=false,stayloMapInstance=null,mapMarkerLayer=null,mapMarkers={};
   function initMap(){
@@ -9842,13 +10589,20 @@ body{background:var(--cream);line-height:1.5}
       setTimeout(function(){
         if(typeof stayloMapInstance !== "undefined" && stayloMapInstance){
           try{ stayloMapInstance.invalidateSize(); }catch(e){}
+          /* Map-only opens on the whole province, not tight on the
+             pins — the visitor zooms in from the outside. */
+          if(v === "map" && typeof fitSouthTyrol === "function"){
+            fitSouthTyrol(stayloMapInstance);
+          }
         }
       }, 80);
     }
     btns.forEach(function(b){
       b.addEventListener("click", function(){ setView(b.getAttribute("data-view")); });
     });
-    setView("split");
+    /* The list is what people came for; the map is a deliberate
+       second step, so the page opens on the list alone. */
+    setView("list");
   })();
 
   routeFromHash();
@@ -9867,21 +10621,205 @@ body{background:var(--cream);line-height:1.5}
   var esc=function(v){return String(v==null?"":v).replace(/[&<>"']/g,function(c){
     return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});};
 
-  var state={q:"",regions:[],types:[],stars:[],amen:[],cats:[],price:500,sort:"rec"};
+  var state={q:"",regions:[],types:[],stars:[],amen:[],cats:[],rating:[],pets:[],price:500,sort:"rec"};
   /* Favourites live in the shared window.STAYLO_FAV store (defined in
      the main script, loaded earlier) — no separate copy here, so
      toggling a heart here or in the header stays in sync everywhere. */
   function isFav(id){ return !!(window.STAYLO_FAV&&window.STAYLO_FAV.has(id)); }
 
-  /* ---- Recap bar: restate what was searched, prefilled --------- */
-  function renderRecap(){
-    var dest=$("recapDest"),dates=$("recapDates"),guests=$("recapGuests");
-    if(!dest)return;
+  /* ---- Recap bar: the search, still editable ------------------
+     Dates and guests are carried over for display only — nothing in
+     this app filters on them — while place, stars and price write
+     straight into the live filter state. */
+  var stay={from:"",to:"",adults:2,children:0,rooms:1};
+
+  function loadStay(){
     var meta={};
-    try{ meta=JSON.parse(sessionStorage.getItem("staylo_search_recap")||"{}"); }catch(e){}
-    dest.textContent=(meta.dest||state.q)||"Ganz Südtirol";
-    dates.textContent=(meta.dates&&meta.dates.indexOf("auswählen")===-1)?meta.dates:"Daten flexibel";
-    guests.textContent=meta.guests||"2 Erwachsene · 1 Zimmer";
+    try{ meta=JSON.parse(sessionStorage.getItem("staylo_stay")||"{}"); }catch(e){}
+    if(meta&&typeof meta==="object"){
+      if(meta.from)stay.from=meta.from;
+      if(meta.to)stay.to=meta.to;
+      if(meta.adults)stay.adults=+meta.adults;
+      if(typeof meta.children==="number")stay.children=meta.children;
+      if(meta.rooms)stay.rooms=+meta.rooms;
+    }
+  }
+  function saveStay(){
+    try{ sessionStorage.setItem("staylo_stay",JSON.stringify(stay)); }catch(e){}
+  }
+  function deDate(iso){
+    if(!iso)return "";
+    var p=iso.split("-");
+    return p.length===3?(p[2]+"."+p[1]+"."+p[0]):"";
+  }
+  function guestLabel(){
+    var out=stay.adults+(stay.adults===1?" Erwachsener":" Erwachsene");
+    if(stay.children)out+=" · "+stay.children+(stay.children===1?" Kind":" Kinder");
+    out+=" · "+stay.rooms+(stay.rooms===1?" Zimmer":" Zimmer");
+    return out;
+  }
+
+  function renderRecap(){
+    var dest=$("recapDest");
+    if(!dest)return;
+
+    /* First arrival carries the homepage's search across. */
+    if(!recapPrimed){
+      recapPrimed=true;
+      loadStay();
+      var meta={};
+      try{ meta=JSON.parse(sessionStorage.getItem("staylo_search_recap")||"{}"); }catch(e){}
+      if(meta.dest&&!state.q)state.q=meta.dest;
+    }
+
+    dest.textContent=state.q||"Ganz Südtirol";
+    $("recapDates").textContent=(stay.from&&stay.to)
+      ? deDate(stay.from)+" – "+deDate(stay.to)
+      : "Daten flexibel";
+    $("recapGuests").textContent=guestLabel();
+    $("recapStars").textContent=state.stars.length
+      ? state.stars.slice().sort().join("★, ")+"★"
+      : "Alle";
+    $("recapPrice").textContent="bis € "+state.price+(state.price>=500?"+":"");
+
+    /* Mirror the values into the controls inside the panels. */
+    var di=$("recapDestInput"); if(di&&document.activeElement!==di)di.value=state.q;
+    var rf=$("recapFrom"); if(rf)rf.value=stay.from;
+    var rt=$("recapTo"); if(rt)rt.value=stay.to;
+    $("recapAdults").textContent=stay.adults;
+    $("recapChildren").textContent=stay.children;
+    $("recapRooms").textContent=stay.rooms;
+    document.querySelectorAll("#recapStarRow .recap-chip").forEach(function(b){
+      b.setAttribute("aria-pressed",state.stars.indexOf(b.getAttribute("data-rstar"))!==-1?"true":"false");
+    });
+    var pr=$("recapPriceRange");
+    if(pr&&document.activeElement!==pr)pr.value=state.price;
+    var po=$("recapPriceOut");
+    if(po)po.textContent="bis € "+state.price+(state.price>=500?"+":"");
+  }
+  var recapPrimed=false;
+
+  /* One panel at a time, closed by outside click or Escape. */
+  function closeRecapPops(except){
+    document.querySelectorAll("#page-suche .recap-field").forEach(function(f){
+      if(f===except)return;
+      f.classList.remove("open");
+      var b=f.querySelector(".recap-item");
+      if(b)b.setAttribute("aria-expanded","false");
+    });
+  }
+  (function initRecapEditing(){
+    var bar=document.getElementById("sucheRecap");
+    if(!bar)return;
+
+    bar.addEventListener("click",function(e){
+      var trigger=e.target.closest(".recap-item");
+      if(trigger){
+        var field=trigger.closest(".recap-field");
+        var wasOpen=field.classList.contains("open");
+        closeRecapPops();
+        if(!wasOpen){
+          field.classList.add("open");
+          trigger.setAttribute("aria-expanded","true");
+          var focusable=field.querySelector("input,button.recap-chip");
+          if(focusable&&focusable.focus)focusable.focus();
+        }
+        return;
+      }
+      /* Clicks inside an open panel must not close it. */
+      if(e.target.closest(".recap-pop"))return;
+    });
+
+    document.addEventListener("click",function(e){
+      if(e.target.closest&&e.target.closest("#sucheRecap"))return;
+      closeRecapPops();
+    });
+    document.addEventListener("keydown",function(e){
+      if(e.key==="Escape")closeRecapPops();
+    });
+
+    /* --- Ort: the same field the top search box drives --------- */
+    var di=document.getElementById("recapDestInput");
+    if(di){
+      var t=null;
+      di.addEventListener("input",function(){
+        clearTimeout(t);
+        var v=this.value.trim();
+        t=setTimeout(function(){
+          state.q=v;
+          var q=document.getElementById("q");
+          if(q){ q.value=v; document.getElementById("clearQ").hidden=!v; }
+          render(); renderRecap();
+        },220);
+      });
+      di.addEventListener("keydown",function(e){ if(e.key==="Enter")closeRecapPops(); });
+    }
+
+    /* --- Datum: display only, but remembered ------------------- */
+    ["recapFrom","recapTo"].forEach(function(id){
+      var el=document.getElementById(id);
+      if(!el)return;
+      el.addEventListener("change",function(){
+        stay[id==="recapFrom"?"from":"to"]=this.value;
+        /* A departure before the arrival is nonsense — push it along. */
+        if(stay.from&&stay.to&&stay.to<stay.from){
+          if(id==="recapFrom")stay.to=stay.from; else stay.from=stay.to;
+        }
+        saveStay(); renderRecap();
+      });
+    });
+    var dc=document.getElementById("recapDatesClear");
+    if(dc)dc.addEventListener("click",function(){
+      stay.from=""; stay.to=""; saveStay(); renderRecap();
+    });
+
+    /* --- Gäste ------------------------------------------------- */
+    bar.addEventListener("click",function(e){
+      var b=e.target.closest("[data-rocc]");
+      if(!b)return;
+      var k=b.getAttribute("data-rocc"),dir=+b.getAttribute("data-dir");
+      var min=k==="children"?0:1,max=k==="rooms"?9:12;
+      stay[k]=Math.max(min,Math.min(max,stay[k]+dir));
+      saveStay(); renderRecap();
+    });
+
+    /* --- Sterne: a real filter, kept in step with the rail ----- */
+    bar.addEventListener("click",function(e){
+      var b=e.target.closest("[data-rstar]");
+      if(!b)return;
+      var v=b.getAttribute("data-rstar"),i=state.stars.indexOf(v);
+      if(i===-1)state.stars.push(v); else state.stars.splice(i,1);
+      syncRailFromState();
+      render(); renderRecap();
+    });
+
+    /* --- Preis ------------------------------------------------- */
+    var pr=document.getElementById("recapPriceRange");
+    if(pr)pr.addEventListener("input",function(){
+      state.price=+this.value;
+      var fp=document.getElementById("fPrice");
+      if(fp){ fp.value=state.price; }
+      var po=document.getElementById("priceOut");
+      if(po)po.textContent="€ "+state.price+(state.price>=500?"+":"");
+      render(); renderRecap();
+    });
+
+    var rr=document.getElementById("recapReset");
+    if(rr)rr.addEventListener("click",function(){
+      var ra=document.getElementById("resetAll");
+      if(ra)ra.click();
+      stay.from=""; stay.to=""; stay.adults=2; stay.children=0; stay.rooms=1;
+      saveStay(); closeRecapPops(); renderRecap();
+    });
+  })();
+
+  /* The rail and the recap bar are two views of one filter state —
+     whichever is touched, the other has to follow. */
+  function syncRailFromState(){
+    document.querySelectorAll("#page-suche .chip[data-k]").forEach(function(c){
+      var arr=state[c.getAttribute("data-k")]||[];
+      c.setAttribute("aria-pressed",arr.indexOf(c.getAttribute("data-v"))!==-1?"true":"false");
+    });
   }
 
   function catByKey(k){
@@ -9906,6 +10844,13 @@ body{background:var(--cream);line-height:1.5}
     if(state.types.length   && state.types.indexOf(h.type)===-1) return false;
     if(state.stars.length   && state.stars.indexOf(String(h.stars))===-1) return false;
     if(h.price>state.price) return false;
+    /* Rating is a floor, not a set: picking 4,5 means "4,5 and up",
+       so the lowest chosen threshold is the one that counts. */
+    if(state.rating.length){
+      var floor=Math.min.apply(null,state.rating.map(Number));
+      if(!(h.rating>=floor)) return false;
+    }
+    if(state.pets.length && !h.pets) return false;
     for(var i=0;i<state.amen.length;i++){
       if((h.amenities||[]).indexOf(state.amen[i])===-1) return false;
     }
@@ -9924,7 +10869,8 @@ body{background:var(--cream);line-height:1.5}
   }
   function activeCount(){
     return state.regions.length+state.types.length+state.stars.length+state.amen.length+
-           state.cats.length+(state.price<500?1:0)+(state.q?1:0);
+           state.cats.length+state.rating.length+state.pets.length+
+           (state.price<500?1:0)+(state.q?1:0);
   }
 
   /* ---- Filter rail ----------------------------------------- */
@@ -9959,11 +10905,25 @@ body{background:var(--cream);line-height:1.5}
     return {v:s,n:countIf(function(h){return String(h.stars)===s;}),label:s+"&nbsp;★"};
   }),"stars");
 
+  buildChips($("fRating"),["4.8","4.5","4"].map(function(r){
+    return {v:r,n:countIf(function(h){return h.rating>=+r;}),
+      label:"ab "+String(r).replace(".",",")};
+  }).filter(function(x){return x.n>0;}),"rating");
+
+  /* The same category definitions the landing page uses, so a
+     category means exactly one thing across the whole site. */
+  buildChips($("fCats"),CATEGORIES.map(function(c){
+    return {v:c.key,n:countIf(c.match),label:esc(c.label)};
+  }).filter(function(x){return x.n>0;}),"cats");
+
   var amenAll=[];
   HOTELS.forEach(function(h){(h.amenities||[]).forEach(function(a){if(amenAll.indexOf(a)===-1)amenAll.push(a);});});
   buildChips($("fAmen"),amenAll.map(function(a){
     return {v:a,n:countIf(function(h){return (h.amenities||[]).indexOf(a)!==-1;}),label:esc(a)};
   }),"amen");
+
+  buildChips($("fPets"),[{v:"yes",n:countIf(function(h){return !!h.pets;}),label:"Haustiere erlaubt"}]
+    .filter(function(x){return x.n>0;}),"pets");
 
   document.addEventListener("click",function(e){
     var uc=e.target.closest&&e.target.closest("[data-uncat]");
@@ -9998,7 +10958,7 @@ body{background:var(--cream);line-height:1.5}
     $("q").value=""; state.q=""; this.hidden=true; render(); $("q").focus();
   });
   $("resetAll").addEventListener("click",function(){
-    state={q:"",regions:[],types:[],stars:[],amen:[],cats:[],price:500,sort:state.sort};
+    state={q:"",regions:[],types:[],stars:[],amen:[],cats:[],rating:[],pets:[],price:500,sort:state.sort};
     $("q").value=""; $("clearQ").hidden=true;
     $("fPrice").value=500; $("priceOut").textContent="€ 500";
     document.querySelectorAll('.chip[aria-pressed="true"]').forEach(function(c){c.setAttribute("aria-pressed","false");});
@@ -10055,6 +11015,10 @@ body{background:var(--cream);line-height:1.5}
     var er=$("emptyReset");
     if(er)er.addEventListener("click",function(){ $("resetAll").click(); });
     drawPins(list);
+    /* The rail, the top search field and the recap bar all edit the
+       same state — re-stating it here keeps the three in step no
+       matter which one was touched. */
+    if(typeof renderRecap==="function")renderRecap();
     if(typeof syncURL==="function")syncURL();
   }
 
@@ -10198,7 +11162,12 @@ body{background:var(--cream);line-height:1.5}
     $("vMap").setAttribute("aria-pressed",String(v==="map"));
     $("grid").classList.toggle("is-list",v==="list");
     $("mapcol").classList.toggle("open",v==="map");
-    if(v==="map"&&map)setTimeout(function(){map.invalidateSize();},260);
+    if(v==="map"&&map)setTimeout(function(){
+      map.invalidateSize();
+      /* Same as the landing page: the map view opens on the whole
+         province with its outline, then you zoom in. */
+      if(window.stayloFitSouthTyrol)window.stayloFitSouthTyrol(map);
+    },260);
   }
   $("vGrid").addEventListener("click",function(){setView("grid");});
   $("vList").addEventListener("click",function(){setView("list");});
@@ -10221,6 +11190,8 @@ body{background:var(--cream);line-height:1.5}
     state.stars=p.getAll("stars");
     state.amen=p.getAll("amen");
     state.cats=p.getAll("cat");
+    state.rating=p.getAll("rating");
+    state.pets=p.getAll("pets");
     state.price=Math.min(500,Math.max(50,+(p.get("maxPrice")||500)))||500;
     state.sort=p.get("sort")||"rec";
 
@@ -10250,6 +11221,8 @@ body{background:var(--cream);line-height:1.5}
     state.stars.forEach(function(v){p.append("stars",v);});
     state.amen.forEach(function(v){p.append("amen",v);});
     state.cats.forEach(function(v){p.append("cat",v);});
+    state.rating.forEach(function(v){p.append("rating",v);});
+    state.pets.forEach(function(v){p.append("pets",v);});
     if(state.price<500)p.set("maxPrice",state.price);
     if(state.sort!=="rec")p.set("sort",state.sort);
     var qs=p.toString();
@@ -10349,5 +11322,575 @@ body{background:var(--cream);line-height:1.5}
   }
 })();
 </script>
+<script>
+/* ============================================================
+   TRANSLATION — German, Italian, English
+   South Tyrol is officially trilingual, so a language switch that
+   only relabels a button is worse than none at all.
+
+   The site's copy lives in the markup and in a dozen render
+   functions, so rather than tagging several hundred elements this
+   translates by source string: every visible text node and the
+   attributes people actually read are looked up in a dictionary
+   keyed on the German original. The German is stashed on the node
+   the first time it is touched, so switching back and forth is
+   lossless and never translates an already-translated string.
+
+   Place names stay as they are. Meran/Merano and Gröden/Gherdëina
+   are already shown side by side elsewhere — translating them here
+   would print "Merano / Merano" and lose the point.
+   ============================================================ */
+(function initI18n(){
+  "use strict";
+
+  var DICT={
+  it:{
+    /* --- header & navigation --- */
+    "Hotels":"Hotel","Kategorien":"Categorie","Regionen":"Regioni","Über uns":"Chi siamo",
+    "Für Hoteliers":"Per albergatori","Für Hoteliers →":"Per albergatori →","Anmelden":"Accedi",
+    "Favoriten":"Preferiti","Noch keine Favoriten ausgewählt.":"Nessun preferito selezionato.",
+    "Menü":"Menu","Schließen":"Chiudi","Startseite":"Home","Zurück zur Startseite":"Torna alla home",
+    "← Zurück zur Startseite":"← Torna alla home","← Zurück zu den Ergebnissen":"← Torna ai risultati",
+    /* --- dropdowns --- */
+    "Finde deine Kategorie":"Trova la tua categoria","Finde deine Kategorie →":"Trova la tua categoria →",
+    "Von Luxus bis Natur.":"Dal lusso alla natura.","Südtirol entdecken":"Scopri l'Alto Adige",
+    "Beliebte Regionen":"Regioni popolari","Finde deine Traumregion →":"Trova la tua regione →",
+    "Luxushotels":"Hotel di lusso","Wellnesshotels":"Hotel benessere","Berghotels":"Hotel di montagna",
+    "Boutique Hotels":"Boutique hotel","Design Hotels":"Design hotel","Familienhotels":"Hotel per famiglie",
+    "Adults Only":"Solo adulti","Nachhaltig":"Sostenibile","Nachhaltige Hotels":"Hotel sostenibili",
+    "Therme · Wein":"Terme · Vino","Stadt · Kultur":"Città · Cultura","Ski":"Sci","Alm":"Alpeggio",
+    "Kronplatz":"Plan de Corones","Brixen":"Bressanone","Obst · Burgen":"Frutta · Castelli",
+    /* --- hero --- */
+    "Drei Sprachen":"Tre lingue","Ein Zuhause":"Una casa","Dein Aufenthalt":"Il tuo soggiorno",
+    "in":"in","Südtirol.":"Alto Adige.",
+    "Hotels von Meran bis ins Pustertal – ausgesucht, unabhängig und ohne Provision. Anfragen gehen direkt an das Haus.":"Hotel da Merano alla Val Pusteria – selezionati, indipendenti e senza commissioni. Le richieste arrivano direttamente alla struttura.",
+    "Hotels entdecken":"Scopri gli hotel","Hotels entdecken →":"Scopri gli hotel →",
+    "Regionen erkunden":"Esplora le regioni","Alle Hotels entdecken →":"Scopri tutti gli hotel →",
+    /* --- search --- */
+    "Reiseziel":"Destinazione","Wohin geht deine Reise?":"Dove vuoi andare?",
+    "Anreise – Abreise":"Arrivo – Partenza","Daten auswählen":"Scegli le date","Daten flexibel":"Date flessibili",
+    "Gäste & Zimmer":"Ospiti e camere","Erwachsene":"Adulti","Ab 18 Jahren":"Dai 18 anni",
+    "Kinder":"Bambini","0–17 Jahre":"0–17 anni","Zimmer":"Camere","Anzahl der Räume":"Numero di camere",
+    "Mit Haustier unterwegs":"In viaggio con un animale","Suchen":"Cerca",
+    "+ Detailsuche":"+ Ricerca avanzata","− Detailsuche schließen":"− Chiudi ricerca avanzata",
+    "Preis pro Nacht":"Prezzo a notte","Bewertung":"Valutazione","Alle":"Tutti",
+    "Art des Hauses":"Tipo di struttura","Sterne":"Stelle","Ausstattung":"Servizi",
+    "Ausstattung suchen …":"Cerca servizi …","Sonstiges":"Altro","Kategorie":"Categoria",
+    "Wir finden die passenden Häuser für dich …":"Stiamo cercando le strutture giuste per te …",
+    "Kein Ort in Südtirol gefunden. Bitte wähle eine Region oder einen Ort in Südtirol.":"Nessuna località trovata in Alto Adige. Scegli una regione o una località dell'Alto Adige.",
+    "Hotel oder Ort suchen":"Cerca hotel o località","Hotel, Ort oder Region – z. B. Meran":"Hotel, località o regione – es. Merano",
+    "Suche leeren":"Cancella ricerca","z. B. Meran":"es. Merano",
+    "Ort":"Località","Ort oder Region":"Località o regione","Leer lassen für ganz Südtirol.":"Lascia vuoto per tutto l'Alto Adige.",
+    "Datum":"Data","Anreise":"Arrivo","Abreise":"Partenza","Daten zurücksetzen":"Azzera le date",
+    "Gäste":"Ospiti","Mindestens":"Almeno","Preis":"Prezzo","Höchstpreis pro Nacht":"Prezzo massimo a notte",
+    "Zurücksetzen":"Azzera","Ganz Südtirol":"Tutto l'Alto Adige",
+    "Ort ändern":"Modifica località","Datum ändern":"Modifica date","Gäste ändern":"Modifica ospiti",
+    "Sterne ändern":"Modifica stelle","Preis ändern":"Modifica prezzo",
+    "mehr":"più","weniger":"meno","bis":"fino a",
+    /* --- amenities & types --- */
+    "WLAN":"Wi-Fi","Frühstück":"Colazione","Parkplatz":"Parcheggio","Spa":"Spa","Sauna":"Sauna",
+    "Pool":"Piscina","Restaurant":"Ristorante","Fine Dining":"Alta cucina","Halbpension":"Mezza pensione",
+    "Skiraum":"Deposito sci","Garten":"Giardino","Balkon":"Balcone","Whirlpool":"Idromassaggio",
+    "Fitness":"Palestra","Yoga":"Yoga","Familienzimmer":"Camere familiari","Barrierefrei":"Accessibile",
+    "E-Ladestation":"Colonnina di ricarica","Klimaanlage":"Aria condizionata","Haustiere":"Animali ammessi",
+    "Haustiere erlaubt":"Animali ammessi","Concierge":"Concierge","Zentrale Lage":"Posizione centrale",
+    "Altstadtnähe":"Vicino al centro storico","Dolomitenblick":"Vista Dolomiti","Design":"Design",
+    "Boutique":"Boutique","Wellness":"Benessere","Berghotel":"Hotel di montagna","Luxus":"Lusso",
+    "Familie":"Famiglia","Bergblick":"Vista montagna",
+    /* --- region strip --- */
+    "Von der Talsohle":"Dal fondovalle","bis zum Gipfel.":"fino alla vetta.",
+    "Meran liegt auf 325 Metern zwischen Weinbergen, die Dolomiten auf fast 2000. Dazwischen: vier sehr unterschiedliche Arten, Südtirol zu erleben – jede mit ihrem deutschen, italienischen und, in den ladinischen Tälern, ladinischen Namen.":"Merano si trova a 325 metri tra i vigneti, le Dolomiti quasi a 2000. Nel mezzo: quattro modi molto diversi di vivere l'Alto Adige – ognuno con il suo nome tedesco, italiano e, nelle valli ladine, ladino.",
+    "Kurort mit Therme, Weinbergen und mediterranem Flair.":"Località termale con vigneti e atmosfera mediterranea.",
+    "Obstgärten, Burgen und der Reschensee.":"Frutteti, castelli e il lago di Resia.",
+    "Ski, ladinische Kultur und traditionsreiche Bergdörfer.":"Sci, cultura ladina e villaggi di montagna ricchi di tradizione.",
+    "UNESCO-Weltnaturerbe mit markanten Gipfeln und Wanderwegen.":"Patrimonio naturale UNESCO con cime inconfondibili e sentieri.",
+    "Landeshauptstadt: Kultur, Gastronomie und idealer Ausgangspunkt.":"Capoluogo: cultura, gastronomia e punto di partenza ideale.",
+    "Europas größte Hochalm mit weitem Panorama.":"Il più grande altopiano alpino d'Europa con ampio panorama.",
+    "Kronplatz, familienfreundlich, viel Platz zum Wandern.":"Plan de Corones, adatto alle famiglie, tanto spazio per camminare.",
+    "Brixen, Klöster und bekannte Weißweine.":"Bressanone, abbazie e rinomati vini bianchi.",
+    /* --- results --- */
+    "Alle Häuser":"Tutte le strutture","Hotels in Südtirol":"Hotel in Alto Adige",
+    "Liste und Karte – gefiltert nach deiner Suche.":"Elenco e mappa – filtrati in base alla tua ricerca.",
+    "Ansicht":"Vista","Liste + Karte":"Elenco + mappa","Nur Liste":"Solo elenco","Nur Karte":"Solo mappa",
+    "Raster":"Griglia","Liste":"Elenco","Karte":"Mappa","Karte schließen":"Chiudi mappa",
+    "Sortierung":"Ordinamento","Empfohlen":"Consigliati","Preis: niedrig → hoch":"Prezzo: crescente",
+    "Preis: hoch → niedrig":"Prezzo: decrescente","Beste Bewertung":"Migliore valutazione",
+    "Preis: aufsteigend":"Prezzo: crescente","Preis: absteigend":"Prezzo: decrescente",
+    "Filter":"Filtri","Filter zurücksetzen":"Azzera filtri","Alle Filter zurücksetzen":"Azzera tutti i filtri",
+    "Weitere laden":"Carica altri","Region":"Regione","Häuser in Südtirol":"strutture in Alto Adige",
+    "Keine passenden Hotels gefunden":"Nessun hotel corrispondente","Keine passenden Häuser":"Nessuna struttura corrispondente",
+    "Versuche deine Suche etwas zu erweitern – anderen Ort wählen, Preis erhöhen oder Filter zurücksetzen.":"Prova ad ampliare la ricerca – scegli un'altra località, aumenta il prezzo o azzera i filtri.",
+    "Versuch es mit einer weiteren Preisspanne oder weniger Filtern.":"Prova con una fascia di prezzo più ampia o meno filtri.",
+    "Keine Hotels in dieser Auswahl":"Nessun hotel in questa selezione",
+    "Filter zurücksetzen, um alle Häuser zu sehen.":"Azzera i filtri per vedere tutte le strutture.",
+    "Preis / Nacht · Karte folgt deinen Filtern":"Prezzo / notte · la mappa segue i tuoi filtri",
+    "Preis pro Nacht · zeigt genau deine Auswahl":"Prezzo a notte · mostra esattamente la tua selezione",
+    "Karte mit Hotels in Südtirol":"Mappa con hotel in Alto Adige","Karte nicht verfügbar.":"Mappa non disponibile.",
+    "Details":"Dettagli","Anfragen":"Richiedi","pro Nacht":"a notte","/ Nacht":"/ notte",
+    "Sehr gut":"Molto buono","Außergewöhnlich":"Eccezionale","Gut":"Buono","Neu":"Nuovo",
+    "Neu bei Staylo":"Nuovo su Staylo","Noch keine Bewertungen":"Ancora nessuna recensione",
+    /* --- hotel detail --- */
+    "Über dieses Hotel":"Su questo hotel","Zimmerkategorien":"Tipologie di camera","Lage":"Posizione",
+    "Bewertungen & Highlights":"Recensioni e punti di forza","Gäste heben besonders hervor:":"Gli ospiti apprezzano in particolare:",
+    "Ähnliche Unterkünfte":"Strutture simili","Verfügbarkeit anfragen":"Richiedi disponibilità",
+    "♡ Zu Favoriten":"♡ Aggiungi ai preferiti","♥ In Favoriten":"♥ Nei preferiti",
+    "Zur Website des Hotels ↗":"Al sito dell'hotel ↗","Kostenlose Anfrage · Keine Buchungsverpflichtung":"Richiesta gratuita · Nessun obbligo di prenotazione",
+    "Preis pro Nacht, zzgl. lokaler Abgaben. Endpreis nach Datumsauswahl.":"Prezzo a notte, escluse le tasse locali. Prezzo finale dopo la scelta delle date.",
+    "Details ansehen →":"Vedi dettagli →","Zimmer anfragen":"Richiedi la camera",
+    "Brotkrumen":"Percorso","Bildergalerie":"Galleria fotografica","Galerie schließen":"Chiudi galleria",
+    "Nächstes Bild":"Immagine successiva","Vorheriges Bild":"Immagine precedente","Foto vergrößern":"Ingrandisci foto",
+    "Zu Favoriten hinzufügen":"Aggiungi ai preferiti","Aus Favoriten entfernen":"Rimuovi dai preferiti",
+    /* --- inquiry --- */
+    "Anfrage senden":"Invia richiesta","Unverbindlich und kostenlos. Das Hotel meldet sich direkt bei dir.":"Senza impegno e gratuito. L'hotel ti risponde direttamente.",
+    "Name":"Nome","Vor- und Nachname":"Nome e cognome","E-Mail":"E-mail","Nachricht":"Messaggio","optional":"facoltativo",
+    "Besondere Wünsche, Fragen zur Anreise …":"Richieste particolari, domande sull'arrivo …",
+    "Staylo vermittelt die Anfrage direkt an das Hotel. Es entstehen keine Kosten und keine Buchungsverpflichtung.":"Staylo inoltra la richiesta direttamente all'hotel. Nessun costo e nessun obbligo di prenotazione.",
+    "Anfrage bereit zum Senden":"Richiesta pronta per l'invio","Alles klar":"Va bene",
+    "Dein E-Mail-Programm wurde mit der fertigen Anfrage geöffnet. Prüfe kurz und schick sie ab.":"Il tuo programma di posta è stato aperto con la richiesta pronta. Controlla e invia.",
+    /* --- auth --- */
+    "Melde dich an, um Favoriten geräteübergreifend zu speichern und Anfragen zu verwalten.":"Accedi per salvare i preferiti su più dispositivi e gestire le richieste.",
+    "Passwort":"Password","Noch kein Konto?":"Non hai un account?","Bereits ein Konto?":"Hai già un account?",
+    "Registrieren":"Registrati","Konto erstellen":"Crea account",
+    "Demo: Die Anmeldung speichert deine Session lokal im Browser. Ein echtes Konto-System folgt später.":"Demo: l'accesso salva la sessione localmente nel browser. Un vero sistema di account arriverà più avanti.",
+    /* --- sections --- */
+    "Staylo · Südtirol":"Staylo · Alto Adige","Mehr als nur":"Molto più di","ein Hotel.":"un hotel.",
+    "Wir sind keine internationale Plattform mit einer Südtirol-Seite. Wir sind nur Südtirol – und das dafür richtig.":"Non siamo una piattaforma internazionale con una pagina sull'Alto Adige. Siamo solo Alto Adige – e lo facciamo bene.",
+    "Provision. Deine Anfrage geht direkt an das Haus, nicht über uns.":"di commissione. La tua richiesta va direttamente alla struttura, non tramite noi.",
+    "Regionen, von Meran auf 325 m bis in die Dolomiten.":"regioni, da Merano a 325 m fino alle Dolomiti.",
+    "Sprachen: Deutsch, Italienisch und Ladinisch.":"lingue: tedesco, italiano e ladino.",
+    "Mehr über uns →":"Scopri di più su di noi →",
+    "Dein Haus auf Staylo.":"La tua struttura su Staylo.",
+    "In etwa fünf Minuten eingetragen. Keine Einstiegsgebühr, keine Provision pro Buchung – und Gästeanfragen landen direkt in deinem Postfach.":"Registrata in circa cinque minuti. Nessuna quota d'ingresso, nessuna commissione per prenotazione – e le richieste arrivano direttamente nella tua casella.",
+    "Eintragen":"Registra","Formular ausfüllen, Fotos verlinken.":"Compila il modulo, collega le foto.",
+    "Prüfen":"Verifica","Wir schauen drüber und melden uns.":"Controlliamo e ti ricontattiamo.",
+    "Online":"Online","Dein Haus erscheint in Suche und Karte.":"La tua struttura appare nella ricerca e sulla mappa.",
+    "Jetzt kostenlos eintragen →":"Registrati ora gratuitamente →","Was du bekommst":"Cosa ottieni",
+    "Eigene Hotelseite mit Zimmern, Karte und Galerie":"Pagina hotel dedicata con camere, mappa e galleria",
+    "Sichtbarkeit bei Gästen aus dem DACH-Raum und Italien":"Visibilità presso ospiti dall'area germanofona e dall'Italia",
+    "Anfragen ohne Umweg – direkt per E-Mail an dich":"Richieste dirette – via e-mail direttamente a te",
+    "Auf Wunsch ein kurzes Video für unsere Kanäle":"Su richiesta un breve video per i nostri canali",
+    /* --- footer --- */
+    "Entdecken":"Scopri","Staylo ist eine unabhängige Plattform für besondere Hotels in Südtirol.":"Staylo è una piattaforma indipendente per hotel speciali in Alto Adige.",
+    "Lana · Südtirol · Italien":"Lana · Alto Adige · Italia","Made in South Tyrol · Italy":"Made in South Tyrol · Italy",
+    "© 2026 Staylo · Hotels in Südtirol":"© 2026 Staylo · Hotel in Alto Adige",
+    "Impressum":"Note legali","Kontakt":"Contatti","Social Media":"Social media",
+    /* --- sub pages --- */
+    "Jeder Aufenthalt hat seinen eigenen Charakter.":"Ogni soggiorno ha il suo carattere.",
+    "Jede Region hat ihren eigenen Rhythmus.":"Ogni regione ha il suo ritmo.",
+    "Über Staylo":"Su Staylo","Warum wir diese Plattform gebaut haben.":"Perché abbiamo creato questa piattaforma.",
+    "Die Idee hinter Staylo":"L'idea dietro Staylo",
+    "Kostenlos und ohne Provision":"Gratuito e senza commissioni","Wohin das gehen soll":"Dove vogliamo arrivare",
+    "Dein Hotel auf Staylo":"Il tuo hotel su Staylo","Kostenlos starten. Professionell präsentieren.":"Inizia gratis. Presentati in modo professionale.",
+    "Kostenlos, ohne Provision":"Gratuito, senza commissioni","Was wir uns von dir wünschen":"Cosa ci aspettiamo da te",
+    "Gute Fotos":"Belle foto","Ehrliche Angaben":"Informazioni oneste","Ein Haus aus Südtirol":"Una struttura dell'Alto Adige",
+    "Anmeldung erforderlich":"Accesso richiesto","Jetzt anmelden":"Accedi ora",
+    "Haus eintragen":"Registra la struttura","Das Haus":"La struttura","Name des Hauses":"Nome della struttura",
+    "Beschreibung & Bild":"Descrizione e immagine","Kurzbeschreibung":"Descrizione breve",
+    "Ausführlicher Text":"Testo dettagliato","Bild-Adresse (URL)":"Indirizzo immagine (URL)",
+    "E-Mail für Anfragen":"E-mail per le richieste","Website":"Sito web","Speichern":"Salva",
+    "Angaben ändern":"Modifica dati","Vorschau deines Hotels":"Anteprima del tuo hotel",
+    "Meine eingetragenen Häuser":"Le mie strutture registrate","Bearbeitung abbrechen":"Annulla modifica",
+    "keine Angabe":"non indicato","3 Sterne":"3 stelle","4 Sterne":"4 stelle","5 Sterne":"5 stelle",
+    "Preis ab (€ / Nacht)":"Prezzo da (€ / notte)","Adresse":"Indirizzo","Anbieter":"Fornitore","Hinweis":"Nota",
+    "Wir freuen uns auf deine Nachricht.":"Aspettiamo il tuo messaggio.","E-Mail schreiben":"Scrivi un'e-mail",
+    "Angaben gemäß den gesetzlichen Vorgaben.":"Informazioni secondo le disposizioni di legge.",
+    "Häuser verfügbar":"strutture disponibili","Haus verfügbar":"struttura disponibile",
+    "Hotels ansehen →":"Vedi gli hotel →","Diese Kategorie ansehen →":"Vedi questa categoria →",
+    /* --- category one-liners --- */
+    "Fünf-Sterne-Häuser mit persönlichem Service und Fine Dining.":"Strutture a cinque stelle con servizio personale e alta cucina.",
+    "Spa, Sauna, Pools und Behandlungen im Mittelpunkt.":"Spa, sauna, piscine e trattamenti al centro.",
+    "Direkt an den Hängen oder mit Dolomitenblick.":"Direttamente sulle piste o con vista sulle Dolomiti.",
+    "Kleine, individuell geführte Häuser mit Charakter.":"Piccole strutture a conduzione familiare con carattere.",
+    "Architektur und Interieur als Teil des Erlebnisses.":"Architettura e interni come parte dell'esperienza.",
+    "Zimmer und Angebote für Kinder und Eltern.":"Camere e offerte per bambini e genitori.",
+    "Nur für Erwachsene – ruhiger, oft mit Wellness und Fine Dining.":"Solo per adulti – più tranquillo, spesso con benessere e alta cucina.",
+    "Regionale Küche und ressourcenschonender Betrieb.":"Cucina regionale e gestione attenta alle risorse.",
+    /* --- about page --- */
+    "Staylo ist eine unabhängige Plattform für Hotels in Südtirol – bewusst regional, bewusst übersichtlich.":"Staylo è una piattaforma indipendente per hotel in Alto Adige – volutamente locale, volutamente essenziale.",
+    "Wer heute ein Haus in Meran oder im Pustertal sucht, landet auf internationalen Portalen, die überall gleich aussehen – und die von jeder Buchung einen Anteil einbehalten. Südtirol ist aber kein beliebiges Reiseziel: eine Region mit drei Sprachen, mit Häusern, die oft seit Generationen in Familienhand sind. Das wollen wir sichtbar machen.":"Chi oggi cerca una struttura a Merano o in Val Pusteria finisce su portali internazionali che si somigliano tutti – e che trattengono una parte di ogni prenotazione. Ma l'Alto Adige non è una destinazione qualsiasi: una regione con tre lingue e strutture spesso in mano alla stessa famiglia da generazioni. È questo che vogliamo rendere visibile.",
+    "Hoteliers tragen ihr Haus kostenlos ein und zahlen keine Provision pro Buchung. Anfragen gehen direkt an das Haus – wir stehen nicht dazwischen. Wer möchte, bekommt von uns zusätzlich ein kurzes Video für unsere Social-Media-Kanäle.":"Gli albergatori registrano la loro struttura gratuitamente e non pagano commissioni per prenotazione. Le richieste arrivano direttamente alla struttura – noi non ci mettiamo in mezzo. Chi lo desidera riceve inoltre un breve video per i nostri canali social.",
+    "Zuerst Südtirol, richtig gut. Später vielleicht Nordtirol, Österreich und die Schweiz – aber erst, wenn die Häuser hier zufrieden sind.":"Prima l'Alto Adige, fatto bene. Più avanti forse il Tirolo del Nord, l'Austria e la Svizzera – ma solo quando le strutture qui saranno soddisfatte.",
+    "Staylo befindet sich im Aufbau. Anfragen laufen direkt an die Häuser; es wird hier nichts verbindlich gebucht.":"Staylo è in fase di sviluppo. Le richieste vanno direttamente alle strutture; qui non si effettuano prenotazioni vincolanti.",
+    /* --- hoteliers page --- */
+    "Trage dein Haus selbst ein – in etwa fünf Minuten. Keine Einstiegsgebühr, keine Provision pro Buchung. Gästeanfragen kommen direkt bei dir an, nicht über uns.":"Registra tu stesso la tua struttura – in circa cinque minuti. Nessuna quota d'ingresso, nessuna commissione per prenotazione. Le richieste arrivano direttamente a te, non tramite noi.",
+    "Du füllst das Formular unten aus. Deine Angaben bleiben auf diesem Gerät gespeichert und bleiben änderbar.":"Compili il modulo qui sotto. I tuoi dati restano salvati su questo dispositivo e sono sempre modificabili.",
+    "Wir schauen uns Fotos und Angaben an und melden uns per E-Mail, wenn etwas fehlt.":"Guardiamo foto e dati e ti scriviamo per e-mail se manca qualcosa.",
+    "Dein Haus erscheint in Suche, Karte und Kategorien – und Gäste fragen direkt bei dir an.":"La tua struttura appare nella ricerca, sulla mappa e nelle categorie – e gli ospiti ti contattano direttamente.",
+    "Um ein Hotel einzutragen, melde dich bitte zuerst an. So können wir deine Einträge diesem Konto zuordnen und du kannst sie später bearbeiten.":"Per registrare un hotel accedi prima. Così possiamo collegare le tue voci a questo account e potrai modificarle in seguito.",
+    "Noch kein Konto? Im Anmelden-Fenster kannst du dich registrieren (Demo, lokal im Browser).":"Non hai un account? Puoi registrarti nella finestra di accesso (demo, in locale nel browser).",
+    "Hell, scharf, aufgeräumt – Zimmer, Außenansicht und Umgebung. Fotos sind der Grund, warum Gäste klicken.":"Luminose, nitide, ordinate – camere, esterni e dintorni. Le foto sono il motivo per cui gli ospiti cliccano.",
+    "Preise und Ausstattung so, wie Gäste sie wirklich vorfinden.":"Prezzi e servizi esattamente come gli ospiti li troveranno.",
+    "Wir bleiben bewusst regional – Meran bis Pustertal, Boutique bis Berghotel.":"Restiamo volutamente locali – da Merano alla Val Pusteria, dal boutique all'hotel di montagna.",
+    "Deine Angaben werden auf diesem Gerät gespeichert, damit du sie jederzeit ändern kannst. Zum Freischalten schickst du sie im letzten Schritt per E-Mail an uns – ein echtes Hotelier-Konto mit zentraler Datenbank kommt als Nächstes.":"I tuoi dati vengono salvati su questo dispositivo, così puoi modificarli quando vuoi. Per l'attivazione ce li invii nell'ultimo passaggio via e-mail – un vero account per albergatori con database centrale arriverà a breve.",
+    "Erscheint auf der Hotelkarte. Max. 120 Zeichen.":"Appare sulla scheda dell'hotel. Max 120 caratteri.",
+    "Direkter Link zu einem hellen, hochauflösenden Foto. Ohne Bild nutzen wir vorerst ein Platzhalterbild.":"Link diretto a una foto luminosa e ad alta risoluzione. Senza immagine useremo per ora un segnaposto.",
+    "Prüfe die Angaben. Erst mit „Speichern“ wird der Eintrag auf diesem Gerät gesichert.":"Controlla i dati. Solo con „Salva“ la voce viene memorizzata su questo dispositivo.",
+    "Hast du Fragen zu Staylo, zu einem Hotel oder möchtest du dein Haus bei uns listen? Schreib uns – wir melden uns so schnell wie möglich.":"Hai domande su Staylo, su un hotel, o vuoi inserire la tua struttura? Scrivici – ti risponderemo al più presto.",
+    "Staylo ist eine unabhängige Hotelplattform. Die dargestellten Hotels und Preise dienen der Orientierung. Verbindliche Buchungen erfolgen über die jeweiligen Hotels bzw. deren Systeme. Dieses Impressum ist eine Vorlage und sollte vor dem Live-Betrieb rechtlich geprüft und vervollständigt werden.":"Staylo è una piattaforma alberghiera indipendente. Gli hotel e i prezzi mostrati sono indicativi. Le prenotazioni vincolanti avvengono tramite i rispettivi hotel o i loro sistemi. Queste note legali sono un modello e vanno verificate e completate legalmente prima della messa online.",
+    "Staylo – Plattform für Hotels in Südtirol":"Staylo – piattaforma per hotel in Alto Adige"
+  },
+  en:{
+    "Hotels":"Hotels","Kategorien":"Categories","Regionen":"Regions","Über uns":"About us",
+    "Für Hoteliers":"For hoteliers","Für Hoteliers →":"For hoteliers →","Anmelden":"Sign in",
+    "Favoriten":"Favourites","Noch keine Favoriten ausgewählt.":"No favourites selected yet.",
+    "Menü":"Menu","Schließen":"Close","Startseite":"Home","Zurück zur Startseite":"Back to home",
+    "← Zurück zur Startseite":"← Back to home","← Zurück zu den Ergebnissen":"← Back to results",
+    "Finde deine Kategorie":"Find your category","Finde deine Kategorie →":"Find your category →",
+    "Von Luxus bis Natur.":"From luxury to nature.","Südtirol entdecken":"Discover South Tyrol",
+    "Beliebte Regionen":"Popular regions","Finde deine Traumregion →":"Find your region →",
+    "Luxushotels":"Luxury hotels","Wellnesshotels":"Spa hotels","Berghotels":"Mountain hotels",
+    "Boutique Hotels":"Boutique hotels","Design Hotels":"Design hotels","Familienhotels":"Family hotels",
+    "Adults Only":"Adults only","Nachhaltig":"Sustainable","Nachhaltige Hotels":"Sustainable hotels",
+    "Therme · Wein":"Spa · Wine","Stadt · Kultur":"City · Culture","Ski":"Skiing","Alm":"Alpine pasture",
+    "Kronplatz":"Kronplatz","Brixen":"Brixen","Obst · Burgen":"Orchards · Castles",
+    "Drei Sprachen":"Three languages","Ein Zuhause":"One home","Dein Aufenthalt":"Your stay",
+    "in":"in","Südtirol.":"South Tyrol.",
+    "Hotels von Meran bis ins Pustertal – ausgesucht, unabhängig und ohne Provision. Anfragen gehen direkt an das Haus.":"Hotels from Meran to the Puster Valley – handpicked, independent and commission-free. Enquiries go straight to the house.",
+    "Hotels entdecken":"Discover hotels","Hotels entdecken →":"Discover hotels →",
+    "Regionen erkunden":"Explore regions","Alle Hotels entdecken →":"Discover all hotels →",
+    "Reiseziel":"Destination","Wohin geht deine Reise?":"Where are you heading?",
+    "Anreise – Abreise":"Check-in – Check-out","Daten auswählen":"Select dates","Daten flexibel":"Dates flexible",
+    "Gäste & Zimmer":"Guests & rooms","Erwachsene":"Adults","Ab 18 Jahren":"18 and over",
+    "Kinder":"Children","0–17 Jahre":"Ages 0–17","Zimmer":"Rooms","Anzahl der Räume":"Number of rooms",
+    "Mit Haustier unterwegs":"Travelling with a pet","Suchen":"Search",
+    "+ Detailsuche":"+ Advanced search","− Detailsuche schließen":"− Close advanced search",
+    "Preis pro Nacht":"Price per night","Bewertung":"Rating","Alle":"All",
+    "Art des Hauses":"Type of house","Sterne":"Stars","Ausstattung":"Amenities",
+    "Ausstattung suchen …":"Search amenities …","Sonstiges":"Other","Kategorie":"Category",
+    "Wir finden die passenden Häuser für dich …":"Finding the right houses for you …",
+    "Kein Ort in Südtirol gefunden. Bitte wähle eine Region oder einen Ort in Südtirol.":"No place found in South Tyrol. Please choose a region or town in South Tyrol.",
+    "Hotel oder Ort suchen":"Search hotel or place","Hotel, Ort oder Region – z. B. Meran":"Hotel, town or region – e.g. Meran",
+    "Suche leeren":"Clear search","z. B. Meran":"e.g. Meran",
+    "Ort":"Place","Ort oder Region":"Town or region","Leer lassen für ganz Südtirol.":"Leave empty for all of South Tyrol.",
+    "Datum":"Dates","Anreise":"Check-in","Abreise":"Check-out","Daten zurücksetzen":"Clear dates",
+    "Gäste":"Guests","Mindestens":"At least","Preis":"Price","Höchstpreis pro Nacht":"Maximum price per night",
+    "Zurücksetzen":"Reset","Ganz Südtirol":"All of South Tyrol",
+    "Ort ändern":"Change place","Datum ändern":"Change dates","Gäste ändern":"Change guests",
+    "Sterne ändern":"Change stars","Preis ändern":"Change price",
+    "mehr":"more","weniger":"fewer","bis":"up to",
+    "WLAN":"Wi-Fi","Frühstück":"Breakfast","Parkplatz":"Parking","Spa":"Spa","Sauna":"Sauna",
+    "Pool":"Pool","Restaurant":"Restaurant","Fine Dining":"Fine dining","Halbpension":"Half board",
+    "Skiraum":"Ski room","Garten":"Garden","Balkon":"Balcony","Whirlpool":"Hot tub",
+    "Fitness":"Gym","Yoga":"Yoga","Familienzimmer":"Family rooms","Barrierefrei":"Step-free access",
+    "E-Ladestation":"EV charging","Klimaanlage":"Air conditioning","Haustiere":"Pets",
+    "Haustiere erlaubt":"Pets allowed","Concierge":"Concierge","Zentrale Lage":"Central location",
+    "Altstadtnähe":"Near the old town","Dolomitenblick":"Dolomite view","Design":"Design",
+    "Boutique":"Boutique","Wellness":"Spa","Berghotel":"Mountain hotel","Luxus":"Luxury",
+    "Familie":"Family","Bergblick":"Mountain view",
+    "Von der Talsohle":"From the valley floor","bis zum Gipfel.":"to the summit.",
+    "Meran liegt auf 325 Metern zwischen Weinbergen, die Dolomiten auf fast 2000. Dazwischen: vier sehr unterschiedliche Arten, Südtirol zu erleben – jede mit ihrem deutschen, italienischen und, in den ladinischen Tälern, ladinischen Namen.":"Meran sits at 325 metres among vineyards, the Dolomites at almost 2000. In between: four very different ways to experience South Tyrol – each with its German, Italian and, in the Ladin valleys, Ladin name.",
+    "Kurort mit Therme, Weinbergen und mediterranem Flair.":"Spa town with vineyards and a Mediterranean feel.",
+    "Obstgärten, Burgen und der Reschensee.":"Orchards, castles and Lake Reschen.",
+    "Ski, ladinische Kultur und traditionsreiche Bergdörfer.":"Skiing, Ladin culture and mountain villages steeped in tradition.",
+    "UNESCO-Weltnaturerbe mit markanten Gipfeln und Wanderwegen.":"UNESCO World Heritage site with striking peaks and hiking trails.",
+    "Landeshauptstadt: Kultur, Gastronomie und idealer Ausgangspunkt.":"The regional capital: culture, food and an ideal base.",
+    "Europas größte Hochalm mit weitem Panorama.":"Europe's largest high alpine meadow, with a wide panorama.",
+    "Kronplatz, familienfreundlich, viel Platz zum Wandern.":"Kronplatz, family-friendly, plenty of room to walk.",
+    "Brixen, Klöster und bekannte Weißweine.":"Brixen, abbeys and well-known white wines.",
+    "Alle Häuser":"All houses","Hotels in Südtirol":"Hotels in South Tyrol",
+    "Liste und Karte – gefiltert nach deiner Suche.":"List and map – filtered by your search.",
+    "Ansicht":"View","Liste + Karte":"List + map","Nur Liste":"List only","Nur Karte":"Map only",
+    "Raster":"Grid","Liste":"List","Karte":"Map","Karte schließen":"Close map",
+    "Sortierung":"Sort","Empfohlen":"Recommended","Preis: niedrig → hoch":"Price: low to high",
+    "Preis: hoch → niedrig":"Price: high to low","Beste Bewertung":"Best rated",
+    "Preis: aufsteigend":"Price: ascending","Preis: absteigend":"Price: descending",
+    "Filter":"Filters","Filter zurücksetzen":"Reset filters","Alle Filter zurücksetzen":"Reset all filters",
+    "Weitere laden":"Load more","Region":"Region","Häuser in Südtirol":"houses in South Tyrol",
+    "Keine passenden Hotels gefunden":"No matching hotels found","Keine passenden Häuser":"No matching houses",
+    "Versuche deine Suche etwas zu erweitern – anderen Ort wählen, Preis erhöhen oder Filter zurücksetzen.":"Try widening your search – pick another place, raise the price or reset the filters.",
+    "Versuch es mit einer weiteren Preisspanne oder weniger Filtern.":"Try a wider price range or fewer filters.",
+    "Keine Hotels in dieser Auswahl":"No hotels in this selection",
+    "Filter zurücksetzen, um alle Häuser zu sehen.":"Reset the filters to see every house.",
+    "Preis / Nacht · Karte folgt deinen Filtern":"Price / night · the map follows your filters",
+    "Preis pro Nacht · zeigt genau deine Auswahl":"Price per night · shows exactly your selection",
+    "Karte mit Hotels in Südtirol":"Map of hotels in South Tyrol","Karte nicht verfügbar.":"Map unavailable.",
+    "Details":"Details","Anfragen":"Enquire","pro Nacht":"per night","/ Nacht":"/ night",
+    "Sehr gut":"Very good","Außergewöhnlich":"Exceptional","Gut":"Good","Neu":"New",
+    "Neu bei Staylo":"New on Staylo","Noch keine Bewertungen":"No reviews yet",
+    "Über dieses Hotel":"About this hotel","Zimmerkategorien":"Room types","Lage":"Location",
+    "Bewertungen & Highlights":"Reviews & highlights","Gäste heben besonders hervor:":"Guests particularly mention:",
+    "Ähnliche Unterkünfte":"Similar places","Verfügbarkeit anfragen":"Check availability",
+    "♡ Zu Favoriten":"♡ Add to favourites","♥ In Favoriten":"♥ In favourites",
+    "Zur Website des Hotels ↗":"Visit the hotel's website ↗","Kostenlose Anfrage · Keine Buchungsverpflichtung":"Free enquiry · No obligation to book",
+    "Preis pro Nacht, zzgl. lokaler Abgaben. Endpreis nach Datumsauswahl.":"Price per night, excluding local taxes. Final price once dates are chosen.",
+    "Details ansehen →":"View details →","Zimmer anfragen":"Enquire about this room",
+    "Brotkrumen":"Breadcrumb","Bildergalerie":"Photo gallery","Galerie schließen":"Close gallery",
+    "Nächstes Bild":"Next image","Vorheriges Bild":"Previous image","Foto vergrößern":"Enlarge photo",
+    "Zu Favoriten hinzufügen":"Add to favourites","Aus Favoriten entfernen":"Remove from favourites",
+    "Anfrage senden":"Send enquiry","Unverbindlich und kostenlos. Das Hotel meldet sich direkt bei dir.":"Free and without obligation. The hotel replies to you directly.",
+    "Name":"Name","Vor- und Nachname":"First and last name","E-Mail":"Email","Nachricht":"Message","optional":"optional",
+    "Besondere Wünsche, Fragen zur Anreise …":"Special requests, questions about getting there …",
+    "Staylo vermittelt die Anfrage direkt an das Hotel. Es entstehen keine Kosten und keine Buchungsverpflichtung.":"Staylo passes the enquiry straight to the hotel. There is no cost and no obligation to book.",
+    "Anfrage bereit zum Senden":"Enquiry ready to send","Alles klar":"Got it",
+    "Dein E-Mail-Programm wurde mit der fertigen Anfrage geöffnet. Prüfe kurz und schick sie ab.":"Your email program has opened with the enquiry ready. Give it a quick check and send.",
+    "Melde dich an, um Favoriten geräteübergreifend zu speichern und Anfragen zu verwalten.":"Sign in to keep favourites across devices and manage your enquiries.",
+    "Passwort":"Password","Noch kein Konto?":"No account yet?","Bereits ein Konto?":"Already have an account?",
+    "Registrieren":"Register","Konto erstellen":"Create account",
+    "Demo: Die Anmeldung speichert deine Session lokal im Browser. Ein echtes Konto-System folgt später.":"Demo: signing in stores your session locally in the browser. A real account system will follow.",
+    "Staylo · Südtirol":"Staylo · South Tyrol","Mehr als nur":"More than just","ein Hotel.":"a hotel.",
+    "Wir sind keine internationale Plattform mit einer Südtirol-Seite. Wir sind nur Südtirol – und das dafür richtig.":"We are not an international platform with a South Tyrol page. We are only South Tyrol – and we do it properly.",
+    "Provision. Deine Anfrage geht direkt an das Haus, nicht über uns.":"commission. Your enquiry goes straight to the house, not through us.",
+    "Regionen, von Meran auf 325 m bis in die Dolomiten.":"regions, from Meran at 325 m up into the Dolomites.",
+    "Sprachen: Deutsch, Italienisch und Ladinisch.":"languages: German, Italian and Ladin.",
+    "Mehr über uns →":"More about us →",
+    "Dein Haus auf Staylo.":"Your house on Staylo.",
+    "In etwa fünf Minuten eingetragen. Keine Einstiegsgebühr, keine Provision pro Buchung – und Gästeanfragen landen direkt in deinem Postfach.":"Listed in about five minutes. No joining fee, no commission per booking – and guest enquiries land straight in your inbox.",
+    "Eintragen":"List it","Formular ausfüllen, Fotos verlinken.":"Fill in the form, link your photos.",
+    "Prüfen":"Review","Wir schauen drüber und melden uns.":"We look it over and get back to you.",
+    "Online":"Live","Dein Haus erscheint in Suche und Karte.":"Your house appears in search and on the map.",
+    "Jetzt kostenlos eintragen →":"List your house for free →","Was du bekommst":"What you get",
+    "Eigene Hotelseite mit Zimmern, Karte und Galerie":"Your own hotel page with rooms, map and gallery",
+    "Sichtbarkeit bei Gästen aus dem DACH-Raum und Italien":"Visibility with guests from German-speaking Europe and Italy",
+    "Anfragen ohne Umweg – direkt per E-Mail an dich":"Enquiries with no detour – straight to your email",
+    "Auf Wunsch ein kurzes Video für unsere Kanäle":"A short video for our channels, if you want one",
+    "Entdecken":"Discover","Staylo ist eine unabhängige Plattform für besondere Hotels in Südtirol.":"Staylo is an independent platform for special hotels in South Tyrol.",
+    "Lana · Südtirol · Italien":"Lana · South Tyrol · Italy","Made in South Tyrol · Italy":"Made in South Tyrol · Italy",
+    "© 2026 Staylo · Hotels in Südtirol":"© 2026 Staylo · Hotels in South Tyrol",
+    "Impressum":"Legal notice","Kontakt":"Contact","Social Media":"Social media",
+    "Jeder Aufenthalt hat seinen eigenen Charakter.":"Every stay has its own character.",
+    "Jede Region hat ihren eigenen Rhythmus.":"Every region has its own rhythm.",
+    "Über Staylo":"About Staylo","Warum wir diese Plattform gebaut haben.":"Why we built this platform.",
+    "Die Idee hinter Staylo":"The idea behind Staylo",
+    "Kostenlos und ohne Provision":"Free and commission-free","Wohin das gehen soll":"Where this is going",
+    "Dein Hotel auf Staylo":"Your hotel on Staylo","Kostenlos starten. Professionell präsentieren.":"Start for free. Present it properly.",
+    "Kostenlos, ohne Provision":"Free, no commission","Was wir uns von dir wünschen":"What we ask of you",
+    "Gute Fotos":"Good photos","Ehrliche Angaben":"Honest details","Ein Haus aus Südtirol":"A house in South Tyrol",
+    "Anmeldung erforderlich":"Sign-in required","Jetzt anmelden":"Sign in now",
+    "Haus eintragen":"List your house","Das Haus":"The house","Name des Hauses":"Name of the house",
+    "Beschreibung & Bild":"Description & photo","Kurzbeschreibung":"Short description",
+    "Ausführlicher Text":"Longer text","Bild-Adresse (URL)":"Image address (URL)",
+    "E-Mail für Anfragen":"Email for enquiries","Website":"Website","Speichern":"Save",
+    "Angaben ändern":"Edit details","Vorschau deines Hotels":"Preview of your hotel",
+    "Meine eingetragenen Häuser":"My listed houses","Bearbeitung abbrechen":"Cancel editing",
+    "keine Angabe":"not specified","3 Sterne":"3 stars","4 Sterne":"4 stars","5 Sterne":"5 stars",
+    "Preis ab (€ / Nacht)":"Price from (€ / night)","Adresse":"Address","Anbieter":"Provider","Hinweis":"Note",
+    "Wir freuen uns auf deine Nachricht.":"We look forward to hearing from you.","E-Mail schreiben":"Write an email",
+    "Angaben gemäß den gesetzlichen Vorgaben.":"Information as required by law.",
+    "Häuser verfügbar":"houses available","Haus verfügbar":"house available",
+    "Hotels ansehen →":"View hotels →","Diese Kategorie ansehen →":"View this category →",
+    "Fünf-Sterne-Häuser mit persönlichem Service und Fine Dining.":"Five-star houses with personal service and fine dining.",
+    "Spa, Sauna, Pools und Behandlungen im Mittelpunkt.":"Spa, sauna, pools and treatments at the centre.",
+    "Direkt an den Hängen oder mit Dolomitenblick.":"Right on the slopes, or with a view of the Dolomites.",
+    "Kleine, individuell geführte Häuser mit Charakter.":"Small, individually run houses with character.",
+    "Architektur und Interieur als Teil des Erlebnisses.":"Architecture and interiors as part of the stay.",
+    "Zimmer und Angebote für Kinder und Eltern.":"Rooms and offers for children and parents.",
+    "Nur für Erwachsene – ruhiger, oft mit Wellness und Fine Dining.":"Adults only – quieter, often with a spa and fine dining.",
+    "Regionale Küche und ressourcenschonender Betrieb.":"Regional cooking and a resource-conscious operation.",
+    "Staylo ist eine unabhängige Plattform für Hotels in Südtirol – bewusst regional, bewusst übersichtlich.":"Staylo is an independent platform for hotels in South Tyrol – deliberately local, deliberately uncluttered.",
+    "Wer heute ein Haus in Meran oder im Pustertal sucht, landet auf internationalen Portalen, die überall gleich aussehen – und die von jeder Buchung einen Anteil einbehalten. Südtirol ist aber kein beliebiges Reiseziel: eine Region mit drei Sprachen, mit Häusern, die oft seit Generationen in Familienhand sind. Das wollen wir sichtbar machen.":"Anyone looking for a house in Meran or the Puster Valley today ends up on international portals that all look the same – and that keep a share of every booking. But South Tyrol is not just any destination: a region with three languages, with houses that have often been in the same family for generations. That is what we want to make visible.",
+    "Hoteliers tragen ihr Haus kostenlos ein und zahlen keine Provision pro Buchung. Anfragen gehen direkt an das Haus – wir stehen nicht dazwischen. Wer möchte, bekommt von uns zusätzlich ein kurzes Video für unsere Social-Media-Kanäle.":"Hoteliers list their house for free and pay no commission per booking. Enquiries go straight to the house – we do not sit in between. If they want, we also make a short video for our social channels.",
+    "Zuerst Südtirol, richtig gut. Später vielleicht Nordtirol, Österreich und die Schweiz – aber erst, wenn die Häuser hier zufrieden sind.":"South Tyrol first, done properly. Later perhaps North Tyrol, Austria and Switzerland – but only once the houses here are happy.",
+    "Staylo befindet sich im Aufbau. Anfragen laufen direkt an die Häuser; es wird hier nichts verbindlich gebucht.":"Staylo is still being built. Enquiries go straight to the houses; nothing is booked bindingly here.",
+    "Trage dein Haus selbst ein – in etwa fünf Minuten. Keine Einstiegsgebühr, keine Provision pro Buchung. Gästeanfragen kommen direkt bei dir an, nicht über uns.":"List your house yourself – in about five minutes. No joining fee, no commission per booking. Guest enquiries reach you directly, not through us.",
+    "Du füllst das Formular unten aus. Deine Angaben bleiben auf diesem Gerät gespeichert und bleiben änderbar.":"You fill in the form below. Your details stay saved on this device and remain editable.",
+    "Wir schauen uns Fotos und Angaben an und melden uns per E-Mail, wenn etwas fehlt.":"We look at your photos and details and email you if anything is missing.",
+    "Dein Haus erscheint in Suche, Karte und Kategorien – und Gäste fragen direkt bei dir an.":"Your house appears in search, on the map and in the categories – and guests enquire with you directly.",
+    "Um ein Hotel einzutragen, melde dich bitte zuerst an. So können wir deine Einträge diesem Konto zuordnen und du kannst sie später bearbeiten.":"To list a hotel, please sign in first. That way we can tie your entries to this account and you can edit them later.",
+    "Noch kein Konto? Im Anmelden-Fenster kannst du dich registrieren (Demo, lokal im Browser).":"No account yet? You can register in the sign-in window (demo, local to your browser).",
+    "Hell, scharf, aufgeräumt – Zimmer, Außenansicht und Umgebung. Fotos sind der Grund, warum Gäste klicken.":"Bright, sharp, tidy – rooms, exterior and surroundings. Photos are the reason guests click.",
+    "Preise und Ausstattung so, wie Gäste sie wirklich vorfinden.":"Prices and amenities exactly as guests will actually find them.",
+    "Wir bleiben bewusst regional – Meran bis Pustertal, Boutique bis Berghotel.":"We stay deliberately local – Meran to the Puster Valley, boutique to mountain hotel.",
+    "Deine Angaben werden auf diesem Gerät gespeichert, damit du sie jederzeit ändern kannst. Zum Freischalten schickst du sie im letzten Schritt per E-Mail an uns – ein echtes Hotelier-Konto mit zentraler Datenbank kommt als Nächstes.":"Your details are stored on this device so you can change them at any time. To go live you email them to us in the last step – a real hotelier account with a central database is coming next.",
+    "Erscheint auf der Hotelkarte. Max. 120 Zeichen.":"Appears on the hotel card. Max. 120 characters.",
+    "Direkter Link zu einem hellen, hochauflösenden Foto. Ohne Bild nutzen wir vorerst ein Platzhalterbild.":"A direct link to a bright, high-resolution photo. Without one we use a placeholder for now.",
+    "Prüfe die Angaben. Erst mit „Speichern“ wird der Eintrag auf diesem Gerät gesichert.":"Check the details. The entry is only saved to this device once you press “Save”.",
+    "Hast du Fragen zu Staylo, zu einem Hotel oder möchtest du dein Haus bei uns listen? Schreib uns – wir melden uns so schnell wie möglich.":"Questions about Staylo, about a hotel, or would you like to list your house? Write to us – we will get back to you as soon as we can.",
+    "Staylo ist eine unabhängige Hotelplattform. Die dargestellten Hotels und Preise dienen der Orientierung. Verbindliche Buchungen erfolgen über die jeweiligen Hotels bzw. deren Systeme. Dieses Impressum ist eine Vorlage und sollte vor dem Live-Betrieb rechtlich geprüft und vervollständigt werden.":"Staylo is an independent hotel platform. The hotels and prices shown are for orientation. Binding bookings are made through the respective hotels or their systems. This legal notice is a template and should be reviewed and completed by a lawyer before going live.",
+    "Staylo – Plattform für Hotels in Südtirol":"Staylo – platform for hotels in South Tyrol"
+  }};
+
+  /* Counts and prices are assembled at render time, so they are
+     matched by shape rather than looked up word for word. */
+  var RULES={
+    it:[
+      [/^(\d+)\s+Hotels?$/,"$1 hotel"],
+      [/^(\d+)\s+Hotels?\s*→$/,"$1 hotel →"],
+      [/^(\d+)\s+Hotels?\s+ansehen\s*→$/,"Vedi $1 hotel →"],
+      [/^(\d+)\s+Bewertungen$/,"$1 recensioni"],
+      [/^(\d+)\s+Häuser\s+eingetragen$/,"$1 strutture registrate"],
+      [/^(\d+)\s+Haus\s+eingetragen$/,"$1 struttura registrata"],
+      [/^(\d+)\s+ausgewählt$/,"$1 selezionati"],
+      [/^ab\s+(.+)$/,"da $1"],
+      [/^bis\s+(.+)$/,"fino a $1"],
+      [/^(.+)\s+gesamt\s+·\s+(\d+)\s+Nächte$/,"$1 in totale · $2 notti"],
+      [/^(.+)\s+gesamt\s+·\s+(\d+)\s+Nacht$/,"$1 in totale · $2 notte"]
+    ],
+    en:[
+      [/^(\d+)\s+Hotels?$/,"$1 hotels"],
+      [/^(\d+)\s+Hotels?\s*→$/,"$1 hotels →"],
+      [/^(\d+)\s+Hotels?\s+ansehen\s*→$/,"View $1 hotels →"],
+      [/^(\d+)\s+Bewertungen$/,"$1 reviews"],
+      [/^(\d+)\s+Häuser\s+eingetragen$/,"$1 houses listed"],
+      [/^(\d+)\s+Haus\s+eingetragen$/,"$1 house listed"],
+      [/^(\d+)\s+ausgewählt$/,"$1 selected"],
+      [/^ab\s+(.+)$/,"from $1"],
+      [/^bis\s+(.+)$/,"up to $1"],
+      [/^(.+)\s+gesamt\s+·\s+(\d+)\s+Nächte$/,"$1 total · $2 nights"],
+      [/^(.+)\s+gesamt\s+·\s+(\d+)\s+Nacht$/,"$1 total · $2 night"]
+    ]
+  };
+
+  /* Strings the render functions glue together from several parts —
+     "2 Erwachsene · 1 Zimmer", "Südtirol · 2 Erw. · 1 Zi. · bis
+     € 500 / Nacht" — cannot be listed exhaustively. When neither the
+     dictionary nor a shape rule matches, individual words are
+     swapped instead. Only applied to strings that carry a digit or a
+     middot, i.e. the generated ones: prose is never word-replaced. */
+  var TOKENS={
+    it:[["Erwachsener","adulto"],["Erwachsene","adulti"],["Kinder","bambini"],["Kind","bambino"],
+        ["Zimmer","camere"],["Nächte","notti"],["Nacht","notte"],["Erw.","ad."],["Zi.","cam."],
+        ["gesamt","in totale"],["Häuser","strutture"],["Haus","struttura"],["Hotels","hotel"],
+        ["Bewertungen","recensioni"],["ausgewählt","selezionati"],["Sterne","stelle"],
+        ["verfügbar","disponibili"],["eingetragen","registrate"],["bis","fino a"],["ab","da"],
+        ["von","di"],["Foto","foto"],["Alle","Tutte"]],
+    en:[["Erwachsener","adult"],["Erwachsene","adults"],["Kinder","children"],["Kind","child"],
+        ["Zimmer","rooms"],["Nächte","nights"],["Nacht","night"],["Erw.","ad."],["Zi.","rm."],
+        ["gesamt","total"],["Häuser","houses"],["Haus","house"],["Hotels","hotels"],
+        ["Bewertungen","reviews"],["ausgewählt","selected"],["Sterne","stars"],
+        ["verfügbar","available"],["eingetragen","listed"],["bis","up to"],["ab","from"],
+        ["von","of"],["Foto","photo"],["Alle","All"]]
+  };
+  function tokenSwap(src,l){
+    if(!/[\d·]/.test(src))return null;
+    var list=TOKENS[l]||[],out=src,hit=false;
+    for(var i=0;i<list.length;i++){
+      var re=new RegExp("(^|[^\\p{L}])"+list[i][0].replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"(?![\\p{L}])","gu");
+      if(re.test(out)){
+        hit=true;
+        out=out.replace(re,function(m,pre){ return pre+list[i][1]; });
+      }
+    }
+    return hit?out:null;
+  }
+
+  var LOCALE={de:"de",it:"it",en:"en"};
+  var lang="de";
+  try{ lang=localStorage.getItem("staylo_lang")||"de"; }catch(e){}
+  if(!DICT[lang]&&lang!=="de")lang="de";
+
+  function lookup(src,l){
+    var d=DICT[l];
+    if(!d)return null;
+    if(Object.prototype.hasOwnProperty.call(d,src))return d[src];
+    var rules=RULES[l]||[];
+    for(var i=0;i<rules.length;i++){
+      if(rules[i][0].test(src))return src.replace(rules[i][0],rules[i][1]);
+    }
+    return tokenSwap(src,l);
+  }
+
+  var SKIP={SCRIPT:1,STYLE:1,NOSCRIPT:1,TEXTAREA:1};
+
+  function translateNode(node){
+    var parent=node.parentElement;
+    if(!parent||SKIP[parent.tagName])return;
+    if(parent.closest("[data-no-i18n]"))return;
+    var raw=node.nodeValue;
+    var src=node.__stayloDe;
+    if(src===undefined){
+      src=raw.trim();
+      if(!src)return;
+      node.__stayloDe=src;
+      node.__stayloPre=raw.slice(0,raw.length-raw.replace(/^\s+/,"").length);
+      node.__stayloPost=raw.slice(raw.replace(/\s+$/,"").length);
+    }
+    var out=(lang==="de")?src:(lookup(src,lang)||src);
+    var next=node.__stayloPre+out+node.__stayloPost;
+    if(node.nodeValue!==next)node.nodeValue=next;
+  }
+
+  var ATTRS=["placeholder","aria-label","title"];
+  function translateAttrs(el){
+    if(el.closest&&el.closest("[data-no-i18n]"))return;
+    for(var i=0;i<ATTRS.length;i++){
+      var a=ATTRS[i];
+      if(!el.hasAttribute||!el.hasAttribute(a))continue;
+      var key="__stayloAttr_"+a;
+      var src=el[key];
+      if(src===undefined){ src=el.getAttribute(a); el[key]=src; }
+      var out=(lang==="de")?src:(lookup(src,lang)||src);
+      if(el.getAttribute(a)!==out)el.setAttribute(a,out);
+    }
+  }
+
+  /* Idempotent by construction: every node translates from the
+     German stashed on it, and nothing is written unless the value
+     actually differs. That means a pass over already-translated
+     content produces no mutations, so the observer settles by
+     itself — no "ignore while running" flag, which used to drop
+     whole renders that happened to land mid-pass. */
+  function apply(root){
+    root=root||document.body;
+    if(!root)return;
+    var w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+    var n,batch=[];
+    while((n=w.nextNode()))batch.push(n);
+    batch.forEach(translateNode);
+    if(root.querySelectorAll){
+      translateAttrs(root);
+      root.querySelectorAll("[placeholder],[aria-label],[title]").forEach(translateAttrs);
+    }
+    document.documentElement.setAttribute("lang",LOCALE[lang]||"de");
+  }
+
+  function setLang(l){
+    if(!l||(l!=="de"&&!DICT[l]))return;
+    lang=l;
+    try{ localStorage.setItem("staylo_lang",l); }catch(e){}
+    var label=document.getElementById("currentLanguage");
+    if(label)label.textContent=l.toUpperCase();
+    document.querySelectorAll(".lang-option").forEach(function(b){
+      b.setAttribute("aria-selected",b.getAttribute("data-lang")===l?"true":"false");
+    });
+    apply();
+  }
+  window.stayloSetLang=setLang;
+
+  document.querySelectorAll(".lang-option").forEach(function(btn){
+    btn.addEventListener("click",function(){ setLang(btn.getAttribute("data-lang")); });
+  });
+
+  /* Everything on this site is rendered on demand — hotel cards,
+     the detail page, dialogs — so translation cannot be a one-off.
+     The observer re-runs it on whatever was just inserted. */
+  /* The queue is deliberately shared across observer callbacks. It
+     used to be rebuilt per batch, and debouncing then cancelled the
+     pending pass for whatever arrived first: opening a hotel page
+     renders the detail markup and then builds a Leaflet map, whose
+     mutations landed inside the 30ms window and threw the detail
+     markup's own translation away. */
+  var pending=null,queue=[];
+  var mo=new MutationObserver(function(muts){
+    muts.forEach(function(m){
+      if(m.type==="childList"){
+        m.addedNodes.forEach(function(node){
+          if(node.nodeType===1)queue.push(node);
+          else if(node.nodeType===3)queue.push(node.parentElement);
+        });
+      }else if(m.type==="attributes"&&m.target.nodeType===1){
+        queue.push(m.target);
+      }
+    });
+    if(!queue.length)return;
+    clearTimeout(pending);
+    pending=setTimeout(function(){
+      var batch=queue; queue=[];
+      if(lang==="de")return;
+      /* A very large batch is cheaper to handle in one sweep. */
+      if(batch.length>150){ apply(document.body); return; }
+      batch.forEach(function(r){ if(r&&r.isConnected)apply(r); });
+    },30);
+  });
+
+  function start(){
+    setLang(lang);
+    mo.observe(document.body,{childList:true,subtree:true,
+      attributes:true,attributeFilter:ATTRS});
+  }
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start);
+  else start();
+})();
+</script>
+
 </body>
 </html>
