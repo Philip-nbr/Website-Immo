@@ -6114,6 +6114,73 @@ body{background:var(--cream);line-height:1.5}
   .js-reveal{opacity:1;transform:none}
 }
 
+/* --- Compact detail filters -------------------------------- */
+.details-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.detail-box{padding:15px;background:#f8faf8;border-color:rgba(23,56,43,.09);box-shadow:inset 0 1px 0 rgba(255,255,255,.8)}
+.detail-box.amenity-detail{grid-column:1/-1}
+.detail-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.detail-heading .detail-title{margin-bottom:0}
+.amenity-count{color:var(--green);font-size:11px;font-weight:700;white-space:nowrap}
+.amenity-search{display:flex;align-items:center;gap:8px;height:36px;margin:12px 0 10px;padding:0 11px;border:1px solid rgba(23,56,43,.11);border-radius:10px;background:#fff;color:#819087;transition:border-color .25s var(--ease),box-shadow .25s var(--ease)}
+.amenity-search:focus-within{border-color:rgba(36,81,63,.45);box-shadow:0 0 0 3px rgba(36,81,63,.09)}
+.amenity-search svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;flex:none}
+.amenity-search input{width:100%;border:0;outline:0;background:transparent;color:var(--black);font:500 12px Lexend,system-ui,sans-serif}
+.amenity-search input::placeholder{color:#9aa69e}
+.amenity-options{max-height:142px;overflow:auto;align-content:flex-start;padding:2px 4px 3px 0;scrollbar-width:thin;scrollbar-color:rgba(36,81,63,.24) transparent}
+.amenity-options::-webkit-scrollbar{width:5px}.amenity-options::-webkit-scrollbar-thumb{background:rgba(36,81,63,.24);border-radius:999px}
+.amenity-options .chip-check{padding:6px 9px;font-size:11.5px}
+.amenity-options .chip-check.is-filtered-out{display:none}
+.amenity-empty{width:100%;padding:12px 2px;color:#87918a;font-size:12px}
+
+/* --- Search feedback --------------------------------------- */
+.search-feedback{display:flex;align-items:center;gap:10px;min-height:0;margin:0 6px;padding:0;color:var(--green);font-size:12px;font-weight:600;opacity:0;transform:translateY(-5px);transition:opacity .35s var(--ease),transform .45s var(--ease),padding .35s var(--ease),min-height .35s var(--ease)}
+.search-feedback:not([hidden]){min-height:34px;padding-top:9px;opacity:1;transform:none}
+.search-feedback-icon{width:15px;height:15px;flex:none;border:2px solid rgba(36,81,63,.22);border-top-color:var(--green);border-radius:50%;animation:searchSpin .8s linear infinite}
+.search-feedback.is-done .search-feedback-icon{border:0;background:var(--green);animation:none;position:relative}
+.search-feedback.is-done .search-feedback-icon::after{content:"";position:absolute;left:4px;top:2px;width:4px;height:7px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+.search-feedback.is-done .search-feedback-copy{color:#5f7467}
+@keyframes searchSpin{to{transform:rotate(360deg)}}
+.search-button.is-loading{transform:none !important;background:var(--green-dark) !important}
+.search-button.is-loading .search-button-label{opacity:.86}
+.search-button.is-loading svg{animation:spin .8s linear infinite}
+.results-section.search-results-ready .results-header,.results-section.search-results-ready .hotels-toolbar,.results-section.search-results-ready .filter-chips{animation:searchContentIn .65s var(--ease) both}
+.results-section.search-results-ready .hotel-card{animation:hotelResultIn .62s var(--ease) both}
+.results-section.search-results-ready .hotel-card:nth-child(2){animation-delay:55ms}.results-section.search-results-ready .hotel-card:nth-child(3){animation-delay:100ms}.results-section.search-results-ready .hotel-card:nth-child(4){animation-delay:145ms}.results-section.search-results-ready .hotel-card:nth-child(5){animation-delay:190ms}.results-section.search-results-ready .hotel-card:nth-child(6){animation-delay:235ms}
+@keyframes searchContentIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes hotelResultIn{from{opacity:0;transform:translateY(18px) scale(.985)}to{opacity:1;transform:none}}
+
+/* General polish: consistent surfaces on every route. */
+.page-body{padding-top:clamp(30px,5vw,58px);padding-bottom:clamp(54px,8vw,96px)}
+.page-hero{min-height:300px;display:flex;align-items:end;padding-bottom:48px;background-position:center;color:#fff}
+.page-hero h1{font-size:clamp(38px,5vw,62px)}
+.page-card,.story-block,.empty-state,.listing-card{border-radius:22px !important}
+.footer-column a,.footer-mail,.footer-social a{transition:color .25s var(--ease),transform .25s var(--ease)}
+.footer-column a:hover,.footer-mail:hover{color:#b9d5c3;transform:translateX(2px)}
+.footer-social a:hover{transform:translateY(-3px);color:#cde4d4}
+
+@media(max-width:1100px){
+  .details-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .detail-box.amenity-detail{grid-column:1/-1}
+}
+@media(max-width:600px){
+  .details-grid{grid-template-columns:1fr}
+  .detail-box.amenity-detail{grid-column:auto}
+  .amenity-options{max-height:160px}
+  .search-feedback{font-size:11px}
+}
+
+/* The results view gets one composed entrance after the search handoff. */
+.page-view#page-suche.search-arriving .bar{animation:resultBarIn .55s var(--ease) both}
+.page-view#page-suche.search-arriving .suche-recap{animation:resultRecapIn .6s var(--ease) 70ms both}
+.page-view#page-suche.search-arriving .rhead{animation:resultHeadIn .58s var(--ease) 120ms both}
+.page-view#page-suche.search-arriving .card{animation:resultCardIn .62s var(--ease) both}
+.page-view#page-suche.search-arriving .card:nth-child(2){animation-delay:70ms}.page-view#page-suche.search-arriving .card:nth-child(3){animation-delay:120ms}.page-view#page-suche.search-arriving .card:nth-child(4){animation-delay:170ms}.page-view#page-suche.search-arriving .card:nth-child(5){animation-delay:220ms}.page-view#page-suche.search-arriving .card:nth-child(6){animation-delay:270ms}
+@keyframes resultBarIn{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}
+@keyframes resultRecapIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+@keyframes resultHeadIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes resultCardIn{from{opacity:0;transform:translateY(20px) scale(.985)}to{opacity:1;transform:none}}
+.amenity-options.has-no-match::after{content:"Keine Ausstattung gefunden";display:block;width:100%;padding:12px 2px;color:#87918a;font-size:12px}
+
 </style>
 </head>
 <body>
@@ -6214,9 +6281,10 @@ body{background:var(--cream);line-height:1.5}
 <div class="occ-row"><div><strong>Zimmer</strong><span>Anzahl der Räume</span></div><div class="occ-ctrl"><button type="button" data-occ="rooms" data-dir="-1">−</button><span class="occ-num" id="occRooms">1</span><button type="button" data-occ="rooms" data-dir="1">+</button></div></div>
 <label class="pets-row"><input type="checkbox" id="petsCheck"><span>Mit Haustier unterwegs</span></label>
 </div></div>
-<button class="search-button" id="searchButton" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg> Suchen</button>
+<button class="search-button" id="searchButton" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><span class="search-button-label">Suchen</span></button>
 </div>
 <div class="search-summary" id="searchSummary"></div>
+<div class="search-feedback" id="searchFeedback" aria-live="polite" hidden><span class="search-feedback-icon" aria-hidden="true"></span><span class="search-feedback-copy">Wir finden die passenden Häuser für dich …</span></div>
 <div class="dest-error" id="destError" role="alert">Kein Ort in Südtirol gefunden. Bitte wähle eine Region oder einen Ort in Südtirol.</div>
 <div class="details-toggle"><button id="detailsButton" type="button">+ Detailsuche</button></div>
 <div class="details-search" id="detailsSearch"><div>
@@ -6243,7 +6311,7 @@ body{background:var(--cream);line-height:1.5}
 <label class="chip-check"><input type="checkbox" value="Adults Only"> Adults Only</label>
 <label class="chip-check"><input type="checkbox" value="Nachhaltig"> Nachhaltig</label>
 </div></div>
-<div class="detail-box"><label class="detail-title">Ausstattung</label><div class="chip-group" id="amenityFilters">
+<div class="detail-box amenity-detail"><div class="detail-heading"><label class="detail-title">Ausstattung</label><span class="amenity-count" id="amenityCount">0 ausgewählt</span></div><label class="amenity-search" for="amenitySearch"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg><input id="amenitySearch" type="search" placeholder="Ausstattung suchen …" autocomplete="off"></label><div class="chip-group amenity-options" id="amenityFilters">
 <label class="chip-check"><input type="checkbox" value="WLAN"> WLAN</label>
 <label class="chip-check"><input type="checkbox" value="Frühstück"> Frühstück</label>
 <label class="chip-check"><input type="checkbox" value="Parkplatz"> Parkplatz</label>
@@ -6769,6 +6837,7 @@ body{background:var(--cream);line-height:1.5}
     if(price&&+price.value<500)p.set("maxPrice",price.value);
     document.querySelectorAll("#starFilters input:checked").forEach(function(i){p.append("stars",i.value);});
     document.querySelectorAll("#amenityFilters input:checked").forEach(function(i){p.append("amen",i.value);});
+    document.querySelectorAll("#typeFilters input:checked").forEach(function(i){p.append("type",i.value);});
     /* Carried across for the results-page recap bar only — dates/guests
        aren't used to filter hotels anywhere in this app, on the
        homepage either, so this is display-only, same depth as before. */
@@ -6804,6 +6873,22 @@ body{background:var(--cream);line-height:1.5}
       }catch(e){/* fall through to a plain switch */}
     }
     apply();
+  }
+
+  function startSearchFeedback(){
+    var btn=document.getElementById("searchButton"), feedback=document.getElementById("searchFeedback");
+    if(btn){
+      btn.classList.add("is-loading");
+      btn.setAttribute("aria-busy","true");
+      var label=btn.querySelector(".search-button-label");
+      if(label)label.textContent="Wird gesucht …";
+    }
+    if(feedback){
+      feedback.hidden=false;
+      feedback.classList.remove("is-done");
+      var copy=feedback.querySelector(".search-feedback-copy");
+      if(copy)copy.textContent="Wir finden die passenden Häuser für dich …";
+    }
   }
 
   /* Plain `location.hash = "…"` is unreliable once the document is
@@ -6851,6 +6936,8 @@ body{background:var(--cream);line-height:1.5}
        on what a category means. */
     if(cat)p.append("cat",cat);
     if(reg)p.append("region",reg);
+
+    if(el.id==="searchButton")startSearchFeedback();
 
     e.preventDefault();
     e.stopPropagation();
@@ -7080,6 +7167,17 @@ body{background:var(--cream);line-height:1.5}
   function showHome(){
     document.body.classList.remove("is-subpage");
     document.body.classList.remove("view-suche");
+    var searchButton=document.getElementById("searchButton"), searchFeedback=document.getElementById("searchFeedback");
+    if(searchButton){
+      searchButton.classList.remove("is-loading");
+      searchButton.removeAttribute("aria-busy");
+      var searchLabel=searchButton.querySelector(".search-button-label");
+      if(searchLabel)searchLabel.textContent="Suchen";
+    }
+    if(searchFeedback){
+      searchFeedback.hidden=true;
+      searchFeedback.classList.remove("is-done");
+    }
     /* Drop a leftover search route, so a reload lands on the
        landing page rather than back in the results. */
     if(location.search||(location.hash||"").replace("#","").indexOf("suche")===0){
@@ -9935,6 +10033,13 @@ body{background:var(--cream);line-height:1.5}
          which view is open. Keeping them apart means neither can
          overwrite the other. */
       applyParams(false);
+      var searchPage=$("page-suche");
+      if(searchPage){
+        searchPage.classList.remove("search-arriving");
+        void searchPage.offsetWidth;
+        searchPage.classList.add("search-arriving");
+        setTimeout(function(){searchPage.classList.remove("search-arriving");},900);
+      }
       renderRecap();
       if(!started){ started=true; render(); initMap(); }
       else { render(); if(map)setTimeout(function(){map.invalidateSize();},60); }
@@ -9944,6 +10049,34 @@ body{background:var(--cream);line-height:1.5}
   /* Loaded after the main script, so a direct visit to …#suche
      has already had showPage() run and only needs the content. */
   if((location.hash||"").indexOf("#suche")===0)window.STAYLO_EXPLORE.show();
+})();
+</script>
+<script>
+/* Compact amenity picker: filter a long list in place without making the
+   details panel taller than the search surface needs to be. */
+(function initAmenityPicker(){
+  var input=document.getElementById("amenitySearch"), box=document.getElementById("amenityFilters"), count=document.getElementById("amenityCount");
+  if(!input||!box)return;
+  var labels=[].slice.call(box.querySelectorAll(".chip-check"));
+  function normalize(v){return String(v||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");}
+  function refresh(){
+    var q=normalize(input.value), selected=0, shown=0;
+    labels.forEach(function(label){
+      var checkbox=label.querySelector("input"), match=!q||normalize(label.textContent).indexOf(q)!==-1;
+      if(checkbox&&checkbox.checked)selected++;
+      label.classList.toggle("is-filtered-out",!match);
+      if(match)shown++;
+    });
+    if(count)count.textContent=selected+" ausgewählt";
+    box.classList.toggle("has-no-match",shown===0);
+  }
+  input.addEventListener("input",refresh);
+  box.addEventListener("change",refresh);
+  document.addEventListener("click",function(e){
+    if(e.target.closest("#resetAll,#resetFiltersBtn,#emptyResetBtn,[data-clear-chip]"))setTimeout(refresh,0);
+  });
+  window.STAYLO_AMENITY_UI={refresh:refresh};
+  refresh();
 })();
 </script>
 <script>
