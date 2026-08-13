@@ -3130,7 +3130,7 @@ img{max-width:100%;height:auto}
   background:var(--green);display:inline-block
 }
 .feature-box{
-  background-image:linear-gradient(105deg,rgba(12,28,22,.9),rgba(17,39,31,.45)),url("https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1800&q=90") !important
+  background-image:linear-gradient(105deg,rgba(12,28,22,.86),rgba(17,39,31,.32) 60%,rgba(122,79,84,.38)),url("https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1800&q=90") !important
 }
 .feature-content{max-width:560px}
 .feature-btn{
@@ -6181,6 +6181,115 @@ body{background:var(--cream);line-height:1.5}
 @keyframes resultCardIn{from{opacity:0;transform:translateY(20px) scale(.985)}to{opacity:1;transform:none}}
 .amenity-options.has-no-match::after{content:"Keine Ausstattung gefunden";display:block;width:100%;padding:12px 2px;color:#87918a;font-size:12px}
 
+/* ============================================================
+   REGION STRIP — "Drei Namen. Ein Zuhause."
+   The homepage's second beat, between the search and the listings:
+   South Tyrol read as what it actually is — three official
+   languages laid over one dramatic rise in altitude. The ascending
+   line is a real elevation profile, not decoration: 325m to 2000m,
+   valley floor to Dolomite summit, in the true order the regions
+   sit at. Cards climb with it.
+   ============================================================ */
+.region-strip{padding:clamp(30px,6vw,58px) 0 clamp(20px,4vw,36px)}
+.region-strip-eyebrow{
+  display:inline-flex;align-items:center;gap:9px;
+  padding:7px 14px;border-radius:999px;
+  background:var(--green-soft);color:var(--green-dark);
+  border:1px solid rgba(42,74,62,.12);
+  font-size:11.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+  margin-bottom:16px
+}
+.region-strip-eyebrow i{opacity:.4;font-style:normal}
+.region-strip-head{max-width:620px;margin-bottom:clamp(30px,5vw,46px)}
+.region-strip-head h2{
+  font-family:'Fraunces',Georgia,serif;
+  font-size:clamp(30px,4vw,44px);
+  letter-spacing:-.03em;line-height:1.08;
+  color:var(--black);margin-bottom:14px
+}
+.region-strip-head p{color:var(--grey);font-size:15.5px;line-height:1.68;max-width:520px}
+
+/* The line: a literal, compressed profile of the terrain these
+   four regions sit on. Each mark rises by its true share of the
+   325–2000m range — nothing here is arbitrary placement. */
+.elevation{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  column-gap:18px;align-items:end;height:58px;
+  margin-bottom:2px;padding:0 2px
+}
+.elevation::before{
+  content:"";grid-column:1/-1;grid-row:1;align-self:end;
+  height:1px;margin-bottom:1px;
+  background:linear-gradient(90deg,rgba(42,74,62,.1),rgba(42,74,62,.32) 50%,rgba(42,74,62,.1))
+}
+.elevation-mark{
+  grid-row:1;display:flex;flex-direction:column;align-items:center;
+  gap:7px;transform:translateY(var(--rise,0px))
+}
+.elevation-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--green);box-shadow:0 0 0 4px var(--cream)
+}
+.elevation-mark span{
+  font-size:10.5px;font-weight:700;color:var(--green-mid);
+  font-variant-numeric:tabular-nums;letter-spacing:.02em;white-space:nowrap
+}
+
+.region-strip-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:18px;
+  padding-top:22px
+}
+.region-strip-card{
+  transform:translateY(var(--rise-card,0px));
+  transition:transform .45s var(--ease),box-shadow .35s var(--ease),border-color .35s var(--ease)
+}
+.region-strip-card:hover{transform:translateY(calc(var(--rise-card,0px) - 5px))}
+.region-strip-card .page-card-photo{aspect-ratio:3/4 !important;max-height:none !important}
+.region-strip-card .page-card-photo img{transition:transform .7s var(--ease-out) !important}
+.region-strip-card:hover .page-card-photo img{transform:scale(1.07) !important}
+.region-strip-card .page-card-body{padding:16px 16px 18px !important}
+.region-strip-card .tag{align-self:flex-start !important}
+.region-strip-card h3{font-family:'Fraunces',Georgia,serif !important;font-size:19px !important;letter-spacing:-.02em !important;margin:0 0 5px !important;color:var(--black) !important}
+.region-strip-card .name-alt{margin:0 0 9px !important;font-size:.76rem !important}
+.region-strip-card p{color:var(--grey) !important;font-size:12.5px !important;line-height:1.5 !important;margin-bottom:11px !important}
+.region-strip-foot{display:flex;justify-content:center;margin-top:clamp(26px,4vw,38px)}
+
+@media(max-width:1000px){
+  .elevation{grid-template-columns:repeat(4,1fr);height:44px}
+  .region-strip-grid{grid-template-columns:repeat(2,1fr)}
+  .elevation-mark,.region-strip-card{transform:none !important}
+}
+@media(max-width:600px){
+  .elevation{display:none}
+  .region-strip-grid{grid-template-columns:1fr;padding-top:4px}
+}
+
+/* A quiet handoff from listings into the story sections: the same
+   rising line, now used as a section divider instead of a chart. */
+.section-divider{
+  height:1px;margin:0 auto;max-width:var(--max);
+  background:linear-gradient(90deg,transparent,rgba(42,74,62,.16) 20%,rgba(154,107,114,.28) 50%,rgba(42,74,62,.16) 80%,transparent)
+}
+
+/* The closing pitch borrows the sky it's actually promising: loden
+   green sliding into Enrosadira, the rose alpenglow the Dolomites
+   are named for. It's the same two colors as the region cards'
+   Ladin pill and the divider above — never introduced only here. */
+.hotelier-box{
+  background:linear-gradient(148deg,var(--green-dark) 0%,var(--green) 48%,#8c6168 92%,#7d555c 115%) !important;
+  position:relative;overflow:hidden
+}
+.hotelier-box::before{
+  content:"";position:absolute;inset:auto 0 0 0;height:2px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.5) 50%,transparent)
+}
+.hotelier-info{
+  background:rgba(255,255,255,.08) !important;
+  border:1px solid rgba(255,255,255,.14);
+  backdrop-filter:blur(14px) saturate(140%);
+  -webkit-backdrop-filter:blur(14px) saturate(140%)
+}
+
 </style>
 </head>
 <body>
@@ -6335,10 +6444,68 @@ body{background:var(--cream);line-height:1.5}
 </div></div>
 </div></div></div>
 </div></div></div>
+<section class="region-strip"><div class="container">
+<div class="region-strip-head">
+  <span class="region-strip-eyebrow">Drei Sprachen <i>·</i> Ein Zuhause</span>
+  <h2>Von der Talsohle<br>bis zum Gipfel.</h2>
+  <p>Meran liegt auf 325&nbsp;Metern zwischen Weinbergen, die Dolomiten auf fast 2000. Dazwischen: vier sehr unterschiedliche Arten, Südtirol zu erleben – jede mit ihrem deutschen, italienischen und, in den ladinischen Tälern, ladinischen Namen.</p>
+</div>
+<div class="elevation" aria-hidden="true">
+  <div class="elevation-mark" style="--rise:0px"><span>325&nbsp;m</span><span class="elevation-dot"></span></div>
+  <div class="elevation-mark" style="--rise:-13px"><span>900&nbsp;m</span><span class="elevation-dot"></span></div>
+  <div class="elevation-mark" style="--rise:-24px"><span>1236&nbsp;m</span><span class="elevation-dot"></span></div>
+  <div class="elevation-mark" style="--rise:-40px"><span>2000&nbsp;m</span><span class="elevation-dot"></span></div>
+</div>
+<div class="region-strip-grid">
+  <a href="#hotels" class="page-card is-clickable has-photo region-strip-card" data-region="Meran" style="--rise-card:0px">
+    <span class="page-card-photo"><img src="https://images.unsplash.com/photo-1502472584811-0a2f2feb8968?auto=format&fit=crop&w=800&q=80" alt="Meran, Südtirol" loading="lazy" width="800" height="1067"></span>
+    <span class="page-card-body">
+      <span class="tag">Therme · Wein</span>
+      <h3>Meran</h3>
+      <span class="name-alt"><span lang="it">Merano</span></span>
+      <p>Kurort mit Therme, Weinbergen und mediterranem Flair.</p>
+      <span class="alt-m">325&nbsp;m</span>
+    </span>
+  </a>
+  <a href="#hotels" class="page-card is-clickable has-photo region-strip-card" data-region="Vinschgau" style="--rise-card:-7px">
+    <span class="page-card-photo"><img src="https://images.unsplash.com/photo-1465056836041-7f43ac27dcb5?auto=format&fit=crop&w=800&q=80" alt="Vinschgau, Südtirol" loading="lazy" width="800" height="1067"></span>
+    <span class="page-card-body">
+      <span class="tag">Obst · Burgen</span>
+      <h3>Vinschgau</h3>
+      <span class="name-alt"><span lang="it">Val Venosta</span></span>
+      <p>Obstgärten, Burgen und der Reschensee.</p>
+      <span class="alt-m">900&nbsp;m</span>
+    </span>
+  </a>
+  <a href="#hotels" class="page-card is-clickable has-photo region-strip-card" data-region="Gröden" style="--rise-card:-13px">
+    <span class="page-card-photo"><img src="https://images.unsplash.com/photo-1454496522488-7a8e488e8606?auto=format&fit=crop&w=800&q=80" alt="Gröden, Südtirol" loading="lazy" width="800" height="1067"></span>
+    <span class="page-card-body">
+      <span class="tag">Ski</span>
+      <h3>Gröden</h3>
+      <span class="name-alt"><span lang="it">Val Gardena</span><span class="name-lad">Gherdëina</span></span>
+      <p>Ski, ladinische Kultur und traditionsreiche Bergdörfer.</p>
+      <span class="alt-m">1236&nbsp;m</span>
+    </span>
+  </a>
+  <a href="#hotels" class="page-card is-clickable has-photo region-strip-card" data-region="Dolomiten" style="--rise-card:-22px">
+    <span class="page-card-photo"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=800&q=80" alt="Dolomiten, Südtirol" loading="lazy" width="800" height="1067"></span>
+    <span class="page-card-body">
+      <span class="tag">UNESCO</span>
+      <h3>Dolomiten</h3>
+      <span class="name-alt"><span lang="it">Dolomiti</span></span>
+      <p>UNESCO-Weltnaturerbe mit markanten Gipfeln und Wanderwegen.</p>
+      <span class="alt-m">2000&nbsp;m</span>
+    </span>
+  </a>
+</div>
+<div class="region-strip-foot"><a href="#page-regions" class="cta-btn secondary" data-page="regions">Alle acht Regionen ansehen →</a></div>
+</div></section>
+<div class="section-divider" role="presentation"></div>
 <main class="main-content" id="hotels">
 <section class="section results-section"><div class="container results-container">
 <div class="section-header results-header">
   <div>
+    <span class="region-strip-eyebrow" style="margin-bottom:10px">Alle Häuser</span>
     <h2 class="section-title">Hotels in Südtirol</h2>
     <p class="section-subtitle">Liste und Karte – gefiltert nach deiner Suche.</p>
   </div>
