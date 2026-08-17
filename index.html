@@ -1477,14 +1477,6 @@ section[id]{
   padding:16px
 }
 
-.hotel-location{
-  color:#858a84;
-  font-size:10px;
-  text-transform:uppercase;
-  letter-spacing:.07em;
-  font-weight:700
-}
-
 .hotel-name{
   font-family:'Fraunces',Georgia,serif;
   font-size:21px;
@@ -3038,11 +3030,6 @@ img{max-width:100%;height:auto}
 
 
 /* ===== Staylo 2026 polish batch ===== */
-.hotel-location{
-  display:flex;
-  align-items:center;
-  gap:5px
-}
 .hotel-stars{
   letter-spacing:1.5px !important;
   color:#c4a035 !important;
@@ -5836,12 +5823,6 @@ body.view-map .map-shell-sticky .map-canvas{
   -webkit-line-clamp:1 !important;
   margin:0 !important
 }
-.hotel-list-mode .hotel-location{
-  font-size:11px !important;
-  text-transform:none !important;
-  letter-spacing:0 !important;
-  color:#666 !important
-}
 .hotel-list-mode .hotel-stars{
   font-size:11px !important;
   margin:0 !important
@@ -5996,17 +5977,6 @@ body.view-map .map-shell-sticky .map-canvas{
   color:#0f172a;
   margin:0
 }
-.hotel-card .hotel-location{
-  font-size:13px !important;
-  color:#64748b !important;
-  text-transform:none !important;
-  letter-spacing:0 !important;
-  font-weight:500;
-  display:flex;
-  align-items:center;
-  gap:4px
-}
-.loc-pin{font-size:12px;opacity:.8}
 .hc-row{
   display:flex;
   justify-content:space-between;
@@ -7688,7 +7658,12 @@ body,body.is-subpage{overflow-x:visible}
     <div class="map-shell map-shell-sticky">
       <div id="stayloMap" class="map-canvas" aria-label="Karte mit Hotels in Südtirol"></div>
       <div class="map-empty" id="mapEmpty" hidden><strong>Keine Hotels in dieser Auswahl</strong><span>Filter zurücksetzen, um alle Häuser zu sehen.</span></div>
-      <p class="map-view-note" id="mapViewNote" role="status" aria-live="polite" hidden></p>
+      <!-- Deliberately not a live region: this text changes on every
+           pan and zoom, so aria-live would narrate a running count
+           for the whole duration of a drag. The same information
+           reaches assistive tech through the hotel list, which is the
+           accessible view of this data. -->
+      <p class="map-view-note" id="mapViewNote" hidden></p>
       <div class="map-legend"><span><i></i> Preis / Nacht · Karte folgt deinen Filtern</span></div>
     </div>
   </aside>
