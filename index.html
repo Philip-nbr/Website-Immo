@@ -7069,25 +7069,47 @@ body,body.is-subpage{overflow-x:visible}
   animation:pageIn .48s cubic-bezier(.22,1,.36,1)
 }
 
-/* c) The search navigation runs a same-document view transition, and
-      the header had no view-transition-name — so it was captured
-      inside the ::view-transition-old(root) snapshot and cross-faded
-      out along with the entire page, then faded back in. The element
-      never moved; its picture dissolved. Naming it lifts it out of
-      the root snapshot so it holds still while the page swaps
-      underneath, which is the whole point of fixed chrome.
+/* c) REVERTED, deliberately. Giving .header a view-transition-name did
+      lift it out of the root snapshot — but view-transition-name also
+      makes an element a *backdrop root*, and a backdrop root has
+      nothing behind it to sample. In WebKit that killed the header's
+      backdrop-filter outright: computed style still reported
+      blur(32px) while the blur did nothing, so at 90% background
+      opacity the hotel cards scrolled visibly *through* the bar,
+      sharp enough to read prices inside the navigation. A bar you can
+      see the page moving through is a bar that looks like it moves.
 
-      Its colours do differ between the two views (dark over the hero,
-      light over the results), so it still gets a swap — just a short
-      one on the spot, not the page's 370ms dissolve. */
-.header{view-transition-name:staylo-header}
-@media (prefers-reduced-motion:no-preference){
-  ::view-transition-group(staylo-header){
-    animation-duration:.22s;
-    z-index:30
-  }
-  ::view-transition-old(staylo-header){animation:sxOut 110ms linear both}
-  ::view-transition-new(staylo-header){animation:sxIn 140ms linear 70ms both}
+      Chromium composites it differently and looked fine, which is why
+      testing in one engine was not enough. The 220ms cross-fade this
+      bought is not worth a permanently transparent header, so the
+      name is gone.
+
+   d) THE ACTUAL CAUSE of "the bar moves", found by bisecting this
+      file's own history in WebKit: the header's backdrop-filter has
+      never worked there. Screenshotting the scrolled header with and
+      without the filter forced off produces byte-identical images in
+      WebKit and different ones in Chromium — and that holds in
+      V1.76, before any of this work. The header never moved; the
+      page moved *through* it.
+
+      At background rgba(251,252,250,.9) the missing blur leaves 10%
+      of the page showing, and 10% of dark text on a white card is
+      legible grey. Hotel prices and ratings slid across the
+      navigation, which is what reads as the bar coming along.
+
+      @supports cannot help here: WebKit reports backdrop-filter as
+      supported (CSS.supports returns true) and then does not apply
+      it, so the fallback never triggers. The only reliable fix is to
+      stop making legibility depend on the blur. The scrolled bar is
+      now opaque in every engine; the blur stays where it works, as
+      an enhancement rather than a load-bearing part.
+
+      Over the hero the bar keeps its translucency on purpose: nothing
+      scrolls behind it there, because the header only takes on its
+      light state after 12px of scroll. */
+.header.is-scrolled{
+  background:#fbfcfa !important;
+  border-bottom-color:rgba(20,32,27,.1)
 }
 
 /* --- 2. Glass off -------------------------------------------
@@ -7304,6 +7326,83 @@ body,body.is-subpage{overflow-x:visible}
 .favorites-row .fi-remove:hover{background:#e9ebe7;color:#1f2a24}
 .favorites-row .fi-remove:focus-visible{outline:2px solid var(--green);outline-offset:2px}
 .nav-badge[hidden]{display:none}
+
+/* ============================================================
+   MAP CLUSTERS
+   A cluster has to read as "more than one thing here", not as a
+   bigger pin — otherwise the count looks like a price. Hence the
+   solid green fill against the pins' white, and the count set large
+   with the price as a quiet second line.
+   ============================================================ */
+.staylo-cluster-wrap{background:none;border:0}
+.staylo-cluster{
+  display:inline-flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  transform:translate(-50%,-50%);
+  min-width:46px;
+  padding:7px 11px;
+  border-radius:999px;
+  background:var(--green-dark);
+  color:#fff;
+  border:2px solid rgba(255,255,255,.9);
+  font-family:'Lexend',system-ui,sans-serif;
+  line-height:1.1;
+  white-space:nowrap;
+  cursor:pointer;
+  box-shadow:0 4px 16px rgba(15,35,26,.34);
+  transition:transform .2s var(--ease),box-shadow .2s var(--ease)
+}
+.staylo-cluster b{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
+.staylo-cluster i{
+  font-style:normal;
+  font-size:10px;
+  font-weight:500;
+  opacity:.82;
+  font-variant-numeric:tabular-nums
+}
+.staylo-cluster:hover,.staylo-cluster:focus-visible{
+  transform:translate(-50%,-50%) scale(1.08);
+  box-shadow:0 8px 24px rgba(15,35,26,.42);
+  outline:none
+}
+.staylo-cluster:focus-visible{border-color:#fff;box-shadow:0 0 0 4px rgba(36,81,63,.35)}
+
+/* On a hotel's own map the other houses are context, not the subject,
+   so they sit back until you point at one. */
+.staylo-pin.is-neighbour{
+  background:rgba(255,255,255,.92);
+  border-color:rgba(36,81,63,.45);
+  color:#3f5a4e;
+  font-weight:500;
+  box-shadow:0 2px 8px rgba(15,35,26,.18)
+}
+.staylo-pin.is-neighbour:hover,.staylo-pin.is-neighbour:focus-visible{
+  background:#fff;
+  border-color:var(--green);
+  color:var(--green-dark);
+  font-weight:600
+}
+
+/* Count of what the current viewport is leaving out. Without it,
+   filtering to 12 hotels and seeing 3 pins looks broken. */
+.map-view-note{
+  position:absolute;
+  left:14px;
+  bottom:14px;
+  z-index:500;
+  padding:7px 13px;
+  border-radius:999px;
+  background:rgba(252,253,251,.94);
+  border:1px solid rgba(20,32,27,.1);
+  box-shadow:0 4px 14px rgba(15,35,26,.14);
+  color:#4a5650;
+  font-size:12px;
+  font-weight:500;
+  pointer-events:none
+}
+.map-view-note[hidden]{display:none}
 @media(max-width:750px){
   .nav-right{gap:12px}
 }
@@ -7589,6 +7688,7 @@ body,body.is-subpage{overflow-x:visible}
     <div class="map-shell map-shell-sticky">
       <div id="stayloMap" class="map-canvas" aria-label="Karte mit Hotels in Südtirol"></div>
       <div class="map-empty" id="mapEmpty" hidden><strong>Keine Hotels in dieser Auswahl</strong><span>Filter zurücksetzen, um alle Häuser zu sehen.</span></div>
+      <p class="map-view-note" id="mapViewNote" role="status" aria-live="polite" hidden></p>
       <div class="map-legend"><span><i></i> Preis / Nacht · Karte folgt deinen Filtern</span></div>
     </div>
   </aside>
@@ -9280,8 +9380,46 @@ body,body.is-subpage{overflow-x:visible}
           attribution: "© OSM",
           maxZoom: 18
         }).addTo(hotelDetailMapInstance);
+        /* The dotted border belongs on every map, not just the explore
+           one: it is the thing that says "this is South Tyrol" the
+           moment you zoom out from a single house. */
+        if(window.stayloDrawRegionOutline) window.stayloDrawRegionOutline(hotelDetailMapInstance);
+
         var marker = L.marker([lat, lng]).addTo(hotelDetailMapInstance);
-        marker.bindPopup("<strong>"+hotel.name+"</strong><br>"+(hotel.location||"")+(hotel.region?", "+hotel.region:"")).openPopup();
+        marker.bindPopup("<strong>"+escapeHtml(hotel.name)+"</strong><br>"+
+          escapeHtml(hotel.location||"")+(hotel.region?", "+escapeHtml(hotel.region):"")).openPopup();
+
+        /* Zooming out from one hotel used to show an empty country.
+           The neighbours appear as you widen the view and merge into
+           counts when they get too close to read — same rules as the
+           other two maps, so the behaviour is learned once. */
+        var others=HOTELS.filter(function(x){
+          return x.id!==hotel.id && typeof x.lat==="number" && typeof x.lng==="number";
+        });
+        var neighbourLayer=L.layerGroup().addTo(hotelDetailMapInstance);
+        var drawNeighbours=function(){
+          if(!hotelDetailMapInstance||!window.stayloClusterForView)return;
+          neighbourLayer.clearLayers();
+          var res=window.stayloClusterForView(hotelDetailMapInstance,others,74);
+          res.groups.forEach(function(group){
+            if(group.length===1){
+              var h=group[0];
+              var icon=L.divIcon({className:"staylo-pin-wrap",iconSize:null,
+                html:'<span class="staylo-pin is-neighbour" tabindex="0" role="button" aria-label="'+
+                  escapeAttr(h.name)+', ab '+h.price+' Euro pro Nacht">€&#8239;'+h.price+'</span>'});
+              L.marker([h.lat,h.lng],{icon:icon,keyboard:true,title:h.name})
+                .bindPopup('<span class="map-pop"><strong>'+escapeHtml(h.name)+'</strong>'+
+                  '<span class="map-pop-loc">'+escapeHtml(h.loc||h.location||"")+'</span>'+
+                  '<button type="button" class="map-pop-btn" data-map-hotel="'+escapeAttr(h.id)+'">Details ansehen →</button></span>')
+                .addTo(neighbourLayer);
+            }else{
+              window.stayloClusterMarker(hotelDetailMapInstance,group).addTo(neighbourLayer);
+            }
+          });
+        };
+        if(window.stayloBindViewRedraw) window.stayloBindViewRedraw(hotelDetailMapInstance,drawNeighbours);
+        drawNeighbours();
+
         setTimeout(function(){
           if(hotelDetailMapInstance) hotelDetailMapInstance.invalidateSize();
         }, 200);
@@ -10321,6 +10459,103 @@ body,body.is-subpage{overflow-x:visible}
   }
   window.stayloFitSouthTyrol=fitSouthTyrol;
 
+  /* ============================================================
+     ZOOM-AWARE MARKERS — shared by every map on the site
+     Two jobs, both of which change with the zoom level:
+
+     1. Cull what is off-screen. Leaflet happily keeps markers for
+        hotels nobody can see, and on the way out that is the whole
+        country's worth of pins stacked into a blob.
+     2. Merge what is too close to read. Grouping is done in *screen
+        pixels*, not by region name, so it needs no metadata and
+        adapts to any zoom by itself: far out, everything collapses
+        into a handful of counts; zooming in pulls them apart into
+        individual price pins at exactly the point where there is
+        room for them.
+
+     O(n²) over the hotels in view, which is a few dozen at most —
+     a spatial index here would be more code than it saves.
+     ============================================================ */
+  function clusterForView(map, items, radiusPx){
+    /* A quarter-screen margin: a pin whose anchor is just past the
+       edge still has a visible bubble, and pre-loading that ring
+       stops pins from popping in late while panning. */
+    var bounds;
+    try{ bounds = map.getBounds().pad(0.25); }catch(e){ bounds = null; }
+    var inView = items.filter(function(it){
+      if(typeof it.lat!=="number" || typeof it.lng!=="number") return false;
+      return bounds ? bounds.contains([it.lat,it.lng]) : true;
+    });
+    var pts = inView.map(function(it){
+      return { it:it, p:map.latLngToLayerPoint([it.lat,it.lng]) };
+    });
+    var taken = [], groups = [];
+    for(var i=0;i<pts.length;i++){
+      if(taken[i]) continue;
+      taken[i] = true;
+      var group = [pts[i].it];
+      for(var j=i+1;j<pts.length;j++){
+        if(taken[j]) continue;
+        var dx = pts[i].p.x-pts[j].p.x, dy = pts[i].p.y-pts[j].p.y;
+        if(dx*dx+dy*dy <= radiusPx*radiusPx){ taken[j]=true; group.push(pts[j].it); }
+      }
+      groups.push(group);
+    }
+    return { groups:groups, hiddenCount:items.length-inView.length };
+  }
+  window.stayloClusterForView=clusterForView;
+
+  /* A cluster is a button, so it works by keyboard as well as click:
+     activating it flies to the group's own bounds, which is the one
+     gesture that reliably breaks a cluster apart. */
+  function clusterMarker(map, group){
+    var lats=0, lngs=0;
+    group.forEach(function(h){ lats+=h.lat; lngs+=h.lng; });
+    var center=[lats/group.length, lngs/group.length];
+    var prices=group.map(function(h){ return Number(h.price)||0; })
+                    .filter(function(p){ return p>0; });
+    var from=prices.length?Math.min.apply(null,prices):null;
+    var label=group.length+" Hotels";
+    var icon=L.divIcon({
+      className:"staylo-cluster-wrap",
+      iconSize:null,
+      html:'<span class="staylo-cluster" tabindex="0" role="button" aria-label="'+
+        label+' in dieser Gegend'+(from?", ab "+from+" Euro":"")+
+        ' – hineinzoomen"><b>'+group.length+'</b>'+
+        (from?'<i>ab &euro;&#8239;'+from+'</i>':'')+'</span>'
+    });
+    var m=L.marker(center,{icon:icon,keyboard:true,title:label});
+    var zoomIn=function(){
+      try{
+        map.fitBounds(group.map(function(h){ return [h.lat,h.lng]; }),
+          {padding:[60,60],maxZoom:14});
+      }catch(e){}
+    };
+    m.on("click",zoomIn);
+    m.on("keypress",function(e){
+      if(e.originalEvent&&(e.originalEvent.key==="Enter"||e.originalEvent.key===" ")) zoomIn();
+    });
+    return m;
+  }
+  window.stayloClusterMarker=clusterMarker;
+
+  /* Redraw on zoom and pan, but never on the same tick as the event —
+     Leaflet's layer point projection is only settled once the frame
+     has been applied, and clustering off a stale projection makes
+     groups jump on the first frame after a zoom. */
+  function bindViewRedraw(map, redraw){
+    var queued=false;
+    var run=function(){
+      if(queued) return;
+      queued=true;
+      requestAnimationFrame(function(){ queued=false; redraw(); });
+    };
+    map.on("zoomend",run);
+    map.on("moveend",run);
+    return run;
+  }
+  window.stayloBindViewRedraw=bindViewRedraw;
+
   var mapInitialized=false,stayloMapInstance=null,mapMarkerLayer=null,mapMarkers={};
   function initMap(){
     if(mapInitialized)return;
@@ -10355,6 +10590,7 @@ body,body.is-subpage{overflow-x:visible}
     drawRegionOutline(map);
 
     mapMarkerLayer=L.layerGroup().addTo(map);
+    bindViewRedraw(map,drawMapMarkersForView);
     renderMapMarkers();
 
     setTimeout(function(){ map.invalidateSize(); },250);
@@ -10364,38 +10600,82 @@ body,body.is-subpage{overflow-x:visible}
     window.addEventListener("resize",function(){ map.invalidateSize(); });
   }
 
-  /* Price-bubble pins, redrawn whenever the filters change, so the map
-     always shows exactly the hotels in the list above it. */
-  function renderMapMarkers(){
+  /* One hotel pin, kept in its own function because both the flat and
+     the clustered branch need it. */
+  function hotelPin(h){
+    var icon=L.divIcon({
+      className:"staylo-pin-wrap",
+      html:'<span class="staylo-pin" tabindex="0" role="button" aria-label="'+
+           escapeAttr(h.name)+', ab '+h.price+' Euro pro Nacht">€&#8239;'+h.price+'</span>',
+      iconSize:null
+    });
+    var m=L.marker([h.lat,h.lng],{icon:icon,keyboard:true,title:h.name});
+    m.bindPopup(
+      '<span class="map-pop">'+
+      '<strong>'+escapeHtml(h.name)+'</strong>'+
+      '<span class="map-pop-loc">'+escapeHtml(h.loc||h.location||"")+'</span>'+
+      '<span class="map-pop-meta">★ '+String(h.rating).replace(".",",")+
+        ' · ab €&#8239;'+h.price+' / Nacht</span>'+
+      '<button type="button" class="map-pop-btn" data-map-hotel="'+escapeAttr(h.id)+'">Details ansehen →</button>'+
+      '</span>'
+    );
+    return m;
+  }
+
+  /* Draw whatever the current view can actually show. Deliberately
+     does NOT touch the viewport: this runs on every zoom and pan, and
+     a fitBounds in here would fight the gesture that triggered it. */
+  function drawMapMarkersForView(){
     if(!stayloMapInstance||!mapMarkerLayer)return;
-    var list=getFilteredHotels();
+    var list=getFilteredHotels().filter(function(h){
+      return typeof h.lat==="number"&&typeof h.lng==="number";
+    });
     mapMarkerLayer.clearLayers();
     mapMarkers={};
-    var pts=[];
-    list.forEach(function(h){
-      if(typeof h.lat!=="number"||typeof h.lng!=="number")return;
-      var icon=L.divIcon({
-        className:"staylo-pin-wrap",
-        html:'<span class="staylo-pin" tabindex="0" role="button" aria-label="'+
-             escapeAttr(h.name)+', ab '+h.price+' Euro pro Nacht">€&#8239;'+h.price+'</span>',
-        iconSize:null
-      });
-      var m=L.marker([h.lat,h.lng],{icon:icon,keyboard:true,title:h.name}).addTo(mapMarkerLayer);
-      m.bindPopup(
-        '<span class="map-pop">'+
-        '<strong>'+escapeHtml(h.name)+'</strong>'+
-        '<span class="map-pop-loc">'+escapeHtml(h.loc||h.location||"")+'</span>'+
-        '<span class="map-pop-meta">★ '+String(h.rating).replace(".",",")+
-          ' · ab €&#8239;'+h.price+' / Nacht</span>'+
-        '<button type="button" class="map-pop-btn" data-map-hotel="'+escapeAttr(h.id)+'">Details ansehen →</button>'+
-        '</span>'
-      );
-      mapMarkers[h.id]=m;
-      pts.push([h.lat,h.lng]);
+    /* 74px, not the 58px it started at: a price bubble is about 70px
+       wide, so two anchors 58px apart still overlap visually. The
+       merge distance has to match the pin, not the anchor. */
+    var res=clusterForView(stayloMapInstance,list,74);
+    res.groups.forEach(function(group){
+      if(group.length===1){
+        var h=group[0];
+        var m=hotelPin(h).addTo(mapMarkerLayer);
+        mapMarkers[h.id]=m;
+      }else{
+        clusterMarker(stayloMapInstance,group).addTo(mapMarkerLayer);
+      }
     });
+    /* Say how many are off-screen rather than letting them vanish
+       silently — otherwise a filtered result of 12 showing 3 pins
+       looks like a bug. */
+    var note=document.getElementById("mapViewNote");
+    if(note){
+      if(res.hiddenCount>0){
+        note.textContent=res.hiddenCount===1
+          ? "1 Hotel außerhalb des Kartenausschnitts"
+          : res.hiddenCount+" Hotels außerhalb des Kartenausschnitts";
+        note.hidden=false;
+      }else{
+        note.hidden=true;
+      }
+    }
     var empty=document.getElementById("mapEmpty");
-    if(empty)empty.hidden=pts.length>0;
-    if(pts.length)stayloMapInstance.fitBounds(pts,{padding:[46,46],maxZoom:11});
+    if(empty)empty.hidden=list.length>0;
+  }
+
+  /* Called when the *set* of hotels changes (filters, favourites), so
+     this one does frame the result. */
+  function renderMapMarkers(){
+    if(!stayloMapInstance||!mapMarkerLayer)return;
+    var pts=getFilteredHotels()
+      .filter(function(h){ return typeof h.lat==="number"&&typeof h.lng==="number"; })
+      .map(function(h){ return [h.lat,h.lng]; });
+    if(pts.length){
+      try{ stayloMapInstance.fitBounds(pts,{padding:[46,46],maxZoom:11}); }catch(e){}
+    }
+    /* fitBounds fires moveend, which redraws via the bound handler —
+       but only if the view actually changed, so draw explicitly too. */
+    drawMapMarkersForView();
   }
 
   /* Popups are rebuilt as HTML strings, so anything user-entered
@@ -11633,27 +11913,54 @@ body,body.is-subpage{overflow-x:visible}
     }).addTo(map);
     if(window.stayloDrawRegionOutline)window.stayloDrawRegionOutline(map);
     layer=L.layerGroup().addTo(map);
+    if(window.stayloBindViewRedraw)window.stayloBindViewRedraw(map,drawPinsForView);
     render();
     /* The column is flex-sized, so Leaflet's first measurement is
        stale. Re-measure after layout, and on every resize. */
     setTimeout(function(){ map.invalidateSize(); },80);
     window.addEventListener("resize",function(){ map.invalidateSize(); });
   }
-  function drawPins(list){
+  /* The list the map is currently showing, remembered so that a zoom
+     or a pan can redraw without re-running the search. */
+  var pinList=[];
+  function pinFor(h){
+    var icon=L.divIcon({className:"pinwrap",iconSize:null,
+      html:'<span class="pin'+(isFav(h.id)?" is-fav":"")+'" data-pin="'+esc(h.id)+'">€&#8239;'+h.price+'</span>'});
+    var m=L.marker([h.lat,h.lng],{icon:icon,title:h.name});
+    m.bindPopup('<span class="pop"><strong>'+esc(h.name)+'</strong>'+
+      '<span>'+esc(h.loc||"")+' · ab €&#8239;'+h.price+'</span>'+
+      '<button type="button" data-open="'+esc(h.id)+'">Details ansehen</button></span>');
+    return m;
+  }
+  /* View-only redraw: same contract as the homepage map — clusters and
+     culls for the current viewport, never moves it. */
+  function drawPinsForView(){
     if(!map||!layer)return;
     layer.clearLayers(); markers={};
-    var pts=[];
-    list.forEach(function(h){
-      if(typeof h.lat!=="number"||typeof h.lng!=="number")return;
-      var icon=L.divIcon({className:"pinwrap",iconSize:null,
-        html:'<span class="pin'+(isFav(h.id)?" is-fav":"")+'" data-pin="'+esc(h.id)+'">€&#8239;'+h.price+'</span>'});
-      var m=L.marker([h.lat,h.lng],{icon:icon,title:h.name}).addTo(layer);
-      m.bindPopup('<span class="pop"><strong>'+esc(h.name)+'</strong>'+
-        '<span>'+esc(h.loc||"")+' · ab €&#8239;'+h.price+'</span>'+
-        '<button type="button" data-open="'+esc(h.id)+'">Details ansehen</button></span>');
-      markers[h.id]=m; pts.push([h.lat,h.lng]);
+    if(!window.stayloClusterForView){
+      pinList.forEach(function(h){ markers[h.id]=pinFor(h).addTo(layer); });
+      return;
+    }
+    var res=window.stayloClusterForView(map,pinList,68);
+    res.groups.forEach(function(group){
+      if(group.length===1){
+        var h=group[0];
+        markers[h.id]=pinFor(h).addTo(layer);
+      }else{
+        window.stayloClusterMarker(map,group).addTo(layer);
+      }
     });
-    if(pts.length)map.fitBounds(pts,{padding:[48,48],maxZoom:11});
+  }
+  function drawPins(list){
+    if(!map||!layer)return;
+    pinList=(list||[]).filter(function(h){
+      return typeof h.lat==="number"&&typeof h.lng==="number";
+    });
+    if(pinList.length){
+      try{ map.fitBounds(pinList.map(function(h){ return [h.lat,h.lng]; }),
+        {padding:[48,48],maxZoom:11}); }catch(e){}
+    }
+    drawPinsForView();
   }
 
   /* The link between list and map, in both directions. */
