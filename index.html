@@ -6774,6 +6774,209 @@ body{background:var(--cream);line-height:1.5}
   .topic-foot .cta-btn{width:100%;justify-content:center}
 }
 
+/* ============================================================
+   MOTION LAYER — hero choreography, softened glass buttons,
+   staggered listings.
+
+   Three things were wrong before this block:
+   1. The hero slideshow ran on a 40s cycle but kept the 8s delays
+      from the old 32s cycle, so slides overlapped in pairs and the
+      fourth left a long dead gap on the last photo.
+   2. The hero headline, label and buttons rose as one 22px block —
+      technically an animation, visually a jolt.
+   3. Hotel cards were never handed to the reveal observer at all
+      (they carried no .js-reveal-target), so the grid just appeared.
+   ============================================================ */
+
+/* --- Hero slideshow: real Ken Burns, correct cadence -------- */
+.hero-media{background:#16241d}
+.hero-slide{
+  animation-name:heroKen;
+  animation-duration:44s;
+  animation-timing-function:linear;
+  animation-iteration-count:infinite;
+  transform:scale(1.075);
+  will-change:opacity,transform
+}
+/* 4 slides / 44s = one 11s beat each; the negative first delay means
+   the page opens on a photo instead of fading up from the backdrop. */
+.hero-slide:nth-child(1){animation-delay:-1.8s}
+.hero-slide:nth-child(2){animation-delay:9.2s}
+.hero-slide:nth-child(3){animation-delay:20.2s}
+.hero-slide:nth-child(4){animation-delay:31.2s}
+/* Alternating drift direction so consecutive photos don't pan alike. */
+.hero-slide:nth-child(2n){animation-name:heroKenAlt}
+
+@keyframes heroKen{
+  0%{opacity:0;transform:scale(1.085) translate3d(1.1%,1%,0)}
+  4%{opacity:1}
+  24%{opacity:1}
+  29%,100%{opacity:0;transform:scale(1.0) translate3d(-.9%,-.8%,0)}
+}
+@keyframes heroKenAlt{
+  0%{opacity:0;transform:scale(1.085) translate3d(-1.1%,-.9%,0)}
+  4%{opacity:1}
+  24%{opacity:1}
+  29%,100%{opacity:0;transform:scale(1.0) translate3d(.9%,.9%,0)}
+}
+
+/* --- Hero entrance: the block holds still, its lines arrive --- */
+.hero-content.js-reveal{opacity:1;transform:none;transition:none}
+.hero-content.js-reveal > *{
+  opacity:0;
+  transform:translateY(20px);
+  transition:opacity .85s var(--ease-out),transform .95s var(--ease-out),filter .9s var(--ease-out)
+}
+.hero-content.js-reveal.is-visible > *{opacity:1;transform:none}
+.hero-content.js-reveal > .hero-label{transform:translateY(12px) scale(.96);transition-delay:.06s}
+.hero-content.js-reveal > h1{filter:blur(9px);transition-delay:.16s}
+.hero-content.js-reveal.is-visible > h1{filter:blur(0)}
+.hero-content.js-reveal > .hero-subtitle{transition-delay:.3s}
+.hero-content.js-reveal > .hero-ctas{transition-delay:.42s}
+.hero-content.js-reveal.is-visible > .hero-label{transform:none}
+
+/* --- Hero buttons: frosted, not outlined ---------------------
+   The secondary button used to be a 1px white ring over a photo.
+   Rings read as unfinished over imagery — every crop moves the
+   contrast behind them. Depth now comes from an inner top
+   highlight plus a drop shadow, which holds on any backdrop, and
+   the label keeps its own shadow so it stays legible over snow. */
+.hero-ctas{gap:14px}
+.hero-cta-primary,.hero-cta-secondary{
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+  letter-spacing:-.005em;
+  transition:transform .4s var(--ease),box-shadow .4s var(--ease),background .4s var(--ease),color .3s var(--ease)
+}
+.hero-cta-primary{
+  background:#fff !important;
+  border:0 !important;
+  color:var(--green-dark);
+  padding:15px 27px;
+  box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 10px 30px rgba(8,20,15,.26) !important
+}
+/* A single slow sheen crossing the white pill on hover. */
+.hero-cta-primary::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  background:linear-gradient(105deg,transparent 32%,rgba(36,81,63,.1) 48%,transparent 64%);
+  transform:translateX(-115%);
+  transition:transform .85s var(--ease-out)
+}
+.hero-cta-primary:hover::after,.hero-cta-primary:focus-visible::after{transform:translateX(115%)}
+.hero-cta-primary:hover{box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 18px 42px rgba(8,20,15,.3) !important}
+
+.hero-cta-secondary{
+  background:rgba(255,255,255,.15) !important;
+  border:0 !important;
+  color:#fff;
+  padding:15px 25px;
+  font-weight:600;
+  text-shadow:0 1px 12px rgba(8,20,15,.4);
+  -webkit-backdrop-filter:blur(22px) saturate(150%);
+  backdrop-filter:blur(22px) saturate(150%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.3),
+    inset 0 -1px 0 rgba(255,255,255,.07),
+    0 8px 26px rgba(8,20,15,.2)
+}
+.hero-cta-secondary:hover{
+  background:rgba(255,255,255,.27) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.42),
+    inset 0 -1px 0 rgba(255,255,255,.1),
+    0 16px 38px rgba(8,20,15,.26)
+}
+.hero-cta-primary:active,.hero-cta-secondary:active{transform:translateY(-1px) scale(.985)}
+.hero-cta-primary:focus-visible,.hero-cta-secondary:focus-visible{
+  outline:2px solid #fff;
+  outline-offset:3px
+}
+
+/* Same treatment for the trilingual pill above the headline, so the
+   hero stops mixing two different border languages. */
+.hero-label{
+  background:rgba(255,255,255,.14) !important;
+  border:0 !important;
+  -webkit-backdrop-filter:blur(22px) saturate(150%);
+  backdrop-filter:blur(22px) saturate(150%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.26),0 6px 20px rgba(8,20,15,.16) !important;
+  text-shadow:0 1px 10px rgba(8,20,15,.32)
+}
+
+/* Fallback for browsers (or users) without backdrop blur: without it
+   a 15% white fill over a photo is neither readable nor visible. */
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .hero-cta-secondary,.hero-label{background:rgba(12,26,20,.46) !important}
+}
+@media (prefers-reduced-transparency:reduce){
+  .hero-cta-secondary,.hero-label{
+    background:rgba(12,26,20,.6) !important;
+    -webkit-backdrop-filter:none;
+    backdrop-filter:none
+  }
+}
+
+/* --- Listings: staggered arrival, calmer hover -------------- */
+#hotelGrid .js-reveal{
+  opacity:0;
+  transform:translateY(26px) scale(.988);
+  transition:opacity .7s var(--ease-out),transform .8s var(--ease-out)
+}
+#hotelGrid .js-reveal.is-visible{opacity:1;transform:none}
+/* Diagonal stagger across the grid rather than strict source order. */
+#hotelGrid .js-reveal:nth-child(3n+2){transition-delay:70ms}
+#hotelGrid .js-reveal:nth-child(3n+3){transition-delay:140ms}
+
+/* The location line used to separate the star row from the score/price
+   row. With it gone the two collided, so the rhythm moves onto the
+   elements that remain. */
+.hotel-card .hotel-stars{margin-bottom:3px}
+.hotel-card .hc-row{margin-top:13px}
+
+.hotel-card{will-change:transform}
+.hotel-card:hover{transform:translateY(-7px)}
+.hotel-image{position:relative;overflow:hidden}
+/* Light gathers at the top edge of the photo as the card lifts. */
+.hotel-image::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(180deg,rgba(255,255,255,.14),transparent 42%);
+  opacity:0;
+  transition:opacity .5s var(--ease)
+}
+.hotel-card:hover .hotel-image::after{opacity:1}
+.hotel-card .favorite{transition:transform .3s cubic-bezier(.34,1.56,.64,1),background .25s var(--ease),color .25s var(--ease)}
+.hotel-card .favorite:hover{transform:scale(1.14)}
+.hotel-card .hotel-cta-mini:active,.hotel-card .hotel-cta-inquiry:active{transform:translateY(0) scale(.97)}
+
+/* Section headings share the hero's curve so the page reads as one
+   motion vocabulary instead of per-section improvisation. */
+.js-reveal{transition:opacity .8s var(--ease-out),transform .9s var(--ease-out)}
+.feature-box.js-reveal,.hotelier-box.js-reveal{transform:translateY(30px) scale(.99)}
+.feature-box.js-reveal.is-visible,.hotelier-box.js-reveal.is-visible{transform:none}
+
+@media(max-width:760px){
+  /* Shorter travel on small screens: 26px of lift is a third of a
+     card there, and long transforms feel sluggish on touch. */
+  #hotelGrid .js-reveal{transform:translateY(16px) scale(.994)}
+  #hotelGrid .js-reveal:nth-child(n){transition-delay:0ms}
+  #hotelGrid .js-reveal:nth-child(2n){transition-delay:60ms}
+  .hero-content.js-reveal > *{transform:translateY(14px)}
+  .hero-slide{animation-duration:38s}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .hero-content.js-reveal > *,
+  #hotelGrid .js-reveal{opacity:1 !important;transform:none !important;filter:none !important}
+  .hero-cta-primary::after{display:none}
+}
+
 /* Transparency is a preference, not a given. */
 @media (prefers-reduced-transparency:reduce){
   .nav-item,.nav-glass,.mobile-menu{
@@ -8450,7 +8653,7 @@ body{background:var(--cream);line-height:1.5}
       var totalLine = nights
         ? '<div class="hotel-total">€ '+(h.price*nights)+' gesamt · '+nights+(nights===1?' Nacht':' Nächte')+'</div>'
         : '';
-      return '<article class="hotel-card hc-card" data-id="'+h.id+'" role="article">'+
+      return '<article class="hotel-card hc-card js-reveal-target" data-id="'+h.id+'" role="article">'+
         '<div class="hotel-image">'+
           '<img src="'+h.img+'" alt="'+(h.name||"Hotel")+' – '+(h.type||"Hotel")+' in '+(h.location||"Südtirol")+'" loading="lazy" decoding="async" width="600" height="400" onerror="this.closest(\'.hotel-image\').classList.add(\'img-failed\');this.remove()">'+
           '<span class="hotel-badge">'+(h.type||"Hotel")+'</span>'+petsBadge+
@@ -8459,7 +8662,6 @@ body{background:var(--cream);line-height:1.5}
         '<div class="hotel-body">'+
           '<h3 class="hotel-name">'+h.name+'</h3>'+
           (stars ? '<div class="hotel-stars" aria-label="'+h.stars+' von 5 Sternen">'+stars+'</div>' : '')+
-          '<div class="hotel-location"><span class="loc-pin" aria-hidden="true">📍</span> '+(h.location || h.loc || "")+(h.region ? " · "+h.region : "")+'</div>'+
           '<div class="hc-row">'+
             '<div class="hc-score">'+(
               h.rating>0
