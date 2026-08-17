@@ -7090,10 +7090,21 @@ body,body.is-subpage{overflow-x:visible}
   ::view-transition-new(staylo-header){animation:sxIn 140ms linear 70ms both}
 }
 
-/* --- 2. Glass off ------------------------------------------- */
-.nav-item,
-.nav-glass,
-.mobile-menu{
+/* --- 2. Glass off -------------------------------------------
+   The .is-scrolled variants are listed explicitly, and that is not
+   redundancy. The rule this replaces sets
+   `.header.is-scrolled .nav-glass{background:…!important}` — when two
+   declarations are both !important, specificity decides before source
+   order, so a bare `.nav-glass{background:none!important}` loses to it
+   no matter how late it appears. The frosted pill survived behind DE
+   and the heart in the scrolled header for exactly that reason.
+   #loginBtn keeps its pill through ID specificity. */
+.header .nav-item,
+.header .nav-glass,
+.header .mobile-menu,
+.header.is-scrolled .nav-item,
+.header.is-scrolled .nav-glass,
+.header.is-scrolled .mobile-menu{
   background:none !important;
   border:0 !important;
   box-shadow:none !important;
@@ -7225,11 +7236,25 @@ body,body.is-subpage{overflow-x:visible}
 
 /* --- Legibility and focus without a backdrop ---------------- */
 /* The pills used to do this job. Over a photo, plain white text needs
-   its own shadow or it dissolves into a bright crop. */
-.header:not(.is-scrolled) .nav-item,
+   its own shadow or it dissolves into a bright crop.
+
+   text-shadow inherits, and the dropdown panels live *inside*
+   .nav-item — so putting the shadow on .nav-item pushed a dark halo
+   onto every link inside a white panel: "Luxushotels", "Wellnesshotels"
+   and the panel headings all glowed black. The shadow belongs on the
+   label itself, which for a menu entry is the child <span>, never on
+   the item that also contains the panel. */
+.header:not(.is-scrolled) .nav-item:not(.has-menu),
+.header:not(.is-scrolled) .nav-item.has-menu>span,
 .header:not(.is-scrolled) .nav-glass,
 .header:not(.is-scrolled) .logo-text{text-shadow:0 1px 11px rgba(8,20,15,.5)}
 .header:not(.is-scrolled) .mobile-menu .bar{filter:drop-shadow(0 1px 4px rgba(8,20,15,.5))}
+/* Anything that floats on its own opaque surface starts clean, whatever
+   it happens to be nested inside. */
+.dropdown,.dropdown *,
+.favorites-panel,.favorites-panel *,
+.lang-menu,.lang-menu *,
+.nav-badge,
 .header.is-scrolled .nav-item,
 .header.is-scrolled .nav-glass{text-shadow:none}
 
