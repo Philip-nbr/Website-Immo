@@ -7027,15 +7027,24 @@ html{scroll-padding-top:calc(var(--header-h) + 14px)}
    only useful once there is content to separate from. */
 .header:not(.is-scrolled){border-bottom-color:transparent}
 
-/* The results view's own sub-bar was the other half of the problem,
-   and neither half was in the bar's own CSS.
+/* The header element itself was never the problem: it is a direct
+   child of <body> with position:fixed and nothing in its ancestor
+   chain that would make it a containing block. What moved was
+   everything the eye reads as part of it.
 
-   a) body.is-subpage set overflow-x:hidden. On <body> that makes
-      overflow-y compute to auto, which turns the body into a scroll
-      container — and position:sticky then resolves against the body
-      box instead of the viewport. overflow-x:clip clips exactly the
-      same overflow without creating a scroll container, so sticky
-      keeps working.
+   a) overflow-x:hidden on <body> (globally, line ~2570, and again on
+      subpages). On <body> that makes overflow-y compute to auto,
+      which turns the body into a scroll container — so every
+      position:sticky in the document resolves against a box that
+      never scrolls, and simply never sticks. That is the homepage's
+      docking search box, and the results view's .bar, .suche-recap
+      and .rail, all at once.
+
+      The horizontal clip moves to <html>, where it propagates to the
+      viewport instead: the viewport stays the scroll container, so
+      sticky works, and fixed elements are never clipped by it.
+      Putting it on <body> is the single most common way to break
+      sticky without touching any sticky rule.
    b) .page-view.is-active ran pageIn with fill-mode:forwards, which
       leaves transform:translateY(0) permanently applied. A non-none
       transform makes the element a containing block for fixed
@@ -7047,12 +7056,34 @@ html{scroll-padding-top:calc(var(--header-h) + 14px)}
 
    Dropping fill-mode and declaring the end state on the rule itself
    gives the same entrance with no residue afterwards. */
-body.is-subpage{overflow-x:clip}
+html{overflow-x:hidden}
+body,body.is-subpage{overflow-x:visible}
 .page-view.is-active{
   opacity:1;
   transform:none;
   will-change:auto;
   animation:pageIn .48s cubic-bezier(.22,1,.36,1)
+}
+
+/* c) The search navigation runs a same-document view transition, and
+      the header had no view-transition-name — so it was captured
+      inside the ::view-transition-old(root) snapshot and cross-faded
+      out along with the entire page, then faded back in. The element
+      never moved; its picture dissolved. Naming it lifts it out of
+      the root snapshot so it holds still while the page swaps
+      underneath, which is the whole point of fixed chrome.
+
+      Its colours do differ between the two views (dark over the hero,
+      light over the results), so it still gets a swap — just a short
+      one on the spot, not the page's 370ms dissolve. */
+.header{view-transition-name:staylo-header}
+@media (prefers-reduced-motion:no-preference){
+  ::view-transition-group(staylo-header){
+    animation-duration:.22s;
+    z-index:30
+  }
+  ::view-transition-old(staylo-header){animation:sxOut 110ms linear both}
+  ::view-transition-new(staylo-header){animation:sxIn 140ms linear 70ms both}
 }
 
 /* --- 2. Glass off ------------------------------------------- */
