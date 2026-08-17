@@ -6987,6 +6987,238 @@ body{background:var(--cream);line-height:1.5}
   .header.is-scrolled .nav-glass{background:#fff !important}
 }
 
+/* ============================================================
+   HEADER — one height, text navigation
+   Two complaints, one root cause each.
+
+   1. "The bar moves when I search."
+      The header shrank 64px → 56px on scroll while body's padding-top
+      animated down with it over 320ms. But every sticky offset in the
+      results view is calc()'d from --header-h (64px), so the moment
+      the padding dropped to 56px the sub-bar slid 8px up under the
+      header and the whole column lurched mid-scroll. Rather than
+      patch the offsets, the header stops resizing: it keeps one
+      height and changes only its appearance. Nothing reflows on
+      scroll, and every calc() in the file is right by construction.
+
+   2. "The liquid glass buttons should go."
+      Nine translucent pills in a 64px bar is a lot of chrome for what
+      is really a list of words — and over a photo that changes every
+      11s, none of them sit on a stable backdrop. They are text now.
+      Hierarchy moves onto weight, colour and an underline that draws
+      itself, and the one real call to action keeps a solid pill so
+      the bar still has a focal point.
+   ============================================================ */
+
+/* --- 1. Nothing in the header changes size ------------------- */
+:root{
+  /* Tracks --header-h instead of restating 64px, so the two cannot
+     drift apart again. */
+  --header-h-scrolled:var(--header-h)
+}
+.header{will-change:background}
+body,body.header-compact{
+  padding-top:var(--header-h) !important;
+  transition:none
+}
+/* Anchor jumps landed behind the fixed bar before this. */
+html{scroll-padding-top:calc(var(--header-h) + 14px)}
+/* Over the hero the hairline reads as a seam across the photo; it is
+   only useful once there is content to separate from. */
+.header:not(.is-scrolled){border-bottom-color:transparent}
+
+/* The results view's own sub-bar was the other half of the problem,
+   and neither half was in the bar's own CSS.
+
+   a) body.is-subpage set overflow-x:hidden. On <body> that makes
+      overflow-y compute to auto, which turns the body into a scroll
+      container — and position:sticky then resolves against the body
+      box instead of the viewport. overflow-x:clip clips exactly the
+      same overflow without creating a scroll container, so sticky
+      keeps working.
+   b) .page-view.is-active ran pageIn with fill-mode:forwards, which
+      leaves transform:translateY(0) permanently applied. A non-none
+      transform makes the element a containing block for fixed
+      descendants (the mobile filter drawer used inset from
+      --header-h and landed relative to the page, not the window),
+      and the paired will-change pinned a compositing layer for the
+      whole session, which is what made the sticky bar drift a few
+      pixels behind the scroll instead of holding still.
+
+   Dropping fill-mode and declaring the end state on the rule itself
+   gives the same entrance with no residue afterwards. */
+body.is-subpage{overflow-x:clip}
+.page-view.is-active{
+  opacity:1;
+  transform:none;
+  will-change:auto;
+  animation:pageIn .48s cubic-bezier(.22,1,.36,1)
+}
+
+/* --- 2. Glass off ------------------------------------------- */
+.nav-item,
+.nav-glass,
+.mobile-menu{
+  background:none !important;
+  border:0 !important;
+  box-shadow:none !important;
+  -webkit-backdrop-filter:none !important;
+  backdrop-filter:none !important
+}
+.nav-item::before,
+.nav-glass::before,
+.mobile-menu::before{display:none !important}
+.nav-item:hover,
+.nav-glass:hover,
+.mobile-menu:hover{transform:none}
+
+/* --- The centre nav: words, with an underline that draws ----- */
+.nav-center{gap:8px}
+.nav-item{
+  min-width:0;
+  padding:0 12px;
+  color:rgba(255,255,255,.88);
+  font-size:14px;
+  font-weight:500;
+  letter-spacing:0;
+  transition:color .25s var(--ease)
+}
+.nav-item:hover,.nav-item:focus-within{color:#fff}
+/* The rule is on .nav-item, never on the label: dropdown items carry
+   their caret on a child <span>, so anchoring here keeps the
+   underline the same width on both kinds of entry.
+
+   Offset from the centre, not from the bottom: the item keeps a 44px
+   touch target regardless of its 14px text, so anything measured off
+   the box edge would float far below the words. */
+.nav-item::after{
+  content:"";
+  position:absolute;
+  left:12px;
+  right:12px;
+  top:calc(50% + 11px);
+  height:1.5px;
+  border-radius:2px;
+  background:currentColor;
+  opacity:.8;
+  transform:scaleX(0);
+  transform-origin:left center;
+  transition:transform .4s var(--ease-out)
+}
+.nav-item:hover::after,
+.nav-item:focus-within::after,
+.nav .nav-item.is-active::after{transform:scaleX(1)}
+/* Weight stays put on the active item — bolding it would change its
+   width and nudge every neighbour sideways. */
+.nav .nav-item.is-active{color:#fff}
+
+.header.is-scrolled .nav-item{color:rgba(26,31,28,.76)}
+.header.is-scrolled .nav-item:hover,
+.header.is-scrolled .nav-item:focus-within,
+.header.is-scrolled .nav .nav-item.is-active,
+.header.is-scrolled .nav-item.is-active{color:var(--green-dark)}
+
+/* --- The right-hand controls -------------------------------- */
+.nav-right{gap:16px}
+/* Flat text, but the tap target keeps its full height — the pill was
+   carrying that job, and on a phone the heart is the one control here
+   that stays visible. */
+.nav-glass{
+  height:44px;
+  min-height:44px;
+  padding:0 4px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-size:13.5px;
+  font-weight:500;
+  color:rgba(255,255,255,.88);
+  transition:color .25s var(--ease)
+}
+.nav-glass:hover{color:#fff}
+.header.is-scrolled .nav-glass{color:rgba(26,31,28,.78)}
+.header.is-scrolled .nav-glass:hover{color:var(--green-dark)}
+/* The heart carried the old pill's 13px type; on its own it needs to
+   read as an icon. */
+#favoritesToggle{font-size:19px;line-height:1;padding-right:12px}
+/* The badge's white ring existed to lift it off the glass. With the
+   glass gone it just made a 20px dot next to a 19px glyph, so it
+   drops the ring, shrinks, and separates with a shadow instead.
+   It also has to be measured off the glyph now rather than the box:
+   the button is 44px tall for the touch target while the heart it
+   belongs to is 19px, so the old top:-5px left it floating above the
+   control with nothing under it. */
+.nav-badge{
+  top:7px;
+  right:-4px;
+  min-width:17px;
+  height:17px;
+  padding:0 5px;
+  font-size:10px;
+  border:0 !important;
+  box-shadow:0 1px 5px rgba(6,16,12,.4) !important
+}
+#languageToggle{font-variant-numeric:tabular-nums;letter-spacing:.04em}
+
+/* Anmelden stays a button, because it is the only thing in the bar
+   that is an action rather than a destination. White over the hero,
+   green once the chrome turns light — either way it is the one solid
+   shape up there. */
+#loginBtn{
+  height:38px !important;
+  padding:0 18px !important;
+  border-radius:999px !important;
+  background:#fff !important;
+  color:var(--green-dark) !important;
+  font-size:13.5px !important;
+  font-weight:650 !important;
+  text-shadow:none !important;
+  box-shadow:0 2px 10px rgba(8,20,15,.2) !important;
+  transition:background .3s var(--ease),color .3s var(--ease),box-shadow .3s var(--ease),transform .28s var(--ease) !important
+}
+#loginBtn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 9px 24px rgba(8,20,15,.26) !important
+}
+#loginBtn:active{transform:translateY(0) scale(.97)}
+.header.is-scrolled #loginBtn{
+  background:var(--green-dark) !important;
+  color:#fff !important;
+  box-shadow:0 2px 10px rgba(23,56,43,.22) !important
+}
+.header.is-scrolled #loginBtn:hover{box-shadow:0 9px 24px rgba(23,56,43,.26) !important}
+
+/* --- Legibility and focus without a backdrop ---------------- */
+/* The pills used to do this job. Over a photo, plain white text needs
+   its own shadow or it dissolves into a bright crop. */
+.header:not(.is-scrolled) .nav-item,
+.header:not(.is-scrolled) .nav-glass,
+.header:not(.is-scrolled) .logo-text{text-shadow:0 1px 11px rgba(8,20,15,.5)}
+.header:not(.is-scrolled) .mobile-menu .bar{filter:drop-shadow(0 1px 4px rgba(8,20,15,.5))}
+.header.is-scrolled .nav-item,
+.header.is-scrolled .nav-glass{text-shadow:none}
+
+/* With no pill to tint, the keyboard ring has to be the whole cue. */
+.nav-item:focus-visible,
+.nav-glass:focus-visible,
+.mobile-menu:focus-visible,
+.nav-item.has-menu>span:focus-visible{
+  outline:2px solid currentColor;
+  outline-offset:5px;
+  border-radius:6px;
+  box-shadow:none !important
+}
+#loginBtn:focus-visible{outline-color:var(--green);outline-offset:3px}
+
+@media(max-width:1100px){
+  .nav-center{gap:2px}
+  .nav-item{padding:0 9px;font-size:13.5px}
+  .nav-item::after{left:9px;right:9px}
+}
+@media(max-width:750px){
+  .nav-right{gap:12px}
+}
+
 </style>
 </head>
 <body>
