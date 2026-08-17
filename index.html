@@ -44,7 +44,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<!-- defer: a synchronous ~145KB script in <head> blocked parsing and
+     first paint of the entire page for a map that is below the fold.
+     Every call site already guards on `typeof L === "undefined"`, and
+     the initialisers run on window load, so nothing needs it earlier. -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
 <style>
 :root{
   /* Neutral South Tyrol — soft stone, muted loden, cool light */
@@ -7246,6 +7250,35 @@ body,body.is-subpage{overflow-x:visible}
   .nav-item{padding:0 9px;font-size:13.5px}
   .nav-item::after{left:9px;right:9px}
 }
+
+/* Remove is a sibling button now, not a <span> nested inside the open
+   button, so its styling moves from a descendant selector to the row.
+   The old markup put interactive content inside a <button>, which no
+   keyboard can reach — a favourite could be added with the keyboard
+   and then never removed. */
+.favorites-row{
+  display:flex;
+  align-items:center;
+  gap:2px;
+  margin-bottom:6px
+}
+.favorites-item{flex:1;min-width:0;margin-bottom:0}
+.favorites-row .fi-remove{
+  width:30px;
+  height:30px;
+  border-radius:8px;
+  flex-shrink:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#8a918a;
+  font-size:14px;
+  background:transparent;
+  transition:background .2s var(--ease),color .2s var(--ease)
+}
+.favorites-row .fi-remove:hover{background:#e9ebe7;color:#1f2a24}
+.favorites-row .fi-remove:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+.nav-badge[hidden]{display:none}
 @media(max-width:750px){
   .nav-right{gap:12px}
 }
@@ -7289,10 +7322,10 @@ body,body.is-subpage{overflow-x:visible}
 <a href="#page-hoteliers" class="nav-item" data-page="hoteliers">Für Hoteliers</a>
 </nav>
 <div class="nav-right">
-<button class="nav-glass has-badge" type="button" id="favoritesToggle" aria-label="Favoriten">♡ <span class="nav-badge" id="favoritesCount">0</span></button>
-<div class="favorites-panel" id="favoritesPanel"><div class="favorites-title">Favoriten</div><div class="favorites-list" id="favoritesList"><div class="favorites-empty">Noch keine Favoriten ausgewählt.</div></div></div>
-<button class="nav-glass" id="languageToggle" type="button"><span id="currentLanguage">DE</span></button>
-<div class="lang-menu" id="languageMenu">
+<button class="nav-glass has-badge" type="button" id="favoritesToggle" aria-label="Favoriten" aria-expanded="false" aria-controls="favoritesPanel">♡ <span class="nav-badge" id="favoritesCount" hidden>0</span></button>
+<div class="favorites-panel" id="favoritesPanel" role="group" aria-label="Favoriten"><div class="favorites-title">Favoriten</div><div class="favorites-list" id="favoritesList"><div class="favorites-empty">Noch keine Favoriten ausgewählt.</div></div></div>
+<button class="nav-glass" id="languageToggle" type="button" aria-label="Sprache wählen" aria-expanded="false" aria-controls="languageMenu"><span id="currentLanguage">DE</span></button>
+<div class="lang-menu" id="languageMenu" role="group" aria-label="Sprache">
 <button class="lang-option" data-lang="de" type="button">Deutsch</button>
 <button class="lang-option" data-lang="it" type="button">Italiano</button>
 <button class="lang-option" data-lang="en" type="button">English</button>
@@ -8910,20 +8943,27 @@ body,body.is-subpage{overflow-x:visible}
     grid.innerHTML = show.map(function(h){
       var fav = favorites.some(function(f){ return f.id === h.id; });
       var stars = h.stars ? "★".repeat(h.stars) + "☆".repeat(Math.max(0, 5 - h.stars)) : "";
-      var reviews = h.reviews ? " (" + h.reviews + ")" : "";
       var petsBadge = h.pets ? '<span class="hotel-badge hotel-badge-pets">Haustiere</span>' : "";
       var nights = nightsBetween(checkIn, checkOut);
       var totalLine = nights
         ? '<div class="hotel-total">€ '+(h.price*nights)+' gesamt · '+nights+(nights===1?' Nacht':' Nächte')+'</div>'
         : '';
-      return '<article class="hotel-card hc-card js-reveal-target" data-id="'+h.id+'" role="article">'+
+      /* Every field below can come from a hotelier's own submission via
+         listingToHotel(), which is why the map popup and the hotelier's
+         list already escape. This grid is the surface those listings
+         actually appear on, so it has to do the same: a hotel named
+         <img src=x onerror=…> executed here. */
+      var name = escapeHtml(h.name);
+      var type = escapeHtml(h.type || "Hotel");
+      var place = escapeHtml(h.location || "Südtirol");
+      return '<article class="hotel-card hc-card js-reveal-target" data-id="'+escapeAttr(h.id)+'" role="article">'+
         '<div class="hotel-image">'+
-          '<img src="'+h.img+'" alt="'+(h.name||"Hotel")+' – '+(h.type||"Hotel")+' in '+(h.location||"Südtirol")+'" loading="lazy" decoding="async" width="600" height="400" onerror="this.closest(\'.hotel-image\').classList.add(\'img-failed\');this.remove()">'+
-          '<span class="hotel-badge">'+(h.type||"Hotel")+'</span>'+petsBadge+
-          '<button class="favorite'+(fav?" is-active":"")+'" type="button" data-fav="'+h.id+'" aria-label="'+(fav?"Aus Favoriten entfernen":"Zu Favoriten hinzufügen")+'" aria-pressed="'+(fav?"true":"false")+'">'+(fav?"♥":"♡")+'</button>'+
+          '<img src="'+escapeAttr(h.img)+'" alt="'+(name||"Hotel")+' – '+type+' in '+place+'" loading="lazy" decoding="async" width="600" height="400" onerror="this.closest(\'.hotel-image\').classList.add(\'img-failed\');this.remove()">'+
+          '<span class="hotel-badge">'+type+'</span>'+petsBadge+
+          '<button class="favorite'+(fav?" is-active":"")+'" type="button" data-fav="'+escapeAttr(h.id)+'" aria-label="'+(fav?"Aus Favoriten entfernen":"Zu Favoriten hinzufügen")+': '+name+'" aria-pressed="'+(fav?"true":"false")+'">'+(fav?"♥":"♡")+'</button>'+
         '</div>'+
         '<div class="hotel-body">'+
-          '<h3 class="hotel-name">'+h.name+'</h3>'+
+          '<h3 class="hotel-name">'+name+'</h3>'+
           (stars ? '<div class="hotel-stars" aria-label="'+h.stars+' von 5 Sternen">'+stars+'</div>' : '')+
           '<div class="hc-row">'+
             '<div class="hc-score">'+(
@@ -8934,16 +8974,16 @@ body,body.is-subpage{overflow-x:visible}
                 : '<span class="hc-score-box hc-score-new">Neu</span><div class="hc-score-text"><strong>Neu bei Staylo</strong><span class="hotel-reviews">Noch keine Bewertungen</span></div>'
             )+'</div>'+
             '<div class="hc-price-block">'+
-              ((h.amenities&&h.amenities.length)?'<div class="hc-perk">'+(h.amenities[0])+'</div>':'')+
+              ((h.amenities&&h.amenities.length)?'<div class="hc-perk">'+escapeHtml(h.amenities[0])+'</div>':'')+
               '<div class="hotel-price">ab '+h.price+' €</div>'+
               '<div class="hc-per-night">pro Nacht</div>'+
               totalLine+
             '</div>'+
           '</div>'+
-          ((h.amenities&&h.amenities.length)?'<ul class="hc-highlights">'+(h.amenities.slice(0,3).map(function(a){return "<li>"+a+"</li>";}).join(""))+"</ul>":"")+
+          ((h.amenities&&h.amenities.length)?'<ul class="hc-highlights">'+(h.amenities.slice(0,3).map(function(a){return "<li>"+escapeHtml(a)+"</li>";}).join(""))+"</ul>":"")+
           '<div class="hotel-actions">'+
-            '<button type="button" class="hotel-cta-mini" data-open-hotel="'+h.id+'" aria-label="'+h.name+' ansehen">Details</button>'+
-            '<button type="button" class="hotel-cta-inquiry" data-inquiry="'+h.id+'" aria-label="'+h.name+' anfragen">Anfragen</button>'+
+            '<button type="button" class="hotel-cta-mini" data-open-hotel="'+escapeAttr(h.id)+'" aria-label="'+name+' ansehen">Details</button>'+
+            '<button type="button" class="hotel-cta-inquiry" data-inquiry="'+escapeAttr(h.id)+'" aria-label="'+name+' anfragen">Anfragen</button>'+
           '</div>'+
         '</div></article>';
     }).join("");
@@ -9019,25 +9059,44 @@ body,body.is-subpage{overflow-x:visible}
     };
     var am = (h.amenities||[]).map(function(a){
       var ic = amenityIcons[a] || "✓";
-      return '<div class="hd-amenity-item"><span class="icon">'+ic+'</span>'+a+'</div>';
+      return '<div class="hd-amenity-item"><span class="icon">'+ic+'</span>'+escapeHtml(a)+'</div>';
     }).join("");
 
     var rooms = (h.rooms||[]).map(function(r, ri){
-      return '<div class="room-card is-clickable" data-room-idx="'+ri+'" data-room-hotel="'+h.id+'" role="button" tabindex="0" aria-label="'+r.name+' – Details ansehen">'+
-        '<div class="room-img-wrap"><img src="'+r.img+'" alt="'+r.name+'" loading="lazy" decoding="async"></div>'+
+      var rn = escapeHtml(r.name);
+      return '<div class="room-card is-clickable" data-room-idx="'+ri+'" data-room-hotel="'+escapeAttr(h.id)+'" role="button" tabindex="0" aria-label="'+rn+' – Details ansehen">'+
+        '<div class="room-img-wrap"><img src="'+escapeAttr(r.img)+'" alt="'+rn+'" loading="lazy" decoding="async"></div>'+
         '<div class="room-info">'+
-          '<h4>'+r.name+'</h4>'+
-          '<p>'+r.desc+'</p>'+
+          '<h4>'+rn+'</h4>'+
+          '<p>'+escapeHtml(r.desc)+'</p>'+
           '<span class="room-more">Details ansehen →</span>'+
         '</div>'+
         '<div class="room-side">'+
           '<div class="room-price">ab € '+r.price+'<span>/ Nacht</span></div>'+
-          '<button type="button" class="room-cta" data-inquiry="'+h.id+'" data-room="'+String(r.name).replace(/"/g,"&quot;")+'">Anfragen</button>'+
+          /* The old hand-rolled .replace(/"/g,"&quot;") closed the
+             attribute but left < and & through. */
+          '<button type="button" class="room-cta" data-inquiry="'+escapeAttr(h.id)+'" data-room="'+escapeAttr(r.name)+'">Anfragen</button>'+
         '</div>'+
       '</div>';
     }).join("");
 
     var isFav = favorites.some(function(f){ return f.id===h.id; });
+    /* Same reasoning as the grid: a hotelier's own submission reaches
+       this page too. Names are used in headings, alt text and aria
+       labels, so they are escaped once and reused. */
+    var hName = escapeHtml(h.name);
+    var hType = escapeHtml(h.type||"");
+    var hLoc  = escapeHtml(h.loc||"");
+    /* A stored href is not made safe by escaping — "javascript:…"
+       survives it intact. Only http(s) is allowed through; anything
+       else falls back to the no-website branch. */
+    var hSite = (function(u){
+      if(!u) return "";
+      try{
+        var p=new URL(String(u),location.href);
+        return (p.protocol==="http:"||p.protocol==="https:") ? p.href : "";
+      }catch(e){ return ""; }
+    })(h.website);
 
     document.getElementById("hotelDetailRoot").innerHTML =
       '<div class="hotel-detail">'+
@@ -9049,18 +9108,18 @@ body,body.is-subpage{overflow-x:visible}
               '<span aria-hidden="true">›</span>'+
               '<a href="#suche">Hotels</a>'+
               '<span aria-hidden="true">›</span>'+
-              '<span aria-current="page">'+h.name+'</span>'+
+              '<span aria-current="page">'+hName+'</span>'+
             '</nav>'+
           '</div>'+
           '<div class="hd-gallery'+(galleryImgs.length<2?' is-single':'')+'">'+
             '<button type="button" class="hd-gal-main" data-lightbox="0" aria-label="Foto 1 von '+galleryImgs.length+' vergrößern">'+
-              '<img src="'+bigImg(galleryImgs[0])+'" alt="'+h.name+' – Hauptansicht" decoding="async">'+
+              '<img src="'+escapeAttr(bigImg(galleryImgs[0]))+'" alt="'+hName+' – Hauptansicht" decoding="async">'+
             '</button>'+
             (galleryImgs.length>1
               ? '<div class="hd-gal-side">'+
                   galleryImgs.slice(1,5).map(function(src,i){
                     return '<button type="button" class="hd-gal-thumb" data-lightbox="'+(i+1)+'" aria-label="Foto '+(i+2)+' von '+galleryImgs.length+' vergrößern">'+
-                      '<img src="'+bigImg(src)+'" alt="'+h.name+' – Ansicht '+(i+2)+'" loading="lazy" decoding="async">'+
+                      '<img src="'+escapeAttr(bigImg(src))+'" alt="'+hName+' – Ansicht '+(i+2)+'" loading="lazy" decoding="async">'+
                     '</button>';
                   }).join("")+
                 '</div>'
@@ -9071,10 +9130,10 @@ body,body.is-subpage{overflow-x:visible}
           '</div>'+
           '<div class="hd-title-row">'+
             '<div>'+
-              '<h1>'+h.name+'</h1>'+
+              '<h1>'+hName+'</h1>'+
               '<div class="hd-title-meta">'+
-                '<span class="hd-type">'+h.type+'</span>'+
-                '<span>'+h.loc+'</span>'+
+                '<span class="hd-type">'+hType+'</span>'+
+                '<span>'+hLoc+'</span>'+
                 (h.rating>0?'<span class="hd-rating-pill">★ '+h.rating.toFixed(1)+'</span>':'<span class="hd-rating-pill is-new">Neu</span>')+
               '</div>'+
             '</div>'+
@@ -9082,7 +9141,7 @@ body,body.is-subpage{overflow-x:visible}
           '<div class="hd-layout">'+
             '<div class="hd-main">'+
               '<h2>Über dieses Hotel</h2>'+
-              '<p class="hd-about">'+(h.long||h.desc)+'</p>'+
+              '<p class="hd-about">'+escapeHtml(h.long||h.desc||"")+'</p>'+
               (am ? '<div class="hd-section"><h2>Ausstattung</h2><div class="hd-amenity-grid">'+am+'</div></div>' : '')+
               (rooms ? '<div class="hd-section"><h2>Zimmerkategorien</h2>'+rooms+'</div>' : '')+
               buildHighlights(h)+
@@ -9093,22 +9152,22 @@ body,body.is-subpage{overflow-x:visible}
               '<p class="hd-note">Preis pro Nacht, zzgl. lokaler Abgaben. Endpreis nach Datumsauswahl.</p>'+
               '<div class="hd-divider"></div>'+
               '<div class="hd-quick">'+
-                '<div><span>Lage</span><strong>'+h.loc.split("·")[0].trim()+'</strong></div>'+
-                '<div><span>Kategorie</span><strong>'+h.type+'</strong></div>'+
+                '<div><span>Lage</span><strong>'+escapeHtml(String(h.loc||"").split("·")[0].trim())+'</strong></div>'+
+                '<div><span>Kategorie</span><strong>'+hType+'</strong></div>'+
                 '<div><span>Bewertung</span><strong>'+(h.rating>0?h.rating.toFixed(1)+' / 5':'—')+'</strong></div>'+
               '</div>'+
               '<button class="cta-btn" type="button" data-inquiry="'+h.id+'">Verfügbarkeit anfragen</button>'+
               '<button class="cta-btn secondary" type="button" data-fav-detail="'+h.id+'">'+(isFav ? "♥ In Favoriten" : "♡ Zu Favoriten")+'</button>'+
-              (h.website
-                ? '<a class="hd-website-btn" href="'+h.website+'" target="_blank" rel="noopener noreferrer">Zur Website des Hotels ↗</a>'
-                : '<a class="hd-website-btn" href="#" data-hotel-web="'+h.id+'" role="link">Zur Website des Hotels ↗</a>')+
+              (hSite
+                ? '<a class="hd-website-btn" href="'+escapeAttr(hSite)+'" target="_blank" rel="noopener noreferrer">Zur Website des Hotels ↗</a>'
+                : '<a class="hd-website-btn" href="#" data-hotel-web="'+escapeAttr(h.id)+'" role="link">Zur Website des Hotels ↗</a>')+
               '<p class="hd-trust">Kostenlose Anfrage · Keine Buchungsverpflichtung</p>'+
             '</aside>'+
           '</div>'+
           '<div class="hd-map-section">'+
             '<h2>Lage</h2>'+
-            '<p class="hd-map-sub">'+(h.location||h.loc||"Südtirol")+(h.region ? " · "+h.region : "")+' – entdecke die Umgebung auf der Karte</p>'+
-            '<div class="hd-map" id="hotelDetailMap" role="img" aria-label="Karte von '+h.name+'"></div>'+
+            '<p class="hd-map-sub">'+escapeHtml(h.location||h.loc||"Südtirol")+(h.region ? " · "+escapeHtml(h.region) : "")+' – entdecke die Umgebung auf der Karte</p>'+
+            '<div class="hd-map" id="hotelDetailMap" role="img" aria-label="Karte von '+hName+'"></div>'+
           '</div>'+
           buildSimilarHotels(h)+
         '</div>'+
@@ -9415,16 +9474,40 @@ body,body.is-subpage{overflow-x:visible}
     )?"♥ In Favoriten":"♡ Zu Favoriten";
   }
   function renderFavorites(){
-    document.getElementById("favoritesCount").textContent=String(favorites.length);
+    var n=favorites.length;
+    var badge=document.getElementById("favoritesCount");
+    var toggle=document.getElementById("favoritesToggle");
+    badge.textContent=String(n);
+    /* A notification badge that permanently reads "0" is noise, not
+       information — it only means something once there is something
+       in it. */
+    badge.hidden=n===0;
+    /* The glyph alone gives a screen reader no count, and the panel it
+       opens was never announced as expandable. */
+    if(toggle){
+      toggle.setAttribute("aria-label",n?"Favoriten ("+n+")":"Favoriten");
+      toggle.setAttribute("aria-expanded",
+        document.getElementById("favoritesPanel").classList.contains("open")?"true":"false");
+    }
     var list=document.getElementById("favoritesList");
-    if(!favorites.length){
+    if(!n){
       list.innerHTML='<div class="favorites-empty">Noch keine Favoriten ausgewählt.</div>';
       return;
     }
+    /* Remove used to be a <span> inside the open <button>: nested
+       interactive content that no keyboard could ever reach, so a
+       favourite could be added by keyboard and never taken back out.
+       Two real buttons side by side instead. */
     list.innerHTML=favorites.map(function(f){
-      return'<button class="favorites-item" type="button" data-open-fav="'+f.id+'"><img src="'+f.img+'" alt=""><div class="fi-body"><strong>'+f.name+'</strong><span>'+f.loc+'</span></div><span class="fi-remove" data-remove-fav="'+f.id+'">✕</span></button>';
-    }
-    ).join("");
+      var name=escapeHtml(f.name);
+      return '<div class="favorites-row">'+
+        '<button class="favorites-item" type="button" data-open-fav="'+escapeAttr(f.id)+'">'+
+          '<img src="'+escapeAttr(f.img)+'" alt="" width="64" height="52" loading="lazy">'+
+          '<div class="fi-body"><strong>'+name+'</strong><span>'+escapeHtml(f.loc||"")+'</span></div>'+
+        '</button>'+
+        '<button class="fi-remove" type="button" data-remove-fav="'+escapeAttr(f.id)+'" aria-label="'+name+' aus Favoriten entfernen">✕</button>'+
+      '</div>';
+    }).join("");
   }
   document.getElementById("favoritesPanel").addEventListener("click",function(e){
     e.stopPropagation();
@@ -9449,16 +9532,29 @@ body,body.is-subpage{overflow-x:visible}
     }
   }
   );
+  /* aria-expanded has to follow the panel in every direction it can
+     change: the toggle, the other toggle closing it, Escape, and the
+     click-outside handler. One helper, called from all of them. */
+  function syncPanelState(){
+    var fp=document.getElementById("favoritesPanel");
+    var lm=document.getElementById("languageMenu");
+    var ft=document.getElementById("favoritesToggle");
+    var lt=document.getElementById("languageToggle");
+    if(ft&&fp)ft.setAttribute("aria-expanded",fp.classList.contains("open")?"true":"false");
+    if(lt&&lm)lt.setAttribute("aria-expanded",lm.classList.contains("open")?"true":"false");
+  }
   document.getElementById("favoritesToggle").addEventListener("click",function(e){
     e.stopPropagation();
     document.getElementById("favoritesPanel").classList.toggle("open");
     document.getElementById("languageMenu").classList.remove("open");
+    syncPanelState();
   }
   );
   document.getElementById("languageToggle").addEventListener("click",function(e){
     e.stopPropagation();
     document.getElementById("languageMenu").classList.toggle("open");
     document.getElementById("favoritesPanel").classList.remove("open");
+    syncPanelState();
   }
   );
   document.querySelectorAll(".lang-option").forEach(function(btn){
@@ -9490,6 +9586,7 @@ body,body.is-subpage{overflow-x:visible}
     var lm=document.getElementById("languageMenu");
     if(fp)fp.classList.remove("open");
     if(lm)lm.classList.remove("open");
+    syncPanelState();
   }
   document.addEventListener("click",function(){
     closePanels();
@@ -12351,6 +12448,135 @@ body,body.is-subpage{overflow-x:visible}
     setLang(lang);
     mo.observe(document.body,{childList:true,subtree:true,
       attributes:true,attributeFilter:ATTRS});
+  }
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start);
+  else start();
+})();
+</script>
+
+<script>
+/* ============================================================
+   DIALOG FOCUS CONTRACT
+   Nine overlays carry role="dialog" aria-modal="true", and each has
+   its own open/close pair. Between them, only the detail sheet kept
+   the full contract: most focused a close button on the way in and
+   then dropped focus on the floor on the way out — landing the caret
+   back at the top of the document — and none of them stopped Tab from
+   walking straight out of the dialog into the page behind it, where
+   the visitor is then typing into a form they cannot see.
+
+   Rather than edit six open/close pairs and hope the seventh is
+   found, this watches the dialogs themselves. Whichever becomes
+   visible acquires the contract; whichever disappears gives it back.
+   ============================================================ */
+(function initDialogFocus(){
+  var SEL='[role="dialog"][aria-modal="true"]';
+  var FOCUSABLE='a[href],button:not([disabled]),input:not([disabled]),'+
+    'select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
+
+  var current=null;      /* the dialog holding focus right now */
+  var opener=null;       /* what to give focus back to */
+  var lastOutside=null;  /* last thing focused or pressed outside a dialog */
+
+  /* "Is this dialog actually open" has three different answers in this
+     file, and only checking one of them would be worse than checking
+     none. The overlays use the hidden attribute (display:none, so no
+     boxes at all). The detail sheet stays in the layout and slides out
+     of frame with transform:translateX(100%) — it keeps its client
+     rects, so a naive check would treat it as permanently open and
+     trap Tab inside an invisible panel forever. It does toggle
+     aria-hidden, and it is off-screen, so both are tested. */
+  function isVisible(el){
+    if(el.hasAttribute("hidden")) return false;
+    if(el.getAttribute("aria-hidden")==="true") return false;
+    if(el.closest("[hidden]")) return false;
+    if(!el.getClientRects().length) return false;
+    var cs=getComputedStyle(el);
+    if(cs.visibility==="hidden" || cs.display==="none" || cs.opacity==="0") return false;
+    var r=el.getBoundingClientRect();
+    if(r.right<=0 || r.bottom<=0 ||
+       r.left>=(window.innerWidth||0) || r.top>=(window.innerHeight||0)) return false;
+    return true;
+  }
+  function focusablesIn(root){
+    return Array.prototype.filter.call(root.querySelectorAll(FOCUSABLE),function(el){
+      return el.getClientRects().length && !el.closest("[hidden]");
+    });
+  }
+
+  /* The opener cannot be read at open time: these dialogs call
+     .focus() on their own close button synchronously, and a
+     MutationObserver callback only runs afterwards — by then
+     activeElement is already inside the dialog. So the last element
+     outside one is tracked continuously instead. mousedown is in
+     there because Safari does not focus a <button> when it is
+     clicked, which would otherwise leave nothing to return to. */
+  ["focusin","mousedown"].forEach(function(ev){
+    document.addEventListener(ev,function(e){
+      var t=e.target;
+      if(!t||!t.closest) return;
+      if(t.closest(SEL)) return;
+      var f=t.closest('a[href],button,input,select,textarea,[tabindex]');
+      if(f) lastOutside=f;
+    },true);
+  });
+
+  function acquire(dlg){
+    current=dlg;
+    opener=lastOutside;
+    /* Only place focus if the dialog's own open handler has not
+       already done it — several of them focus a close button, and
+       overriding that would move the caret somewhere less useful. */
+    if(!dlg.contains(document.activeElement)){
+      var f=focusablesIn(dlg);
+      (f[0]||dlg).focus();
+    }
+  }
+  function release(){
+    var back=opener;
+    current=null;
+    opener=null;
+    /* Do not steal focus if something else has legitimately taken it
+       in the meantime — only restore when focus was lost with the
+       dialog. */
+    var a=document.activeElement;
+    if(a && a!==document.body && !a.closest(SEL)) return;
+    if(back && document.contains(back) && back.focus) back.focus();
+  }
+
+  function scan(){
+    var open=null;
+    var all=document.querySelectorAll(SEL);
+    for(var i=0;i<all.length;i++){
+      if(isVisible(all[i])){ open=all[i]; break; }
+    }
+    if(open===current) return;
+    if(current && !open) release();
+    else if(open) acquire(open);
+  }
+
+  document.addEventListener("keydown",function(e){
+    if(e.key!=="Tab" || !current || !isVisible(current)) return;
+    var f=focusablesIn(current);
+    if(!f.length){ e.preventDefault(); return; }
+    var first=f[0], last=f[f.length-1];
+    /* Focus can start outside the list entirely (the dialog element
+       itself, or a node that just got hidden), so both edges fall back
+       to a defined end rather than doing nothing. */
+    if(e.shiftKey && (document.activeElement===first || !current.contains(document.activeElement))){
+      e.preventDefault(); last.focus();
+    }else if(!e.shiftKey && document.activeElement===last){
+      e.preventDefault(); first.focus();
+    }
+  });
+
+  var mo=new MutationObserver(function(){ scan(); });
+  function start(){
+    mo.observe(document.body,{
+      subtree:true,childList:true,
+      attributes:true,attributeFilter:["class","hidden","style","aria-hidden","open"]
+    });
+    scan();
   }
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start);
   else start();
