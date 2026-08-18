@@ -6690,62 +6690,235 @@ body{background:var(--cream);line-height:1.5}
    answered "show me these" but never "what is this". The dialog
    explains first and filters second, on the same button.
    ============================================================ */
-.topic-overlay{align-items:flex-start;overflow-y:auto;padding:24px 20px}
+.topic-overlay{align-items:center;padding:clamp(12px,3vh,32px) clamp(10px,3vw,24px)}
 .topic-modal{
-  width:min(560px,100%);
+  width:min(760px,100%);
+  max-height:min(92vh,1000px);
   margin:auto;
   padding:0;
   overflow:hidden;
-  text-align:left
+  text-align:left;
+  display:flex;flex-direction:column
 }
-.topic-photo{position:relative;aspect-ratio:16/9;background:var(--green-soft)}
+/* The dialog is long on purpose, so the reading area scrolls inside
+   the sheet while the CTA stays anchored at the bottom edge. */
+.topic-scroll{
+  flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;scrollbar-width:thin
+}
+.topic-scroll:focus{outline:none}
+.topic-scroll::-webkit-scrollbar{width:9px}
+.topic-scroll::-webkit-scrollbar-thumb{background:rgba(26,50,41,.18);border-radius:99px;border:3px solid transparent;background-clip:content-box}
+.topic-scroll::-webkit-scrollbar-thumb:hover{background:rgba(26,50,41,.3);background-clip:content-box}
+
+.topic-photo{position:relative;height:clamp(200px,30vh,290px);background:var(--green-soft)}
 .topic-photo img{width:100%;height:100%;object-fit:cover;display:block}
 .topic-photo::after{
-  content:"";position:absolute;inset:auto 0 0 0;height:55%;
-  background:linear-gradient(180deg,transparent,rgba(14,30,24,.5))
+  content:"";position:absolute;inset:auto 0 0 0;height:78%;
+  background:linear-gradient(180deg,transparent,rgba(14,30,24,.28) 40%,rgba(12,26,21,.82))
+}
+.topic-photo-head{
+  position:absolute;left:0;right:0;bottom:0;z-index:2;
+  padding:0 clamp(20px,4vw,30px) clamp(16px,2.4vw,22px)
+}
+.topic-photo-head h2{
+  font-family:'Fraunces',Georgia,serif;
+  font-size:clamp(27px,4.4vw,38px);letter-spacing:-.028em;line-height:1.08;
+  margin:0;color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.35)
 }
 .topic-tag{
-  position:absolute;left:18px;bottom:16px;z-index:2;
+  position:absolute;left:clamp(20px,4vw,30px);top:18px;bottom:auto;z-index:2;
   padding:6px 12px;border-radius:999px;
   background:rgba(255,255,255,.94);
   color:var(--green-dark);
   font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase
 }
 .topic-tag[hidden]{display:none}
-.topic-body{padding:24px 26px 26px}
-.topic-body h2{
-  font-family:'Fraunces',Georgia,serif;
-  font-size:29px;letter-spacing:-.025em;line-height:1.12;
-  margin:0 0 6px;color:var(--black)
+.topic-modal .auth-close{
+  z-index:4;background:rgba(255,255,255,.92);color:var(--green-dark);
+  box-shadow:0 2px 10px rgba(20,30,25,.14)
 }
-.topic-alt{margin:0 0 14px !important;font-size:.86rem !important}
+.topic-modal .auth-close:hover{background:#fff}
+.topic-alt{margin:7px 0 0 !important;font-size:.86rem !important;color:rgba(255,255,255,.86)}
+.topic-alt [lang]{color:inherit}
 .topic-alt[hidden]{display:none}
-.topic-long{
-  color:var(--grey);font-size:15px;line-height:1.7;margin-bottom:18px
+
+.topic-body{padding:clamp(20px,3.4vw,30px) clamp(20px,4vw,30px) 34px}
+.topic-lead{
+  color:#2f3a34;font-size:clamp(15.5px,1.5vw,17px);line-height:1.72;
+  margin:0 0 22px;font-weight:450
 }
-.topic-points{list-style:none;padding:0;margin:0 0 22px;display:grid;gap:9px}
+
+/* Hard numbers first: what the reader needs before any prose. */
+/* Hairlines are drawn per cell rather than as grid gaps: an odd
+   number of facts leaves a trailing empty track, and a gap-coloured
+   background paints that leftover grey. */
+.topic-facts{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));
+  background:var(--cream-warm);
+  border:1px solid var(--border);border-radius:var(--radius-sm);
+  overflow:hidden;margin-bottom:12px
+}
+.tfact{padding:12px 14px;box-shadow:1px 0 0 var(--border),0 1px 0 var(--border)}
+.tfact-k{
+  display:block;font-size:10.5px;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--grey-light);margin-bottom:4px
+}
+.tfact-v{display:block;font-size:14px;line-height:1.4;color:var(--black);font-weight:600}
+
+/* Live numbers, pulled from the listings rather than written down. */
+.topic-stats{
+  display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px
+}
+.tstat{
+  display:inline-flex;align-items:baseline;gap:6px;
+  padding:7px 13px;border-radius:999px;
+  background:var(--green-soft);color:var(--green-dark);
+  font-size:13px;font-weight:600
+}
+.tstat b{font-weight:800}
+.tstat span{color:var(--green-mid);font-weight:600}
+
+.topic-sec{margin:0 0 26px}
+.topic-sec:last-child{margin-bottom:0}
+.topic-sec h3{
+  font-family:'Fraunces',Georgia,serif;
+  font-size:clamp(18px,2.1vw,21px);line-height:1.25;letter-spacing:-.015em;
+  margin:0 0 9px;color:var(--black)
+}
+.topic-sec p{color:var(--grey);font-size:15px;line-height:1.75;margin:0}
+.topic-sec+.topic-sec h3{margin-top:0}
+.topic-rule{border:0;border-top:1px solid var(--border);margin:26px 0}
+
+.topic-points{list-style:none;padding:0;margin:0;display:grid;gap:10px}
 .topic-points li{
   position:relative;padding-left:26px;
-  font-size:14px;line-height:1.5;color:#2f3a34
+  font-size:14.5px;line-height:1.55;color:#2f3a34
 }
 .topic-points li::before{
-  content:"";position:absolute;left:0;top:.42em;
+  content:"";position:absolute;left:0;top:.45em;
   width:9px;height:9px;border-radius:50%;
   background:var(--green-soft);
   box-shadow:inset 0 0 0 2.5px var(--green)
 }
+
+/* Season strip — a region reads completely differently in March
+   than in August, and that is usually the actual question. */
+.topic-seasons{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px
+}
+.tseason{
+  border:1px solid var(--border);border-radius:var(--radius-sm);
+  padding:13px 15px;background:var(--white)
+}
+.tseason strong{
+  display:block;font-size:12px;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--green);margin-bottom:6px
+}
+.tseason span{display:block;font-size:13.5px;line-height:1.6;color:var(--grey)}
+
+.topic-tips{list-style:none;padding:0;margin:0;display:grid;gap:9px}
+.topic-tips li{
+  position:relative;padding:11px 14px 11px 40px;
+  background:var(--cream-warm);border-radius:var(--radius-sm);
+  font-size:14px;line-height:1.55;color:#2f3a34
+}
+.topic-tips li::before{
+  content:"i";position:absolute;left:13px;top:11px;
+  width:17px;height:17px;border-radius:50%;
+  background:var(--green);color:#fff;
+  font-family:Georgia,serif;font-size:11px;font-style:italic;
+  font-weight:700;line-height:17px;text-align:center
+}
+
+/* The honest half: saying who this is not for is what makes the
+   rest of the page trustworthy. */
+.topic-fit{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.tfit{border:1px solid var(--border);border-radius:var(--radius-sm);padding:15px 16px}
+.tfit-yes{background:rgba(42,74,62,.045);border-color:rgba(42,74,62,.16)}
+.tfit-no{background:rgba(154,107,114,.05);border-color:rgba(154,107,114,.18)}
+.tfit h4{
+  font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  margin:0 0 10px
+}
+.tfit-yes h4{color:var(--green)}
+.tfit-no h4{color:var(--glow-dark)}
+.tfit ul{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+.tfit li{position:relative;padding-left:22px;font-size:13.8px;line-height:1.5;color:#2f3a34}
+.tfit-yes li::before{
+  content:"";position:absolute;left:2px;top:.28em;width:11px;height:6px;
+  border-left:2px solid var(--green);border-bottom:2px solid var(--green);
+  transform:rotate(-45deg)
+}
+.tfit-no li::before{
+  content:"";position:absolute;left:4px;top:.62em;width:10px;height:2px;
+  background:var(--glow-dark);border-radius:2px
+}
+
+/* Real houses, so the abstraction lands on something bookable. */
+.topic-hotels{display:grid;gap:9px}
+.thotel{
+  display:flex;align-items:center;gap:13px;width:100%;text-align:left;
+  padding:8px;border:1px solid var(--border);border-radius:var(--radius-sm);
+  background:var(--white);cursor:pointer;
+  transition:border-color var(--t-fast,.2s) var(--ease),transform var(--t-fast,.2s) var(--ease),box-shadow var(--t-fast,.2s) var(--ease)
+}
+.thotel:hover{border-color:rgba(42,74,62,.32);transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+.thotel img{
+  width:74px;height:56px;flex:0 0 74px;object-fit:cover;
+  border-radius:10px;background:var(--green-soft)
+}
+.thotel-txt{flex:1 1 auto;min-width:0}
+.thotel-name{
+  display:block;font-size:14.5px;font-weight:700;color:var(--black);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+}
+.thotel-sub{
+  display:block;font-size:12.5px;color:var(--grey);margin-top:2px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+}
+.thotel-price{flex:0 0 auto;font-size:13.5px;font-weight:700;color:var(--green);white-space:nowrap}
+.topic-more{
+  margin:10px 0 0;font-size:13px;color:var(--grey-light)
+}
+
+.topic-related{display:flex;flex-wrap:wrap;gap:8px}
+.trel{
+  padding:9px 15px;border-radius:999px;cursor:pointer;
+  border:1px solid var(--border);background:var(--white);
+  font-size:13.5px;font-weight:600;color:var(--green-dark);
+  transition:background var(--t-fast,.2s) var(--ease),border-color var(--t-fast,.2s) var(--ease)
+}
+.trel:hover{background:var(--green-soft);border-color:rgba(42,74,62,.28)}
+
 .topic-foot{
+  flex:0 0 auto;
   display:flex;align-items:center;justify-content:space-between;
   gap:16px;flex-wrap:wrap;
-  padding-top:18px;border-top:1px solid var(--border)
+  padding:14px clamp(20px,4vw,30px);
+  border-top:1px solid var(--border);
+  background:var(--glass-light-solid,#fff);
+  box-shadow:0 -8px 24px rgba(20,30,25,.06)
 }
 .topic-count{font-size:13.5px;color:var(--grey);font-weight:500}
 .topic-count strong{color:var(--black);font-weight:700}
-.topic-foot .cta-btn{margin-top:0}
-@media(max-width:560px){
-  .topic-body{padding:20px 18px 22px}
-  .topic-body h2{font-size:25px}
+.topic-foot .cta-btn{margin-top:0;flex:0 0 auto}
+@media(max-width:620px){
+  .topic-overlay{padding:0}
+  .topic-modal{
+    width:100%;max-height:100dvh;height:100dvh;
+    border-radius:0;border:0
+  }
+  .topic-photo{height:clamp(180px,26vh,230px)}
+  .topic-foot{
+    padding:12px 18px calc(12px + env(safe-area-inset-bottom,0px));
+    flex-direction:column;align-items:stretch;gap:9px
+  }
+  .topic-count{text-align:center}
   .topic-foot .cta-btn{width:100%;justify-content:center}
+}
+@media(prefers-reduced-motion:reduce){
+  .thotel:hover{transform:none}
 }
 
 /* ============================================================
@@ -8199,16 +8372,20 @@ body,body.is-subpage{overflow-x:visible}
 <div class="auth-overlay topic-overlay" id="topicOverlay" hidden>
   <div class="auth-modal topic-modal" role="dialog" aria-modal="true" aria-labelledby="topicTitle">
     <button type="button" class="auth-close" id="topicClose" aria-label="Schließen">×</button>
-    <div class="topic-photo"><img id="topicImg" src="" alt=""><span class="topic-tag" id="topicTag" hidden></span></div>
-    <div class="topic-body">
-      <h2 id="topicTitle"></h2>
-      <div class="name-alt topic-alt" id="topicAlt" hidden></div>
-      <p class="topic-long" id="topicLong"></p>
-      <ul class="topic-points" id="topicPoints"></ul>
-      <div class="topic-foot">
-        <div class="topic-count" id="topicCount"></div>
-        <button type="button" class="cta-btn" id="topicGo">Hotels ansehen →</button>
+    <div class="topic-scroll" id="topicScroll" tabindex="-1">
+      <div class="topic-photo">
+        <img id="topicImg" src="" alt="">
+        <span class="topic-tag" id="topicTag" hidden></span>
+        <div class="topic-photo-head">
+          <h2 id="topicTitle"></h2>
+          <div class="name-alt topic-alt" id="topicAlt" hidden></div>
+        </div>
       </div>
+      <div class="topic-body" id="topicBody"></div>
+    </div>
+    <div class="topic-foot">
+      <div class="topic-count" id="topicCount"></div>
+      <button type="button" class="cta-btn" id="topicGo">Hotels ansehen →</button>
     </div>
   </div>
 </div>
@@ -8491,28 +8668,747 @@ body,body.is-subpage{overflow-x:visible}
   /* The long form of each category and region, kept beside the data
      rather than inside it so the match functions above stay
      readable. Shown in the detail dialog before anyone commits to a
-     filter — the point is to explain what the label actually means
-     in South Tyrol, not to repeat the one-liner. */
+     filter.
+
+     This is deliberately long. The dialog used to answer "what is
+     this called" with one sentence; a traveller deciding between
+     Gröden and Vinschgau, or between Wellness and Adults Only,
+     needs the trade-offs, the season, the practical catches and an
+     honest "this is not for you if". So each entry carries a lead,
+     hard facts, several sections, expectations, insider notes, a
+     fit/no-fit pair and pointers to the neighbouring topics. The
+     dialog scrolls — that is the point. */
   var CATEGORY_DETAIL={
-    "luxus":{long:"Fünf Sterne heißen in Südtirol selten Marmor und Lobby-Pianist. Die Häuser dieser Kategorie sind meist familiengeführt, oft seit drei Generationen, und setzen den Aufwand dorthin, wo man ihn spürt: in die Küche, in den Spa und in die Zahl der Mitarbeitenden pro Gast.",points:["Meist Halb- oder Vollpension mit eigener Handschrift","Spa-Bereiche mit Panorama statt Kellerlage","Persönlicher Service – man kennt deinen Namen"]},
-    "wellness":{long:"Wellness ist hier keine Zusatzausstattung, sondern der Grund für den Aufenthalt. Südtirol hat mit Thermalwasser in Meran, Latschenkiefer und Bergkräutern eine eigene Tradition – gute Häuser arbeiten damit, statt austauschbare Anwendungen anzubieten.",points:["Sauna-Landschaften, oft mit Außenbecken","Behandlungen mit regionalen Kräutern und Heu","Ruhezonen mit Blick, nicht ohne Fenster"]},
-    "berg":{long:"Direkt am Hang, am Ende des Tals oder auf der Alm: Häuser, bei denen der Weg zur Piste oder zum Wanderweg vor der Tür beginnt. Im Winter zählt der Skiraum, im Sommer die Wanderkarte an der Rezeption und jemand, der weiß, welche Hütte gerade offen hat.",points:["Ski- und Trockenraum, oft mit Depot","Wander- und Tourenberatung im Haus","Küche, die nach dem Berg satt macht"]},
-    "boutique":{long:"Kleine Häuser mit weniger als dreißig Zimmern, in denen jemand jeden Tag persönlich anwesend ist. Kein Konzept von der Stange – dafür Zimmer, die sich voneinander unterscheiden, und Gastgeber, die dir sagen, wo man wirklich essen geht.",points:["Wenige Zimmer, individuell eingerichtet","Gastgeber statt Rezeptionsschicht","Frühstück mit Produkten aus der Nachbarschaft"]},
-    "design":{long:"Architektur ist in Südtirol ein eigenes Thema: alte Bausubstanz trifft auf klare, zeitgenössische Eingriffe. Diese Häuser behandeln Material, Licht und Ausblick als Teil des Aufenthalts – Holz, Beton und Glas statt Dekoration.",points:["Zeitgenössische Architektur, oft preisgekrönt","Historische Substanz sichtbar belassen","Der Ausblick ist Teil des Grundrisses"]},
-    "familie":{long:"Platz ist das Entscheidende: Familienzimmer, Verbindungstüren und Betten, die man dazustellen kann. Dazu Häuser, die Kinder nicht nur dulden, sondern einplanen – mit Zeiten, Portionen und Wegen, die zu einem Familientag passen.",points:["Familienzimmer und verbundene Zimmer","Flexible Essenszeiten und Kinderportionen","Kurze Wege zu Bade- und Wandermöglichkeiten"]},
-    "adults-only":{long:"Häuser, die bewusst nur Erwachsene aufnehmen. Das Ergebnis ist vor allem eines: leise. Frühstück ohne Trubel, Spa ohne Wartezeit, Abende, die nicht um acht Uhr enden müssen – oft kombiniert mit Fine Dining und größeren Wellnessbereichen.",points:["Ruhe als ausdrücklicher Teil des Angebots","Meist größere Spa- und Rückzugsbereiche","Küche mit Zeit für lange Abende"]},
-    "nachhaltig":{long:"Nachhaltig heißt hier konkret: kurze Wege. Produkte von Höfen aus demselben Tal, Heizung aus Biomasse oder Fernwärme, eigener Garten. Südtirol ist klein genug, dass das keine Behauptung bleiben muss, sondern nachprüfbar ist.",points:["Regionale Küche mit Erzeugern aus der Umgebung","Eigener Garten oder Partnerhöfe im Tal","Ressourcenschonender Betrieb, oft zertifiziert"]}
+    "luxus":{
+      lead:"Fünf Sterne heißen in Südtirol selten Marmor und Lobby-Pianist. Die Häuser dieser Kategorie sind meist familiengeführt, oft seit drei Generationen, und setzen den Aufwand dorthin, wo man ihn spürt: in die Küche, in den Spa und in die Zahl der Mitarbeitenden pro Gast. Wer aus der Stadt kommt und internationale Kettenhotels gewohnt ist, merkt den Unterschied meist am zweiten Tag – wenn das Personal weiß, wie du deinen Kaffee trinkst.",
+      facts:[
+        {k:"Hausgröße",v:"meist 30–90 Zimmer"},
+        {k:"Verpflegung",v:"Frühstücksbuffet plus Mehrgang-Menü"},
+        {k:"Zimmergröße",v:"ab etwa 30 m², fast immer mit Balkon"},
+        {k:"Ideal für",v:"Paare, besondere Anlässe, längere Aufenthalte"}
+      ],
+      sections:[
+        {h:"Was Luxus hier tatsächlich bedeutet",p:"Der große Unterschied zu klassischen Grandhotels ist die Eigentümerstruktur. Fast alle Häuser dieser Kategorie gehören einer Familie, die selbst im Haus lebt und arbeitet. Das Geld fließt deshalb nicht in eine repräsentative Lobby, sondern in Dinge mit täglichem Nutzen: mehr Personal pro Gast, eine eigene Konditorei, ein Spa, der über Jahre gewachsen ist. Umgekehrt heißt das auch: du bekommst keine anonyme Perfektion, sondern eine Handschrift. Manche mögen genau das nicht."},
+        {h:"Am Tisch",p:"Halbpension ist in dieser Kategorie der Normalfall, nicht der Aufpreis. Abends erwartet dich meist ein Menü über fünf bis sieben Gänge mit Wahlmöglichkeiten, morgens ein Buffet, das eher Manufaktur als Großküche ist – eigenes Brot, Speck vom Metzger im Ort, Käse von der Sennerei im Tal. Südtirol hat gemessen an der Einwohnerzahl die höchste Dichte an Sterneküchen in Italien; einige davon stehen in genau diesen Hotels."},
+        {h:"Spa und Rückzug",p:"Wellnessbereiche sind hier großzügig und liegen fast nie im Keller: Panoramapools auf dem Dach, Saunahäuser im Garten, Ruheräume mit Fensterfront zum Berg. Viele Häuser haben zusätzlich private Spa-Suiten, die stundenweise gebucht werden – sinnvoll, wenn man in der Hochsaison wirklich allein sein will."},
+        {h:"Service, der Arbeit abnimmt",p:"Der praktische Wert liegt im Concierge: Tischreservierung in Hütten, die telefonisch schwer erreichbar sind, Skipass und Verleih im Haus, Shuttle zur Talstation, geführte Wanderungen mehrmals pro Woche. Wer im Urlaub nicht organisieren möchte, spart hier täglich eine Stunde Planung."},
+        {h:"Was das kostet – und was nicht",p:"Die Nachtpreise wirken im Vergleich hoch, enthalten aber in aller Regel Frühstück, Abendmenü, Spa-Nutzung und oft das Aktivprogramm. Rechnet man ein Abendessen und Spa-Eintritt gegen, verschiebt sich das Bild deutlich. In den Nebenzeiten – Ende November, März, Anfang Juli – liegen die Preise regelmäßig ein Drittel unter der Hochsaison."}
+      ],
+      points:[
+        "Halb- oder Vollpension mit eigener Handschrift statt Standardbuffet",
+        "Spa mit Panorama statt Kellerlage, oft mit Außenpool",
+        "Personal, das deinen Namen und deine Gewohnheiten kennt",
+        "Concierge organisiert Hütten, Tische, Skipässe und Transfers",
+        "Zimmer ab etwa 30 m², meist mit Südbalkon",
+        "Weinkarte mit Tiefe in Südtiroler Lagen – Lagrein, Vernatsch, Sylvaner"
+      ],
+      tips:[
+        "Vergleiche keine reinen Übernachtungspreise: Halbpension und Spa sind meist enthalten.",
+        "Viele Häuser schließen im November und für einige Wochen nach Ostern komplett.",
+        "In der Hochsaison ist ein Mindestaufenthalt von drei bis sieben Nächten üblich.",
+        "Anreise am Sonntag oder Montag ist oft günstiger als am Samstag."
+      ],
+      fitYes:[
+        "Du willst dich im Urlaub um gar nichts kümmern müssen",
+        "Essen und Spa sind Teil der Reise, nicht Beiwerk",
+        "Du bleibst mehrere Nächte am selben Ort"
+      ],
+      fitNo:[
+        "Du bist täglich unterwegs und nur zum Schlafen im Haus",
+        "Du willst abends flexibel und spontan auswärts essen",
+        "Feste Essenszeiten stören dich"
+      ],
+      related:[{kind:"cat",key:"wellness"},{kind:"cat",key:"adults-only"},{kind:"cat",key:"design"}]
+    },
+    "wellness":{
+      lead:"Wellness ist hier keine Zusatzausstattung, sondern der Grund für den Aufenthalt. Südtirol hat mit Thermalwasser in Meran, Latschenkiefer, Heu und Bergkräutern eine eigene Tradition, die älter ist als der Begriff Wellness – gute Häuser arbeiten damit, statt austauschbare Anwendungen aus dem Katalog anzubieten. Der Unterschied zeigt sich an der Behandlungskarte: steht dort Heubad aus Völs, ist jemand am Werk, der die Gegend kennt.",
+      facts:[
+        {k:"Spa-Fläche",v:"meist 800–3.000 m²"},
+        {k:"Saunen",v:"Finnisch, Bio, Dampfbad, oft mit Panorama"},
+        {k:"Anwendungen",v:"25–80 Minuten, Vorabbuchung empfohlen"},
+        {k:"Ideal für",v:"Paare, Alleinreisende, Regen- und Winterwochen"}
+      ],
+      sections:[
+        {h:"Woher die Tradition kommt",p:"Drei Dinge prägen den Südtiroler Spa. Erstens das Thermalwasser von Meran, das seit dem 19. Jahrhundert genutzt wird und der Stadt den Status als Kurort gab. Zweitens das Heubad, das in Völs am Schlern seit über hundert Jahren praktiziert wird – Bergheu mit seinen Gräsern und Kräutern, erwärmt, als Wickel. Drittens die Latschenkiefer, deren Öl in fast jeder Sauna und jeder Massage dieses Landes auftaucht. Wer das erste Mal hier ist, sollte mindestens eine dieser drei Anwendungen ausprobieren, statt zur klassischen Rückenmassage zu greifen."},
+        {h:"Wie ein Spa-Tag abläuft",p:"Der Rhythmus ist in fast allen Häusern ähnlich: vormittags ruhig, weil die meisten Gäste unterwegs sind, ab dem späten Nachmittag füllt es sich. Aufgüsse laufen nach Plan, meist stündlich zwischen 15 und 20 Uhr, oft von einem Saunameister zelebriert. Zwischen den Gängen gehören Ruhephasen dazu – die Ruheräume mit Blick sind nicht Dekoration, sondern der eigentliche Zweck. Wer die Anwendung auf den späten Vormittag legt, hat den Spa fast für sich."},
+        {h:"Wasser",p:"Innen- und Außenpool sind Standard, meist ganzjährig auf 30 bis 34 Grad beheizt. Dazu kommen je nach Haus: Solebecken mit höherem Salzgehalt, Naturbadeteiche ohne Chlor, Sky-Pools mit Glasboden über der Dachkante, Kneipp-Becken. Im Winter ist der beheizte Außenpool bei Schneefall die zuverlässigste Urlaubserinnerung, die ein Hotel produzieren kann."},
+        {h:"Behandlungen, die es woanders nicht gibt",p:"Neben Klassikern findest du regionale Anwendungen: Heubad, Latschenkiefer-Packung, Molkebad, Apfelpeeling aus dem Etschtal, Massagen mit Bergkräuteröl, Bäder mit Zirbenholzessenz. Viele Häuser arbeiten mit Südtiroler Kosmetiklinien, die ihre Rohstoffe im Land beziehen. Preise liegen üblicherweise zwischen 60 und 140 Euro pro Anwendung."},
+        {h:"Ruhe herstellen",p:"Der wichtigste Faktor für einen guten Spa-Aufenthalt ist nicht die Quadratmeterzahl, sondern die Belegung. Kleine Häuser mit gutem Spa fühlen sich oft besser an als große mit dreimal so viel Fläche. Achte auf das Verhältnis Zimmer zu Spa-Fläche und darauf, ob es getrennte Adults-Only-Zonen oder -Zeiten gibt."}
+      ],
+      points:[
+        "Sauna-Landschaften, häufig mit Außenbereich und Panoramafenster",
+        "Behandlungen mit Bergkräutern, Heu und Latschenkiefer",
+        "Ruhezonen mit Blick, nicht fensterlose Kellerräume",
+        "Innen- und Außenpool, meist ganzjährig beheizt",
+        "Bademantel, Slipper und Saunatuch liegen im Zimmer bereit",
+        "Oft eigene Adults-Only-Zeiten oder -Bereiche im Spa"
+      ],
+      tips:[
+        "Anwendungen möglichst bei der Buchung reservieren – gute Häuser sind in der Hochsaison voll.",
+        "Aufgüsse laufen nach festem Plan; der Zettel hängt am Saunaeingang.",
+        "In den meisten Saunabereichen ist Textilfreiheit üblich, ein Handtuch aber Pflicht.",
+        "Frage vor der Buchung nach Kinderzeiten im Spa, wenn du Ruhe suchst.",
+        "Am Anreisetag ist der Spa meist ab Mittag nutzbar, auch wenn das Zimmer noch nicht frei ist."
+      ],
+      fitYes:[
+        "Du willst mindestens einen ganzen Tag im Haus verbringen",
+        "Schlechtes Wetter soll den Urlaub nicht kippen",
+        "Du reist im Winter oder in der Nebensaison"
+      ],
+      fitNo:[
+        "Du bist von früh bis spät draußen unterwegs",
+        "Du bleibst nur eine Nacht – der Spa rechnet sich dann nicht",
+        "Große Wasserwelten mit Betrieb sind dir zu unruhig"
+      ],
+      related:[{kind:"cat",key:"adults-only"},{kind:"cat",key:"luxus"},{kind:"cat",key:"nachhaltig"}]
+    },
+    "berg":{
+      lead:"Direkt am Hang, am Ende des Tals oder auf der Alm: Häuser, bei denen der Weg zur Piste oder zum Wanderweg vor der Tür beginnt und nicht nach zwanzig Minuten Autofahrt. Im Winter zählt der Skiraum, im Sommer die Wanderkarte an der Rezeption und jemand, der weiß, welche Hütte gerade offen hat und wo oben noch Schnee liegt.",
+      facts:[
+        {k:"Höhenlage",v:"meist 900–2.000 m"},
+        {k:"Saison",v:"Dezember–April und Juni–Oktober"},
+        {k:"Anreise",v:"Auto, Skibus, teils nur per Seilbahn"},
+        {k:"Ideal für",v:"Wanderer, Skifahrer, Familien mit älteren Kindern"}
+      ],
+      sections:[
+        {h:"Warum die Lage alles entscheidet",p:"Ein Berghotel bemisst sich an Metern, nicht an Sternen. Liegt das Haus an der Piste, sparst du morgens Anfahrt, Parkplatzsuche und das Schleppen der Ausrüstung – bei einer Woche Skiurlaub summiert sich das auf Stunden. Im Sommer gilt dasselbe für Wanderwege: Häuser am Talschluss oder auf einem Plateau setzen dich direkt auf den Weg, statt dass der Tag mit einer Serpentinenfahrt beginnt."},
+        {h:"Winter",p:"Südtirol gehört zum Dolomiti Superski, einem Verbund aus zwölf Skigebieten mit rund 1.200 Pistenkilometern auf einem Skipass. Die bekannteste Runde ist die Sellaronda, eine Umrundung des Sellastocks über vier Pässe, die man an einem Tag in beide Richtungen fahren kann. Ein gutes Berghotel hat einen beheizten Skiraum mit Schuhtrocknern, oft ein Depot direkt an der Talstation und einen Shuttle, der auch bei Neuschnee fährt."},
+        {h:"Sommer",p:"Von Juni bis Oktober verschiebt sich alles nach draußen: markierte Wege in allen Schwierigkeitsgraden, Klettersteige, die auf die Dolomitenfront des Ersten Weltkriegs zurückgehen, E-Bike-Verleih im Haus, Almhütten mit Selbstgemachtem. Viele Häuser bieten geführte Touren an mehreren Tagen pro Woche an – der schnellste Weg, die Gegend zu verstehen, wenn man zum ersten Mal da ist."},
+        {h:"Was auf den Tisch kommt",p:"Die Küche folgt dem Tagespensum: Speckknödel, Schlutzkrapfen, Gerstsuppe, Kaiserschmarrn, dazu Marende und Jause am Nachmittag. In höheren Lagen ist die Halbpension oft die einzige realistische Option, weil das nächste Restaurant im Tal liegt – was kein Nachteil sein muss, aber eingeplant gehört."},
+        {h:"Die Zwischenzeiten",p:"Im November und von Mitte April bis Anfang Juni sind viele Bergbahnen außer Betrieb, Hütten geschlossen und ein Teil der Häuser in Revision. Wer in dieser Zeit reist, bekommt sehr niedrige Preise und sehr leere Täler – aber auch eingeschränkte Möglichkeiten. Prüfe vorher die Öffnungszeiten der Bahnen, sie stehen auf den Seiten der Skigebiete."}
+      ],
+      points:[
+        "Ski- und Trockenraum, oft mit Depot an der Talstation",
+        "Wander- und Tourenberatung durch Leute, die die Wege selbst gehen",
+        "Küche, die nach einem langen Tag am Berg tatsächlich satt macht",
+        "Skibus oder Hotelshuttle zur nächsten Bahn",
+        "Karten, Wetterbericht und Lawinenlage am Morgen an der Rezeption",
+        "Bergblick aus dem Zimmer statt aus dem Frühstücksraum"
+      ],
+      tips:[
+        "Bergbahnen haben zwischen den Saisonen zu – Öffnungszeiten vor der Buchung prüfen.",
+        "Im Winter sind Winterreifen Pflicht, Schneeketten je nach Zufahrt sinnvoll.",
+        "Beliebte Hütten für das Mittagessen am Vortag reservieren, vor allem im August.",
+        "Ein Zimmer nach Süden ist im Winter deutlich heller und wärmer.",
+        "Gewitter kommen im Sommer meist am frühen Nachmittag – Touren früh starten."
+      ],
+      fitYes:[
+        "Du willst morgens ohne Auto auf Piste oder Weg stehen",
+        "Aktive Tage sind der Kern deines Urlaubs",
+        "Dir ist Aussicht wichtiger als Nachtleben"
+      ],
+      fitNo:[
+        "Du willst abends zwischen Restaurants wählen",
+        "Serpentinen und Höhenlagen sind dir unangenehm",
+        "Du reist in der Zwischensaison und erwartest offene Bahnen"
+      ],
+      related:[{kind:"cat",key:"familie"},{kind:"cat",key:"nachhaltig"},{kind:"cat",key:"wellness"}]
+    },
+    "boutique":{
+      lead:"Kleine Häuser, in denen jemand jeden Tag persönlich anwesend ist. Kein Konzept von der Stange – dafür Zimmer, die sich voneinander unterscheiden, und Gastgeber, die dir sagen, wo man wirklich essen geht, welcher Weg gerade begehbar ist und welcher Winzer im Dorf Besuch empfängt. Der Preis dafür sind fehlende Standardleistungen: keine Rezeption rund um die Uhr, nicht immer ein Lift, selten ein großer Spa.",
+      facts:[
+        {k:"Zimmerzahl",v:"meist 8–30"},
+        {k:"Frühstück",v:"à la carte oder kleines, sehr gutes Buffet"},
+        {k:"Check-in",v:"persönlich, oft durch die Inhaberfamilie"},
+        {k:"Ideal für",v:"Paare, Städtereisen, kurze Aufenthalte"}
+      ],
+      sections:[
+        {h:"Größe als Konzept",p:"Unter dreißig Zimmern verändert sich die Logik eines Hotels. Es gibt keine Schichtübergabe, in der Informationen verloren gehen, und keine Standardisierung, die jedes Zimmer gleich macht. Stattdessen: unterschiedliche Grundrisse, Zimmer mit Dachschräge neben solchen mit Erker, ein Frühstücksraum, der abends zur Bar wird. Das ist charmant, aber es heißt auch, dass die Zimmerkategorie mehr Bedeutung hat als anderswo – frag nach, welches Zimmer du bekommst."},
+        {h:"Wer dich empfängt",p:"In dieser Kategorie ist der Gastgeber der wichtigste Ausstattungsgegenstand. Menschen, die im Ort aufgewachsen sind, kennen die Öffnungszeiten der Buschenschank, den Bäcker, der um sechs aufmacht, und den Weg, der gerade nicht wegen Holzarbeiten gesperrt ist. Diese Auskünfte sind praktisch mehr wert als ein Concierge-Schalter, weil sie aktuell und ehrlich sind."},
+        {h:"Frühstück als Visitenkarte",p:"Weil das Abendessen häufig nicht angeboten wird, wandert der ganze kulinarische Ehrgeiz ins Frühstück: eigenes Brot oder das des Bäckers zwei Häuser weiter, Speck vom Metzger im Dorf, Eier aus dem Nachbarhof, Marmelade aus dem eigenen Garten, Kaffee, der ernst genommen wird. Häufig wird à la carte serviert statt am Buffet – langsamer, aber besser."},
+        {h:"Was oft fehlt",p:"Sei realistisch: viele dieser Häuser sind Altbauten. Das bedeutet manchmal keinen Lift, schmale Treppen, hellhörige Wände und begrenzte Parkplätze. Es gibt selten einen großen Wellnessbereich, oft aber eine kleine Sauna. Wenn du auf Barrierefreiheit, Klimaanlage oder späten Check-in angewiesen bist, kläre das vor der Buchung – nachträglich lässt sich das in einem denkmalgeschützten Haus nicht lösen."},
+        {h:"Wo sie stehen",p:"Boutiquehotels liegen in Südtirol typischerweise in den Altstädten von Meran, Bozen, Brixen und Klausen oder in Weindörfern wie Kaltern, Tramin und Girlan. Damit sind sie die naheliegende Wahl für eine Städtereise, für Weinwochenenden im Herbst und für alle, die abends zu Fuß essen gehen wollen."}
+      ],
+      points:[
+        "Wenige Zimmer, jedes anders eingerichtet",
+        "Gastgeber statt Rezeptionsschicht – mit echten Tipps",
+        "Frühstück mit Produkten aus der unmittelbaren Nachbarschaft",
+        "Meist zentrale Lage in Altstädten oder Weindörfern",
+        "Oft historische Bausubstanz mit sichtbaren Details",
+        "Kleine Sauna statt großem Spa"
+      ],
+      tips:[
+        "Ohne 24-Stunden-Rezeption: Ankunftszeit unbedingt vorher abstimmen.",
+        "Wenige Zimmer heißt früh buchen – Wochenenden sind Monate im Voraus weg.",
+        "Nach Lift, Parkplatz und Klimaanlage fragen, wenn eines davon wichtig ist.",
+        "Zimmer zur Straße können in Altstädten laut sein; nach hinten raus lohnt den Aufpreis.",
+        "Viele Häuser haben Ruhetage oder schließen im Winter für mehrere Wochen."
+      ],
+      fitYes:[
+        "Du willst persönlichen Kontakt statt Abläufe",
+        "Du gehst abends gern auswärts essen",
+        "Individuelle Zimmer sind dir lieber als Standard"
+      ],
+      fitNo:[
+        "Du brauchst Barrierefreiheit oder späten Check-in",
+        "Ein großer Wellnessbereich ist dir wichtig",
+        "Du reist mit kleinen Kindern und brauchst Platz"
+      ],
+      related:[{kind:"cat",key:"design"},{kind:"cat",key:"luxus"},{kind:"cat",key:"nachhaltig"}]
+    },
+    "design":{
+      lead:"Architektur ist in Südtirol ein eigenes Thema und wird hier ungewöhnlich ernst genommen: alte Bausubstanz trifft auf klare, zeitgenössische Eingriffe, geplant von Büros, die im Land sitzen und die Baukultur kennen. Diese Häuser behandeln Material, Licht und Ausblick als Teil des Aufenthalts – Holz, Sichtbeton und Glas statt Dekoration.",
+      facts:[
+        {k:"Bauzeit",v:"Neubau oder Umbau, meist nach 2010"},
+        {k:"Zimmer",v:"18–45 m², oft mit offenem Bad"},
+        {k:"Material",v:"Zirbe, Lärche, Sichtbeton, Glas, Naturstein"},
+        {k:"Ideal für",v:"Architekturinteressierte, Paare, Städtereisen"}
+      ],
+      sections:[
+        {h:"Warum ausgerechnet hier",p:"Südtirol hat eine ausgeprägte zeitgenössische Baukultur – gefördert durch Architekturpreise, eine strenge Bauordnung und Bauherren, die bereit sind, in Substanz zu investieren. Das Ergebnis sieht man nicht nur an Hotels, sondern auch an Kellereien, Bergstationen und Museen. Für Reisende heißt das: Ein Design Hotel ist hier meist kein Interior-Styling, sondern ein Gebäude, das jemand durchdacht hat."},
+        {h:"Alt und neu nebeneinander",p:"Der typische Südtiroler Zugang ist der Eingriff in Bestehendes. Ein Hof aus dem 16. Jahrhundert bekommt einen Kern aus Beton, ein Stadel wird zum Zimmertrakt mit raumhoher Verglasung, eine Gaststube bleibt in Originalholz stehen, während der Anbau bewusst als neu erkennbar ist. Man sieht die Nahtstelle – das ist Absicht, nicht Schlamperei."},
+        {h:"Material, das man anfasst",p:"Zirbenholz, das nach Harz riecht und dem man Schlafqualität nachsagt, geölte Lärche für Fassaden, Beton mit sichtbarer Schalungsstruktur, Laaser Marmor aus dem Vinschgau, Wolle und Loden als Textilien. Die Palette ist regional, weil die Materialien hier verfügbar sind – nicht als Marketingargument, sondern aus Logistik."},
+        {h:"Der Ausblick ist Teil des Grundrisses",p:"Das verbindende Merkmal dieser Häuser sind Fensteröffnungen, die eine Entscheidung darstellen: ein breites Panoramafenster auf die Dolomiten, ein schmaler Schlitz auf den Kirchturm, eine Loggia, die den Wind draußen hält. Wo andernorts der Balkon eine Standardgröße hat, ist er hier ein Raum."},
+        {h:"Die Kehrseite",p:"Offene Bäder und harte Oberflächen sehen gut aus und dämpfen wenig Schall – wer hellhörig ist, sollte nachfragen. Große Südverglasungen heizen im Sommer auf, wenn keine Kühlung oder Verschattung vorhanden ist. Und Reduktion heißt manchmal: wenig Stauraum. Das sind lösbare Fragen, aber sie gehören vor die Buchung."}
+      ],
+      points:[
+        "Zeitgenössische Architektur, häufig ausgezeichnet",
+        "Historische Substanz sichtbar belassen statt überformt",
+        "Der Ausblick ist im Grundriss geplant, nicht zufällig",
+        "Regionale Materialien: Zirbe, Lärche, Marmor, Loden",
+        "Reduzierte Zimmer mit wenigen, guten Stücken",
+        "Meist auch gastronomisch mit Anspruch"
+      ],
+      tips:[
+        "Offenes Bad im Zimmer ist verbreitet – wenn du das nicht willst, vorher prüfen.",
+        "Nach Klimatisierung oder Verschattung fragen, wenn du im Hochsommer kommst.",
+        "Die Zimmerkategorien unterscheiden sich stark; Fotos der konkreten Kategorie anfordern.",
+        "Viele dieser Häuser sind klein und über Monate ausgebucht."
+      ],
+      fitYes:[
+        "Du achtest auf Räume, Material und Licht",
+        "Ein Haus darf Haltung haben, auch unbequeme",
+        "Du reist zu zweit und bleibst zwei bis vier Nächte"
+      ],
+      fitNo:[
+        "Du willst viel Stauraum und klassischen Komfort",
+        "Offene Bäder und Sichtbeton sind dir zu kühl",
+        "Du reist mit kleinen Kindern"
+      ],
+      related:[{kind:"cat",key:"boutique"},{kind:"cat",key:"luxus"},{kind:"cat",key:"nachhaltig"}]
+    },
+    "familie":{
+      lead:"Platz ist das Entscheidende: Familienzimmer, Verbindungstüren und Betten, die man dazustellen kann. Dazu Häuser, die Kinder nicht nur dulden, sondern einplanen – mit Essenszeiten, Portionen, Betreuung und Wegen, die zu einem Familientag passen. Südtirol ist dafür geografisch im Vorteil: kurze Distanzen, viele Bergbahnen und Täler, in denen sich in zehn Minuten alles erreichen lässt.",
+      facts:[
+        {k:"Zimmer",v:"Familienzimmer 25–45 m², oft mit zweitem Raum"},
+        {k:"Betreuung",v:"in vielen Häusern an mehreren Tagen pro Woche"},
+        {k:"Ermäßigung",v:"nach Alter gestaffelt, meist bis 12 Jahre"},
+        {k:"Ideal für",v:"Familien mit Kindern jeden Alters"}
+      ],
+      sections:[
+        {h:"Platz im Zimmer",p:"Der wichtigste Unterschied ist der Grundriss. Ein echtes Familienzimmer hat entweder einen abgetrennten zweiten Schlafbereich oder eine Verbindungstür zum Nachbarzimmer – beides ermöglicht, dass Kinder um acht schlafen und Erwachsene noch wach sind. Zustellbetten in einem Raum sind die günstigere, aber deutlich engere Variante. Frag konkret nach dem Grundriss, die Bezeichnungen sind nicht einheitlich."},
+        {h:"Der Tagesablauf",p:"Familienhotels arbeiten mit vorgezogenen Essenszeiten, Kinderportionen und einem Buffet, das auch für Fünfjährige funktioniert. Betreuung gibt es in vielen Häusern ab etwa drei Jahren, an mehreren Tagen pro Woche, häufig vor- und nachmittags. Manche Häuser bieten Babyphone, Fläschchenwärmer und Windeleimer serienmäßig – erspart Gepäck."},
+        {h:"Was draußen wartet",p:"Südtirol ist für Familien ungewöhnlich gut erschlossen: Bergbahnen, die einen Höhenweg in Kinderwagenqualität eröffnen, Sommerrodelbahnen, Wasserspielplätze an Bächen, Almen mit Tieren, Badeseen wie der Kalterer See, der im Sommer über 20 Grad hat. Im Winter sind die Skischulen gut organisiert, mit Kinderland an der Talstation."},
+        {h:"Was es kostet",p:"Kinderpreise sind fast immer altersabhängig und werden pro Nacht als Prozentsatz oder Festbetrag berechnet. Kleinkinder sind in vielen Häusern kostenlos, Schulkinder zahlen anteilig, ab etwa 12 bis 14 Jahren gilt oft der Erwachsenenpreis. Nenne bei der Anfrage das exakte Alter zum Reisezeitpunkt – Angebote unterscheiden sich dadurch deutlich."},
+        {h:"Wann reisen",p:"Die Sommerferien liegen in Italien, Deutschland und Österreich versetzt. Ende Juni und die erste Juliwoche sind dadurch spürbar ruhiger und günstiger als August. Im Winter sind die Wochen um Weihnachten und Fasching Spitzenzeiten; die zweite Januarhälfte ist die entspannteste Zeit auf den Pisten."}
+      ],
+      points:[
+        "Familienzimmer und verbundene Zimmer statt Zustellbett im Einzelraum",
+        "Flexible, meist vorgezogene Essenszeiten und Kinderportionen",
+        "Betreuung an mehreren Tagen pro Woche, oft ab drei Jahren",
+        "Ausstattung für Babys ohne Aufpreis – Bett, Wärmer, Babyphone",
+        "Kurze Wege zu Bergbahn, Badeplatz und Spielplatz",
+        "Kinderbecken oder eigener Familienbereich im Spa"
+      ],
+      tips:[
+        "Bei der Anfrage das genaue Kindesalter angeben – davon hängt der Preis ab.",
+        "Ende Juni ist wegen versetzter Ferien oft günstiger und leerer als August.",
+        "Die Gästekarte gilt in weiten Teilen Südtirols für Busse und Züge – auch für Kinder.",
+        "Nach getrennten Ruhezeiten fragen, wenn ihr abends noch Spa nutzen wollt.",
+        "Kinderwagen: viele Höhenwege sind befahrbar, die Bergbahn-Websites weisen es aus."
+      ],
+      fitYes:[
+        "Ihr reist mit Kindern und braucht zwei getrennte Schlafbereiche",
+        "Ein Teil des Tages soll ohne Planung funktionieren",
+        "Kurze Wege sind euch wichtiger als Exklusivität"
+      ],
+      fitNo:[
+        "Du suchst absolute Ruhe im Haus",
+        "Feste Essenszeiten passen euch nicht",
+        "Ihr wollt jeden Abend auswärts essen"
+      ],
+      related:[{kind:"cat",key:"berg"},{kind:"cat",key:"nachhaltig"},{kind:"cat",key:"wellness"}]
+    },
+    "adults-only":{
+      lead:"Häuser, die bewusst nur Erwachsene aufnehmen. Das Ergebnis ist vor allem eines: leise. Frühstück ohne Trubel, Spa ohne Wartezeit an der Sauna, Abende, die nicht um acht enden müssen – oft kombiniert mit Fine Dining und größeren Wellnessbereichen, weil die Fläche nicht für Kinderbecken gebraucht wird.",
+      facts:[
+        {k:"Mindestalter",v:"je nach Haus 12, 14, 16 oder 18 Jahre"},
+        {k:"Atmosphäre",v:"ruhig, ohne Kinderbereiche"},
+        {k:"Verpflegung",v:"meist Halbpension mit Abendmenü"},
+        {k:"Ideal für",v:"Paare, Alleinreisende, kleine Gruppen"}
+      ],
+      sections:[
+        {h:"Warum Häuser das machen",p:"Adults Only ist in Südtirol seltener eine Marketingentscheidung als eine bauliche. Wer keinen Kinderbereich, keinen Betreuungsraum und keine zweite Essenszeit vorhalten muss, kann dieselbe Fläche in Spa, Ruhezonen und Küche stecken. Deshalb überschneidet sich diese Kategorie stark mit Wellness und Fine Dining – nicht zufällig, sondern weil dieselbe Fläche anders genutzt wird."},
+        {h:"Was sich im Alltag ändert",p:"Am deutlichsten merkt man es im Spa und beim Frühstück. Kein Anstehen an der Sauna, keine Wartezeit an der Kaffeemaschine, Liegen, die nicht belegt sind. Am Abend wird meist über zwei bis drei Stunden serviert statt in einem engen Fenster, weil niemand Kinder ins Bett bringen muss. Insgesamt verschiebt sich der Rhythmus des Hauses um ein bis zwei Stunden nach hinten."},
+        {h:"Das Mindestalter genau prüfen",p:"Es gibt keinen einheitlichen Standard. Manche Häuser nehmen ab 12 Jahren auf, andere erst ab 18. Wieder andere sind nur im Spa Adults Only, im übrigen Haus aber offen für alle – was einen erheblichen Unterschied macht. Diese Angabe steht nicht immer prominent; frag im Zweifel direkt nach."},
+        {h:"Nicht gleichbedeutend mit teuer",p:"Adults Only sagt nichts über die Preisklasse. Es gibt kleine, ruhige Häuser mit vier Sternen und moderaten Preisen ebenso wie große Spa-Resorts im oberen Segment. Der gemeinsame Nenner ist die Ruhe, nicht das Budget."},
+        {h:"Wann es sich besonders lohnt",p:"In den Ferienzeiten. Im August und um Weihnachten ist der Unterschied zwischen einem Adults-Only-Haus und einem gemischten Haus am größten – dann kostet die Kategorie zwar am meisten, liefert aber auch am meisten. In der Nebensaison ist der Vorteil kleiner, weil ohnehin weniger los ist."}
+      ],
+      points:[
+        "Ruhe als ausdrücklicher Teil des Angebots, nicht als Zufall",
+        "Meist größere Spa- und Rückzugsbereiche",
+        "Küche mit Zeit für lange Abende und späteres Servierfenster",
+        "Keine Wartezeiten an Sauna, Pool und Buffet",
+        "Häufig private Spa-Suiten stundenweise buchbar",
+        "Erwachsenengerechte Zimmer statt Familienlayouts"
+      ],
+      tips:[
+        "Das Mindestalter unterscheidet sich stark – vor der Buchung nachlesen.",
+        "Manche Häuser sind nur im Spa Adults Only; das ist ein anderer Aufenthalt.",
+        "Der Vorteil ist in den Schulferien am größten, in der Nebensaison am kleinsten.",
+        "Halbpension ist hier fast immer sinnvoll, weil das Abendessen zum Konzept gehört."
+      ],
+      fitYes:[
+        "Ruhe ist der Hauptgrund deiner Reise",
+        "Du reist zu zweit oder allein",
+        "Du willst den Spa auch nachmittags leer vorfinden"
+      ],
+      fitNo:[
+        "Ihr reist mit Kindern oder Jugendlichen",
+        "Ihr wollt euch der Familie unterwegs anschließen",
+        "Du suchst ein lebhaftes, geselliges Haus"
+      ],
+      related:[{kind:"cat",key:"wellness"},{kind:"cat",key:"luxus"},{kind:"cat",key:"design"}]
+    },
+    "nachhaltig":{
+      lead:"Nachhaltig heißt hier vor allem eines: kurze Wege. Produkte von Höfen aus demselben Tal, Heizung aus Biomasse oder Fernwärme, ein eigener Garten hinter dem Haus. Südtirol ist klein genug, dass das keine Behauptung bleiben muss, sondern nachprüfbar ist – man kann den Hof besuchen, dessen Käse morgens auf dem Frühstücksbrett liegt.",
+      facts:[
+        {k:"Zertifikate",v:"KlimaHaus, KlimaHotel, Bio-Hotel, Roter Hahn"},
+        {k:"Küche",v:"Erzeuger meist aus demselben oder benachbarten Tal"},
+        {k:"Energie",v:"Biomasse-Fernwärme, Photovoltaik, Wärmepumpe"},
+        {k:"Ideal für",v:"alle, die kurze Wege dem Etikett vorziehen"}
+      ],
+      sections:[
+        {h:"Was konkret dahintersteckt",p:"In Südtirol ist Nachhaltigkeit stärker institutionalisiert als in vielen anderen Alpenregionen. Die KlimaHaus-Agentur in Bozen zertifiziert seit den 2000er-Jahren die Energieeffizienz von Gebäuden, das darauf aufbauende KlimaHotel bewertet zusätzlich Betrieb, Beschaffung und Mobilität. Viele Dörfer heizen über gemeinschaftliche Biomasse-Fernheizwerke mit Hackgut aus der regionalen Waldpflege. Das sind überprüfbare Fakten, keine Selbstbeschreibungen."},
+        {h:"Auf dem Teller",p:"Der sichtbarste Teil ist die Küche. Käse aus der Sennerei im Tal, Speck vom Metzger im Ort, Eier und Gemüse von Höfen im Umkreis weniger Kilometer, Wein von Genossenschaften, an denen die Bauern des Dorfes beteiligt sind. Gute Häuser nennen die Erzeuger namentlich auf der Karte – das ist der einfachste Test für die Ernsthaftigkeit."},
+        {h:"Energie und Haus",p:"Typische Maßnahmen: Dämmung und Fenster nach KlimaHaus-Standard, Photovoltaik auf dem Dach, Wärmerückgewinnung im Spa, Heizung ohne Öl, keine Einwegverpackungen im Bad, Wasser aus der eigenen Quelle in Glasflaschen statt Plastik. Bei Neubauten und Sanierungen der letzten Jahre ist das inzwischen weitgehend Standard."},
+        {h:"Ohne Auto unterwegs",p:"Der größte Hebel einer Reise ist die Anreise. Südtirol ist über die Brennerbahn direkt aus München, Innsbruck und Verona erreichbar; von Bozen aus fahren Regionalzüge nach Meran, Brixen, Bruneck und in den Vinschgau. Die Gästekarte, die viele Häuser ausgeben, gilt für Busse und Züge im ganzen Land. Wer mit der Bahn kommt, braucht vor Ort in vielen Regionen kein Auto."},
+        {h:"Woran du echte von behaupteter Nachhaltigkeit unterscheidest",p:"Frag nach drei Dingen: Wie wird geheizt? Welche Erzeuger beliefern die Küche, mit Namen? Gibt es eine Zertifizierung, und welche Stufe? Häuser, die das beantworten können, meinen es ernst. Wer stattdessen von Naturverbundenheit spricht und Handtuchkarten erwähnt, meint etwas anderes."}
+      ],
+      points:[
+        "Regionale Küche mit namentlich genannten Erzeugern",
+        "Eigener Garten oder feste Partnerhöfe im Tal",
+        "Heizung aus Biomasse, Fernwärme oder Wärmepumpe",
+        "Zertifizierung nach KlimaHaus, KlimaHotel oder Bio-Hotel",
+        "Wasser aus der Quelle statt Plastikflaschen im Zimmer",
+        "Gästekarte für Bus und Bahn im ganzen Land"
+      ],
+      tips:[
+        "Zertifikate sagen mehr als Formulierungen – nach der KlimaHaus-Stufe fragen.",
+        "Mit Bahn und Gästekarte kommst du in Südtirol fast überall ohne Auto hin.",
+        "Wer im Tal bleibt statt täglich weite Ausflüge zu fahren, spart am meisten ein.",
+        "Nebensaison entlastet die Orte spürbar – und ist günstiger."
+      ],
+      fitYes:[
+        "Du willst wissen, woher das Essen kommt",
+        "Du reist mit der Bahn oder bleibst in einem Tal",
+        "Regionale Wertschöpfung ist dir ein echtes Kriterium"
+      ],
+      fitNo:[
+        "Du erwartest internationale Buffets zu jeder Zeit",
+        "Du willst jeden Tag mit dem Auto quer durchs Land",
+        "Klimaanlage und Poolbetrieb rund um die Uhr sind dir wichtig"
+      ],
+      related:[{kind:"cat",key:"berg"},{kind:"cat",key:"boutique"},{kind:"cat",key:"familie"}]
+    }
   };
 
   var REGION_DETAIL={
-    "Meran":{long:"Meran liegt auf nur 325 Metern und ist damit der wärmste Ort der Liste – Palmen an der Kurpromenade, Weinberge an den Hängen, Apfelgärten im Talboden. Die Therme mitten in der Stadt und die Gärten von Schloss Trauttmansdorff machen die Stadt auch dann zum Ziel, wenn oben noch Schnee liegt.",points:["Therme Meran mitten im Zentrum","Weinberge und Apfelgärten rund um die Stadt","Milde Monate, wenn die Berge noch Winter haben"]},
-    "Bozen":{long:"Die Landeshauptstadt ist der Punkt, an dem Südtirol am italienischsten wird: Lauben, Espresso im Stehen, Obstmarkt am Vormittag. Gleichzeitig steht im Archäologiemuseum Ötzi, und in dreißig Minuten Seilbahn ist man auf einem Hochplateau mit Almwiesen.",points:["Altstadt mit Lauben und Obstmarkt","Ötzi im Südtiroler Archäologiemuseum","Seilbahnen aufs Ritten- und Salten-Plateau"]},
-    "Dolomiten":{long:"UNESCO-Weltnaturerbe und der Grund, warum viele überhaupt kommen. Der helle Dolomit lässt die Wände bei Sonnenuntergang rot aufleuchten – die Enrosadira, für die es im Ladinischen einen eigenen Namen gibt. Wandern, Klettersteige und im Winter die Sellaronda.",points:["UNESCO-Weltnaturerbe seit 2009","Enrosadira: das Alpenglühen der Dolomiten","Sellaronda und Klettersteige direkt vor der Tür"]},
-    "Gröden":{long:"Ein ladinisches Tal mit drei Orten – St. Ulrich, St. Christina, Wolkenstein – und einer Holzschnitzerei-Tradition, die bis ins 17. Jahrhundert zurückreicht. Im Winter Teil der Sellaronda, im Sommer Ausgangspunkt für die Seiser Alm und den Langkofel.",points:["Ladinisch als dritte Landessprache im Alltag","Holzschnitzerei mit jahrhundertealter Tradition","Direkter Zugang zu Sellaronda und Langkofel"]},
-    "Seiser Alm":{long:"Mit rund 56 Quadratkilometern die größte Hochalm Europas – eine leicht gewellte Wiesenfläche auf 1.800 Metern, hinter der die Zacken von Schlern und Langkofel stehen. Autofrei tagsüber, dafür Loipen, Almhütten und ein Panorama, das man sonst nur aus Prospekten kennt.",points:["Größte Hochalm Europas, rund 56 km²","Tagsüber weitgehend autofrei","Loipen und Almhütten mit Schlern-Blick"]},
-    "Pustertal":{long:"Das breite Tal im Osten läuft von Bruneck bis nach Innichen und ist die familienfreundlichste Ecke Südtirols: viel Platz, sanfte Hänge, der Kronplatz als Hausberg. Am Ende des Tals liegen die Drei Zinnen, das meistfotografierte Motiv der Alpen.",points:["Kronplatz als zentraler Ski- und Wanderberg","Drei Zinnen und Pragser Wildsee in Reichweite","Breite Täler, gut für Familien und Radfahrer"]},
-    "Eisacktal":{long:"Das Tal zwischen Brenner und Bozen ist die Route, über die schon die Römer kamen. Brixen ist die älteste Stadt Südtirols mit Dom und Hofburg, das Kloster Neustift keltert seit 1142 Wein – die Weißweine von hier, Sylvaner und Kerner, gelten als die besten des Landes.",points:["Brixen: älteste Stadt Südtirols","Kloster Neustift, Weinbau seit 1142","Sylvaner und Kerner – Weißweine mit Ruf"]},
-    "Vinschgau":{long:"Der trockenste Teil Südtirols, ein langes Tal Richtung Schweiz mit Bewässerungskanälen – den Waalwegen –, die seit dem Mittelalter das Wasser zu den Obstwiesen führen. Am oberen Ende steht der Kirchturm von Graun im Reschensee, das Wahrzeichen der Gegend.",points:["Waalwege: mittelalterliche Bewässerungspfade","Kirchturm im Reschensee bei Graun","Burgen und Klöster entlang des ganzen Tals"]}
+    "Meran":{
+      lead:"Meran liegt auf nur 325 Metern und ist damit der wärmste Ort dieser Liste – Palmen an der Kurpromenade, Weinberge an den Hängen, Apfelgärten im Talboden. Die Therme mitten in der Stadt und die Gärten von Schloss Trauttmansdorff machen die Stadt auch dann zum Ziel, wenn oben noch Schnee liegt. Meran ist der Ort, an dem Südtirol am wenigsten alpin und am meisten mediterran wirkt.",
+      facts:[
+        {k:"Höhe",v:"325 m"},
+        {k:"Italienisch",v:"Merano"},
+        {k:"Anreise",v:"Zug ab Bozen etwa 40 Minuten"},
+        {k:"Beste Zeit",v:"März bis November"},
+        {k:"Charakter",v:"Kurstadt, mild, städtisch"}
+      ],
+      sections:[
+        {h:"Lage und Klima",p:"Die Stadt liegt in einem Talkessel, dort wo die Passer in die Etsch mündet, im Rücken geschützt von der Texelgruppe. Diese Konstellation erzeugt ein außergewöhnlich mildes Klima: Zypressen, Palmen und Zitrusbäume wachsen im Freien, der Frühling beginnt hier Wochen früher als eine Talstufe höher. Genau deshalb kamen im 19. Jahrhundert die Kurgäste – Meran war ein Kurort, lange bevor es ein Urlaubsort wurde."},
+        {h:"Die Stadt selbst",p:"Kern ist die mittelalterliche Laubengasse, eine überdachte Geschäftsstraße, die parallel zur Passer verläuft. Am Flussufer liegen die Kurpromenaden: die Winterpromenade auf der sonnigen Seite, die Sommerpromenade im Schatten alter Bäume, dazwischen das Kurhaus von 1914, eines der bedeutendsten Jugendstilgebäude im Alpenraum. Oberhalb der Stadt zieht sich der Tappeinerweg über rund vier Kilometer durch mediterrane Bepflanzung – ganzjährig begehbar und auch im Winter schneefrei."},
+        {h:"Therme und Gärten",p:"Die Therme Meran wurde 2005 nach Plänen von Matteo Thun eröffnet: ein Glaskubus mitten im Zentrum, mit rund 25 Becken innen und außen und einem großen Saunabereich. Vier Kilometer östlich liegen die Gärten von Schloss Trauttmansdorff, zwölf Hektar mit rund achtzig Gartenlandschaften an einem Hang, dazu das Touriseum im Schloss – Kaiserin Elisabeth verbrachte hier in den 1870er-Jahren zwei Kuraufenthalte. Für die Gärten sollte man mindestens einen halben Tag rechnen."},
+        {h:"Was rundherum liegt",p:"Vom Talboden geht es in alle Richtungen weg: der Meraner Höhenweg umrundet auf rund hundert Kilometern die Texelgruppe und lässt sich in Etappen gehen, Meran 2000 ist das Hausskigebiet in zwanzig Minuten Fahrzeit, das Passeiertal führt nach Norden Richtung Timmelsjoch, Dorf Tirol oberhalb der Stadt trägt Schloss Tirol, das dem ganzen Land den Namen gab. Nach Westen beginnt der Vinschgau, nach Süden das Etschtal Richtung Bozen."},
+        {h:"Essen, Wein und Termine",p:"Meran hat zwei Termine, die den Herbst prägen: das Traubenfest Mitte Oktober, das älteste Fest dieser Art in Südtirol, und das Merano WineFestival Anfang November, eines der wichtigsten Weinereignisse Italiens. Rundherum wachsen vor allem Vernatsch und zunehmend Weißburgunder; die Meraner Hügel gelten als eigene Herkunftsbezeichnung. Im Herbst beginnt außerdem die Törggelezeit in den Buschenschänken der Umgebung."}
+      ],
+      points:[
+        "Therme Meran mitten im Zentrum, ganzjährig geöffnet",
+        "Gärten von Schloss Trauttmansdorff mit Touriseum",
+        "Kurpromenaden und Tappeinerweg direkt über der Altstadt",
+        "Weinberge und Apfelgärten unmittelbar am Stadtrand",
+        "Milde Monate, wenn die Berge noch Winter haben",
+        "Meraner Höhenweg und Naturpark Texelgruppe vor der Tür"
+      ],
+      seasons:[
+        {s:"Frühling",t:"Ab Ende März blüht der Talboden – die Apfelblüte über zwei bis drei Wochen ist die schönste Zeit des Jahres, während die Berge noch Schnee tragen."},
+        {s:"Sommer",t:"Warm bis heiß, oft über 30 Grad. Die Promenaden liegen im Schatten, und die Texelgruppe bringt dich in einer Stunde 1.500 Meter höher."},
+        {s:"Herbst",t:"Für viele die beste Zeit: Traubenfest, Törggelen, WineFestival, milde Tage bis weit in den November."},
+        {s:"Winter",t:"Ruhig und mild, Weihnachtsmarkt an der Passer, Skifahren auf Meran 2000 in zwanzig Minuten."}
+      ],
+      tips:[
+        "Der Tappeinerweg ist auch im Winter schnee- und eisfrei – ideal für Vormittage.",
+        "Für Trauttmansdorff mindestens einen halben Tag einplanen und im Sommer früh kommen.",
+        "Parken in der Altstadt ist teuer; Garagen am Rand plus zehn Minuten Fußweg sind entspannter.",
+        "Die Therme ist an Regentagen voll – ab 18 Uhr wird es deutlich ruhiger.",
+        "Die Vinschgerbahn startet in Meran und ist die schönste Zugfahrt des Landes."
+      ],
+      fitYes:[
+        "Du willst Stadt und Berg an einem Tag kombinieren",
+        "Du reist in der Nebensaison und suchst mildes Wetter",
+        "Kultur, Wein und Thermalwasser sind dir wichtig"
+      ],
+      fitNo:[
+        "Du willst direkt an der Skipiste wohnen",
+        "Hochsommerliche Hitze im Tal ist dir unangenehm",
+        "Du suchst Abgeschiedenheit statt Kurstadt"
+      ],
+      related:[{kind:"region",key:"Vinschgau"},{kind:"region",key:"Bozen"},{kind:"region",key:"Dolomiten"}]
+    },
+    "Bozen":{
+      lead:"Die Landeshauptstadt ist der Punkt, an dem Südtirol am italienischsten wird: Lauben, Espresso im Stehen, Obstmarkt am Vormittag, Aperitivo ab sechs. Gleichzeitig liegt im Archäologiemuseum Ötzi, und in zwölf Minuten Seilbahn bist du auf einem Hochplateau mit Almwiesen. Bozen ist die Stadt mit den kürzesten Wegen zwischen zwei sehr unterschiedlichen Welten.",
+      facts:[
+        {k:"Höhe",v:"262 m"},
+        {k:"Italienisch",v:"Bolzano"},
+        {k:"Anreise",v:"Brennerbahn, direkt aus München und Verona"},
+        {k:"Beste Zeit",v:"April–Juni, September–Dezember"},
+        {k:"Charakter",v:"Stadt, Kultur, Wein"}
+      ],
+      sections:[
+        {h:"Wo die Sprachen sich mischen",p:"Bozen ist die einzige Stadt Südtirols mit italienischsprachiger Mehrheit – ein Ergebnis der Industrieansiedlungen der 1930er-Jahre. Im Alltag heißt das: Man hört beide Sprachen in einem Satz, Schilder sind zweisprachig, und die Küche der Stadt bewegt sich zwischen Knödel und Vitello tonnato ohne erkennbaren Bruch. Wer Südtirol verstehen will, sollte hier anfangen."},
+        {h:"Die Altstadt",p:"Zentrum ist der Waltherplatz mit dem gotischen Dom. Von dort führen die Lauben nach Westen, eine gut dreihundert Meter lange Arkadenstraße aus dem 12. Jahrhundert mit tiefen, schmalen Häusern – die historische Handelsachse der Stadt. Parallel liegt der Obstmarkt, der jeden Vormittag außer sonntags stattfindet und der beste Ort für Speck, Käse, Obst und einen Zwischenstopp ist. Im Advent steht auf dem Waltherplatz der Christkindlmarkt, der seit 1990 stattfindet und der bekannteste des Landes ist."},
+        {h:"Ötzi und die Museen",p:"Das Südtiroler Archäologiemuseum zeigt seit 1998 die 1991 am Tisenjoch gefundene Gletschermumie samt Ausrüstung – rund 5.300 Jahre alt und das meistuntersuchte Fundstück seiner Art. Tickets sollte man online buchen. Dazu kommen das Messner Mountain Museum Firmian auf Schloss Sigmundskron, das Museion für zeitgenössische Kunst und das Naturmuseum."},
+        {h:"Rauf aufs Plateau",p:"Drei Seilbahnen starten praktisch im Stadtgebiet. Die Rittner Seilbahn bringt dich in zwölf Minuten von 265 auf 1.220 Meter nach Oberbozen, wo die historische Schmalspurbahn über das Plateau fährt und die Erdpyramiden von Lengmoos stehen. Die Kohlerer Bahn ist die Nachfolgerin der ersten Personenseilbahn der Welt von 1908. Und über Jenesien erreicht man den Salten, eine der größten Lärchenwiesen Europas. Im Hochsommer sind das oft acht bis zehn Grad weniger als unten."},
+        {h:"Wein",p:"Bozen ist von Weinbau umgeben. Nördlich der Stadt wächst der St. Magdalener aus Vernatsch, in den Schwemmböden im Süden der kräftige Lagrein – beides Bozner Spezialitäten. Von hier beginnt die Südtiroler Weinstraße über Eppan, Kaltern und Tramin, wo der Gewürztraminer seinen Namen her hat. Die Kellereien der Umgebung bieten fast alle Verkostungen ohne Voranmeldung an."}
+      ],
+      points:[
+        "Altstadt mit Lauben und täglichem Obstmarkt",
+        "Ötzi im Südtiroler Archäologiemuseum",
+        "Seilbahnen auf Ritten, Kohlern und Salten in Minuten",
+        "Südtiroler Weinstraße mit Kaltern, Eppan und Tramin",
+        "Bester Bahnanschluss des Landes, Auto oft überflüssig",
+        "Christkindlmarkt auf dem Waltherplatz im Advent"
+      ],
+      seasons:[
+        {s:"Frühling",t:"Ideal: milde Temperaturen, blühende Weinberge, alle Museen offen und noch keine Reisegruppen."},
+        {s:"Sommer",t:"Bozen ist die heißeste Stadt Italiens im Alpenraum, bis 35 Grad. Der Ritten liegt fast tausend Meter höher – das ist die Rettung."},
+        {s:"Herbst",t:"Törggelen, Weinlese, klare Luft. Die stärkste Zeit für Wein und Küche."},
+        {s:"Winter",t:"Advent bestimmt die Stadt; danach ruhig, kühl und mit sehr günstigen Hotelpreisen."}
+      ],
+      tips:[
+        "Ötzi-Tickets online kaufen, sonst wartest du an Regentagen lange.",
+        "Der Obstmarkt findet vormittags außer sonntags statt – vormittags kommen.",
+        "Die Gästekarte gilt für Stadtbusse, Regionalzüge und einige Seilbahnen.",
+        "Im Hochsommer den Nachmittag auf dem Ritten oder Salten verbringen.",
+        "Von Bozen aus sind Meran, Brixen und Bruneck alle in unter einer Stunde erreichbar."
+      ],
+      fitYes:[
+        "Du willst ohne Auto reisen und viel per Bahn erkunden",
+        "Kultur, Küche und Wein stehen im Vordergrund",
+        "Du nutzt einen Standort als Basis für Tagesausflüge"
+      ],
+      fitNo:[
+        "Du willst morgens direkt auf die Piste",
+        "Sommerhitze in der Stadt ist ein Problem für dich",
+        "Du suchst Bergruhe statt Stadtleben"
+      ],
+      related:[{kind:"region",key:"Meran"},{kind:"region",key:"Eisacktal"},{kind:"region",key:"Dolomiten"}]
+    },
+    "Dolomiten":{
+      lead:"UNESCO-Weltnaturerbe und für viele der eigentliche Grund, überhaupt nach Südtirol zu fahren. Der helle Dolomit lässt die Wände bei Sonnenauf- und -untergang rot aufleuchten – die Enrosadira, für die es im Ladinischen einen eigenen Namen gibt. Wandern, Klettersteige, Hüttentouren und im Winter eines der größten Skigebiete der Welt.",
+      facts:[
+        {k:"Höchster Gipfel",v:"Marmolada, 3.343 m"},
+        {k:"UNESCO",v:"Weltnaturerbe seit 2009, neun Teilgebiete"},
+        {k:"Gestein",v:"Dolomit, entstanden aus Riffen der Trias"},
+        {k:"Beste Zeit",v:"Juni–Oktober und Dezember–April"},
+        {k:"Charakter",v:"Hochgebirge, Wandern, Ski"}
+      ],
+      sections:[
+        {h:"Warum sie anders aussehen als andere Alpen",p:"Die Dolomiten bestehen aus einem Gestein, das vor rund 250 Millionen Jahren als Korallenriff in einem flachen Tropenmeer entstand. Deshalb stehen hier keine abgerundeten Grate wie in den Zentralalpen, sondern senkrechte Wände, Türme und Plateaus, die abrupt aus Wiesen aufragen. Benannt ist das Gestein nach dem französischen Mineralogen Déodat de Dolomieu, der es 1791 beschrieb."},
+        {h:"Die Enrosadira",p:"Bei tiefstehender Sonne färbt sich der Fels von blassgelb über rosa zu tiefem Rot und schließlich violett. Verantwortlich sind Magnesium- und Eisenanteile im Gestein. Auf Ladinisch heißt das Phänomen Enrosadira; die Sage von König Laurin und seinem Rosengarten erklärt es auf ihre Weise. Die besten Plätze sind ostseitig gelegene Terrassen bei Sonnenuntergang – Seiser Alm, Villnöss und der Rosengarten von Bozen aus."},
+        {h:"Wandern und Klettersteige",p:"Das Wegenetz ist dicht und durchgehend markiert, mit Hütten in Tagesabständen. Die klassischen Höhenwege sind die Alta Via 1 vom Pragser Wildsee nach Belluno und die anspruchsvollere Alta Via 2. Die Klettersteige gehen zu einem großen Teil auf die Gebirgsfront des Ersten Weltkriegs zurück, deren Stellungen, Tunnel und Steiganlagen bis heute begehbar sind – ein Grund, warum die Dolomiten als Ursprungsgebiet der Via ferrata gelten."},
+        {h:"Ski",p:"Der Dolomiti Superski verbindet zwölf Skigebiete mit rund 1.200 Pistenkilometern auf einem Pass. Das bekannteste Element ist die Sellaronda, eine Skirunde um den Sellastock über die Pässe Sella, Pordoi, Campolongo und Grödner Joch – rund vierzig Kilometer, machbar an einem Tag, in beide Richtungen ausgeschildert. Wer früh startet, vermeidet die Warteschlangen an den Pässen am Nachmittag."},
+        {h:"Die Ikonen",p:"Drei Zinnen im Osten, meistfotografiertes Motiv der Alpen, umrundbar in etwa vier Stunden. Der Seceda-Grat über Gröden mit seiner schrägen Schneide. Der Langkofel über der Seiser Alm. Der Rosengarten östlich von Bozen. Der Pragser Wildsee im Pustertal. Alle sind im Sommer stark besucht – die erste Bahn oder der späte Nachmittag machen den Unterschied zwischen Andrang und Ruhe."},
+        {h:"Sicherheit und Wetter",p:"Das Wetter schlägt hier schneller um als in flacheren Gebirgen. Gewitter entstehen im Sommer typischerweise ab dem frühen Nachmittag, oft aus heiterem Himmel. Wer früh startet und mittags am Ziel ist, hat das Problem meist umgangen. Für Klettersteige braucht es Set, Helm und die Bereitschaft umzudrehen; nach Regen sind Dolomitplatten sehr rutschig."}
+      ],
+      points:[
+        "UNESCO-Weltnaturerbe seit 2009 mit neun Teilgebieten",
+        "Enrosadira: das Alpenglühen an senkrechten Wänden",
+        "Sellaronda und Dolomiti Superski mit rund 1.200 Pistenkilometern",
+        "Klettersteige aus der Zeit des Ersten Weltkriegs",
+        "Hüttennetz, das mehrtägige Touren ohne Zelt erlaubt",
+        "Drei Zinnen, Seceda, Langkofel und Rosengarten in Reichweite"
+      ],
+      seasons:[
+        {s:"Frühling",t:"Bis Anfang Juni liegt oben noch Schnee und viele Hütten sind zu – die ruhigste, aber eingeschränkteste Zeit."},
+        {s:"Sommer",t:"Juli und August sind Hauptsaison: alle Wege offen, alle Hütten besetzt, aber auch voll und mit Nachmittagsgewittern."},
+        {s:"Herbst",t:"September und Anfang Oktober sind die beste Wanderzeit – stabiles Wetter, klare Sicht, deutlich weniger Menschen."},
+        {s:"Winter",t:"Von Dezember bis April Skibetrieb, dazu Schneeschuh- und Winterwanderwege in den Tälern."}
+      ],
+      tips:[
+        "Hütten für Übernachtungen Monate im Voraus reservieren, im August sind sie ausgebucht.",
+        "Die Auffahrt zu den Drei Zinnen ist mautpflichtig und ab Vormittag überfüllt – früh starten.",
+        "Gewitter kommen meist ab dem frühen Nachmittag; Touren morgens beginnen.",
+        "Der Skipass Dolomiti Superski gilt für zwölf Gebiete – Standortwechsel lohnt sich.",
+        "Für die Enrosadira zählt der Ostblick: Sonnenuntergang von der gegenüberliegenden Seite."
+      ],
+      fitYes:[
+        "Du willst wandern, klettern oder Ski fahren",
+        "Landschaft ist dir wichtiger als Ortsleben",
+        "Du planst Touren und startest gern früh"
+      ],
+      fitNo:[
+        "Du reist in der Zwischensaison und willst offene Bahnen",
+        "Höhe und Ausgesetztheit sind dir unangenehm",
+        "Du suchst Stadt, Museen und Shopping"
+      ],
+      related:[{kind:"region",key:"Gröden"},{kind:"region",key:"Seiser Alm"},{kind:"region",key:"Pustertal"}]
+    },
+    "Gröden":{
+      lead:"Ein ladinisches Tal mit drei Orten – St. Ulrich, St. Christina und Wolkenstein – und einer Holzschnitzerei-Tradition, die bis ins 17. Jahrhundert zurückreicht. Im Winter Teil der Sellaronda und Austragungsort eines Weltcup-Klassikers, im Sommer Ausgangspunkt für Seceda, Langkofel und die Seiser Alm. Gröden ist das Tal, in dem alle drei Landessprachen im Alltag nebeneinander laufen.",
+      facts:[
+        {k:"Höhe",v:"1.236 m in St. Ulrich bis über 2.500 m"},
+        {k:"Orte",v:"St. Ulrich, St. Christina, Wolkenstein"},
+        {k:"Sprachen",v:"Ladinisch, Deutsch, Italienisch"},
+        {k:"Beste Zeit",v:"Dezember–April und Juni–Oktober"},
+        {k:"Charakter",v:"Ski, Ladinien, Handwerk"}
+      ],
+      sections:[
+        {h:"Ein ladinisches Tal",p:"Ladinisch ist neben Deutsch und Italienisch die dritte Landessprache Südtirols, gesprochen von rund 30.000 Menschen in fünf Tälern rund um den Sellastock. In Gröden – ladinisch Gherdëina – ist es Alltagssprache, Unterrichtssprache und auf den Ortsschildern die erste Zeile. Die Kultur ist damit auch kulinarisch und in den Bräuchen eigenständig; das Museum Gherdëina in St. Ulrich erklärt das kompakt und gut."},
+        {h:"Holzschnitzerei",p:"Seit dem 17. Jahrhundert schnitzen Grödner Familien Figuren, Krippen und Altäre, ursprünglich als Winterarbeit der Bauern, später als Export in halb Europa. Bis heute gibt es Werkstätten, in denen von Hand gearbeitet wird, und die Ausstellungen reichen von barocken Sakralfiguren bis zu zeitgenössischen Objekten. Wer eine Krippe kaufen will, sollte nach Handarbeit fragen – der Unterschied zur Maschinenware ist erheblich und der Preis auch."},
+        {h:"Winter",p:"Gröden bildet zusammen mit der Seiser Alm ein Skigebiet mit rund 175 Pistenkilometern und ist ein Viertel der Sellaronda. Der Weltcup fährt seit 1969 die Saslong-Abfahrt in St. Christina, bekannt für die Kamelbuckel und den Ciaslat-Hang. Für Anfänger ist die Sellaronda in grüner Richtung etwas einfacher als in oranger; für beide Richtungen sollte man vor 10 Uhr starten, um die Pässe nicht am Nachmittag zu erreichen."},
+        {h:"Sommer",p:"Der Seceda-Grat über St. Ulrich ist das bekannteste Motiv des Tals: eine schräg abfallende Schneide vor den Geislerspitzen, per Bahn in zwei Etappen erreichbar. Dazu kommen der Naturpark Puez-Geisler, das flache Langental hinter Wolkenstein, das auch mit Kinderwagen funktioniert, und die Langkofelscharte, deren Einstieg über eine Standseilbahn im Felsspalt führt."},
+        {h:"Wege ins Tal",p:"Gröden zweigt bei Waidbruck vom Eisacktal ab und ist über eine Straße erschlossen, die im Winter viel Verkehr trägt. Von Bozen aus dauert die Anfahrt etwa eine Stunde, von der Brennerautobahn etwa vierzig Minuten. In der Hochsaison lohnt es sich, das Auto stehen zu lassen: Die Skibusse verbinden alle drei Orte im Zehn-Minuten-Takt."}
+      ],
+      points:[
+        "Ladinisch als dritte Landessprache im Alltag",
+        "Holzschnitzerei mit jahrhundertealter Tradition und offenen Werkstätten",
+        "Direkter Zugang zu Sellaronda, Langkofel und Seiser Alm",
+        "Seceda-Grat und Naturpark Puez-Geisler",
+        "Rund 175 Pistenkilometer im Verbund mit der Seiser Alm",
+        "Saslong: Weltcup-Abfahrt seit 1969"
+      ],
+      seasons:[
+        {s:"Frühling",t:"Bis Anfang April Skibetrieb, danach Ruhephase – viele Häuser und Bahnen schließen bis Mitte Juni."},
+        {s:"Sommer",t:"Wanderhochsaison. Seceda und Langkofel sind ab dem Vormittag stark besucht, das Langental bleibt ruhig."},
+        {s:"Herbst",t:"September und Oktober mit klarer Luft, offenen Hütten bis Anfang Oktober und deutlich weniger Betrieb."},
+        {s:"Winter",t:"Hauptsaison. Weihnachten bis Anfang Januar und Fasching sind die vollsten Wochen des Jahres."}
+      ],
+      tips:[
+        "Die Sellaronda in grüner Richtung ist für Einsteiger etwas gutmütiger als in oranger.",
+        "Vor 10 Uhr auf die Runde gehen, sonst stehst du nachmittags an den Passliften.",
+        "Von Wolkenstein ins Langental: flach, eine Stunde, kinderwagentauglich.",
+        "Erste Seceda-Bahn nehmen – ab zehn Uhr wird der Grat im August zum Laufsteg.",
+        "Skibusse verbinden die drei Orte engmaschig; das Auto kann stehen bleiben."
+      ],
+      fitYes:[
+        "Du willst Ski fahren, ohne den Standort zu wechseln",
+        "Kultur und Sprache der Region interessieren dich",
+        "Du suchst Hochgebirge mit guter Infrastruktur"
+      ],
+      fitNo:[
+        "Du reist in der Zwischensaison im Mai oder November",
+        "Du willst Ruhe abseits bekannter Ziele",
+        "Enge Bergstraßen im Winter sind dir unangenehm"
+      ],
+      related:[{kind:"region",key:"Seiser Alm"},{kind:"region",key:"Dolomiten"},{kind:"region",key:"Pustertal"}]
+    },
+    "Seiser Alm":{
+      lead:"Mit rund 56 Quadratkilometern die größte Hochalm Europas – eine leicht gewellte Wiesenfläche auf etwa 1.800 Metern, hinter der die Zacken von Schlern, Langkofel und Plattkofel stehen. Tagsüber weitgehend autofrei, dafür Almhütten, Loipen und ein Panorama, das man sonst nur aus Prospekten kennt. Wer oben übernachtet, bekommt die Alm morgens und abends fast für sich.",
+      facts:[
+        {k:"Höhe",v:"1.680–2.350 m"},
+        {k:"Fläche",v:"rund 56 km²"},
+        {k:"Zufahrt",v:"Seilbahn ab Seis; Straße tagsüber gesperrt"},
+        {k:"Beste Zeit",v:"Juni–Oktober und Dezember–März"},
+        {k:"Charakter",v:"Almlandschaft, weit, ruhig"}
+      ],
+      sections:[
+        {h:"Was eine Hochalm ist",p:"Die Seiser Alm ist kein Naturpark im Sinne unberührter Wildnis, sondern eine seit Jahrhunderten bewirtschaftete Almfläche: Im Sommer weiden hier Rinder und Pferde, die Wiesen werden gemäht, die Hütten sind ursprünglich Wirtschaftsgebäude. Genau diese Nutzung hält die Fläche offen – ohne Beweidung würde sie wieder zuwachsen. Für Besucher heißt das: Wege bleiben Wege, Wiesen sind Futterflächen."},
+        {h:"Autofrei – und was das bedeutet",p:"Die Straße von Seis auf die Alm ist tagsüber, üblicherweise von 9 bis 17 Uhr, für Nicht-Berechtigte gesperrt. Wer oben im Hotel schläft, bekommt eine Zufahrtsgenehmigung, alle anderen nehmen die Umlaufbahn ab Seis am Schlern, die in rund fünfzehn Minuten nach Compatsch fährt. Oben verkehren Almbusse. Der Effekt ist deutlich: keine Blechlawine, sondern eine sehr stille Landschaft."},
+        {h:"Sommer",p:"Die Wege auf der Alm sind fast eben und damit die seltene Kombination aus Hochgebirgspanorama und geringem Anspruch – für Familien, ältere Gäste und alle, die nicht 1.000 Höhenmeter steigen wollen. Vom Rand aus geht es steiler weiter: auf den Schlern, zum Plattkofel oder in den Naturpark Schlern-Rosengarten, den ältesten Naturpark Südtirols. Die Almhütten kochen bodenständig und schließen früh."},
+        {h:"Winter",p:"Im Winter gibt es rund 60 Pistenkilometer, die über Gröden an die Sellaronda anschließen, dazu ein Loipennetz von rund 80 Kilometern, das zu den bekanntesten der Alpen zählt. Winterwanderwege und Rodelbahnen ergänzen das. Weil die Alm hoch und offen liegt, ist die Schneesicherheit gut, der Wind aber ein Faktor."},
+        {h:"Die Orte darunter",p:"Am Fuß liegen Seis am Schlern, Kastelruth und Völs am Schlern. Völs ist die Heimat des Heubads, das dort seit über hundert Jahren angewendet wird. Kastelruth ist der größere Ort mit Geschäften und Infrastruktur. Wer nicht oben schläft, wohnt in einem dieser drei Orte und nimmt morgens die Bahn."}
+      ],
+      points:[
+        "Größte Hochalm Europas mit rund 56 km²",
+        "Tagsüber weitgehend autofrei, Zufahrt per Seilbahn",
+        "Fast ebene Wege mit Schlern- und Langkofelblick",
+        "Rund 80 Kilometer Loipen im Winter",
+        "Naturpark Schlern-Rosengarten, ältester des Landes",
+        "Almhütten mit bodenständiger Küche"
+      ],
+      seasons:[
+        {s:"Frühling",t:"Von April bis Anfang Juni ist die Alm im Übergang: Schneereste, geschlossene Hütten, wenig Betrieb."},
+        {s:"Sommer",t:"Die Hauptzeit. Wiesenblüte im Juni, warme Tage, alle Hütten offen – tagsüber viele Ausflügler, morgens und abends leer."},
+        {s:"Herbst",t:"Die vielleicht schönste Zeit: goldene Lärchen, klare Fernsicht, kaum Menschen. Hütten schließen ab Mitte Oktober."},
+        {s:"Winter",t:"Schneesicher und weit. Skifahren, Langlauf und Winterwandern; Wind kann auf der offenen Fläche unangenehm werden."}
+      ],
+      tips:[
+        "Die Straße auf die Alm ist von 9 bis 17 Uhr gesperrt – Hotelgäste oben bekommen eine Genehmigung.",
+        "Sonnenaufgang auf der Alm ist der eigentliche Grund, oben zu übernachten.",
+        "Bleib auf den Wegen: die Wiesen sind bewirtschaftete Futterflächen.",
+        "Hütten schließen früh, meist gegen 17 Uhr – Einkehr entsprechend planen.",
+        "Im Winter windfeste Kleidung mitnehmen, die Fläche ist völlig offen."
+      ],
+      fitYes:[
+        "Du willst Hochgebirgspanorama ohne steile Anstiege",
+        "Ruhe am frühen Morgen und späten Abend ist dir wichtig",
+        "Langlauf oder Winterwandern stehen auf dem Programm"
+      ],
+      fitNo:[
+        "Du willst abends unter Leuten sein",
+        "Du brauchst dein Auto jederzeit verfügbar",
+        "Du suchst anspruchsvolles Klettergelände direkt vor der Tür"
+      ],
+      related:[{kind:"region",key:"Gröden"},{kind:"region",key:"Dolomiten"},{kind:"region",key:"Bozen"}]
+    },
+    "Pustertal":{
+      lead:"Das breite Tal im Osten läuft von Bruneck bis nach Innichen und weiter nach Osttirol – die familienfreundlichste Ecke Südtirols: viel Platz, sanfte Hänge, der Kronplatz als Hausberg und ein Radweg, der das ganze Tal durchzieht. Am östlichen Ende liegen die Drei Zinnen, das meistfotografierte Motiv der Alpen.",
+      facts:[
+        {k:"Höhe",v:"780–1.200 m im Talboden"},
+        {k:"Orte",v:"Bruneck, Toblach, Innichen, Sand in Taufers"},
+        {k:"Länge",v:"rund 100 km bis Lienz"},
+        {k:"Beste Zeit",v:"ganzjährig"},
+        {k:"Charakter",v:"weit, familiär, vielseitig"}
+      ],
+      sections:[
+        {h:"Ein Tal, das Platz hat",p:"Anders als die engen Seitentäler des Landes ist das Pustertal breit und offen, mit Sonne bis in den Talboden und sanft ansteigenden Hängen. Das macht es für Familien, Radfahrer und alle, die keine Serpentinen mögen, deutlich zugänglicher. Die Bahnlinie durchzieht das Tal von Franzensfeste bis Lienz und nimmt Räder mit – eine der praktischsten Kombinationen im ganzen Alpenraum."},
+        {h:"Kronplatz",p:"Der Kronplatz ist mit 2.275 Metern ein freistehender, abgerundeter Gipfel mit rund 120 Pistenkilometern und Zubringern aus Bruneck, Reischach und Olang. Oben stehen zwei Museen: das Messner Mountain Museum Corones, gebaut von Zaha Hadid und teilweise in den Berg versenkt, und das LUMEN, ein Museum der Bergfotografie in der alten Bergstation. Im Sommer ist der Gipfel per Bahn erreichbar und Startpunkt für einfache Rundwege."},
+        {h:"Drei Zinnen und Pragser Wildsee",p:"Die beiden bekanntesten Ziele liegen am östlichen Ende. Die Drei Zinnen erreicht man über eine mautpflichtige Straße zur Auronzohütte; die Umrundung dauert etwa vier Stunden. Der Pragser Wildsee ist im Sommer so stark frequentiert, dass die Zufahrt zeitweise nur mit Reservierung oder Bus möglich ist – informiere dich vor der Fahrt, die Regelung ändert sich jährlich."},
+        {h:"Die Seitentäler",p:"Der eigentliche Reiz liegt in den Abzweigungen. Das Ahrntal führt nach Norden zu den Dreitausendern der Zillertaler Alpen, das Antholzertal beherbergt eine der wichtigsten Biathlonarenen der Welt, das Gsieser Tal ist ein Langlaufparadies mit dem bekannten Gsieser Tal Lauf, und das Gadertal führt ladinisch geprägt Richtung Sella. Alle vier sind deutlich ruhiger als der Talboden."},
+        {h:"Für Familien",p:"Der Pustertaler Radweg verläuft über rund hundert Kilometer von Mühlbach bis Lienz, überwiegend abschüssig Richtung Osten und durchgehend asphaltiert. Mit Bahn und Radmitnahme lässt sich beliebig kombinieren: hinfahren, zurückradeln. Dazu kommen Naturbadeseen, Sommerrodelbahnen und Almen mit kurzen Zustiegen."}
+      ],
+      points:[
+        "Kronplatz mit rund 120 Pistenkilometern und zwei Bergmuseen",
+        "Drei Zinnen und Pragser Wildsee in Reichweite",
+        "Pustertaler Radweg über rund 100 Kilometer",
+        "Bahnlinie durchs ganze Tal mit Radmitnahme",
+        "Ruhige Seitentäler: Ahrntal, Antholz, Gsies, Gadertal",
+        "Breite, sonnige Täler – gut für Familien und Einsteiger"
+      ],
+      seasons:[
+        {s:"Frühling",t:"Ruhig und günstig, aber viele Bergbahnen stehen still. Der Radweg im Talboden ist ab April meist frei."},
+        {s:"Sommer",t:"Hochsaison an den bekannten Zielen, während Gsies, Antholz und Ahrntal entspannt bleiben."},
+        {s:"Herbst",t:"Klare Sicht, warme Tage, leere Wege – die unterschätzteste Zeit im Tal."},
+        {s:"Winter",t:"Kronplatz, Langlauf in Gsies und Antholz, Rodelbahnen. Schneesicher durch die Höhenlage."}
+      ],
+      tips:[
+        "Zufahrt zum Pragser Wildsee ist im Sommer reglementiert – vor der Fahrt prüfen.",
+        "Radweg mit Bahn kombinieren: mit dem Zug hoch, mit dem Rad zurück.",
+        "Gsieser und Antholzertal sind die ruhigen Alternativen zum Kronplatz.",
+        "Für die Drei Zinnen früh starten, die Mautstraße ist ab Vormittag voll.",
+        "Von Innichen aus ist Osttirol in zwanzig Minuten erreicht."
+      ],
+      fitYes:[
+        "Ihr reist mit Kindern und wollt kurze, einfache Wege",
+        "Radfahren gehört zum Urlaub dazu",
+        "Ihr wollt Skifahren und Langlauf kombinieren"
+      ],
+      fitNo:[
+        "Du suchst mediterranes Klima und Weinkultur",
+        "Du willst städtisches Leben am Abend",
+        "Massen an den Ikonen im August stören dich"
+      ],
+      related:[{kind:"region",key:"Dolomiten"},{kind:"region",key:"Gröden"},{kind:"region",key:"Eisacktal"}]
+    },
+    "Eisacktal":{
+      lead:"Das Tal zwischen Brenner und Bozen ist die Route, über die schon die Römer kamen und über die bis heute der gesamte Nord-Süd-Verkehr läuft. Brixen ist die älteste Stadt Südtirols mit Dom und Hofburg, das Kloster Neustift keltert seit 1142 Wein – die Weißweine von hier, Sylvaner und Kerner, gelten als die besten des Landes.",
+      facts:[
+        {k:"Höhe",v:"300–1.100 m"},
+        {k:"Orte",v:"Brixen, Klausen, Sterzing, Villnöss"},
+        {k:"Weine",v:"Sylvaner, Kerner, Grüner Veltliner, Riesling"},
+        {k:"Beste Zeit",v:"April–November und Advent"},
+        {k:"Charakter",v:"Kultur, Wein, Klöster"}
+      ],
+      sections:[
+        {h:"Die alte Nord-Süd-Route",p:"Der Brenner ist mit 1.370 Metern der niedrigste Übergang im Alpenhauptkamm, und das Eisacktal ist sein südlicher Zugang. Römerstraße, Reichsstraße, Bahnlinie und Autobahn folgen bis heute derselben Linie. Das prägt das Tal: Es ist keine Sackgasse, sondern ein Durchgang – mit Städten, die vom Handel gewachsen sind, und einer Dichte an Kirchen und Klöstern, die sonst nirgends im Land erreicht wird."},
+        {h:"Brixen",p:"Brixen wurde 901 erstmals erwähnt und ist die älteste Stadt Südtirols, jahrhundertelang Sitz eines Fürstbischofs. Der Dom mit dem romanischen Kreuzgang und die Hofburg mit dem Diözesanmuseum bilden das Zentrum, drumherum liegen Laubengassen und der Domplatz, auf dem im Advent ein kleiner, sehr sehenswerter Weihnachtsmarkt stattfindet. Hausberg ist die Plose mit 2.486 Metern – das ruhigere Skigebiet zwischen Kronplatz und Gröden."},
+        {h:"Kloster Neustift",p:"Zwei Kilometer nördlich von Brixen liegt das Augustiner-Chorherrenstift Neustift, gegründet 1142 und damit eine der ältesten durchgehend arbeitenden Weinkellereien der Welt. Zu besichtigen sind die barocke Stiftskirche, die Bibliothek und die Engelsburg; verkostet wird im Stiftskeller. Die Weißweine von hier sind der Grund, warum das Eisacktal in Weinkreisen einen Namen hat."},
+        {h:"Weißwein aus der Höhe",p:"Die Weinberge liegen zwischen 500 und 900 Metern, deutlich höher als im Etschtal, mit kühlen Nächten und großen Temperaturunterschieden. Das ergibt Weine mit ausgeprägter Säure und Struktur: Sylvaner als Leitsorte, dazu Kerner, Grüner Veltliner, Riesling und Müller-Thurgau. Fast alle Betriebe sind klein und bieten Verkostungen an."},
+        {h:"Törggelen",p:"Der Herbstbrauch, für den das Eisacktal der Ursprungsort ist: Nach der Weinlese öffnen die Buschenschänke, es gibt neuen Wein, Speck, Schlutzkrapfen, Gerstsuppe und gebratene Kastanien. Der Keschtnweg, ein rund neunzig Kilometer langer Kastanienweg von Neustift bis nach Runkelstein bei Bozen, verbindet die Höfe. Oktober und November, an Wochenenden voll, unter der Woche entspannt."},
+        {h:"Villnösstal",p:"Ein Seitental, das nach Osten in den Naturpark Puez-Geisler führt. St. Magdalena mit der kleinen Kirche vor den Geislerspitzen ist eines der bekanntesten Fotomotive Südtirols. Reinhold Messner ist hier aufgewachsen. Das Tal ist trotz seiner Bekanntheit deutlich ruhiger als Gröden."}
+      ],
+      points:[
+        "Brixen: älteste Stadt Südtirols mit Dom, Kreuzgang und Hofburg",
+        "Kloster Neustift, Weinbau seit 1142",
+        "Sylvaner und Kerner – die besten Weißweine des Landes",
+        "Törggelen und Keschtnweg im Herbst",
+        "Plose: das ruhigere Skigebiet der Region",
+        "Villnösstal mit Geislerspitzen und Naturpark Puez-Geisler"
+      ],
+      seasons:[
+        {s:"Frühling",t:"Klöster, Städte und Weingüter sind offen, die Wanderwege in mittlerer Höhe ab April begehbar."},
+        {s:"Sommer",t:"Angenehmer als das Etschtal, weil höher gelegen. Villnöss und Plose als kühle Rückzüge."},
+        {s:"Herbst",t:"Die Kernzeit: Weinlese, Törggelen, Kastanien, klare Luft. Wochenenden früh reservieren."},
+        {s:"Winter",t:"Advent in Brixen und Sterzing, Skifahren auf der Plose ohne Gedränge."}
+      ],
+      tips:[
+        "Törggelen läuft von Oktober bis November – unter der Woche ist es deutlich ruhiger.",
+        "Der Brixner Weihnachtsmarkt ist klein und einer der schönsten im Land.",
+        "Die Plose ist die entspannte Alternative zu Kronplatz und Gröden.",
+        "Kloster Neustift lässt sich gut mit einer Radtour von Brixen aus verbinden.",
+        "Von Brixen aus sind Bozen, Bruneck und Gröden alle in unter einer Stunde erreichbar."
+      ],
+      fitYes:[
+        "Wein, Klöster und Stadtgeschichte interessieren dich",
+        "Du willst im Herbst reisen",
+        "Du suchst eine zentrale Basis mit Bahnanschluss"
+      ],
+      fitNo:[
+        "Du willst hochalpine Landschaft direkt vor der Tür",
+        "Du suchst ein großes, schneesicheres Skigebiet",
+        "Verkehrslärm der Nord-Süd-Achse stört dich"
+      ],
+      related:[{kind:"region",key:"Bozen"},{kind:"region",key:"Pustertal"},{kind:"region",key:"Dolomiten"}]
+    },
+    "Vinschgau":{
+      lead:"Der trockenste Teil Südtirols und einer der niederschlagsärmsten Orte der Alpen: ein langes Tal Richtung Schweizer Grenze, in dem seit dem Mittelalter Bewässerungskanäle – die Waale – das Wasser zu den Obstwiesen führen. Am oberen Ende steht der Kirchturm von Graun im Reschensee, das bekannteste Bild der Gegend. Dazu Burgen, Klöster und der Nationalpark Stilfserjoch.",
+      facts:[
+        {k:"Höhe",v:"500–1.800 m"},
+        {k:"Niederschlag",v:"rund 500 mm im Jahr"},
+        {k:"Orte",v:"Naturns, Schlanders, Glurns, Mals"},
+        {k:"Beste Zeit",v:"April–Oktober"},
+        {k:"Charakter",v:"trocken, weit, ursprünglich"}
+      ],
+      sections:[
+        {h:"Trocken, hell, weit",p:"Der Vinschgau liegt im Regenschatten der Ötztaler und Ortler-Alpen und bekommt kaum mehr Niederschlag als manche Steppe. Die Folge ist eine Landschaft, die man in Südtirol sonst nicht findet: Trockenrasen, Steppenpflanzen, Föhrenwälder am Sonnenberg, während die Schattenseite bewaldet ist. Landwirtschaft war hier nur mit künstlicher Bewässerung möglich – daher die Waale."},
+        {h:"Die Waalwege",p:"Seit dem 12. und 13. Jahrhundert leiten offene Kanäle Schmelzwasser aus den Seitentälern quer über die Hänge zu den Feldern. Betreut wurden sie vom Waaler, und die Waalschellen zeigten an, ob das Wasser floss. Heute laufen entlang dieser Kanäle die Waalwege: fast eben, schattig, ganzjährig begehbar und im Frühjahr schon lange schneefrei, wenn oben noch Winter ist. Für Wanderer mit wenig Höhenmeterbedarf sind sie das beste Angebot des Landes."},
+        {h:"Der Reschensee",p:"1950 wurde das Tal am oberen Ende für ein Wasserkraftwerk geflutet. Das alte Graun und Teile von Reschen verschwanden; rund 160 Häuser wurden abgetragen oder gesprengt, hunderte Menschen umgesiedelt. Stehen geblieben ist der romanische Kirchturm aus dem 14. Jahrhundert, der bis heute aus dem Wasser ragt. Im Winter, wenn der See zufriert, kann man zu Fuß hingehen."},
+        {h:"Burgen und Klöster",p:"Der Vinschgau hat eine ungewöhnliche Dichte an mittelalterlicher Substanz. Die Churburg bei Schluderns besitzt eine der größten privaten Rüstkammern Europas. Marienberg über Burgeis ist die höchstgelegene Benediktinerabtei Europas, mit romanischen Fresken in der Krypta. Und Glurns ist die kleinste Stadt Südtirols mit einer vollständig erhaltenen Stadtmauer aus dem 16. Jahrhundert – man umrundet sie in zwanzig Minuten."},
+        {h:"Die Berge ringsum",p:"Südlich liegt der Nationalpark Stilfserjoch mit dem Ortler, mit 3.905 Metern der höchste Berg Südtirols. Über das Stilfser Joch führt eine Passstraße mit 48 nummerierten Kehren auf 2.757 Meter, meist von Ende Mai bis Oktober offen. Im Schnalstal wurde 1991 am Tisenjoch Ötzi gefunden; das archäologische Fenster dort erklärt den Fundort."},
+        {h:"Was hier wächst",p:"Vinschger Marillen im Frühsommer, Äpfel im Herbst, dazu das Vinschger Paarl, ein Roggenbrot mit Brotklee, das man im ganzen Land findet, aber hier zuerst gebacken wurde. In Laas wird seit dem 19. Jahrhundert Marmor gebrochen, der als einer der reinsten weißen Marmore der Welt gilt."}
+      ],
+      points:[
+        "Waalwege: mittelalterliche Bewässerungspfade, fast eben und früh schneefrei",
+        "Kirchturm im Reschensee bei Graun",
+        "Churburg, Marienberg und die Stadtmauer von Glurns",
+        "Nationalpark Stilfserjoch mit dem Ortler",
+        "Vinschgerbahn von Meran bis Mals mit Radmitnahme",
+        "Marillen, Äpfel, Vinschger Paarl und Laaser Marmor"
+      ],
+      seasons:[
+        {s:"Frühling",t:"Die stärkste Zeit: Marillenblüte, Waalwege schon frei, während die Berge noch weiß sind."},
+        {s:"Sommer",t:"Trocken und heiß im Talboden, angenehm auf den Höhenwegen. Das Stilfser Joch ist offen."},
+        {s:"Herbst",t:"Apfelernte, klare Fernsicht, sehr stabiles Wetter – der niederschlagsärmste Zeitraum."},
+        {s:"Winter",t:"Ruhig, kalt und schneearm im Tal; Skifahren in Sulden, Schnals und am Watles."}
+      ],
+      tips:[
+        "Die Vinschgerbahn fährt ab Meran bis Mals und nimmt Räder mit.",
+        "Das Stilfser Joch ist meist von Ende Mai bis Oktober befahrbar.",
+        "Waalwege sind fast eben und schon im März begehbar.",
+        "Glurns lässt sich in zwanzig Minuten umrunden – lohnt trotzdem den Umweg.",
+        "Der Radweg von Reschen nach Meran ist überwiegend abschüssig: hinfahren mit Bus, zurück mit Rad."
+      ],
+      fitYes:[
+        "Du willst wandern, ohne viele Höhenmeter zu machen",
+        "Du reist früh im Jahr oder magst trockenes Klima",
+        "Geschichte, Burgen und Klöster interessieren dich"
+      ],
+      fitNo:[
+        "Du suchst ein großes zusammenhängendes Skigebiet",
+        "Du willst kurze Wege zu den Dolomiten",
+        "Du magst dichte Infrastruktur und viel Auswahl am Abend"
+      ],
+      related:[{kind:"region",key:"Meran"},{kind:"region",key:"Dolomiten"},{kind:"region",key:"Bozen"}]
+    }
   };
 
   function getCategory(key){
@@ -8743,44 +9639,156 @@ body,body.is-subpage{overflow-x:visible}
       '</button>';
     }).join("");
   }
-  /* ===== Topic dialog: explain first, filter second ============ */
+  /* ===== Topic dialog: explain first, filter second ============
+     The dialog is the only place on the site where someone can find
+     out what a label actually means before committing to it. A tile
+     saying "Boutique · kleine Häuser mit Charakter" answers nothing
+     that the word Boutique did not already answer, so this builds a
+     full read: hard facts, several sections of prose, expectations,
+     practical notes, an honest not-for-you list, the real houses
+     behind the label and pointers to neighbouring topics. It is long
+     and it scrolls — that is the intended shape. */
   (function initTopicDialog(){
     var ov=document.getElementById("topicOverlay");
     if(!ov)return;
     var pending=null;   /* {param:"cat"|"region", value:"…"} */
+    var lastFocus=null;
 
     function close(){
       ov.hidden=true;
       document.body.style.overflow="";
       pending=null;
+      if(lastFocus&&lastFocus.focus){ try{lastFocus.focus();}catch(e){} }
+      lastFocus=null;
     }
+
+    /* Same matching the destination filter uses, so the houses listed
+       here and the count on the button can never disagree. */
+    function hotelsForRegion(name){
+      var prev=activeFilters.dest;
+      activeFilters.dest=findExactDest(name)||{name:name,province:"Südtirol"};
+      var list=getFilteredHotelsIgnoringPrice();
+      activeFilters.dest=prev;
+      return list;
+    }
+
+    function sec(h,body){
+      return '<section class="topic-sec"><h3>'+escapeHtml(h)+'</h3>'+body+'</section>';
+    }
+    function factsHtml(facts){
+      if(!facts||!facts.length)return "";
+      return '<div class="topic-facts">'+facts.map(function(f){
+        return '<div class="tfact"><span class="tfact-k">'+escapeHtml(f.k)+'</span>'+
+               '<span class="tfact-v">'+escapeHtml(f.v)+'</span></div>';
+      }).join("")+'</div>';
+    }
+    /* Counted from the listings each time the dialog opens, so a new
+       house changes these numbers without anyone editing copy. */
+    function statsHtml(list){
+      if(!list.length)return "";
+      var prices=list.map(function(h){return h.price;});
+      var rated=list.filter(function(h){return h.rating>0;});
+      var starred=list.filter(function(h){return h.stars>0;});
+      var out=[];
+      out.push('<span class="tstat"><b>'+list.length+'</b> <span>'+(list.length===1?"Haus":"Häuser")+'</span></span>');
+      out.push('<span class="tstat"><span>ab</span> <b>€ '+Math.min.apply(null,prices)+'</b> <span>/ Nacht</span></span>');
+      if(prices.length>1)
+        out.push('<span class="tstat"><span>bis</span> <b>€ '+Math.max.apply(null,prices)+'</b> <span>/ Nacht</span></span>');
+      if(rated.length){
+        var avg=rated.reduce(function(a,h){return a+h.rating;},0)/rated.length;
+        out.push('<span class="tstat"><span>Ø</span> <b>'+avg.toFixed(1).replace(".",",")+'</b> <span>von 5</span></span>');
+      }
+      if(starred.length){
+        var lo=Math.min.apply(null,starred.map(function(h){return h.stars;}));
+        var hi=Math.max.apply(null,starred.map(function(h){return h.stars;}));
+        out.push('<span class="tstat"><b>'+(lo===hi?lo:lo+"–"+hi)+'</b> <span>Sterne</span></span>');
+      }
+      return '<div class="topic-stats">'+out.join("")+'</div>';
+    }
+    function pointsHtml(points){
+      return '<ul class="topic-points">'+points.map(function(p){
+        return "<li>"+escapeHtml(p)+"</li>";
+      }).join("")+'</ul>';
+    }
+    function seasonsHtml(seasons){
+      return '<div class="topic-seasons">'+seasons.map(function(s){
+        return '<div class="tseason"><strong>'+escapeHtml(s.s)+'</strong><span>'+escapeHtml(s.t)+'</span></div>';
+      }).join("")+'</div>';
+    }
+    function tipsHtml(tips){
+      return '<ul class="topic-tips">'+tips.map(function(t){
+        return "<li>"+escapeHtml(t)+"</li>";
+      }).join("")+'</ul>';
+    }
+    function fitHtml(yes,no){
+      var cols="";
+      if(yes&&yes.length)
+        cols+='<div class="tfit tfit-yes"><h4>Passt zu dir, wenn</h4><ul>'+
+          yes.map(function(x){return "<li>"+escapeHtml(x)+"</li>";}).join("")+'</ul></div>';
+      if(no&&no.length)
+        cols+='<div class="tfit tfit-no"><h4>Eher nicht, wenn</h4><ul>'+
+          no.map(function(x){return "<li>"+escapeHtml(x)+"</li>";}).join("")+'</ul></div>';
+      return cols?'<div class="topic-fit">'+cols+'</div>':"";
+    }
+    /* Hotel names can come from a hotelier's own submission, so every
+       field here goes through the escapers before it becomes markup. */
+    function hotelsHtml(list){
+      if(!list.length)return "";
+      var show=list.slice(0,5);
+      var html='<div class="topic-hotels">'+show.map(function(h){
+        var sub=[h.loc||h.location||"",h.stars?h.stars+" Sterne":""].filter(Boolean).join(" · ");
+        return '<button type="button" class="thotel" data-topic-hotel="'+escapeAttr(h.id)+'">'+
+          '<img src="'+escapeAttr(h.img)+'" alt="" loading="lazy" width="74" height="56">'+
+          '<span class="thotel-txt">'+
+            '<span class="thotel-name">'+escapeHtml(h.name)+'</span>'+
+            '<span class="thotel-sub">'+escapeHtml(sub)+'</span>'+
+          '</span>'+
+          '<span class="thotel-price">ab € '+h.price+'</span>'+
+        '</button>';
+      }).join("")+'</div>';
+      if(list.length>show.length)
+        html+='<p class="topic-more">und '+(list.length-show.length)+' weitere – über den Button unten.</p>';
+      return html;
+    }
+    function relatedHtml(rel){
+      if(!rel||!rel.length)return "";
+      var chips=rel.map(function(r){
+        var label;
+        if(r.kind==="cat"){ var c=getCategory(r.key); if(!c)return ""; label=c.label; }
+        else { var g=regionByName(r.key); if(!g)return ""; label=g.name; }
+        return '<button type="button" class="trel" data-topic-jump="'+escapeAttr(r.kind)+'" '+
+               'data-topic-key="'+escapeAttr(r.key)+'">'+escapeHtml(label)+'</button>';
+      }).filter(Boolean).join("");
+      return chips?'<div class="topic-related">'+chips+'</div>':"";
+    }
+
     function open(kind,key){
-      var img,title,alt,tag,long,points,count,go;
+      var img,title,alt,tag,d,list,go,secLabel;
       if(kind==="cat"){
         var c=getCategory(key);
         if(!c)return;
-        var inCat=HOTELS.filter(c.match);
-        var d=CATEGORY_DETAIL[key]||{};
-        img=inCat.length?inCat[0].img:"";
+        list=HOTELS.filter(c.match);
+        d=CATEGORY_DETAIL[key]||{};
+        img=list.length?list[0].img:"";
         title=c.label; alt=""; tag="Kategorie";
-        long=d.long||c.desc; points=d.points||[];
-        count=inCat.length;
         go="Diese Kategorie ansehen →";
+        secLabel="Häuser in dieser Kategorie";
         pending={param:"cat",value:key};
       }else{
         var r=regionByName(key);
         if(!r)return;
-        var rd=REGION_DETAIL[key]||{};
+        d=REGION_DETAIL[key]||{};
+        list=hotelsForRegion(r.name);
         img=r.img;
         title=r.name;
         alt='<span lang="it">'+escapeHtml(r.it)+'</span>'+
             (r.lad?'<span class="name-lad" lang="lld">'+escapeHtml(r.lad)+'</span>':'');
-        tag=r.alt?r.alt.toLocaleString("de-DE")+" m":"";
-        long=rd.long||r.desc; points=rd.points||[];
-        count=countRegion(r.name);
+        tag=r.alt?r.alt.toLocaleString("de-DE")+" m":"";
         go="Hotels in "+r.name+" →";
+        secLabel="Häuser in "+r.name;
         pending={param:"region",value:r.name};
       }
+      var count=list.length;
 
       var im=document.getElementById("topicImg");
       im.src=img||""; im.alt=title;
@@ -8789,18 +9797,48 @@ body,body.is-subpage{overflow-x:visible}
       altEl.innerHTML=alt; altEl.hidden=!alt;
       var tagEl=document.getElementById("topicTag");
       tagEl.textContent=tag; tagEl.hidden=!tag;
-      document.getElementById("topicLong").textContent=long;
-      document.getElementById("topicPoints").innerHTML=
-        points.map(function(p){ return "<li>"+escapeHtml(p)+"</li>"; }).join("");
+
+      var lead=d.lead||d.long||"";
+      var html="";
+      if(lead) html+='<p class="topic-lead">'+escapeHtml(lead)+'</p>';
+      html+=factsHtml(d.facts);
+      html+=statsHtml(list);
+      (d.sections||[]).forEach(function(s){
+        html+=sec(s.h,'<p>'+escapeHtml(s.p)+'</p>');
+      });
+      if(d.points&&d.points.length){
+        html+='<hr class="topic-rule">';
+        html+=sec("Das erwartet dich",pointsHtml(d.points));
+      }
+      if(d.seasons&&d.seasons.length)
+        html+=sec("Das Jahr über",seasonsHtml(d.seasons));
+      if(d.tips&&d.tips.length)
+        html+=sec("Gut zu wissen",tipsHtml(d.tips));
+      var fit=fitHtml(d.fitYes,d.fitNo);
+      if(fit) html+=sec("Passt das zu dir?",fit);
+      if(count){
+        html+='<hr class="topic-rule">';
+        html+=sec(secLabel,hotelsHtml(list));
+      }
+      var rel=relatedHtml(d.related);
+      if(rel) html+=sec("Passt dazu",rel);
+      document.getElementById("topicBody").innerHTML=html;
+
       document.getElementById("topicCount").innerHTML=
         "<strong>"+count+"</strong> "+(count===1?"Haus":"Häuser")+" verfügbar";
       var goBtn=document.getElementById("topicGo");
       goBtn.textContent=go;
       goBtn.disabled=count===0;
 
+      var wasOpen=!ov.hidden;
+      if(!wasOpen) lastFocus=document.activeElement;
       ov.hidden=false;
       document.body.style.overflow="hidden";
+      var sc=document.getElementById("topicScroll");
+      if(sc) sc.scrollTop=0;
       document.getElementById("topicClose").focus();
+      /* The body is written after any language switch has run; the
+         i18n MutationObserver picks the fresh nodes up on its own. */
     }
 
     document.addEventListener("click",function(e){
@@ -8809,6 +9847,21 @@ body,body.is-subpage{overflow-x:visible}
       if(c){ e.preventDefault(); open("cat",c.getAttribute("data-topic-cat")); return; }
       var r=e.target.closest("[data-topic-region]");
       if(r){ e.preventDefault(); open("region",r.getAttribute("data-topic-region")); return; }
+    });
+
+    /* Inside the dialog: jump to a neighbouring topic, or straight to
+       one of the houses that the explanation is actually about. */
+    ov.addEventListener("click",function(e){
+      if(!e.target.closest)return;
+      var j=e.target.closest("[data-topic-jump]");
+      if(j){ open(j.getAttribute("data-topic-jump"),j.getAttribute("data-topic-key")); return; }
+      var h=e.target.closest("[data-topic-hotel]");
+      if(h){
+        var id=h.getAttribute("data-topic-hotel");
+        close();
+        openHotel(id);
+        return;
+      }
     });
 
     document.getElementById("topicClose").addEventListener("click",close);
