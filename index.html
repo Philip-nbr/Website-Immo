@@ -161,8 +161,7 @@ img{
   -webkit-backdrop-filter:blur(30px) saturate(180%);
   border-bottom:1px solid rgba(255,255,255,.14);
   box-shadow:0 1px 0 rgba(255,255,255,.06),0 8px 32px rgba(0,0,0,.08);
-  transition:height .32s var(--ease),background .28s var(--ease),box-shadow .28s var(--ease),backdrop-filter .28s var(--ease),border-color .28s var(--ease),color .25s;
-  will-change:height,background
+  transition:height .32s var(--ease),background .28s var(--ease),box-shadow .28s var(--ease),backdrop-filter .28s var(--ease),border-color .28s var(--ease),color .25s
 }
 .header.is-scrolled{
   height:var(--header-h-scrolled);
@@ -7168,7 +7167,9 @@ body{background:var(--cream);line-height:1.5}
      drift apart again. */
   --header-h-scrolled:var(--header-h)
 }
-.header{will-change:background}
+/* Kein will-change: der backdrop-filter promotet die Leiste ohnehin auf
+   eine eigene Ebene, und eine dauerhaft angekuendigte Aenderung laesst sie
+   in Safari beim Scrollen nachziehen. */
 body,body.header-compact{
   padding-top:var(--header-h) !important;
   transition:none
@@ -7208,7 +7209,7 @@ html{scroll-padding-top:calc(var(--header-h) + 14px)}
 
    Dropping fill-mode and declaring the end state on the rule itself
    gives the same entrance with no residue afterwards. */
-html{overflow-x:hidden}
+html{overflow-x:hidden;overflow-x:clip}
 body,body.is-subpage{overflow-x:visible}
 .page-view.is-active{
   opacity:1;
