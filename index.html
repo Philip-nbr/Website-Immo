@@ -1597,7 +1597,7 @@ section[id]{
 }
 
 .hotelier-box{
-  background:var(--green-dark);
+  background:#37594b;
   color:#fff;
   border-radius:24px;
   padding:48px;
@@ -1615,7 +1615,7 @@ section[id]{
 }
 
 .hotelier-box p{
-  color:rgba(255,255,255,.72);
+  color:rgba(255,255,255,.84);
   line-height:1.7;
   margin:13px 0 20px;
   max-width:560px
@@ -3941,7 +3941,7 @@ p,li{line-height:1.68}
 .staylo-pin-wrap{background:none;border:0}
 .staylo-pin{
   display:inline-block;
-  transform:translate(-50%,-50%);
+  transform:translate(-50%,calc(-100% - 6px));
   padding:7px 12px;
   border-radius:999px;
   background:var(--white);
@@ -3960,7 +3960,7 @@ p,li{line-height:1.68}
 .leaflet-marker-icon:focus .staylo-pin{
   background:var(--green);
   color:#fff;
-  transform:translate(-50%,-50%) scale(1.09)
+  transform:translate(-50%,calc(-100% - 6px)) scale(1.09)
 }
 .leaflet-popup-content-wrapper{
   border-radius:14px;
@@ -4453,7 +4453,7 @@ select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{
 }
 #page-suche .pinwrap{background:none;border:0}
 #page-suche .pin{
-  display:inline-block;transform:translate(-50%,-50%);
+  display:inline-block;transform:translate(-50%,calc(-100% - 6px));
   padding:6px 11px;border-radius:999px;
   background:var(--white);color:var(--green-dark);
   border:1.5px solid var(--green);
@@ -4463,7 +4463,7 @@ select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{
 }
 #page-suche .pin:hover,#page-suche .pin.is-linked{
   background:var(--green);color:#fff;
-  transform:translate(-50%,-50%) scale(1.12);
+  transform:translate(-50%,calc(-100% - 6px)) scale(1.12);
   z-index:900
 }
 #page-suche .pin.is-fav{border-color:var(--glow)}
@@ -5065,7 +5065,7 @@ body{
   box-shadow:0 24px 64px rgba(0,0,0,.18) !important
 }
 .hotelier-box{
-  background:linear-gradient(145deg,var(--green-dark),var(--green)) !important;
+  background:linear-gradient(145deg,#2b4c40,#3f6655) !important;
   border-radius:24px !important
 }
 footer{
@@ -6421,7 +6421,7 @@ body{background:var(--cream);line-height:1.5}
    are named for. It's the same two colors as the region cards'
    Ladin pill and the divider above — never introduced only here. */
 .hotelier-box{
-  background:linear-gradient(148deg,var(--green-dark) 0%,var(--green) 48%,#8c6168 92%,#7d555c 115%) !important;
+  background:linear-gradient(148deg,#2b4c40 0%,#37594b 52%,#436d5a 100%) !important;
   position:relative;overflow:hidden
 }
 .hotelier-box::before{
@@ -6649,7 +6649,7 @@ body{background:var(--cream);line-height:1.5}
 .hotelier-steps-mini div{
   font-size:13.5px;
   line-height:1.5;
-  color:rgba(255,255,255,.72)
+  color:rgba(255,255,255,.84)
 }
 .hotelier-info strong{font-size:14.5px;margin-bottom:12px}
 
@@ -7483,7 +7483,7 @@ body,body.is-subpage{overflow-x:visible}
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  transform:translate(-50%,-50%);
+  transform:translate(-50%,calc(-100% - 6px));
   min-width:46px;
   padding:7px 11px;
   border-radius:999px;
@@ -7506,7 +7506,7 @@ body,body.is-subpage{overflow-x:visible}
   font-variant-numeric:tabular-nums
 }
 .staylo-cluster:hover,.staylo-cluster:focus-visible{
-  transform:translate(-50%,-50%) scale(1.08);
+  transform:translate(-50%,calc(-100% - 6px)) scale(1.08);
   box-shadow:0 8px 24px rgba(15,35,26,.42);
   outline:none
 }
@@ -11554,7 +11554,8 @@ body,body.is-subpage{overflow-x:visible}
   function fitSouthTyrol(map){
     if(!map||typeof L==="undefined"||!window.SOUTH_TYROL_OUTLINE)return;
     try{
-      map.fitBounds(L.latLngBounds(window.SOUTH_TYROL_OUTLINE),{padding:[28,28]});
+      map.fitBounds(L.latLngBounds(window.SOUTH_TYROL_OUTLINE),
+        {paddingTopLeft:[42,62],paddingBottomRight:[42,24]});
     }catch(e){}
   }
   window.stayloFitSouthTyrol=fitSouthTyrol;
@@ -11628,7 +11629,7 @@ body,body.is-subpage{overflow-x:visible}
     var zoomIn=function(){
       try{
         map.fitBounds(group.map(function(h){ return [h.lat,h.lng]; }),
-          {padding:[60,60],maxZoom:14});
+          {paddingTopLeft:[42,62],paddingBottomRight:[42,24],maxZoom:14});
       }catch(e){}
     };
     m.on("click",zoomIn);
@@ -11676,7 +11677,8 @@ body,body.is-subpage{overflow-x:visible}
       boxZoom:true,
       keyboard:true,
       touchZoom:true,
-      zoomControl:true
+      zoomControl:true,
+      zoomSnap:0.25
     }).setView([46.62,11.42],9);
     var map=stayloMapInstance;
     if(map.attributionControl){ map.attributionControl.setPrefix(""); }
@@ -11771,7 +11773,7 @@ body,body.is-subpage{overflow-x:visible}
       .filter(function(h){ return typeof h.lat==="number"&&typeof h.lng==="number"; })
       .map(function(h){ return [h.lat,h.lng]; });
     if(pts.length){
-      try{ stayloMapInstance.fitBounds(pts,{padding:[46,46],maxZoom:11}); }catch(e){}
+      try{ stayloMapInstance.fitBounds(pts,{paddingTopLeft:[42,62],paddingBottomRight:[42,24],maxZoom:11}); }catch(e){}
     }
     /* fitBounds fires moveend, which redraws via the bound handler —
        but only if the view actually changed, so draw explicitly too. */
@@ -12560,6 +12562,8 @@ body,body.is-subpage{overflow-x:visible}
              pins — the visitor zooms in from the outside. */
           if(v === "map" && typeof fitSouthTyrol === "function"){
             fitSouthTyrol(stayloMapInstance);
+          }else if(v === "split" && typeof renderMapMarkers === "function"){
+            renderMapMarkers();
           }
         }
       }, 80);
@@ -13006,7 +13010,7 @@ body,body.is-subpage{overflow-x:visible}
   var map=null,layer=null,markers={};
   function initMap(){
     if(map||typeof L==="undefined")return;
-    map=L.map("map",{scrollWheelZoom:false,zoomControl:true}).setView([46.62,11.42],9);
+    map=L.map("map",{scrollWheelZoom:false,zoomControl:true,zoomSnap:0.25}).setView([46.62,11.42],9);
     L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",{
       attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
       subdomains:"abcd",maxZoom:19
@@ -13058,7 +13062,7 @@ body,body.is-subpage{overflow-x:visible}
     });
     if(pinList.length){
       try{ map.fitBounds(pinList.map(function(h){ return [h.lat,h.lng]; }),
-        {padding:[48,48],maxZoom:11}); }catch(e){}
+        {paddingTopLeft:[42,62],paddingBottomRight:[42,24],maxZoom:11}); }catch(e){}
     }
     drawPinsForView();
   }
