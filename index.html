@@ -50,8 +50,32 @@
      the initialisers run on window load, so nothing needs it earlier. -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
 <style>
+/* ============================================================
+   HELL UND DUNKEL
+   Die Seite hatte nur eine Palette, verteilt auf 43 Variablen und
+   rund 130 Regeln mit fest eingetragenen hellen Flaechen. Statt
+   jede davon zu verdoppeln, laufen die Flaechen jetzt ueber drei
+   Rollen — Grund, Karte, erhoehte Karte — und die Palette wird als
+   Ganzes getauscht.
+
+   Umgeschaltet wird ueber data-theme am <html>. Ohne Angabe folgt
+   die Seite der Systemeinstellung; ein Klick auf den Schalter legt
+   die Wahl fest und merkt sie sich.
+   ============================================================ */
 :root{
   /* Neutral South Tyrol — soft stone, muted loden, cool light */
+  --surface:#ffffff;          /* Karten, Panels, Dialoge   */
+  --surface-2:#fbfcfa;        /* leicht abgesetzte Flaeche */
+  --surface-3:#f2f4f1;        /* Chips, Schalterhintergrund*/
+  --ground:#f7f7f5;           /* Seitengrund               */
+  --ink:#1a1f1c;              /* Fliesstext                */
+  --ink-soft:#5e6661;
+  --ink-faint:#8a928c;
+  --line:rgba(0,0,0,.07);
+  --accent:#2a4a3e;           /* traegt auf hellem Grund   */
+  --accent-soft:#e6eee9;
+  --on-accent:#ffffff;
+  --ph-bg:#e6eee9;            /* Platzhalterkachel         */
   --green:#2a4a3e;
   --green-dark:#1a3229;
   --green-soft:#e6eee9;
@@ -98,6 +122,7 @@
   --touch-min:44px;
   --glass:rgba(255,255,255,.55);
   --glass-strong:rgba(255,255,255,.72);
+  color-scheme:light;
   --glass-border:rgba(255,255,255,.45);
   --glass-dark:rgba(20,32,28,.55);
   --transition:background .28s var(--ease),box-shadow .3s var(--ease),transform .25s var(--ease),border-color .25s var(--ease),color .2s var(--ease),opacity .25s var(--ease)
@@ -6950,6 +6975,431 @@ body{background:var(--cream);line-height:1.5}
   .thotel:hover{transform:none}
 }
 
+
+/* ============================================================
+   DUNKELMODUS
+   Gebaut auf denselben Rollen wie oben. Der Grund ist kein reines
+   Schwarz, sondern ein sehr dunkles Loden — sonst wirkt eine Seite,
+   deren ganze Identitaet gruen ist, im Dunkeln fremd.
+
+   Das Gruen musste hell werden: #2a4a3e auf dunklem Grund hat rund
+   1,4:1 Kontrast und ist unlesbar. Als Akzent traegt jetzt ein
+   aufgehelltes Salbeigruen.
+   ============================================================ */
+html[data-theme="dark"]{
+  color-scheme:dark;
+  --surface:#161d1a;
+  --surface-2:#1b2320;
+  --surface-3:#232d29;
+  --ground:#101613;
+  --ink:#e8efea;
+  --ink-soft:#a9b5ae;
+  --ink-faint:#7d8a83;
+  --line:rgba(255,255,255,.10);
+  --border:rgba(255,255,255,.10);
+  --border-soft:rgba(255,255,255,.06);
+  --accent:#8fc4ac;
+  --accent-soft:#233029;
+  --on-accent:#0f1613;
+  --ph-bg:#1e2a25;
+
+  --white:#161d1a;
+  --black:#e8efea;
+  --grey:#a9b5ae;
+  --grey-light:#7d8a83;
+  --cream:#101613;
+  --cream-warm:#151c19;
+  --green:#8fc4ac;
+  --green-dark:#0f1613;
+  --green-mid:#6aa78d;
+  --green-soft:#233029;
+  --glow:#c99aa2;
+  --glow-dark:#e0b3ba;
+  --glow-soft:#2c2226;
+  --glass:rgba(30,42,37,.55);
+  --glass-strong:rgba(30,42,37,.74);
+  --focus:0 0 0 3px rgba(143,196,172,.32);
+  --shadow-sm:0 2px 12px rgba(0,0,0,.34);
+  --shadow-md:0 8px 28px rgba(0,0,0,.42);
+  --shadow-lg:0 16px 48px rgba(0,0,0,.5);
+  --shadow-xl:0 24px 64px rgba(0,0,0,.58);
+}
+html[data-theme="dark"] body{background:var(--ground);color:var(--ink)}
+
+/* ---- Flaechen: Karten, Panels, Dialoge --------------------- */
+html[data-theme="dark"] .hotel-card,
+html[data-theme="dark"] .page-card,
+html[data-theme="dark"] .room-card,
+html[data-theme="dark"] .hd-side,
+html[data-theme="dark"] .hotel-detail,
+html[data-theme="dark"] .auth-modal,
+html[data-theme="dark"] .search-box,
+html[data-theme="dark"] .search-main,
+html[data-theme="dark"] .search-panel,
+html[data-theme="dark"] .dest-dropdown,
+html[data-theme="dark"] .lang-menu,
+html[data-theme="dark"] .favorites-panel,
+html[data-theme="dark"] .dropdown,
+html[data-theme="dark"] .map-shell,
+html[data-theme="dark"] .story-block,
+html[data-theme="dark"] .empty-state,
+html[data-theme="dark"] .skeleton-card,
+html[data-theme="dark"] .hd-amenity-item,
+html[data-theme="dark"] .mobile-drawer,
+html[data-theme="dark"] .listing-panel,
+html[data-theme="dark"] .listing-gate-card,
+html[data-theme="dark"] #page-suche .card,
+html[data-theme="dark"] #page-suche .rail,
+html[data-theme="dark"] #page-suche .bar,
+html[data-theme="dark"] #page-suche .suche-recap{
+  background:var(--surface) !important;
+  color:var(--ink);
+  border-color:var(--line)
+}
+html[data-theme="dark"] .page-view{background:var(--ground) !important}
+html[data-theme="dark"] .map-legend,
+html[data-theme="dark"] .room-card .room-side,
+html[data-theme="dark"] .hd-side.hd-sticky-mobile,
+html[data-theme="dark"] .listing-preview,
+html[data-theme="dark"] .tfact,
+html[data-theme="dark"] .topic-tips li{
+  background:var(--surface-2) !important;
+  color:var(--ink-soft)
+}
+
+/* ---- Kleine Bedienelemente --------------------------------- */
+html[data-theme="dark"] .hotel-badge,
+html[data-theme="dark"] .favorite,
+html[data-theme="dark"] .chip-check,
+html[data-theme="dark"] .occ-ctrl button,
+html[data-theme="dark"] .dest-pill,
+html[data-theme="dark"] .page-back,
+html[data-theme="dark"] .reset-btn,
+html[data-theme="dark"] .hotels-toolbar select,
+html[data-theme="dark"] .hd-website-btn,
+html[data-theme="dark"] .hd-gal-all,
+html[data-theme="dark"] .footer-social a,
+html[data-theme="dark"] .cta-btn.secondary,
+html[data-theme="dark"] .hd-title-meta .hd-type,
+html[data-theme="dark"] .lightbox-close,
+html[data-theme="dark"] .auth-close,
+html[data-theme="dark"] #page-suche .chip,
+html[data-theme="dark"] #page-suche .seg,
+html[data-theme="dark"] .view-toggle,
+html[data-theme="dark"] .trel,
+html[data-theme="dark"] .tseason,
+html[data-theme="dark"] .thotel{
+  background:var(--surface-3) !important;
+  color:var(--ink) !important;
+  border-color:var(--line) !important
+}
+html[data-theme="dark"] .view-toggle-btn.is-active,
+html[data-theme="dark"] #page-suche .seg button[aria-pressed="true"]{
+  background:var(--surface) !important;color:var(--accent) !important
+}
+html[data-theme="dark"] #page-suche .chip[aria-pressed="true"],
+html[data-theme="dark"] #page-suche .recap-chip[aria-pressed="true"]{
+  background:var(--accent) !important;color:var(--on-accent) !important;
+  border-color:var(--accent) !important
+}
+html[data-theme="dark"] #page-suche .chip[aria-pressed="true"] .cnt{color:rgba(15,22,19,.7)}
+
+/* ---- Formularfelder --------------------------------------- */
+html[data-theme="dark"] input,
+html[data-theme="dark"] select,
+html[data-theme="dark"] textarea{
+  background:var(--surface-2);color:var(--ink);border-color:var(--line)
+}
+html[data-theme="dark"] input::placeholder,
+html[data-theme="dark"] textarea::placeholder{color:var(--ink-faint)}
+
+/* ---- Kopfleiste -------------------------------------------- */
+html[data-theme="dark"] .header{
+  background:rgba(14,20,17,.62);
+  border-bottom-color:rgba(255,255,255,.10)
+}
+html[data-theme="dark"] .header.is-scrolled{
+  background:rgba(18,25,21,.9);color:var(--ink)
+}
+html[data-theme="dark"] .header.is-scrolled .nav-item{color:rgba(232,239,234,.84)}
+html[data-theme="dark"] .header.is-scrolled .nav-item:hover,
+html[data-theme="dark"] .header.is-scrolled .nav-item:focus-within{color:var(--ink)}
+html[data-theme="dark"] .header.is-scrolled .logo-text span:first-child{color:var(--ink)}
+html[data-theme="dark"] .header.is-scrolled .logo-text span:last-child{color:var(--accent)}
+html[data-theme="dark"] .header.is-scrolled .nav-glass{
+  background:rgba(255,255,255,.1) !important;color:var(--ink)
+}
+html[data-theme="dark"] .header.is-scrolled .mobile-menu .bar{background:var(--ink)}
+
+/* ---- Knoepfe in Akzentfarbe -------------------------------- */
+html[data-theme="dark"] .cta-btn:not(.secondary),
+html[data-theme="dark"] .hero-cta-primary,
+html[data-theme="dark"] .search-submit,
+html[data-theme="dark"] .auth-submit,
+html[data-theme="dark"] .hotel-cta-inquiry,
+html[data-theme="dark"] .load-more,
+html[data-theme="dark"] .feature-btn,
+html[data-theme="dark"] .hotelier-button,
+html[data-theme="dark"] #topicGo{
+  background:var(--accent) !important;color:var(--on-accent) !important
+}
+
+/* ---- Fusszeile und dunkle Blaecke bleiben dunkel ------------ */
+html[data-theme="dark"] footer{background:#0b100e !important}
+html[data-theme="dark"] .hotelier-box{
+  background:linear-gradient(148deg,#1d3229 0%,#254236 52%,#2b4d3f 100%) !important
+}
+
+/* ---- Platzhalterkacheln ------------------------------------ */
+/* Die Kacheln sind fertige SVG-Adressen im Markup und in den Daten;
+   neu erzeugen liesse sie sich nur mit einem kompletten Neuaufbau.
+   Umkehren plus Farbtondrehung dreht Mintgruen zu dunklem Loden und
+   das Gruen der Schrift zu hellem Salbei — genau die Rollen, die der
+   Dunkelmodus ohnehin verwendet. Nicht ganz umkehren (.88): bei vollem
+   Umkehren landet die Flaeche auf fast demselben Schwarz wie der
+   Seitengrund, und die Kachel verschwindet darin. */
+html[data-theme="dark"] img.ph-light{filter:invert(.88) hue-rotate(180deg)}
+
+/* ---- Karte -------------------------------------------------- */
+html[data-theme="dark"] .map-canvas{background:#151c19}
+html[data-theme="dark"] .staylo-pin{
+  background:var(--surface) !important;color:var(--ink) !important;
+  border-color:var(--accent) !important
+}
+html[data-theme="dark"] .staylo-cluster{
+  background:var(--accent) !important;color:var(--on-accent) !important;
+  border-color:rgba(15,22,19,.5) !important
+}
+html[data-theme="dark"] .map-view-note{
+  background:rgba(22,29,26,.94) !important;color:var(--ink-soft) !important;
+  border-color:var(--line) !important
+}
+
+
+/* ---- Texte, die als fester Farbwert im Stylesheet stehen ----
+   Rund zwei Dutzend Stellen setzen ihre Schriftfarbe direkt statt
+   ueber eine Variable. Auf dunklem Grund sind das schwarze Buchstaben
+   auf schwarzer Flaeche. Hier gesammelt zurueckgeholt. */
+html[data-theme="dark"] .hotel-card .hotel-name,
+html[data-theme="dark"] .hotel-card .hotel-stars,
+html[data-theme="dark"] .hc-score-text strong,
+html[data-theme="dark"] .hotel-card .hotel-price,
+html[data-theme="dark"] .hotel-card .hotel-cta-mini,
+html[data-theme="dark"] .hotel-card .hotel-badge,
+html[data-theme="dark"] .search-value,
+html[data-theme="dark"] .search-input-dest,
+html[data-theme="dark"] .cal-day,
+html[data-theme="dark"] .chip-check,
+html[data-theme="dark"] .dropdown-link,
+html[data-theme="dark"] .hd-amenity-item,
+html[data-theme="dark"] .hd-side .hd-quick div,
+html[data-theme="dark"] .auth-close,
+html[data-theme="dark"] .auth-label,
+html[data-theme="dark"] .room-modal-facts li,
+html[data-theme="dark"] .topic-lead,
+html[data-theme="dark"] .topic-points li,
+html[data-theme="dark"] .topic-tips li,
+html[data-theme="dark"] .tfit li,
+html[data-theme="dark"] .favorites-item .fi-remove:hover{
+  color:var(--ink) !important
+}
+html[data-theme="dark"] .hc-highlights li,
+html[data-theme="dark"] .hc-per-night,
+html[data-theme="dark"] .hotel-reviews{color:var(--ink-soft) !important}
+html[data-theme="dark"] .hotel-card .hotel-cta-mini{
+  background:var(--surface-3) !important;border-color:var(--line) !important
+}
+/* Die Bewertungs-Plakette war ein kraeftiges Blau aus einer fremden
+   Palette — im Dunkeln sticht sie heraus wie ein Fremdkoerper. */
+html[data-theme="dark"] .hc-score-box{background:var(--accent) !important;color:var(--on-accent) !important}
+html[data-theme="dark"] .hotel-card .hotel-stars{color:#e3b341 !important}
+
+/* Sterne, Preise und Auszeichnungen auf der Detailseite */
+html[data-theme="dark"] .hd-title-meta,
+html[data-theme="dark"] .hd-price-main,
+html[data-theme="dark"] .room-card strong,
+html[data-theme="dark"] .listing-form label,
+html[data-theme="dark"] .ls-group legend{color:var(--ink) !important}
+
+
+/* ---- Suchansicht ------------------------------------------
+   #page-suche bringt eine eigene, geschlossene Palette mit — das
+   ist der Grund, warum die Regeln oben dort nicht ankommen. Statt
+   die Ansicht Regel fuer Regel nachzuziehen, wird die Palette als
+   Ganzes getauscht; alles, was daraus liest, folgt von selbst. */
+html[data-theme="dark"] #page-suche{
+  --green:#8fc4ac;
+  --green-dark:#0f1613;
+  --green-mid:#6aa78d;
+  --green-soft:#233029;
+  --glow:#c99aa2;
+  --glow-dark:#e0b3ba;
+  --glow-soft:#2c2226;
+  --stone:#1b2320;
+  --white:#161d1a;
+  --ink:#e8efea;
+  --grey:#a9b5ae;
+  --grey-light:#7d8a83;
+  --border:rgba(255,255,255,.11);
+  --glass:rgba(22,29,26,.78);
+  --glass-edge:rgba(255,255,255,.08);
+  --lift-1:0 2px 10px rgba(0,0,0,.4);
+  --lift-2:0 16px 40px -14px rgba(0,0,0,.6),0 2px 8px rgba(0,0,0,.3);
+  --lift-3:0 40px 80px -20px rgba(0,0,0,.7);
+  background:var(--ground);
+  color:var(--ink)
+}
+/* Fest eingetragene Werte, die an der Palette vorbeigehen */
+html[data-theme="dark"] #page-suche .searchfield,
+html[data-theme="dark"] #page-suche .searchfield input,
+html[data-theme="dark"] #page-suche select,
+html[data-theme="dark"] #page-suche .sortsel{
+  background:var(--surface-2) !important;color:var(--ink) !important;
+  border-color:var(--line) !important
+}
+html[data-theme="dark"] #page-suche .card-title,
+html[data-theme="dark"] #page-suche .price,
+html[data-theme="dark"] #page-suche .card strong,
+html[data-theme="dark"] #page-suche .barline strong,
+html[data-theme="dark"] #page-suche .recap-val{color:var(--ink) !important}
+html[data-theme="dark"] #page-suche .am,
+html[data-theme="dark"] #page-suche .card-am .am,
+html[data-theme="dark"] #page-suche .amen,
+html[data-theme="dark"] #page-suche .tag{
+  background:var(--surface-3) !important;color:var(--ink) !important
+}
+/* Die Kategorie-Plakette liegt auf dem Bild und war weiss auf hell */
+html[data-theme="dark"] #page-suche .card-tag{
+  background:rgba(18,25,21,.86) !important;color:var(--ink) !important;
+  border:1px solid rgba(255,255,255,.14)
+}
+html[data-theme="dark"] #page-suche .card-loc,
+html[data-theme="dark"] #page-suche .card-desc,
+html[data-theme="dark"] #page-suche .card-lad{color:var(--ink-soft) !important}
+html[data-theme="dark"] #page-suche .rate{color:var(--ink) !important}
+html[data-theme="dark"] #page-suche .recap-edit,
+html[data-theme="dark"] #page-suche .recap-chip{
+  background:var(--surface-3) !important;color:var(--ink) !important;
+  border-color:var(--line) !important
+}
+html[data-theme="dark"] #page-suche .fav{background:var(--surface-3) !important}
+html[data-theme="dark"] #page-suche .fgroup h2{color:var(--ink-faint) !important}
+html[data-theme="dark"] #page-suche .backhome,
+html[data-theme="dark"] #page-suche .resetall,
+html[data-theme="dark"] #page-suche .filterbtn{
+  background:var(--surface-3) !important;color:var(--ink) !important;
+  border-color:var(--line) !important
+}
+
+
+/* ---- Nachtrag aus der Kontrastpruefung ---------------------
+   Gemessen statt geschaetzt: ein Durchlauf ueber alle sichtbaren
+   Textknoten hat die Stellen gemeldet, die unter 3:1 lagen. Das
+   waren drei Muster — Kartenkoerper mit eigener weisser Flaeche,
+   Seitenkoepfe im hellen Verlauf, und weisse Schrift, die fest
+   eingetragen auf dem Akzent sitzt (der im Dunkeln hell ist). */
+html[data-theme="dark"] .page-card-body,
+html[data-theme="dark"] .page-card .page-card-body,
+html[data-theme="dark"] .region-strip-card .page-card-body{
+  background:var(--surface) !important;color:var(--ink) !important
+}
+html[data-theme="dark"] .page-card-body h3,
+html[data-theme="dark"] .page-card-body .name-alt,
+html[data-theme="dark"] .page-card-count{color:var(--ink) !important}
+html[data-theme="dark"] .page-card-body p,
+html[data-theme="dark"] .alt-m{color:var(--ink-soft) !important}
+html[data-theme="dark"] .page-card .tag{
+  background:var(--accent-soft) !important;color:var(--accent) !important
+}
+html[data-theme="dark"] .page-hero{
+  background:linear-gradient(160deg,#16241e 0%,#1d3229 60%,#224034 100%) !important
+}
+html[data-theme="dark"] .page-hero h1,
+html[data-theme="dark"] .page-hero p,
+html[data-theme="dark"] .page-back{color:#e8efea !important}
+
+/* Weisse Schrift auf dem Akzent — im Hellmodus richtig, im Dunkeln
+   hell auf hell. */
+html[data-theme="dark"] .room-cta,
+html[data-theme="dark"] .drawer-cta,
+html[data-theme="dark"] .search-button-label,
+html[data-theme="dark"] .search-submit,
+html[data-theme="dark"] .hd-review-box,
+html[data-theme="dark"] .price-value,
+html[data-theme="dark"] .amenity-count,
+html[data-theme="dark"] .hd-cta,
+html[data-theme="dark"] .hotel-cta-inquiry,
+html[data-theme="dark"] .staylo-toast{
+  background:var(--accent) !important;color:var(--on-accent) !important
+}
+html[data-theme="dark"] .search-submit svg,
+html[data-theme="dark"] .search-button-label{color:var(--on-accent) !important}
+
+/* Hoteldetail: eigene, fest eingetragene Schriftfarben */
+html[data-theme="dark"] .hd-back-results,
+html[data-theme="dark"] .hd-title-meta h1,
+html[data-theme="dark"] .hd-rating,
+html[data-theme="dark"] .hd-facts dt,
+html[data-theme="dark"] .hd-facts dd,
+html[data-theme="dark"] .hd-section h2,
+html[data-theme="dark"] .hd-quick strong,
+html[data-theme="dark"] .room-card .room-name{color:var(--ink) !important}
+html[data-theme="dark"] .hd-back-results,
+html[data-theme="dark"] .hd-side .hd-quick div,
+html[data-theme="dark"] .hd-quick div,
+html[data-theme="dark"] .hd-fav,
+html[data-theme="dark"] .hd-website-btn{
+  background:var(--surface-3) !important;color:var(--ink) !important;
+  border-color:var(--line) !important
+}
+html[data-theme="dark"] .hd-quick div span:last-child{color:var(--ink) !important}
+/* Aehnliche Haeuser am Seitenfuss und der aktuelle Krumenpfad */
+html[data-theme="dark"] .similar-card,
+html[data-theme="dark"] .similar-list a{
+  background:var(--surface) !important;border-color:var(--line) !important
+}
+html[data-theme="dark"] .similar-card strong,
+html[data-theme="dark"] .similar-name,
+html[data-theme="dark"] .similar-price,
+html[data-theme="dark"] .hd-breadcrumb,
+html[data-theme="dark"] .hd-breadcrumb *,
+html[data-theme="dark"] .breadcrumb,
+html[data-theme="dark"] .breadcrumb *{color:var(--ink-soft) !important}
+html[data-theme="dark"] .hd-breadcrumb .bc-current,
+html[data-theme="dark"] .hd-breadcrumb [aria-current],
+html[data-theme="dark"] .breadcrumb [aria-current]{color:var(--ink) !important}
+html[data-theme="dark"] .hd-breadcrumb a,
+html[data-theme="dark"] .breadcrumb a{
+  background:var(--surface-3) !important;color:var(--ink) !important
+}
+html[data-theme="dark"] .similar-meta{color:var(--ink-soft) !important}
+/* Kartenflaeche und ihr Ersatztext, wenn keine Kacheln geladen werden */
+html[data-theme="dark"] #map,
+html[data-theme="dark"] .hd-map,
+html[data-theme="dark"] .map-canvas,
+html[data-theme="dark"] .leaflet-container{
+  background:var(--surface-2) !important;color:var(--ink-soft) !important
+}
+html[data-theme="dark"] .hd-crumbs,
+html[data-theme="dark"] .hd-crumbs a,
+html[data-theme="dark"] .hd-crumbs span,
+html[data-theme="dark"] .region-strip-eyebrow,
+html[data-theme="dark"] .hero-label,
+html[data-theme="dark"] .similar-meta,
+html[data-theme="dark"] .footer-about,
+html[data-theme="dark"] .footer-column a{color:var(--ink-soft) !important}
+html[data-theme="dark"] .region-strip-eyebrow,
+html[data-theme="dark"] .hero-label{background:var(--surface-3) !important}
+html[data-theme="dark"] .footer-column h4,
+html[data-theme="dark"] .footer-logo{color:var(--ink) !important}
+
+/* ---- Der Schalter selbst ----------------------------------- */
+.theme-toggle{display:inline-flex;align-items:center;justify-content:center;padding:0;width:38px}
+.theme-toggle .ic-moon{display:none}
+html[data-theme="dark"] .theme-toggle .ic-sun{display:none}
+html[data-theme="dark"] .theme-toggle .ic-moon{display:inline-block}
+@media(max-width:900px){ .theme-toggle{width:34px} }
+
 /* ============================================================
    MOTION LAYER — hero choreography, softened glass buttons,
    staggered listings.
@@ -7588,6 +8038,18 @@ body,body.is-subpage{overflow-x:visible}
 }
 
 </style>
+<script>
+/* Vor dem ersten Malen: sonst blitzt bei gemerkter dunkler Wahl kurz
+   die helle Seite auf. Deshalb hier oben und ohne defer. */
+(function(){
+  try{
+    var w=localStorage.getItem("staylo_theme");
+    if(w==="dark"||w==="light"){ document.documentElement.setAttribute("data-theme",w); return; }
+  }catch(e){}
+  if(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)
+    document.documentElement.setAttribute("data-theme","dark");
+})();
+</script>
 </head>
 <body>
 
@@ -7628,6 +8090,10 @@ body,body.is-subpage{overflow-x:visible}
 <div class="nav-right">
 <button class="nav-glass has-badge" type="button" id="favoritesToggle" aria-label="Favoriten" aria-expanded="false" aria-controls="favoritesPanel">♡ <span class="nav-badge" id="favoritesCount" hidden>0</span></button>
 <div class="favorites-panel" id="favoritesPanel" role="group" aria-label="Favoriten"><div class="favorites-title">Favoriten</div><div class="favorites-list" id="favoritesList"><div class="favorites-empty">Noch keine Favoriten ausgewählt.</div></div></div>
+<button class="nav-glass theme-toggle" id="themeToggle" type="button" aria-label="Dunkelmodus einschalten" aria-pressed="false" title="Hell / Dunkel">
+  <svg class="ic-sun" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.6 12h2.2M19.2 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/></svg>
+  <svg class="ic-moon" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.3A8.5 8.5 0 0 1 9.7 3.5a8.5 8.5 0 1 0 10.8 10.8z"/></svg>
+</button>
 <button class="nav-glass" id="languageToggle" type="button" aria-label="Sprache wählen" aria-expanded="false" aria-controls="languageMenu"><span id="currentLanguage">DE</span></button>
 <div class="lang-menu" id="languageMenu" role="group" aria-label="Sprache">
 <button class="lang-option" data-lang="de" type="button">Deutsch</button>
@@ -7783,7 +8249,7 @@ body,body.is-subpage{overflow-x:visible}
 </div>
 <div class="region-strip-grid">
   <a href="#hotels" class="page-card is-clickable has-photo region-strip-card" data-region="Meran" style="--rise-card:0px">
-    <span class="page-card-photo"><img src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%22900%22%20height=%221200%22%20viewBox=%220%200%20900%201200%22%3E%3Crect%20width=%22900%22%20height=%221200%22%20fill=%22%23e6eee9%22/%3E%3Cg%20transform=%22translate(385.2%20359.7)%20scale(2.025)%22%20fill=%22none%22%20stroke=%22%232a4a3e%22%20stroke-opacity=%22.38%22%20stroke-width=%223.4%22%20stroke-linejoin=%22round%22%20stroke-linecap=%22round%22%3E%3Crect%20x=%223%22%20y=%229%22%20width=%2258%22%20height=%2246%22%20rx=%227%22/%3E%3Ccircle%20cx=%2220%22%20cy=%2224%22%20r=%224.5%22/%3E%3Cpath%20d=%22M7%2048%20L24%2031%20L34%2041%20L44%2029%20L57%2046%22/%3E%3C/g%3E%3Ctext%20x=%22450%22%20y=%22640%22%20text-anchor=%22middle%22%20font-family=%22Georgia,serif%22%20font-size=%2267.5%22%20font-weight=%22600%22%20fill=%22%232a4a3e%22%3EMeran%3C/text%3E%3Ctext%20x=%22450%22%20y=%22704%22%20text-anchor=%22middle%22%20font-family=%22system-ui,sans-serif%22%20font-size=%2238.2%22%20font-weight=%22400%22%20fill=%22%235e6661%22%3EMerano%3C/text%3E%3Cg%3E%3Crect%20x=%22362%22%20y=%22749%22%20width=%22176%22%20height=%2261%22%20rx=%2230%22%20fill=%22%232a4a3e%22/%3E%3Ctext%20x=%22450%22%20y=%22797%22%20text-anchor=%22middle%22%20font-family=%22system-ui,sans-serif%22%20font-size=%2225.9%22%20font-weight=%22700%22%20letter-spacing=%223.1%22%20fill=%22%23ffffff%22%3EBILD%2006%3C/text%3E%3C/g%3E%3C/svg%3E" alt="Meran, Südtirol" loading="lazy" width="800" height="1067"></span>
+    <span class="page-card-photo"><img src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%22900%22%20height=%221200%22%20viewBox=%220%200%20900%201200%22%3E%3Crect%20width=%22900%22%20height=%221200%22%20fill=%22%23e6eee9%22/%3E%3Cg%20transform=%22translate(405.4%20411.4)%20scale(1.395)%22%20fill=%22none%22%20stroke=%22%232a4a3e%22%20stroke-opacity=%22.34%22%20stroke-width=%223.4%22%20stroke-linejoin=%22round%22%20stroke-linecap=%22round%22%3E%3Crect%20x=%223%22%20y=%229%22%20width=%2258%22%20height=%2246%22%20rx=%227%22/%3E%3Ccircle%20cx=%2220%22%20cy=%2224%22%20r=%224.5%22/%3E%3Cpath%20d=%22M7%2048%20L24%2031%20L34%2041%20L44%2029%20L57%2046%22/%3E%3C/g%3E%3Cg%3E%3Crect%20x=%22317%22%20y=%22560%22%20width=%22266%22%20height=%2281%22%20rx=%2240%22%20fill=%22%232a4a3e%22/%3E%3Ctext%20x=%22450%22%20y=%22616%22%20text-anchor=%22middle%22%20font-family=%22system-ui,sans-serif%22%20font-size=%2233.8%22%20font-weight=%22700%22%20letter-spacing=%223.6%22%20fill=%22%23ffffff%22%3EBILD%2006%3C/text%3E%3C/g%3E%3Ctext%20x=%22450%22%20y=%22708%22%20text-anchor=%22middle%22%20font-family=%22Georgia,serif%22%20font-size=%2242.8%22%20font-weight=%22600%22%20fill=%22%232a4a3e%22%3EMeran%3C/text%3E%3Ctext%20x=%22450%22%20y=%22762%22%20text-anchor=%22middle%22%20font-family=%22system-ui,sans-serif%22%20font-size=%2233.8%22%20font-weight=%22400%22%20fill=%22%235e6661%22%3EMerano%3C/text%3E%3C/svg%3E" alt="Meran, Südtirol" loading="lazy" width="800" height="1067"></span>
     <span class="page-card-body">
       <span class="tag">Therme · Wein</span>
       <h3>Meran</h3>
@@ -7793,7 +8259,7 @@ body,body.is-subpage{overflow-x:visible}
     </span>
   </a>
   <a href="#hotels" class="page-card is-clickable has-photo region-strip-card" data-region="Vinschgau" style="--rise-card:-7px">
-    <span class="page-card-photo"><img src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%22900%22%20height=%221200%22%20viewBox=%220%200%20900%201200%22%3E%3Crect%20width=%22900%22%20height=%221200%22%20fill=%22%23e6eee9%22/%3E%3Cg%20transform=%22translate(385.2%20359.7)%20scale(2.025)%22%20fill=%22none%22%20stroke=%22%232a4a3e%22%20stroke-opacity=%22.38%22%20stroke-width=%223.4%22%20stroke-linejoin=%22round%22%20stroke-linecap=%22round%22%3E%3Crect%20x=%223%22%20y=%229%22%20width=%2258%22%20height=%2246%22%20rx=%227%22/%3E%3Ccircle%20cx=%2220%22%20cy=%2224%22%20r=%224.5%22/%3E%3Cpath%20d=%22M7%2048%20L24%2031%20L34%2041%20L44%2029%20L57%2046%22/%3E%3C/g%3E%3Ctext%20x=%22450%22%20y=%22640%22%20text-anchor=%22middle%22%20font-family=%22Georgia,serif%22%20font-size=%2267.5%22%20font-weight=%22600%22%20fill=%22%232a4a3e%22%3EVinschgau%3C/text%3E%3Ctext%20x=%22450%22%20y=%22704%22%20text-anchor=%22middle%22%20font-family=%22system-ui,sans-serif%22%20font-size=%2238.2%22%20font-weight=%22400%22%20fill=%22%235e6661%22%3EVal%20Venosta%3C/text%3E%3Cg%3E%3Crect%20x=%22362%22%20y=%22749%22%20width=%22176%22%20height=%2261%22%20rx=%2230%22%20fill=%22%232a4a3e%22/%3E%3Ctext%20x=%22450%22%20y=%22797%22%20text-anchor=%22middle%22%20font-family=%22system-ui,sans-serif%22%20font-size=%2225.9%22%20font-weight=%22700%22%20letter-spacing=%223.1%22%20fill=%22%23ffffff%22%3EBILD%2007%3C/text%3E%3C/g%3E%3C/svg%3E" alt="Vinschgau, Südtirol" loading="lazy" width="800" height="1067"></span>
+    <span class="page-card-photo"><img src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%22900%22%20height=%221200%22%20viewBox=%220%200%20900%201200%22%3E%3Crect%20width=%22900%22%20height=%221200%22%20fill=%22%23e6eee9%22/%3E%3Cg%20transform=%22translate(405.4%20411.4)%20scale(1.395)%22%20fill=%22none%22%20stroke=%22%232a4a3e%22%20stroke-opacity=%22.34%22%20stroke-width=%223.4%22%20stroke-linejoin=%22round%22%20stroke-linecap=%22round%22%3E%3Crect%20x=%223%22%20y=%229%22%20width=%2258%22%20height=%2246%22%20rx=%227%22/%3E%3Ccircle%20cx=%2220%22%20cy=%2224%22%20r=%224.5%22/%3E%3Cpath%20d=%22M7%2048%20L24%2031%20L34%2041%20L44%2029%20L57%2046%22/%3E%3C/g%3E%3Cg%3E%3Crect%20x=%22317%22%20y=%22560%22%20width=%22266%22%20height=%2281%22%20rx=%2240%22%20fill=%22%232a4a3e%22/%3E%3Ctext%20x=%22450%22%20y=%22616%22%20text-anchor=%22middle%22%20font-family=%22system-ui,sans-serif%22%20font-size=%2233.8%22%20font-weight=%22700%22%20letter-spacing=%223.6%22%20fill=%22%23ffffff%22%3EBILD%2007%3C/text%3E%3C/g%3E%3Ctext%20x=%22450%22%20y=%22708%22%20text-anchor=%22middle%22%20font-family=%22Georgia,serif%22%20font-size=%2242.8%22%20font-weight=%22600%22%20fill=%22%232a4a3e%22%3EVinschgau%3C/text%3E%3Ctext%20x=%22450%22%20y=%22762%22%20text-anchor=%22middle%22%20font-family=%22system-ui,sans-serif%22%20font-size=%2233.8%22%20font-weight=%22400%22%20fill=%22%235e6661%22%3EVal%20Venosta%3C/text%3E%3C/svg%3E" alt="Vinschgau, Südtirol" loading="lazy" width="800" height="1067"></span>
     <span class="page-card-body">
       <span class="tag">Obst · Burgen</span>
       <h3>Vinschgau</h3>
@@ -7803,7 +8269,7 @@ body,body.is-subpage{overflow-x:visible}
     </span>
   </a>
   <a href="#hotels" class="page-card is-clickable has-photo region-strip-card" data-region="Gröden" style="--rise-card:-13px">
-    <span class="page-card-photo"><img src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%22900%22%20height=%221200%22%20viewBox=%220%200%20900%201200%22%3E%3Crect%20width=%22900%22%20height=%221200%22%20fill=%22%23e6eee9%22/%3E%3Cg%20transform=%22translate(385.2%20359.7)%20scale(2.025)%22%20fill=%22none%22%20stroke=%22%232a4a3e%22%20stroke-opacity=%22.38%22%20stroke-width=%223.4%22%20stroke-linejoin=%22round%22%20stroke-linecap=%22round%22%3E%3Crect%20x=%223%22%20y=%229%22%20width=%2258%22%20height=%2246%22%20rx=%227%22/%3E%3Ccircle%20cx=%2220%22%20cy=%2224%22%20r=%224.5%22/%3E%3Cpath%20d=%22M7%2048%20L24%2031%20L34%2041%20L44%2029%20L57%2046%22/%3E%3C/g%3E%3Ctext%20x=%22450%22%20y=%22640%22%20text-anchor=%22middle%22%20font-family=%22Georgia,serif%22%20font-size=%2267.5%22%20font-weight=%22600%22%20fill=%22%232a4a3e%22%3EGr%C3%B6den%3C/text%3E%3Ctext%20x=%22450%22%20y=%22704%22%20text-anchor=%22middle%22%20font-family=%22system-ui,sans-serif%22%20font-size=%2238.2%22%20font-weight=%22400%22%20fill=%22%235e6661%22%3EVal%20Gardena%3C/text%3E%3Cg%3E%3Crect%20x=%22362%22%20y=%22749%22%20width=%22176%22%20height=%2261%22%20rx=%2230%22%20fill=%22%232a4a3e%22/%3E%3Ctext%20x=%22450%22%20y=%22797%22%20text-anchor=%22middle%22%20font-family=%22system-ui,sans-serif%22%20font-size=%2225.9%22%20font-weight=%22700%22%20letter-spacing=%223.1%22%20fill=%22%23ffffff%22%3EBILD%2008%3C/text%3E%3C/g%3E%3C/svg%3E" alt="Gröden, Südtirol" loading="lazy" width="800" height="1067"></span>
+    <span class="page-card-photo"><img src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%22900%22%20height=%221200%22%20viewBox=%220%200%20900%201200%22%3E%3Crect%20width=%22900%22%20height=%221200%22%20fill=%22%23e6eee9%22/%3E%3Cg%20transform=%22translate(405.4%20411.4)%20scale(1.395)%22%20fill=%22none%22%20stroke=%22%232a4a3e%22%20stroke-opacity=%22.34%22%20stroke-width=%223.4%22%20stroke-linejoin=%22round%22%20stroke-linecap=%22round%22%3E%3Crect%20x=%223%22%20y=%229%22%20width=%2258%22%20height=%2246%22%20rx=%227%22/%3E%3Ccircle%20cx=%2220%22%20cy=%2224%22%20r=%224.5%22/%3E%3Cpath%20d=%22M7%2048%20L24%2031%20L34%2041%20L44%2029%20L57%2046%22/%3E%3C/g%3E%3Cg%3E%3Crect%20x=%22317%22%20y=%22560%22%20width=%22266%22%20height=%2281%22%20rx=%2240%22%20fill=%22%232a4a3e%22/%3E%3Ctext%20x=%22450%22%20y=%22616%22%20text-anchor=%22middle%22%20font-family=%22system-ui,sans-serif%22%20font-size=%2233.8%22%20font-weight=%22700%22%20letter-spacing=%223.6%22%20fill=%22%23ffffff%22%3EBILD%2008%3C/text%3E%3C/g%3E%3Ctext%20x=%22450%22%20y=%22708%22%20text-anchor=%22middle%22%20font-family=%22Georgia,serif%22%20font-size=%2242.8%22%20font-weight=%22600%22%20fill=%22%232a4a3e%22%3EGr%C3%B6den%3C/text%3E%3Ctext%20x=%22450%22%20y=%22762%22%20text-anchor=%22middle%22%20font-family=%22system-ui,sans-serif%22%20font-size=%2233.8%22%20font-weight=%22400%22%20fill=%22%235e6661%22%3EVal%20Gardena%3C/text%3E%3C/svg%3E" alt="Gröden, Südtirol" loading="lazy" width="800" height="1067"></span>
     <span class="page-card-body">
       <span class="tag">Ski</span>
       <h3>Gröden</h3>
@@ -7813,7 +8279,7 @@ body,body.is-subpage{overflow-x:visible}
     </span>
   </a>
   <a href="#hotels" class="page-card is-clickable has-photo region-strip-card" data-region="Dolomiten" style="--rise-card:-22px">
-    <span class="page-card-photo"><img src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%22900%22%20height=%221200%22%20viewBox=%220%200%20900%201200%22%3E%3Crect%20width=%22900%22%20height=%221200%22%20fill=%22%23e6eee9%22/%3E%3Cg%20transform=%22translate(385.2%20359.7)%20scale(2.025)%22%20fill=%22none%22%20stroke=%22%232a4a3e%22%20stroke-opacity=%22.38%22%20stroke-width=%223.4%22%20stroke-linejoin=%22round%22%20stroke-linecap=%22round%22%3E%3Crect%20x=%223%22%20y=%229%22%20width=%2258%22%20height=%2246%22%20rx=%227%22/%3E%3Ccircle%20cx=%2220%22%20cy=%2224%22%20r=%224.5%22/%3E%3Cpath%20d=%22M7%2048%20L24%2031%20L34%2041%20L44%2029%20L57%2046%22/%3E%3C/g%3E%3Ctext%20x=%22450%22%20y=%22640%22%20text-anchor=%22middle%22%20font-family=%22Georgia,serif%22%20font-size=%2267.5%22%20font-weight=%22600%22%20fill=%22%232a4a3e%22%3EDolomiten%3C/text%3E%3Ctext%20x=%22450%22%20y=%22704%22%20text-anchor=%22middle%22%20font-family=%22system-ui,sans-serif%22%20font-size=%2238.2%22%20font-weight=%22400%22%20fill=%22%235e6661%22%3EDolomiti%3C/text%3E%3Cg%3E%3Crect%20x=%22362%22%20y=%22749%22%20width=%22176%22%20height=%2261%22%20rx=%2230%22%20fill=%22%232a4a3e%22/%3E%3Ctext%20x=%22450%22%20y=%22797%22%20text-anchor=%22middle%22%20font-family=%22system-ui,sans-serif%22%20font-size=%2225.9%22%20font-weight=%22700%22%20letter-spacing=%223.1%22%20fill=%22%23ffffff%22%3EBILD%2009%3C/text%3E%3C/g%3E%3C/svg%3E" alt="Dolomiten, Südtirol" loading="lazy" width="800" height="1067"></span>
+    <span class="page-card-photo"><img src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%22900%22%20height=%221200%22%20viewBox=%220%200%20900%201200%22%3E%3Crect%20width=%22900%22%20height=%221200%22%20fill=%22%23e6eee9%22/%3E%3Cg%20transform=%22translate(405.4%20411.4)%20scale(1.395)%22%20fill=%22none%22%20stroke=%22%232a4a3e%22%20stroke-opacity=%22.34%22%20stroke-width=%223.4%22%20stroke-linejoin=%22round%22%20stroke-linecap=%22round%22%3E%3Crect%20x=%223%22%20y=%229%22%20width=%2258%22%20height=%2246%22%20rx=%227%22/%3E%3Ccircle%20cx=%2220%22%20cy=%2224%22%20r=%224.5%22/%3E%3Cpath%20d=%22M7%2048%20L24%2031%20L34%2041%20L44%2029%20L57%2046%22/%3E%3C/g%3E%3Cg%3E%3Crect%20x=%22317%22%20y=%22560%22%20width=%22266%22%20height=%2281%22%20rx=%2240%22%20fill=%22%232a4a3e%22/%3E%3Ctext%20x=%22450%22%20y=%22616%22%20text-anchor=%22middle%22%20font-family=%22system-ui,sans-serif%22%20font-size=%2233.8%22%20font-weight=%22700%22%20letter-spacing=%223.6%22%20fill=%22%23ffffff%22%3EBILD%2009%3C/text%3E%3C/g%3E%3Ctext%20x=%22450%22%20y=%22708%22%20text-anchor=%22middle%22%20font-family=%22Georgia,serif%22%20font-size=%2242.8%22%20font-weight=%22600%22%20fill=%22%232a4a3e%22%3EDolomiten%3C/text%3E%3Ctext%20x=%22450%22%20y=%22762%22%20text-anchor=%22middle%22%20font-family=%22system-ui,sans-serif%22%20font-size=%2233.8%22%20font-weight=%22400%22%20fill=%22%235e6661%22%3EDolomiti%3C/text%3E%3C/svg%3E" alt="Dolomiten, Südtirol" loading="lazy" width="800" height="1067"></span>
     <span class="page-card-body">
       <span class="tag">UNESCO</span>
       <h3>Dolomiten</h3>
@@ -8642,6 +9108,9 @@ body,body.is-subpage{overflow-x:visible}
      Die zehn Platzhalter, die in CSS-Hintergruenden und im statischen
      Markup stehen (Hero, Feature-Bereich, Regionskacheln), sind mit
      derselben Zeichnung vorgerendert und dort direkt hinterlegt. */
+  /* Als Variablen, damit der Dunkelmodus dieselben Kacheln in
+     passenden Toenen neu zeichnen kann. */
+  var PH_BG="#e6eee9", PH_INK="#2a4a3e", PH_SUB="#5e6661";
   function ph(num,title,sub,w,h){
     w=w||1200; h=h||800;
     var k=Math.min(w,h)/400, cx=w/2, cy=h/2;
@@ -8652,30 +9121,32 @@ body,body.is-subpage{overflow-x:visible}
         'font-family="'+fam+'" font-size="'+(size*k).toFixed(1)+'" font-weight="'+weight+'" '+
         (ls?'letter-spacing="'+(ls*k).toFixed(1)+'" ':'')+'fill="'+fill+'">'+esc(txt)+'</text>';
     }
-    var gy=cy-78*k, gs=k*0.9;
-    /* Die Nummer sitzt mittig unter dem Namen, nicht in der Ecke: die
-       Kacheln werden je nach Kartenformat unterschiedlich beschnitten,
-       und eine Ecke ist als erstes weg. Die Mitte ueberlebt jeden
-       Zuschnitt. */
-    var by=(sub?86:74)*k, bw=78*k, bh=27*k;
-    var badge=nr?('<g><rect x="'+Math.round(cx-bw/2)+'" y="'+Math.round(cy+by-bh*0.74)+'" '+
+    /* Die Nummer sitzt exakt im Mittelpunkt der Kachel — sie ist beim
+       Austauschen das Einzige, was man wirklich sucht. Alles andere
+       ordnet sich darum an: Symbol darueber, Name darunter. Weil die
+       Kacheln mit object-fit:cover mittig beschnitten werden, bleibt
+       der Mittelpunkt in jedem Kartenformat sichtbar. */
+    var bw=118*k, bh=36*k;
+    var badge=nr?('<g><rect x="'+Math.round(cx-bw/2)+'" y="'+Math.round(cy-bh/2)+'" '+
         'width="'+Math.round(bw)+'" height="'+Math.round(bh)+'" rx="'+Math.round(bh/2)+'" '+
-        'fill="#2a4a3e"/><text x="'+Math.round(cx)+'" y="'+Math.round(cy+by+bh*0.06)+'" '+
-        'text-anchor="middle" font-family="system-ui,sans-serif" font-size="'+(11.5*k).toFixed(1)+'" '+
-        'font-weight="700" letter-spacing="'+(1.4*k).toFixed(1)+'" fill="#ffffff">'+nr+'</text></g>'):"";
+        'fill="#2a4a3e"/><text x="'+Math.round(cx)+'" y="'+Math.round(cy+bh*0.20)+'" '+
+        'text-anchor="middle" font-family="system-ui,sans-serif" font-size="'+(15*k).toFixed(1)+'" '+
+        'font-weight="700" letter-spacing="'+(1.6*k).toFixed(1)+'" fill="#ffffff">'+nr+'</text></g>'):"";
+    var gy=cy-(nr?64:78)*k, gs=k*(nr?0.62:0.9);
     var svg='<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'" viewBox="0 0 '+w+' '+h+'">'+
-      '<rect width="'+w+'" height="'+h+'" fill="#e6eee9"/>'+
+      '<rect width="'+w+'" height="'+h+'" fill="'+PH_BG+'"/>'+
       '<g transform="translate('+(cx-32*gs).toFixed(1)+' '+(gy-32*gs).toFixed(1)+') scale('+gs.toFixed(3)+')" '+
-        'fill="none" stroke="#2a4a3e" stroke-opacity=".38" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round">'+
+        'fill="none" stroke="'+PH_INK+'" stroke-opacity=".34" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round">'+
         '<rect x="3" y="9" width="58" height="46" rx="7"/><circle cx="20" cy="24" r="4.5"/>'+
         '<path d="M7 48 L24 31 L34 41 L44 29 L57 46"/></g>'+
-      t(18,30,"600","#2a4a3e","Georgia,serif",0,title||"Foto")+
-      (sub?t(46,17,"400","#5e6661","system-ui,sans-serif",0,sub):"")+
-      (nr?"":t(sub?86:74,12,"700","#8a928c","system-ui,sans-serif",3,"PLATZHALTER"))+
       badge+
+      (nr?t(48,19,"600",PH_INK,"Georgia,serif",0,title||"Foto"):t(18,30,"600",PH_INK,"Georgia,serif",0,title||"Foto"))+
+      (sub?t(nr?72:46,15,"400",PH_SUB,"system-ui,sans-serif",0,sub):"")+
+      (nr?"":t(sub?86:74,12,"700",PH_SUB,"system-ui,sans-serif",3,"PLATZHALTER"))+
     '</svg>';
     return "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg);
   }
+
 
   /* Ruhige Variante fuer Flaechen, ueber denen Text liegt (Hero,
      Feature-Bereich, Dialogkopf). Eine mittige Beschriftung wuerde
@@ -11801,10 +12272,23 @@ body,body.is-subpage{overflow-x:visible}
 
     /* Muted cartography so the hotel pins are the only saturated thing
        on the map. CARTO Positron, same free/no-key terms as plain OSM. */
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",{
+    /* CARTO liefert dieselbe Karte in einer dunklen Fassung, zu den
+       gleichen freien Bedingungen. Eine helle Karte auf dunklem Grund
+       ist der hellste Fleck der Seite und blendet. */
+    var TILES={
+      hell:"https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+      dunkel:"https://{s}.basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}{r}.png"
+    };
+    var tileOpts={
       attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
       subdomains:"abcd",maxZoom:19
-    }).addTo(map);
+    };
+    var dunkel=document.documentElement.getAttribute("data-theme")==="dark";
+    var tiles=L.tileLayer(dunkel?TILES.dunkel:TILES.hell,tileOpts).addTo(map);
+    window.stayloMapTheme=function(d){
+      if(!tiles)return;
+      tiles.setUrl(d?TILES.dunkel:TILES.hell);
+    };
     drawRegionOutline(map);
 
     mapMarkerLayer=L.layerGroup().addTo(map);
@@ -14211,5 +14695,65 @@ body,body.is-subpage{overflow-x:visible}
 })();
 </script>
 
+
+<script>
+/* ============================================================
+   HELL / DUNKEL
+   Drei Zustaende waeren ehrlicher (hell, dunkel, System), aber der
+   Schalter soll ein Klick sein. Also: solange nichts gewaehlt wurde,
+   folgt die Seite dem System und reagiert live auf dessen Wechsel.
+   Der erste Klick legt die Wahl fest und beendet das Mitlaufen.
+   ============================================================ */
+(function initTheme(){
+  var root=document.documentElement, btn=document.getElementById("themeToggle");
+  var mq=window.matchMedia?matchMedia("(prefers-color-scheme: dark)"):null;
+  function gewaehlt(){ try{ var v=localStorage.getItem("staylo_theme");
+    return v==="dark"||v==="light"?v:null; }catch(e){ return null; } }
+  function aktiv(){ return root.getAttribute("data-theme")==="dark"; }
+  function anzeigen(){
+    if(!btn)return;
+    var d=aktiv();
+    btn.setAttribute("aria-pressed",d?"true":"false");
+    btn.setAttribute("aria-label",d?"Hellen Modus einschalten":"Dunkelmodus einschalten");
+  }
+  function setzen(modus,merken){
+    if(modus==="dark") root.setAttribute("data-theme","dark");
+    else root.setAttribute("data-theme","light");
+    if(merken){ try{ localStorage.setItem("staylo_theme",modus); }catch(e){} }
+    anzeigen();
+    /* Die Kartenkacheln haben eine eigene helle und dunkle Fassung. */
+    if(window.stayloMapTheme) window.stayloMapTheme(modus==="dark");
+  }
+  if(!gewaehlt() && mq){
+    /* Noch keine Wahl getroffen: dem System folgen, auch spaeter. */
+    var folgen=function(e){ if(!gewaehlt()) setzen(e.matches?"dark":"light",false); };
+    if(mq.addEventListener) mq.addEventListener("change",folgen);
+    else if(mq.addListener) mq.addListener(folgen);
+  }
+  if(btn) btn.addEventListener("click",function(){ setzen(aktiv()?"light":"dark",true); });
+  anzeigen();
+  if(window.stayloMapTheme) window.stayloMapTheme(aktiv());
+
+  /* Platzhalterkacheln markieren, damit der Dunkelmodus nur die hellen
+     umkehrt — die von phQuiet() sind schon dunkel und wuerden sonst
+     ausgerechnet im Dunkelmodus hell. */
+  function markieren(wurzel){
+    (wurzel||document).querySelectorAll("img").forEach(function(i){
+      var src=i.getAttribute("src")||"";
+      if(src.indexOf("data:image/svg+xml")!==0) return;
+      i.classList.toggle("ph-light", src.indexOf("linearGradient")===-1);
+    });
+  }
+  markieren();
+  new MutationObserver(function(muts){
+    muts.forEach(function(m){
+      m.addedNodes.forEach(function(n){
+        if(n.nodeType!==1)return;
+        if(n.tagName==="IMG") markieren(n.parentNode); else markieren(n);
+      });
+    });
+  }).observe(document.body,{childList:true,subtree:true});
+})();
+</script>
 </body>
 </html>
