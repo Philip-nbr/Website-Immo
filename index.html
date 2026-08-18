@@ -50,6 +50,46 @@
      the initialisers run on window load, so nothing needs it earlier. -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
 <style>
+
+/* ============================================================
+   BEWERTUNGEN — Verweis statt eigener Zahl
+   Die Seite fuehrt zur Quelle, statt eine Zahl zu behaupten, die
+   sie nicht erhoben hat. Der Verweis ist bewusst zurueckhaltend:
+   er ist eine Zusatzinformation, kein zweiter Handlungsaufruf
+   neben "Anfragen".
+   ============================================================ */
+.review-link{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:13px;font-weight:600;line-height:1.3;
+  color:var(--green);text-decoration:none;
+  border-bottom:1px solid transparent;
+  transition:color .2s var(--ease),border-color .2s var(--ease)
+}
+.review-link:hover,.review-link:focus-visible{
+  color:var(--green-dark);border-bottom-color:currentColor
+}
+.review-link span{font-size:.85em;opacity:.75}
+.review-link.is-small{font-size:12.5px;font-weight:600}
+/* Auf der Hotelkarte steht der Verweis neben dem Preis. Dort ist er
+   Zusatzinformation, nicht Angebot — also leiser und einzeilig. */
+.review-link.is-compact{
+  font-size:12.5px;font-weight:500;color:var(--grey);
+  white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis;
+  display:inline-block
+}
+.review-link.is-compact:hover,.review-link.is-compact:focus-visible{color:var(--green)}
+html[data-theme="dark"] .review-link.is-compact{color:var(--ink-soft) !important}
+html[data-theme="dark"] .review-link.is-compact:hover{color:var(--accent) !important}
+.review-link.is-big{font-size:15px}
+.hc-score .review-link{margin:2px 0}
+.hd-review-score.is-link{display:block}
+.hd-review-note{
+  margin:8px 0 0;font-size:12.5px;line-height:1.5;color:var(--grey-light);max-width:46ch
+}
+html[data-theme="dark"] .review-link{color:var(--accent) !important}
+html[data-theme="dark"] .review-link:hover{color:#b7dcc9 !important}
+html[data-theme="dark"] .hd-review-note{color:var(--ink-faint) !important}
+
 /* ============================================================
    HELL UND DUNKEL
    Die Seite hatte nur eine Palette, verteilt auf 43 Variablen und
@@ -8162,12 +8202,6 @@ body,body.is-subpage{overflow-x:visible}
 <div class="details-search" id="detailsSearch"><div>
 <div class="details-grid">
 <div class="detail-box price-detail"><label class="detail-title">Preis pro Nacht</label><div class="price-row"><input type="range" id="priceSlider" min="50" max="500" value="500" step="10"><span class="price-value" id="priceValue">€ 500</span></div></div>
-<div class="detail-box rating-detail"><label class="detail-title">Bewertung</label><div class="chip-group" id="ratingFilters">
-<label class="chip-check is-on"><input type="radio" name="rating" value="all" checked> Alle</label>
-<label class="chip-check"><input type="radio" name="rating" value="4.0"> 4,0+</label>
-<label class="chip-check"><input type="radio" name="rating" value="4.5"> 4,5+</label>
-<label class="chip-check"><input type="radio" name="rating" value="4.8"> 4,8+</label>
-</div></div>
 <div class="detail-box house-detail">
 <label class="detail-title">Art des Hauses</label><div class="chip-group" id="typeFilters">
 <label class="chip-check"><input type="checkbox" value="Boutique"> Boutique</label>
@@ -8313,8 +8347,7 @@ body,body.is-subpage{overflow-x:visible}
       <option value="recommended">Empfohlen</option>
       <option value="price-asc">Preis: niedrig → hoch</option>
       <option value="price-desc">Preis: hoch → niedrig</option>
-      <option value="rating">Beste Bewertung</option>
-    </select>
+          </select>
     <button type="button" class="reset-btn" id="resetFiltersBtn">Filter zurücksetzen</button>
   </div>
   <div class="hotels-count" id="hotelsCount"></div>
@@ -8710,10 +8743,6 @@ body,body.is-subpage{overflow-x:visible}
       <div class="chips" id="fStars"></div>
     </div>
     <div class="fgroup">
-      <h2>Bewertung</h2>
-      <div class="chips" id="fRating"></div>
-    </div>
-    <div class="fgroup">
       <h2>Kategorie</h2>
       <div class="chips" id="fCats"></div>
     </div>
@@ -8740,8 +8769,7 @@ body,body.is-subpage{overflow-x:visible}
           <option value="rec">Empfohlen</option>
           <option value="asc">Preis: aufsteigend</option>
           <option value="desc">Preis: absteigend</option>
-          <option value="rating">Beste Bewertung</option>
-        </select>
+                  </select>
       </div>
     </div>
     <div class="grid" id="grid"></div>
@@ -9111,6 +9139,33 @@ body,body.is-subpage{overflow-x:visible}
   /* Als Variablen, damit der Dunkelmodus dieselben Kacheln in
      passenden Toenen neu zeichnen kann. */
   var PH_BG="#e6eee9", PH_INK="#2a4a3e", PH_SUB="#5e6661";
+
+  /* ===== Bewertungen ===============================================
+     Diese Seite zeigt keine eigenen Bewertungszahlen. Sie hatte welche
+     — 4,9 Sterne, 289 Bewertungen — aber die waren erfunden. Sobald
+     echte Haeuser eingetragen sind, waere das irrefuehrende Werbung
+     (§ 5 UWG), und seit der EU-Omnibus-Richtlinie muss ausserdem
+     offengelegt werden, wie die Echtheit von Bewertungen geprueft wird.
+
+     Echte Daten liessen sich nicht einbauen: TripAdvisor und Google
+     verlangen einen Schluessel, der an eine Domain gebunden ist und
+     serverseitig liegen muss — beides gibt es bei einer einzelnen
+     HTML-Datei nicht. Booking.com oeffnet seine Schnittstelle nur
+     freigeschalteten Partnern.
+
+     Also verlinkt: der Gast sieht die echten Bewertungen an der Quelle.
+     Kein Schluessel, kein Server, keine Auflagen. */
+  function reviewUrl(h){
+    var q=[h&&h.name, h&&(h.location||h.loc), "Südtirol"].filter(Boolean).join(" ");
+    return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(q);
+  }
+  window.stayloReviewUrl=reviewUrl;
+  function reviewLink(h,klasse,text){
+    return '<a class="review-link'+(klasse?" "+klasse:"")+'" href="'+reviewUrl(h)+'" '+
+      'target="_blank" rel="noopener noreferrer" '+
+      'onclick="event.stopPropagation()">'+(text||"Bewertungen auf Google ansehen")+
+      ' <span aria-hidden="true">↗</span></a>';
+  }
   function ph(num,title,sub,w,h){
     w=w||1200; h=h||800;
     var k=Math.min(w,h)/400, cx=w/2, cy=h/2;
@@ -10341,17 +10396,13 @@ body,body.is-subpage{overflow-x:visible}
     function statsHtml(list){
       if(!list.length)return "";
       var prices=list.map(function(h){return h.price;});
-      var rated=list.filter(function(h){return h.rating>0;});
+
       var starred=list.filter(function(h){return h.stars>0;});
       var out=[];
       out.push('<span class="tstat"><b>'+list.length+'</b> <span>'+(list.length===1?"Haus":"Häuser")+'</span></span>');
       out.push('<span class="tstat"><span>ab</span> <b>€ '+Math.min.apply(null,prices)+'</b> <span>/ Nacht</span></span>');
       if(prices.length>1)
         out.push('<span class="tstat"><span>bis</span> <b>€ '+Math.max.apply(null,prices)+'</b> <span>/ Nacht</span></span>');
-      if(rated.length){
-        var avg=rated.reduce(function(a,h){return a+h.rating;},0)/rated.length;
-        out.push('<span class="tstat"><span>Ø</span> <b>'+avg.toFixed(1).replace(".",",")+'</b> <span>von 5</span></span>');
-      }
       if(starred.length){
         var lo=Math.min.apply(null,starred.map(function(h){return h.stars;}));
         var hi=Math.max.apply(null,starred.map(function(h){return h.stars;}));
@@ -10729,7 +10780,10 @@ body,body.is-subpage{overflow-x:visible}
     if(sort === "price-asc") list.sort(function(a,b){ return a.price - b.price; });
     else if(sort === "price-desc") list.sort(function(a,b){ return b.price - a.price; });
     else if(sort === "rating") list.sort(function(a,b){ return b.rating - a.rating; });
-    else list.sort(function(a,b){ return b.rating - a.rating || a.price - b.price; });
+    /* "Empfohlen" sortierte bisher nach der erfundenen Bewertung. Jetzt
+       nach der amtlichen Sternekategorie und dann nach Preis — beides
+       nachpruefbar. */
+    else list.sort(function(a,b){ return (b.stars||0) - (a.stars||0) || a.price - b.price; });
     return list;
   }
   function renderHotels(){
@@ -10778,13 +10832,7 @@ body,body.is-subpage{overflow-x:visible}
           '<h3 class="hotel-name">'+name+'</h3>'+
           (stars ? '<div class="hotel-stars" aria-label="'+h.stars+' von 5 Sternen">'+stars+'</div>' : '')+
           '<div class="hc-row">'+
-            '<div class="hc-score">'+(
-              h.rating>0
-                ? '<span class="hc-score-box">'+(Math.round(h.rating/5*100))+'%</span>'+
-                  '<div class="hc-score-text"><strong>'+(h.rating>=4.5?"Sehr gut":h.rating>=4?"Gut":h.rating>=3.5?"Befriedigend":"Ok")+'</strong>'+
-                  '<span class="hotel-reviews">'+(h.reviews?h.reviews.toLocaleString("de-DE")+" Bewertungen":"Neu")+'</span></div>'
-                : '<span class="hc-score-box hc-score-new">Neu</span><div class="hc-score-text"><strong>Neu bei Staylo</strong><span class="hotel-reviews">Noch keine Bewertungen</span></div>'
-            )+'</div>'+
+            '<div class="hc-score">'+reviewLink(h,"is-compact","Google-Bewertungen")+'</div>'+
             '<div class="hc-price-block">'+
               ((h.amenities&&h.amenities.length)?'<div class="hc-perk">'+escapeHtml(h.amenities[0])+'</div>':'')+
               '<div class="hotel-price">ab '+h.price+' €</div>'+
@@ -10946,7 +10994,7 @@ body,body.is-subpage{overflow-x:visible}
               '<div class="hd-title-meta">'+
                 '<span class="hd-type">'+hType+'</span>'+
                 '<span>'+hLoc+'</span>'+
-                (h.rating>0?'<span class="hd-rating-pill">★ '+h.rating.toFixed(1)+'</span>':'<span class="hd-rating-pill is-new">Neu</span>')+
+
               '</div>'+
             '</div>'+
           '</div>'+
@@ -10960,13 +11008,13 @@ body,body.is-subpage{overflow-x:visible}
             '</div>'+
             '<aside class="hd-side">'+
               '<div class="hd-price">ab € '+h.price+' <span>/ Nacht</span></div>'+
-              (h.rating>0?'<div class="hd-rating">★ '+h.rating.toFixed(1)+' · Sehr gut</div>':'<div class="hd-rating is-new">Noch keine Bewertungen</div>')+
+              '<div class="hd-rating">'+reviewLink(h)+'</div>'+
               '<p class="hd-note">Preis pro Nacht, zzgl. lokaler Abgaben. Endpreis nach Datumsauswahl.</p>'+
               '<div class="hd-divider"></div>'+
               '<div class="hd-quick">'+
                 '<div><span>Lage</span><strong>'+escapeHtml(String(h.loc||"").split("·")[0].trim())+'</strong></div>'+
                 '<div><span>Kategorie</span><strong>'+hType+'</strong></div>'+
-                '<div><span>Bewertung</span><strong>'+(h.rating>0?h.rating.toFixed(1)+' / 5':'—')+'</strong></div>'+
+
               '</div>'+
               '<button class="cta-btn" type="button" data-inquiry="'+h.id+'">Verfügbarkeit anfragen</button>'+
               '<button class="cta-btn secondary" type="button" data-fav-detail="'+h.id+'">'+(isFav ? "♥ In Favoriten" : "♡ Zu Favoriten")+'</button>'+
@@ -10990,19 +11038,18 @@ body,body.is-subpage{overflow-x:visible}
   }
 
   function buildHighlights(h){
-    var scoreLabel = h.rating>=4.5?"Außergewöhnlich":h.rating>=4?"Sehr gut":h.rating>=3.5?"Gut":h.rating>0?"Befriedigend":"";
-    var head = h.rating>0
-      ? '<div class="hd-review-score"><span class="hd-review-box">'+h.rating.toFixed(1)+'</span>'+
-        '<div><strong>'+scoreLabel+'</strong><span>'+(h.reviews?h.reviews.toLocaleString("de-DE")+" Bewertungen":"")+'</span></div></div>'
-      : '<div class="hd-review-score is-new"><span class="hd-review-box">Neu</span>'+
-        '<div><strong>Neu bei Staylo</strong><span>Noch keine Bewertungen</span></div></div>';
+    /* Kein eigener Punktestand mehr — der Verweis fuehrt dorthin, wo
+       die Bewertungen tatsaechlich stehen und geprueft werden. */
+    var head = '<div class="hd-review-score is-link">'+reviewLink(h,"is-big")+
+      '<p class="hd-review-note">Staylo erhebt keine eigenen Bewertungen. '+
+      'Was du hier siehst, sind Angaben des Hauses.</p></div>';
     var perks = (h.amenities||[]).slice(0,4).map(function(a){
       return '<li>'+a+'</li>';
     }).join("");
     return '<div class="hd-section hd-highlights">'+
-      '<h2>Bewertungen &amp; Highlights</h2>'+
+      '<h2>Bewertungen</h2>'+
       head+
-      (perks ? '<p class="hd-highlights-sub">Gäste heben besonders hervor:</p><ul class="hd-highlights-list">'+perks+'</ul>' : '')+
+      (perks ? '<p class="hd-highlights-sub">Das hebt das Haus selbst hervor:</p><ul class="hd-highlights-list">'+perks+'</ul>' : '')+
     '</div>';
   }
 
@@ -12316,7 +12363,7 @@ body,body.is-subpage{overflow-x:visible}
       '<span class="map-pop">'+
       '<strong>'+escapeHtml(h.name)+'</strong>'+
       '<span class="map-pop-loc">'+escapeHtml(h.loc||h.location||"")+'</span>'+
-      '<span class="map-pop-meta">★ '+String(h.rating).replace(".",",")+
+      ''+
         ' · ab €&#8239;'+h.price+' / Nacht</span>'+
       '<button type="button" class="map-pop-btn" data-map-hotel="'+escapeAttr(h.id)+'">Details ansehen →</button>'+
       '</span>'
@@ -13466,7 +13513,6 @@ body,body.is-subpage{overflow-x:visible}
     var l=HOTELS.filter(matches);
     if(state.sort==="asc")    l.sort(function(a,b){return a.price-b.price;});
     if(state.sort==="desc")   l.sort(function(a,b){return b.price-a.price;});
-    if(state.sort==="rating") l.sort(function(a,b){return b.rating-a.rating;});
     return l;
   }
   function activeCount(){
@@ -13507,10 +13553,6 @@ body,body.is-subpage{overflow-x:visible}
     return {v:s,n:countIf(function(h){return String(h.stars)===s;}),label:s+"&nbsp;★"};
   }),"stars");
 
-  buildChips($("fRating"),["4.8","4.5","4"].map(function(r){
-    return {v:r,n:countIf(function(h){return h.rating>=+r;}),
-      label:"ab "+String(r).replace(".",",")};
-  }).filter(function(x){return x.n>0;}),"rating");
 
   /* The same category definitions the landing page uses, so a
      category means exactly one thing across the whole site. */
@@ -13596,8 +13638,8 @@ body,body.is-subpage{overflow-x:visible}
           return '<span class="am">'+esc(a)+'</span>';}).join("")+'</div>'+
         '<div class="card-foot">'+
           '<span class="price">ab €&#8239;'+h.price+' <small>/ Nacht</small></span>'+
-          (h.rating>0?'<span class="rate">★ '+h.rating.toFixed(1).replace(".",",")+'</span>'
-                     :'<span class="rate is-new">Neu</span>')+
+          '<a class="review-link is-small" href="'+window.stayloReviewUrl(h)+'" target="_blank" '+
+            'rel="noopener noreferrer" onclick="event.stopPropagation()">Bewertungen ↗</a>'+
         '</div>'+
       '</div></article>';
   }
@@ -13758,7 +13800,7 @@ body,body.is-subpage{overflow-x:visible}
         '<h2 id="sheetTitle">'+esc(h.name)+'</h2>'+
         '<div class="sheet-facts">'+
           '<div class="fact"><span>Ab</span><strong>€ '+h.price+'</strong></div>'+
-          '<div class="fact"><span>Bewertung</span><strong>'+(h.rating>0?h.rating.toFixed(1).replace(".",","):"neu")+'</strong></div>'+
+
           '<div class="fact"><span>Sterne</span><strong>'+(h.stars||"—")+'</strong></div>'+
           '<div class="fact"><span>Art</span><strong>'+esc(h.type)+'</strong></div>'+
         '</div>'+
@@ -14105,7 +14147,7 @@ body,body.is-subpage{overflow-x:visible}
     "Neu bei Staylo":"Nuovo su Staylo","Noch keine Bewertungen":"Ancora nessuna recensione",
     /* --- hotel detail --- */
     "Über dieses Hotel":"Su questo hotel","Zimmerkategorien":"Tipologie di camera","Lage":"Posizione",
-    "Bewertungen & Highlights":"Recensioni e punti di forza","Gäste heben besonders hervor:":"Gli ospiti apprezzano in particolare:",
+    "Bewertungen":"Recensioni","Google-Bewertungen":"Recensioni su Google","Bewertungen auf Google ansehen":"Vedi le recensioni su Google","Staylo erhebt keine eigenen Bewertungen. Was du hier siehst, sind Angaben des Hauses.":"Staylo non raccoglie recensioni proprie. Quanto vedi qui sono dati forniti dalla struttura.","Das hebt das Haus selbst hervor:":"Gli ospiti apprezzano in particolare:",
     "Ähnliche Unterkünfte":"Strutture simili","Verfügbarkeit anfragen":"Richiedi disponibilità",
     "♡ Zu Favoriten":"♡ Aggiungi ai preferiti","♥ In Favoriten":"♥ Nei preferiti",
     "Zur Website des Hotels ↗":"Al sito dell'hotel ↗","Kostenlose Anfrage · Keine Buchungsverpflichtung":"Richiesta gratuita · Nessun obbligo di prenotazione",
@@ -14282,7 +14324,7 @@ body,body.is-subpage{overflow-x:visible}
     "Sehr gut":"Very good","Außergewöhnlich":"Exceptional","Gut":"Good","Neu":"New",
     "Neu bei Staylo":"New on Staylo","Noch keine Bewertungen":"No reviews yet",
     "Über dieses Hotel":"About this hotel","Zimmerkategorien":"Room types","Lage":"Location",
-    "Bewertungen & Highlights":"Reviews & highlights","Gäste heben besonders hervor:":"Guests particularly mention:",
+    "Bewertungen":"Reviews","Google-Bewertungen":"Google reviews","Bewertungen auf Google ansehen":"See reviews on Google","Staylo erhebt keine eigenen Bewertungen. Was du hier siehst, sind Angaben des Hauses.":"Staylo does not collect its own reviews. What you see here is supplied by the property.","Das hebt das Haus selbst hervor:":"Guests particularly mention:",
     "Ähnliche Unterkünfte":"Similar places","Verfügbarkeit anfragen":"Check availability",
     "♡ Zu Favoriten":"♡ Add to favourites","♥ In Favoriten":"♥ In favourites",
     "Zur Website des Hotels ↗":"Visit the hotel's website ↗","Kostenlose Anfrage · Keine Buchungsverpflichtung":"Free enquiry · No obligation to book",
