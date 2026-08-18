@@ -3100,14 +3100,19 @@ img{max-width:100%;height:auto}
 }
 .map-shell{
   border-radius:var(--radius-lg);
-  overflow:hidden
+  overflow:hidden;
+  --map-legend-h:34px
 }
 .map-canvas{
   border-radius:var(--radius-lg) var(--radius-lg) 0 0
 }
 .map-legend{
   display:flex;
-  flex-wrap:wrap;
+  flex-wrap:nowrap;
+  align-items:center;
+  min-height:var(--map-legend-h,34px);
+  box-sizing:border-box;
+  overflow:hidden;
   gap:12px 18px;
   padding:12px 16px;
   font-size:12.5px;
@@ -3115,7 +3120,7 @@ img{max-width:100%;height:auto}
   border-top:1px solid var(--border);
   background:#fafaf8
 }
-.map-legend span{display:inline-flex;align-items:center;gap:6px}
+.map-legend span{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
 .map-legend i{
   width:10px;height:10px;border-radius:50%;
   background:var(--green);display:inline-block
@@ -7533,15 +7538,21 @@ body,body.is-subpage{overflow-x:visible}
 .map-view-note{
   position:absolute;
   left:14px;
-  bottom:14px;
+  /* Der Shell endet unter der Legende, nicht am Kartenrand — also die
+     Leistenhoehe mitrechnen, sonst sitzt die Notiz auf der Legende und
+     ragt in die abgerundete Ecke. */
+  bottom:calc(var(--map-legend-h,34px) + 12px);
   z-index:500;
+  max-width:calc(100% - 28px);
+  box-sizing:border-box;
   padding:7px 13px;
-  border-radius:999px;
+  border-radius:16px;
   background:rgba(252,253,251,.94);
   border:1px solid rgba(20,32,27,.1);
   box-shadow:0 4px 14px rgba(15,35,26,.14);
   color:#4a5650;
   font-size:12px;
+  line-height:1.35;
   font-weight:500;
   pointer-events:none
 }
