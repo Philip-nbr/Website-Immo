@@ -12906,9 +12906,40 @@ body,body.is-subpage{overflow-x:visible}
      whichever is touched, the other has to follow. */
   function syncRailFromState(){
     document.querySelectorAll("#page-suche .chip[data-k]").forEach(function(c){
-      var arr=state[c.getAttribute("data-k")]||[];
-      c.setAttribute("aria-pressed",arr.indexOf(c.getAttribute("data-v"))!==-1?"true":"false");
+      var t=chipTarget(c.getAttribute("data-k"),c.getAttribute("data-v"));
+      var arr=state[t.k]||[];
+      c.setAttribute("aria-pressed",arr.indexOf(t.v)!==-1?"true":"false");
     });
+  }
+
+  /* Sechs der acht Kategorien meinen dasselbe wie ein Eintrag unter
+     "Art des Hauses". Bisher waren das zwei getrennte Filter: wer ueber
+     eine Kategoriekachel hereinkam, sah oben "Design Hotels" gesetzt,
+     in der Spalte aber ein weisses "Design".
+
+     Nicht gespiegelt, sondern zusammengelegt: beide Chips schreiben in
+     dieselbe Auswahl (state.types). Spiegeln waere falsch, weil die
+     Kategorien mit UND verknuepft werden und die Haustypen mit ODER —
+     "Design" und "Wellness" gleichzeitig haette dann null Treffer
+     ergeben statt der Vereinigung.
+
+     Adults Only und Nachhaltig haben keine Entsprechung und bleiben
+     eigenstaendig in state.cats. */
+  var CAT_TYPE={luxus:"Luxus",wellness:"Wellness",berg:"Berghotel",
+                boutique:"Boutique",design:"Design",familie:"Familie"};
+  var TYPE_CAT={};
+  Object.keys(CAT_TYPE).forEach(function(k){ TYPE_CAT[CAT_TYPE[k]]=k; });
+
+  /* Ein Chip kann in einer anderen Liste landen, als sein data-k sagt. */
+  function chipTarget(k,v){
+    if(k==="cats"&&CAT_TYPE[v]) return {k:"types",v:CAT_TYPE[v]};
+    return {k:k,v:v};
+  }
+  /* Beschriftung fuer die Chipzeile ueber den Ergebnissen: der
+     Kategoriename ist sprechender als der nackte Haustyp. */
+  function typeLabel(t){
+    var c=TYPE_CAT[t]&&catByKey(TYPE_CAT[t]);
+    return c?c.label:t;
   }
 
   function catByKey(k){
@@ -13015,17 +13046,24 @@ body,body.is-subpage{overflow-x:visible}
     .filter(function(x){return x.n>0;}),"pets");
 
   document.addEventListener("click",function(e){
+    var ut=e.target.closest&&e.target.closest("[data-untype]");
+    if(ut){
+      var tv=ut.getAttribute("data-untype"),it=state.types.indexOf(tv);
+      if(it!==-1)state.types.splice(it,1);
+      syncRailFromState(); render(); return;
+    }
     var uc=e.target.closest&&e.target.closest("[data-uncat]");
     if(uc){
       var k=uc.getAttribute("data-uncat"),ix=state.cats.indexOf(k);
       if(ix!==-1)state.cats.splice(ix,1);
-      render(); return;
+      syncRailFromState(); render(); return;
     }
     var c=e.target.closest&&e.target.closest(".chip");
     if(!c)return;
-    var k=c.getAttribute("data-k"),v=c.getAttribute("data-v"),arr=state[k],i=arr.indexOf(v);
-    if(i===-1)arr.push(v); else arr.splice(i,1);
-    c.setAttribute("aria-pressed",i===-1?"true":"false");
+    var t=chipTarget(c.getAttribute("data-k"),c.getAttribute("data-v"));
+    var arr=state[t.k],i=arr.indexOf(t.v);
+    if(i===-1)arr.push(t.v); else arr.splice(i,1);
+    syncRailFromState();
     render();
   });
 
@@ -13089,12 +13127,19 @@ body,body.is-subpage{overflow-x:visible}
       : '<strong>'+list.length+'</strong> von '+HOTELS.length+' Häusern';
     var n=activeCount();
     $("filterN").hidden=!n; $("filterN").textContent=n;
-    $("ctx").innerHTML=state.cats.map(function(k){
+    /* Die Zeile ueber den Ergebnissen zeigt beides — sonst waere ein in
+       der Spalte gesetzter Haustyp oben unsichtbar und liesse sich dort
+       auch nicht wieder abwaehlen. */
+    $("ctx").innerHTML=state.types.map(function(t){
+      return '<button class="ctxchip" type="button" data-untype="'+esc(t)+'">'+
+        esc(typeLabel(t))+'<span aria-hidden="true">×</span>'+
+        '<span class="sr-only">Filter entfernen</span></button>';
+    }).concat(state.cats.map(function(k){
       var c=catByKey(k);
       return c?'<button class="ctxchip" type="button" data-uncat="'+k+'">'+
         esc(c.label)+'<span aria-hidden="true">×</span>'+
         '<span class="sr-only">Filter entfernen</span></button>':"";
-    }).join("");
+    })).join("");
 
     g.innerHTML=list.length
       ? list.map(cardHTML).join("")
@@ -13305,7 +13350,13 @@ body,body.is-subpage{overflow-x:visible}
     state.types=p.getAll("type");
     state.stars=p.getAll("stars");
     state.amen=p.getAll("amen");
-    state.cats=p.getAll("cat");
+    /* Alte Links wie ?cat=design bleiben gueltig: was eine Entsprechung
+       unter "Art des Hauses" hat, wandert dorthin. */
+    state.cats=[];
+    p.getAll("cat").forEach(function(k){
+      if(CAT_TYPE[k]){ if(state.types.indexOf(CAT_TYPE[k])===-1)state.types.push(CAT_TYPE[k]); }
+      else if(state.cats.indexOf(k)===-1) state.cats.push(k);
+    });
     state.rating=p.getAll("rating");
     state.pets=p.getAll("pets");
     state.price=Math.min(500,Math.max(50,+(p.get("maxPrice")||500)))||500;
@@ -13316,16 +13367,13 @@ body,body.is-subpage{overflow-x:visible}
     $("fPrice").value=state.price;
     $("priceOut").textContent="€ "+state.price+(state.price>=500?"+":"");
     $("sort").value=state.sort;
-    document.querySelectorAll(".chip").forEach(function(c){
-      var on=state[c.getAttribute("data-k")].indexOf(c.getAttribute("data-v"))!==-1;
-      c.setAttribute("aria-pressed",String(on));
-    });
+    syncRailFromState();
     if(replace)render();
     /* Nicht an `replace` haengen: beim ersten Oeffnen von #suche laeuft
        applyParams(false), und genau das ist der Fall, in dem man ueber
        eine Kategoriekachel hereinkommt. applyParams wird ohnehin nur
        beim Ankommen gerufen, nicht beim Klick auf einen Chip. */
-    if(state.cats.length)revealCatGroup();
+    if(state.cats.length||state.types.length)revealCatGroup();
   }
 
   /* Die Kategorie kommt von aussen (Kategorieseite, Themenfenster) und
@@ -13334,7 +13382,10 @@ body,body.is-subpage{overflow-x:visible}
      dorthin scrollen und kurz markieren. */
   function revealCatGroup(){
     setTimeout(function(){
-      var box=$("fCats");
+      /* Zu der Gruppe scrollen, in der die Auswahl tatsaechlich sitzt:
+         die sechs ueberschneidenden Kategorien landen unter "Art des
+         Hauses", Adults Only und Nachhaltig unter "Kategorie". */
+      var box=state.types.length?$("fType"):$("fCats");
       var grp=box&&box.closest?box.closest(".fgroup"):null;
       if(!grp)return;
       var rail=grp.closest(".rail");
