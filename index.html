@@ -7125,6 +7125,32 @@ html[data-theme="dark"] .empty-state{
   background:var(--surface) !important;border-color:var(--line) !important
 }
 html[data-theme="dark"] .lang-option{background:transparent !important;color:var(--ink) !important}
+
+/* Das Menue im Kopf wird beim Ueberfahren von einer eigenen Regel
+   deckend weiss gesetzt — und die hat mit .nav-item.has-menu:hover >
+   .dropdown drei Klassen und schlaegt damit meine zwei. Deshalb hier
+   mit derselben Kette dagegen. Das war das Muster hinter allen drei
+   Faellen: Kopfleiste, Kartenflaeche, Menue. */
+html[data-theme="dark"] .nav-item.has-menu:hover > .dropdown,
+html[data-theme="dark"] .nav-item.has-menu:focus-within > .dropdown,
+html[data-theme="dark"] .nav-item.has-menu .dropdown:hover,
+html[data-theme="dark"] .dropdown{
+  background:var(--surface) !important;
+  border-color:var(--line) !important;
+  box-shadow:0 14px 38px rgba(0,0,0,.45) !important
+}
+html[data-theme="dark"] .dropdown-link{color:var(--ink) !important}
+html[data-theme="dark"] .dropdown-link:hover,
+html[data-theme="dark"] .dropdown-link:focus{
+  background:var(--surface-3) !important;color:var(--accent) !important
+}
+html[data-theme="dark"] .dropdown-link small{color:var(--ink-faint) !important}
+html[data-theme="dark"] .dropdown-title{color:var(--ink) !important}
+html[data-theme="dark"] .dropdown-subtitle{color:var(--ink-soft) !important}
+/* Weisse Schrift auf dem hellen Akzent — dieselbe Falle wie zuvor */
+html[data-theme="dark"] .dropdown-cta{
+  background:var(--accent) !important;color:var(--on-accent) !important
+}
 html[data-theme="dark"] .lang-option[aria-selected="true"]{
   background:var(--accent-soft) !important;color:var(--accent) !important
 }
