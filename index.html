@@ -251,8 +251,7 @@ img{
   color:var(--green-dark)
 }
 .header.is-scrolled .nav-item.has-menu>span::after{border-top-color:rgba(26,31,28,.45)}
-.header.is-scrolled .logo-text span:first-child{color:var(--black)}
-.header.is-scrolled .logo-text span:last-child{color:var(--green-mid)}
+.header.is-scrolled .logo-text span{color:var(--black)}
 .header.is-scrolled .nav-glass{
   color:var(--green-dark);
   background:rgba(255,255,255,.55);
@@ -297,6 +296,10 @@ img{
 .logo:hover{opacity:.92}
 .logo:focus-visible{outline:none;box-shadow:var(--focus);border-radius:8px}
 
+/* Solange kein Logo vorliegt, steht hier ein Kreis mit Fragezeichen —
+   erkennbar als Leerstelle, nicht als Gestaltung. Zum Einsetzen:
+   .is-empty entfernen und wieder ein <img class="logo-image"> in den
+   Kreis legen. */
 .logo-mark{
   width:32px;
   height:32px;
@@ -322,12 +325,25 @@ img{
   color:#f5f5f1
 }
 
-.logo-text span:first-child{
-  color:#fff
+.logo-mark.is-empty{
+  background:transparent;
+  border:1.5px dashed rgba(255,255,255,.55)
 }
+.logo-q{
+  font-family:'Lexend',system-ui,sans-serif;
+  font-size:16px;
+  font-weight:600;
+  line-height:1;
+  color:rgba(255,255,255,.8)
+}
+.header.is-scrolled .logo-mark.is-empty{border-color:rgba(42,74,62,.45)}
+.header.is-scrolled .logo-q{color:rgba(42,74,62,.75)}
 
-.logo-text span:last-child{
-  color:#b8d0c2
+/* Einfarbig statt zweifarbig — der Schriftzug soll ein Wort sein,
+   nicht zwei Toene. Beim Scrollen wird die Leiste hell, deshalb
+   wechselt er dort mit, sonst waere er unsichtbar. */
+.logo-text span{
+  color:#fff
 }
 
 .nav-center{
@@ -7226,8 +7242,9 @@ html[data-theme="dark"] .header.is-scrolled{
 html[data-theme="dark"] .header.is-scrolled .nav-item{color:rgba(232,239,234,.84)}
 html[data-theme="dark"] .header.is-scrolled .nav-item:hover,
 html[data-theme="dark"] .header.is-scrolled .nav-item:focus-within{color:var(--ink)}
-html[data-theme="dark"] .header.is-scrolled .logo-text span:first-child{color:var(--ink)}
-html[data-theme="dark"] .header.is-scrolled .logo-text span:last-child{color:var(--accent)}
+html[data-theme="dark"] .header.is-scrolled .logo-text span{color:var(--ink) !important}
+html[data-theme="dark"] .logo-mark.is-empty{border-color:rgba(255,255,255,.4)}
+html[data-theme="dark"] .header.is-scrolled .logo-q{color:var(--ink-soft)}
 html[data-theme="dark"] .header.is-scrolled .nav-glass{
   background:rgba(255,255,255,.1) !important;color:var(--ink)
 }
@@ -8296,7 +8313,7 @@ body,body.is-subpage{overflow-x:visible}
 
 <header class="header" id="siteHeader">
 <div class="container nav">
-<a href="#" class="logo" id="logoHome"><span class="logo-mark"><img class="logo-image" src="./YtDCk.jpg" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><span class="logo-fallback" style="display:none">S</span></span><div class="logo-text"><span>Stay</span><span>lo</span></div></a>
+<a href="#" class="logo" id="logoHome"><span class="logo-mark is-empty" role="img" aria-label="Logo fehlt noch"><span class="logo-q" aria-hidden="true">?</span></span><div class="logo-text"><span>Stay</span><span>lo</span></div></a>
 <nav class="nav-center">
 <a href="#hotels" class="nav-item" data-nav="home">Hotels</a>
 <div class="nav-item has-menu"><span data-page="categories" role="link" tabindex="0">Kategorien</span>
