@@ -7246,8 +7246,17 @@ html[data-theme="dark"] .header.is-scrolled .logo-text span{color:var(--ink) !im
 html[data-theme="dark"] .logo-mark.is-empty{border-color:rgba(255,255,255,.4)}
 html[data-theme="dark"] .header.is-scrolled .logo-q{color:var(--ink-soft)}
 html[data-theme="dark"] .header.is-scrolled .nav-glass{
-  background:rgba(255,255,255,.1) !important;color:var(--ink)
+  background:rgba(255,255,255,.08) !important;color:var(--ink)
 }
+/* Mit !important auf der Grundfarbe bekam der Ueberfahr-Zustand kein
+   Gewicht mehr — im Dunkeln gab es dadurch gar keine Rueckmeldung. */
+html[data-theme="dark"] .header.is-scrolled .nav-glass:hover,
+html[data-theme="dark"] .header.is-scrolled .nav-glass:focus-visible,
+html[data-theme="dark"] .nav-glass:hover,
+html[data-theme="dark"] .nav-glass:focus-visible{
+  background:rgba(255,255,255,.18) !important
+}
+html[data-theme="dark"] #loginBtn:hover{background:#9acdb6 !important}
 html[data-theme="dark"] .header.is-scrolled .mobile-menu .bar{background:var(--ink)}
 /* "Anmelden" ist der eine Handlungsaufruf in der Leiste. Als
    .nav-glass wurde er von der Regel oben mit eingesammelt und
@@ -7652,7 +7661,25 @@ html[data-theme="dark"] .topic-tag{
 }
 
 /* ---- Der Schalter selbst ----------------------------------- */
-.theme-toggle{display:inline-flex;align-items:center;justify-content:center;padding:0;width:38px}
+/* Die drei Symbolknoepfe im Kopf — Favoriten, Hell/Dunkel, Sprache —
+   waren 34, 38 und 28 Pixel breit. Solange sie unsichtbar sind, faellt
+   das nicht auf; beim Ueberfahren erscheint die Pille und die drei
+   sind sichtbar unterschiedlich gross. Jetzt ein gemeinsames Quadrat.
+   44 px, damit die Beruehrflaeche die Mindestgroesse behaelt.
+   "Anmelden" bleibt aussen vor: der traegt eine Beschriftung. */
+.nav-right .nav-glass:not(#loginBtn){
+  width:var(--touch-min,44px);
+  height:var(--touch-min,44px);
+  padding:0;
+  border-radius:50%;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  flex:0 0 auto
+}
+.theme-toggle{display:inline-flex;align-items:center;justify-content:center}
+/* Die Zaehlblase sass an einem Rand, den es jetzt nicht mehr gibt. */
+.nav-right #favoritesToggle .nav-badge{top:2px;right:1px}
 .theme-toggle .ic-moon{display:none}
 html[data-theme="dark"] .theme-toggle .ic-sun{display:none}
 html[data-theme="dark"] .theme-toggle .ic-moon{display:inline-block}
