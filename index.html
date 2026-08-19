@@ -7025,41 +7025,56 @@ body{background:var(--cream);line-height:1.5}
    ============================================================ */
 html[data-theme="dark"]{
   color-scheme:dark;
-  --surface:#161d1a;
-  --surface-2:#1b2320;
-  --surface-3:#232d29;
-  --ground:#101613;
-  --ink:#e8efea;
-  --ink-soft:#a9b5ae;
-  --ink-faint:#7d8a83;
-  --line:rgba(255,255,255,.10);
-  --border:rgba(255,255,255,.10);
-  --border-soft:rgba(255,255,255,.06);
-  --accent:#8fc4ac;
-  --accent-soft:#233029;
-  --on-accent:#0f1613;
-  --ph-bg:#1e2a25;
+  /* Weicher als der erste Wurf. Der Grund war fast Schwarz und die
+     Schrift fast Weiss — zusammen ergab das ueber 15:1 und wirkte
+     hart. Jetzt liegt der Grund hoeher, die Schrift etwas tiefer,
+     und die Abstufungen zwischen den Flaechen sind enger. Der
+     Fliesstext kommt damit immer noch auf rund 11:1, also weit
+     ueber der Anforderung — nur eben ohne das Blenden. */
+  --surface:#1b2320;
+  --surface-2:#202825;
+  --surface-3:#27302c;
+  --ground:#151c19;
+  --ink:#d8e0db;
+  --ink-soft:#a0aba6;
+  --ink-faint:#7b8681;
+  --line:rgba(255,255,255,.085);
+  --border:rgba(255,255,255,.085);
+  --border-soft:rgba(255,255,255,.05);
+  --accent:#86bda4;
+  --accent-soft:#26302b;
+  --on-accent:#111a16;
+  --ph-bg:#222c28;
 
-  --white:#161d1a;
-  --black:#e8efea;
-  --grey:#a9b5ae;
-  --grey-light:#7d8a83;
-  --cream:#101613;
-  --cream-warm:#151c19;
-  --green:#8fc4ac;
-  --green-dark:#0f1613;
-  --green-mid:#6aa78d;
-  --green-soft:#233029;
-  --glow:#c99aa2;
-  --glow-dark:#e0b3ba;
-  --glow-soft:#2c2226;
-  --glass:rgba(30,42,37,.55);
-  --glass-strong:rgba(30,42,37,.74);
-  --focus:0 0 0 3px rgba(143,196,172,.32);
-  --shadow-sm:0 2px 12px rgba(0,0,0,.34);
-  --shadow-md:0 8px 28px rgba(0,0,0,.42);
-  --shadow-lg:0 16px 48px rgba(0,0,0,.5);
-  --shadow-xl:0 24px 64px rgba(0,0,0,.58);
+  --white:#1b2320;
+  --black:#d8e0db;
+  --grey:#a0aba6;
+  --grey-light:#7b8681;
+  --cream:#151c19;
+  --cream-warm:#1a221f;
+  --green:#86bda4;
+  --green-dark:#111a16;
+  --green-mid:#659f87;
+  --green-soft:#26302b;
+  --glow:#c096a0;
+  --glow-dark:#d7aeb6;
+  --glow-soft:#2b2226;
+  --glass:rgba(33,43,39,.55);
+  --glass-strong:rgba(33,43,39,.74);
+  --glass-light-solid:#1b2320;
+  --glass-hairline:rgba(255,255,255,.085);
+  --glass-edge:rgba(255,255,255,.06);
+  --focus:0 0 0 3px rgba(134,189,164,.30);
+  /* Schatten im Dunkeln sind fast unsichtbar und wirken nur als
+     schmutziger Rand. Flacher, dafuer traegt eine Haarlinie die
+     Abgrenzung. */
+  --shadow-sm:0 1px 3px rgba(0,0,0,.28);
+  --shadow-md:0 4px 14px rgba(0,0,0,.32);
+  --shadow-lg:0 10px 30px rgba(0,0,0,.38);
+  --shadow-xl:0 18px 44px rgba(0,0,0,.44);
+  --lift-modal:0 18px 44px rgba(0,0,0,.5);
+  --lift-panel:0 8px 24px rgba(0,0,0,.36);
+  --lift-1:0 1px 3px rgba(0,0,0,.28)
 }
 html[data-theme="dark"] body{background:var(--ground);color:var(--ink)}
 
@@ -7155,8 +7170,13 @@ html[data-theme="dark"] .header{
   background:rgba(14,20,17,.62);
   border-bottom-color:rgba(255,255,255,.10)
 }
+/* Die helle Fassung der Leiste steht weiter unten mit !important —
+   bewusst, damit sie in jeder Engine deckend bleibt. Ohne dasselbe
+   Gewicht verliert der Dunkelmodus hier, und die Leiste wird beim
+   Scrollen wieder weiss. */
 html[data-theme="dark"] .header.is-scrolled{
-  background:rgba(18,25,21,.9);color:var(--ink)
+  background:#1b2320 !important;color:var(--ink) !important;
+  border-bottom-color:rgba(255,255,255,.09) !important
 }
 html[data-theme="dark"] .header.is-scrolled .nav-item{color:rgba(232,239,234,.84)}
 html[data-theme="dark"] .header.is-scrolled .nav-item:hover,
@@ -7167,6 +7187,15 @@ html[data-theme="dark"] .header.is-scrolled .nav-glass{
   background:rgba(255,255,255,.1) !important;color:var(--ink)
 }
 html[data-theme="dark"] .header.is-scrolled .mobile-menu .bar{background:var(--ink)}
+/* "Anmelden" ist der eine Handlungsaufruf in der Leiste. Als
+   .nav-glass wurde er von der Regel oben mit eingesammelt und
+   verschwand im dunklen Kopf — er bekommt den Akzent zurueck. */
+html[data-theme="dark"] #loginBtn,
+html[data-theme="dark"] .header.is-scrolled #loginBtn{
+  background:var(--accent) !important;color:var(--on-accent) !important;
+  border-color:transparent !important
+}
+html[data-theme="dark"] .header.is-scrolled .nav-item.is-active{color:var(--ink) !important}
 
 /* ---- Knoepfe in Akzentfarbe -------------------------------- */
 html[data-theme="dark"] .cta-btn:not(.secondary),
@@ -7195,7 +7224,7 @@ html[data-theme="dark"] .hotelier-box{
    Dunkelmodus ohnehin verwendet. Nicht ganz umkehren (.88): bei vollem
    Umkehren landet die Flaeche auf fast demselben Schwarz wie der
    Seitengrund, und die Kachel verschwindet darin. */
-html[data-theme="dark"] img.ph-light{filter:invert(.88) hue-rotate(180deg)}
+html[data-theme="dark"] img.ph-light{filter:invert(.85) hue-rotate(180deg)}
 
 /* ---- Karte -------------------------------------------------- */
 html[data-theme="dark"] .map-canvas{background:#151c19}
@@ -7429,6 +7458,91 @@ html[data-theme="dark"] .region-strip-eyebrow,
 html[data-theme="dark"] .hero-label{background:var(--surface-3) !important}
 html[data-theme="dark"] .footer-column h4,
 html[data-theme="dark"] .footer-logo{color:var(--ink) !important}
+
+
+/* ---- Nachtrag aus dem zweiten Durchgang --------------------
+   Ein Durchklicken durch Dialoge, Kalender, Favoriten und das
+   Themenfenster hat drei Luecken gezeigt: Flaechen, die ueber
+   --glass-light-solid liefen (das war noch der helle Wert),
+   die Kennzahl-Pillen im Themenfenster, und die Fusszeile des
+   Themenfensters. */
+html[data-theme="dark"] .topic-foot,
+html[data-theme="dark"] .topic-modal,
+html[data-theme="dark"] .auth-modal,
+html[data-theme="dark"] .lightbox-stage,
+html[data-theme="dark"] .room-modal{
+  background:var(--surface) !important;color:var(--ink)
+}
+html[data-theme="dark"] .topic-foot{
+  border-top-color:var(--line) !important;
+  box-shadow:0 -6px 18px rgba(0,0,0,.3) !important
+}
+html[data-theme="dark"] .topic-count,
+html[data-theme="dark"] .topic-count strong{color:var(--ink-soft) !important}
+html[data-theme="dark"] .topic-count strong{color:var(--ink) !important}
+html[data-theme="dark"] .topic-body,
+html[data-theme="dark"] .topic-scroll{background:var(--surface) !important}
+html[data-theme="dark"] .topic-sec h3,
+html[data-theme="dark"] .tfact-v,
+html[data-theme="dark"] .tseason strong{color:var(--ink) !important}
+html[data-theme="dark"] .topic-sec p,
+html[data-theme="dark"] .tseason span,
+html[data-theme="dark"] .topic-more{color:var(--ink-soft) !important}
+html[data-theme="dark"] .tfact-k{color:var(--ink-faint) !important}
+/* Die Kennzahl-Pillen waren dunkelgruene Schrift auf dunkelgruenem
+   Grund — im Hellmodus richtig, hier unlesbar. */
+html[data-theme="dark"] .tstat{
+  background:var(--accent-soft) !important;color:var(--ink) !important
+}
+html[data-theme="dark"] .tstat b{color:var(--accent) !important}
+html[data-theme="dark"] .tstat span{color:var(--ink-soft) !important}
+html[data-theme="dark"] .tfit-yes{background:rgba(134,189,164,.08) !important;border-color:rgba(134,189,164,.2) !important}
+html[data-theme="dark"] .tfit-no{background:rgba(192,150,160,.08) !important;border-color:rgba(192,150,160,.2) !important}
+html[data-theme="dark"] .tfit-yes h4{color:var(--accent) !important}
+html[data-theme="dark"] .tfit-no h4{color:var(--glow-dark) !important}
+html[data-theme="dark"] .thotel-name{color:var(--ink) !important}
+html[data-theme="dark"] .thotel-sub{color:var(--ink-soft) !important}
+html[data-theme="dark"] .thotel-price{color:var(--accent) !important}
+html[data-theme="dark"] .topic-rule{border-top-color:var(--line) !important}
+
+/* Kalender, Favoriten, Sprachmenue und Ziel-Auswahl */
+html[data-theme="dark"] .cal,
+html[data-theme="dark"] .cal-head,
+html[data-theme="dark"] .occ-panel,
+html[data-theme="dark"] .dest-list,
+html[data-theme="dark"] .favorites-list,
+html[data-theme="dark"] .favorites-item{
+  background:var(--surface) !important;color:var(--ink) !important
+}
+html[data-theme="dark"] .cal-day:hover,
+html[data-theme="dark"] .dest-item:hover,
+html[data-theme="dark"] .lang-option:hover,
+html[data-theme="dark"] .favorites-item:hover{background:var(--surface-3) !important}
+html[data-theme="dark"] .cal-day.is-out,
+html[data-theme="dark"] .cal-dow{color:var(--ink-faint) !important}
+html[data-theme="dark"] .cal-day.is-sel,
+html[data-theme="dark"] .cal-day.is-start,
+html[data-theme="dark"] .cal-day.is-end{background:var(--accent) !important;color:var(--on-accent) !important}
+html[data-theme="dark"] .cal-day.is-range{background:var(--accent-soft) !important;color:var(--ink) !important}
+html[data-theme="dark"] .lang-option,
+html[data-theme="dark"] .dest-item{color:var(--ink) !important}
+html[data-theme="dark"] .favorites-title{color:var(--ink) !important}
+
+/* Formular fuer Hoteliers */
+html[data-theme="dark"] .ls-group,
+html[data-theme="dark"] .hstep,
+html[data-theme="dark"] .listing-count,
+html[data-theme="dark"] .page-intro{
+  background:var(--surface) !important;color:var(--ink) !important;
+  border-color:var(--line) !important
+}
+html[data-theme="dark"] .ls-help,
+html[data-theme="dark"] .listing-sub,
+html[data-theme="dark"] .hstep p{color:var(--ink-soft) !important}
+html[data-theme="dark"] .hstep strong,
+html[data-theme="dark"] .page-intro h2{color:var(--ink) !important}
+html[data-theme="dark"] .hstep-n{background:var(--accent) !important;color:var(--on-accent) !important}
+html[data-theme="dark"] .ls-help a{color:var(--accent) !important}
 
 /* ---- Der Schalter selbst ----------------------------------- */
 .theme-toggle{display:inline-flex;align-items:center;justify-content:center;padding:0;width:38px}
