@@ -3800,7 +3800,12 @@ p,li{line-height:1.68}
   padding:2px 9px
 }
 
+/* align-items steht auf flex-start, deshalb dehnt sich der Kartenkoerper
+   nicht auf die volle Breite — bei kurzem Text bleibt rechts ein Streifen
+   der Kartenflaeche frei. Im Hellmodus war das unsichtbar (weiss auf
+   weiss), im Dunkelmodus stand dort ein heller Balken. */
 .page-card{display:flex;flex-direction:column}
+.page-card>.page-card-body,.page-card>.page-card-photo{width:100%;align-self:stretch}
 
 /* Region cards carry a photo of the actual place */
 .page-grid .page-card.has-photo{padding:0;overflow:hidden;text-align:left}
@@ -7109,6 +7114,20 @@ html[data-theme="dark"] #page-suche .suche-recap{
   border-color:var(--line)
 }
 html[data-theme="dark"] .page-view{background:var(--ground) !important}
+/* Die Kartenflaeche selbst — eine spaetere Regel im Feinschliff-Block
+   setzt sie mit !important auf halbtransparentes Weiss, deshalb hier
+   mit voller Selektorkette dagegen. */
+html[data-theme="dark"] .page-grid .page-card,
+html[data-theme="dark"] .region-strip-grid .page-card,
+html[data-theme="dark"] .page-card.is-clickable.has-photo,
+html[data-theme="dark"] .story-block,
+html[data-theme="dark"] .empty-state{
+  background:var(--surface) !important;border-color:var(--line) !important
+}
+html[data-theme="dark"] .lang-option{background:transparent !important;color:var(--ink) !important}
+html[data-theme="dark"] .lang-option[aria-selected="true"]{
+  background:var(--accent-soft) !important;color:var(--accent) !important
+}
 html[data-theme="dark"] .map-legend,
 html[data-theme="dark"] .room-card .room-side,
 html[data-theme="dark"] .hd-side.hd-sticky-mobile,
@@ -7446,6 +7465,14 @@ html[data-theme="dark"] .map-canvas,
 html[data-theme="dark"] .leaflet-container{
   background:var(--surface-2) !important;color:var(--ink-soft) !important
 }
+/* CARTOs dunkle Kacheln sind fast schwarz — dunkler als der Rest der
+   Seite, was die Karte zum Loch macht statt zur Flaeche. Aufgehellt
+   und leicht entsaettigt liegt sie auf der Hoehe der uebrigen
+   Flaechen; die Marker bleiben davon unberuehrt, weil nur die
+   Kachelebene gefiltert wird. */
+html[data-theme="dark"] .leaflet-tile-pane{
+  filter:brightness(2) saturate(.9) contrast(.9)
+}
 html[data-theme="dark"] .hd-crumbs,
 html[data-theme="dark"] .hd-crumbs a,
 html[data-theme="dark"] .hd-crumbs span,
@@ -7543,6 +7570,43 @@ html[data-theme="dark"] .hstep strong,
 html[data-theme="dark"] .page-intro h2{color:var(--ink) !important}
 html[data-theme="dark"] .hstep-n{background:var(--accent) !important;color:var(--on-accent) !important}
 html[data-theme="dark"] .ls-help a{color:var(--accent) !important}
+
+
+/* ---- Dritter Durchgang: Seite fuer Seite abgesucht ----------
+   Ein Skript hat auf allen neun Seiten und in den Dialogen nach
+   Flaechen gesucht, die im Dunkelmodus noch hell geblieben sind.
+   Es blieben drei Gruppen. */
+
+/* 1. Das aufklappbare Feld der Detailsuche */
+html[data-theme="dark"] .detail-box,
+html[data-theme="dark"] .amenity-search,
+html[data-theme="dark"] .search-detail,
+html[data-theme="dark"] .detail-panel{
+  background:var(--surface-2) !important;color:var(--ink) !important;
+  border-color:var(--line) !important
+}
+html[data-theme="dark"] .detail-title{color:var(--ink-faint) !important}
+html[data-theme="dark"] .amenity-search input{background:var(--surface) !important;color:var(--ink) !important}
+
+/* 2. Bildrahmen — dahinter lag der helle Kachelgrund, weil die
+      Platzhalter selbst gefiltert werden, ihr Behaelter aber nicht */
+html[data-theme="dark"] .hotel-image,
+html[data-theme="dark"] .hd-gal-main,
+html[data-theme="dark"] .hd-gal-thumb,
+html[data-theme="dark"] .room-img-wrap,
+html[data-theme="dark"] .page-card-photo,
+html[data-theme="dark"] .thotel img,
+html[data-theme="dark"] .ls-preview img,
+html[data-theme="dark"] #page-suche .card-photo{
+  background:var(--ph-bg) !important
+}
+
+/* 3. Die Plakette auf dem Bild im Themenfenster war reines Weiss
+      und damit der hellste Punkt der ganzen Seite */
+html[data-theme="dark"] .topic-tag{
+  background:rgba(27,35,32,.88) !important;color:var(--ink) !important;
+  border:1px solid rgba(255,255,255,.14)
+}
 
 /* ---- Der Schalter selbst ----------------------------------- */
 .theme-toggle{display:inline-flex;align-items:center;justify-content:center;padding:0;width:38px}
